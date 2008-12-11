@@ -53,6 +53,7 @@
     <option name="ADDITIONAL_OPTIONS_STRING" value="" />
     <option name="MAXIMUM_HEAP_SIZE" value="128" />
   </component>
+  <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false" />
   <component name="EntryPointsManager">
     <entry_points version="2.0" />
   </component>
@@ -131,6 +132,13 @@
     <option name="GENERATE_NO_WARNINGS" value="false" />
     <option name="IS_EMACS_ERRORS_MODE" value="true" />
     <option name="ADDITIONAL_OPTIONS_STRING" value="" />
+  </component>
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/pom.xml" />
+      </list>
+    </option>
   </component>
   <component name="Palette2">
     <group name="Swing">
@@ -253,13 +261,20 @@
       </item>
     </group>
   </component>
-  <component name="ProjectFileVersion" converted="true" />
+  <component name="ProjectDetails">
+    <option name="projectName" value="xlite" />
+  </component>
+  <component name="ProjectFileVersion" converted="true">
+    <converter id="javaee-modules" />
+    <converter id="ror-modules" />
+    <converter id="SelenaRunConfToDiana" />
+  </component>
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/xlite.iml" filepath="$PROJECT_DIR$/xlite.iml" />
     </modules>
   </component>
-  <component name="ProjectRootManager" version="2" assert-keyword="true" jdk-15="true" project-jdk-name="1.6" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_5" assert-keyword="true" jdk-15="true" project-jdk-name="1.6" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/classes" />
   </component>
   <component name="ResourceManagerContainer">
@@ -276,6 +291,18 @@
     <option name="GENERATE_IIOP_STUBS" value="false" />
     <option name="ADDITIONAL_OPTIONS_STRING" value="" />
   </component>
+  <component name="SvnBranchConfigurationManager">
+    <option name="myConfigurationMap">
+      <map>
+        <entry key="$PROJECT_DIR$">
+          <value>
+            <SvnBranchConfiguration />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="myVersion" value="124" />
+  </component>
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="svn" />
   </component>
@@ -289,5 +316,65 @@
     <option name="cycleTableSpecificationString" value="" />
     <option name="shortCycleTableSpecificationString" value="" />
   </component>
+  <component name="libraryTable">
+    <library name="Maven: junit:junit:3.8.1">
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/junit/junit/3.8.1/junit-3.8.1.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/junit/junit/3.8.1/junit-3.8.1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/junit/junit/3.8.1/junit-3.8.1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.testng:testng:jdk15:4.7">
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/testng/testng/4.7/testng-4.7-jdk15.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/org/testng/testng/4.7/testng-4.7-jdk15-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/testng/testng/4.7/testng-4.7-jdk15-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: xmlunit:xmlunit:1.1">
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/xmlunit/xmlunit/1.1/xmlunit-1.1.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/xmlunit/xmlunit/1.1/xmlunit-1.1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/xmlunit/xmlunit/1.1/xmlunit-1.1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: qdox:qdox:1.5">
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/qdox/qdox/1.5/qdox-1.5.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/qdox/qdox/1.5/qdox-1.5-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/qdox/qdox/1.5/qdox-1.5-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: bsh:bsh:2.0b1">
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/bsh/bsh/2.0b1/bsh-2.0b1.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/bsh/bsh/2.0b1/bsh-2.0b1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/bsh/bsh/2.0b1/bsh-2.0b1-sources.jar!/" />
+      </SOURCES>
+    </library>
+  </component>
+  <UsedPathMacros>
+    <macro name="MAVEN_REPOSITORY" />
+  </UsedPathMacros>
 </project>
 
