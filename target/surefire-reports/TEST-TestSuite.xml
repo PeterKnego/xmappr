@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite failures="0" time="22.387" errors="0" skipped="0" tests="23" name="TestSuite">
+  <properties>
+    <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
+    <property name="sun.boot.library.path" value="/usr/lib/jvm/java-6-openjdk/jre/lib/i386"/>
+    <property name="java.vm.version" value="1.6.0-b09"/>
+    <property name="java.vm.vendor" value="Sun Microsystems Inc."/>
+    <property name="java.vendor.url" value="http://java.sun.com/"/>
+    <property name="path.separator" value=":"/>
+    <property name="java.vm.name" value="OpenJDK Server VM"/>
+    <property name="file.encoding.pkg" value="sun.io"/>
+    <property name="user.country" value="US"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="sun.os.patch.level" value="unknown"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="user.dir" value="/home/peter/Projects/xlite"/>
+    <property name="java.runtime.version" value="1.6.0-b09"/>
+    <property name="java.awt.graphicsenv" value="sun.awt.X11GraphicsEnvironment"/>
+    <property name="basedir" value="/home/peter/Projects/xlite"/>
+    <property name="java.endorsed.dirs" value="/usr/lib/jvm/java-6-openjdk/jre/lib/endorsed"/>
+    <property name="os.arch" value="i386"/>
+    <property name="java.io.tmpdir" value="/tmp"/>
+    <property name="line.separator" value="
+"/>
+    <property name="java.vm.specification.vendor" value="Sun Microsystems Inc."/>
+    <property name="os.name" value="Linux"/>
+    <property name="classworlds.conf" value="/usr/share/maven2/bin/m2.conf"/>
+    <property name="sun.jnu.encoding" value="UTF-8"/>
+    <property name="java.library.path" value="/usr/lib/jvm/java-6-openjdk/jre/lib/i386/server:/usr/lib/jvm/java-6-openjdk/jre/lib/i386:/usr/lib/jvm/java-6-openjdk/jre/../lib/i386:/usr/java/packages/lib/i386:/lib:/usr/lib"/>
+    <property name="surefire.test.class.path" value="/home/peter/Projects/xlite/target/test-classes:/home/peter/Projects/xlite/target/classes:/home/peter/.m2/repository/junit/junit/3.8.1/junit-3.8.1.jar:/home/peter/.m2/repository/org/testng/testng/4.7/testng-4.7-jdk15.jar:/home/peter/.m2/repository/qdox/qdox/1.5/qdox-1.5.jar:/home/peter/.m2/repository/bsh/bsh/2.0b1/bsh-2.0b1.jar:/home/peter/.m2/repository/xmlunit/xmlunit/1.1/xmlunit-1.1.jar:"/>
+    <property name="javax.net.ssl.trustStore" value="/etc/ssl/certs/ca-certificates.crt"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="java.class.version" value="50.0"/>
+    <property name="sun.management.compiler" value="HotSpot Tiered Compilers"/>
+    <property name="os.version" value="2.6.24-16-generic"/>
+    <property name="user.home" value="/home/peter"/>
+    <property name="user.timezone" value="Europe/Belgrade"/>
+    <property name="user.zoneinfo.dir" value="/usr/share/javazi"/>
+    <property name="java.awt.printerjob" value="sun.print.PSPrinterJob"/>
+    <property name="java.specification.version" value="1.6"/>
+    <property name="file.encoding" value="UTF-8"/>
+    <property name="javax.net.ssl.trustStoreType" value="CertBundle"/>
+    <property name="user.name" value="peter"/>
+    <property name="java.class.path" value="/usr/share/maven2/boot/classworlds.jar"/>
+    <property name="java.vm.specification.version" value="1.0"/>
+    <property name="javax.net.ssl.trustStoreProvider" value=""/>
+    <property name="sun.arch.data.model" value="32"/>
+    <property name="java.home" value="/usr/lib/jvm/java-6-openjdk/jre"/>
+    <property name="java.specification.vendor" value="Sun Microsystems Inc."/>
+    <property name="user.language" value="en"/>
+    <property name="java.vm.info" value="mixed mode"/>
+    <property name="java.version" value="1.6.0"/>
+    <property name="java.ext.dirs" value="/usr/lib/jvm/java-6-openjdk/jre/lib/ext:/usr/java/packages/lib/ext"/>
+    <property name="sun.boot.class.path" value="/usr/lib/jvm/java-6-openjdk/jre/lib/resources.jar:/usr/lib/jvm/java-6-openjdk/jre/lib/rt.jar:/usr/lib/jvm/java-6-openjdk/jre/lib/sunrsasign.jar:/usr/lib/jvm/java-6-openjdk/jre/lib/jsse.jar:/usr/lib/jvm/java-6-openjdk/jre/lib/jce.jar:/usr/lib/jvm/java-6-openjdk/jre/lib/charsets.jar:/usr/lib/jvm/java-6-openjdk/jre/classes"/>
+    <property name="java.vendor" value="Sun Microsystems Inc."/>
+    <property name="maven.home" value="/usr/share/maven2"/>
+    <property name="localRepository" value="/home/peter/.m2/repository"/>
+    <property name="file.separator" value="/"/>
+    <property name="java.vendor.url.bug" value="http://java.sun.com/cgi-bin/bugreport.cgi"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+    <property name="javax.net.ssl.trustStorePassword" value=""/>
+    <property name="sun.desktop" value="gnome"/>
+    <property name="sun.cpu.isalist" value=""/>
+  </properties>
+  <testcase time="0.148" classname="info.documan.xlite.AnnotationProcessorTest" name="printMapperTree"/>
+  <testcase time="0.343" classname="info.documan.xlite.BasicConvertersTest" name="mainTest"/>
+  <testcase time="1.743" classname="info.documan.xlite.CollectionConverterTest" name="collectionConverterTest"/>
+  <testcase time="0.096" classname="info.documan.xlite.CustomConverterTest" name="customConverterTest"/>
+  <testcase time="0.001" classname="info.documan.xlite.SimpleReaderTest" name="emptyElementWithAttributeTest"/>
+  <testcase time="0.001" classname="info.documan.xlite.SimpleReaderTest" name="skippingChildNodesTest"/>
+  <testcase time="0.001" classname="info.documan.xlite.SimpleReaderTest" name="skippedNodesTest"/>
+  <testcase time="0.001" classname="info.documan.xlite.SimpleReaderTest" name="simpleTest2"/>
+  <testcase time="0.001" classname="info.documan.xlite.SimpleReaderTest" name="ignoringOtherNodesTest"/>
+  <testcase time="0.001" classname="info.documan.xlite.SimpleReaderTest" name="textTest"/>
+  <testcase time="0.002" classname="info.documan.xlite.SimpleReaderTest" name="anotherTest"/>
+  <testcase time="0.131" classname="info.documan.xlite.SimpleWriterTest" name="testEquality"/>
+  <testcase time="0.258" classname="info.documan.xlite.SubTreeStoreTest" name="testStoringNodes"/>
+  <testcase time="17.231" classname="info.documan.xlite.Test" name="testXmlSimple"/>
+  <testcase time="0.001" classname="info.documan.xlite.Test" name="test"/>
+  <testcase time="0.023" classname="info.documan.xlite.XliteTest" name="basicTest"/>
+  <testcase time="0.037" classname="info.documan.xlite.namespaces.AttributeNsTest" name="test"/>
+  <testcase time="0.038" classname="info.documan.xlite.namespaces.DefaultNsOverridingTest" name="test"/>
+  <testcase time="0.032" classname="info.documan.xlite.namespaces.DifferentNsSamePrefixesTest" name="test"/>
+  <testcase time="0.025" classname="info.documan.xlite.namespaces.DifferentPrefixesSameNsTest" name="test"/>
+  <testcase time="0.029" classname="info.documan.xlite.namespaces.NamespaceScopeTest" name="test"/>
+  <testcase time="0.045" classname="info.documan.xlite.namespaces.RootNsTest" name="test"/>
+  <testcase time="0" classname="info.documan.xlite.AppTest" name="testApp"/>
+</testsuite>
