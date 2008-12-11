@@ -16,151 +16,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" readonly="true" name="Default" comment="">
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/converters/CollectionConverting.java" afterPath="$PROJECT_DIR$/src/main/java/org/xlite/converters/CollectionConverting.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/test/java/info/documan/xlite/namespaces/DifferentNsSamePrefixesTest.java" afterPath="$PROJECT_DIR$/src/test/java/org/xlite/namespaces/DifferentNsSamePrefixesTest.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/XMLelements.java" afterPath="$PROJECT_DIR$/src/main/java/org/xlite/XMLelements.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test-output/Custom suite/methods.html" afterPath="$PROJECT_DIR$/test-output/Custom suite/methods.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test-output/Custom suite/xlite.html" afterPath="$PROJECT_DIR$/test-output/Custom suite/xlite.html" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/test/java/info/documan/xlite/Test.java" afterPath="$PROJECT_DIR$/src/test/java/org/xlite/Test.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/XMLnamespaces.java" afterPath="$PROJECT_DIR$/src/main/java/org/xlite/XMLnamespaces.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/test/java/info/documan/xlite/SampleXml.java" afterPath="$PROJECT_DIR$/src/test/java/org/xlite/SampleXml.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/test/java/info/documan/xlite/docx/Paragraph.java" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/test/java/info/documan/xlite/namespaces/DefaultNSEachSubnode.java" afterPath="$PROJECT_DIR$/src/test/java/org/xlite/namespaces/DefaultNSEachSubnode.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/Xlite.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/converters/ByteConverter.java" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/ElementHolder.java" afterPath="$PROJECT_DIR$/src/main/java/org/xlite/ElementHolder.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/converters/CharConverter.java" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/converters/ElementMapper.java" afterPath="$PROJECT_DIR$/src/main/java/org/xlite/converters/ElementMapper.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/converters/CollectionConverter.java" afterPath="" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/test/java/org/xlite" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test-output/Custom suite/methods-alphabetical.html" afterPath="$PROJECT_DIR$/test-output/Custom suite/methods-alphabetical.html" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/XMLtext.java" afterPath="" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/test/java/org/xlite/docx" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/test/java/info/documan/xlite/AnnotationProcessorTest.java" afterPath="$PROJECT_DIR$/src/test/java/org/xlite/AnnotationProcessorTest.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/converters/ValueConverterWrapper.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/converters/ElementHolderConverter.java" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/test/java/info/documan/xlite/namespaces/NamespaceScopeTest.java" afterPath="$PROJECT_DIR$/src/test/java/org/xlite/namespaces/NamespaceScopeTest.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/XMLtext.java" afterPath="$PROJECT_DIR$/src/main/java/org/xlite/XMLtext.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/SubTreeStore.java" afterPath="$PROJECT_DIR$/src/main/java/org/xlite/SubTreeStore.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/converters/AnnotatedClassConverter.java" afterPath="$PROJECT_DIR$/src/main/java/org/xlite/converters/AnnotatedClassConverter.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/test/java/info/documan/xlite/docx/Run.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/ArrayUtil.java" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test-output/Custom suite/toc.html" afterPath="$PROJECT_DIR$/test-output/Custom suite/toc.html" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/test/java/info/documan/xlite/CustomConverterTest.java" afterPath="$PROJECT_DIR$/src/test/java/org/xlite/CustomConverterTest.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/XMLelements.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/converters/ShortConverter.java" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test-output/index.html" afterPath="$PROJECT_DIR$/test-output/index.html" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/test/java/info/documan/xlite/docx/DocxDocument.java" afterPath="$PROJECT_DIR$/src/test/java/org/xlite/docx/DocxDocument.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/converters/ValueMapper.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/test/java/info/documan/xlite/docx/DocxDocument.java" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/test/java/info/documan/xlite/namespaces/DefaultNsOverridingTest.java" afterPath="$PROJECT_DIR$/src/test/java/org/xlite/namespaces/DefaultNsOverridingTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test-output/testng-results.xml" afterPath="$PROJECT_DIR$/test-output/testng-results.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/Xlite.java" afterPath="$PROJECT_DIR$/src/main/java/org/xlite/Xlite.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/converters/StringConverter.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/converters/FieldConnector.java" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/converters/RootMapper.java" afterPath="$PROJECT_DIR$/src/main/java/org/xlite/converters/RootMapper.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/MappingContext.java" afterPath="" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/test/java/org" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/test/java/info/documan/xlite/docx/Paragraph.java" afterPath="$PROJECT_DIR$/src/test/java/org/xlite/docx/Paragraph.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/converters/BooleanConverter.java" afterPath="$PROJECT_DIR$/src/main/java/org/xlite/converters/BooleanConverter.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/converters/CharConverter.java" afterPath="$PROJECT_DIR$/src/main/java/org/xlite/converters/CharConverter.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/org" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/test/java/info/documan/xlite/namespaces/AttributeNsTest.java" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/test/java/info/documan/xlite/docx/Body.java" afterPath="$PROJECT_DIR$/src/test/java/org/xlite/docx/Body.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/converters/ShortConverter.java" afterPath="$PROJECT_DIR$/src/main/java/org/xlite/converters/ShortConverter.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/converters/LongConverter.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/test/java/info/documan/xlite/namespaces/DefaultNSEachSubnode.java" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/converters/DoubleConverter.java" afterPath="$PROJECT_DIR$/src/main/java/org/xlite/converters/DoubleConverter.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/XmlStreamSettings.java" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/test/java/info/documan/xlite/SimpleReaderTest.java" afterPath="$PROJECT_DIR$/src/test/java/org/xlite/SimpleReaderTest.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/converters/RootMapper.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/XMLattribute.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/converters" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/test/java/info/documan/xlite/ElementHolderTest.java" afterPath="$PROJECT_DIR$/src/test/java/org/xlite/ElementHolderTest.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/converters/ElementConverter.java" afterPath="$PROJECT_DIR$/src/main/java/org/xlite/converters/ElementConverter.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/test/java/info/documan/xlite/namespaces/NamespaceScopeTest.java" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xlite.ipr" afterPath="$PROJECT_DIR$/xlite.ipr" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/test/java/info/documan/xlite/docx/Footer.java" afterPath="$PROJECT_DIR$/src/test/java/org/xlite/docx/Footer.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/converters/FieldConnector.java" afterPath="$PROJECT_DIR$/src/main/java/org/xlite/converters/FieldConnector.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/test/java/info/documan/xlite/namespaces" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/test/java/info/documan/xlite/namespaces/UndeclaringDefaultNs.java" afterPath="$PROJECT_DIR$/src/test/java/org/xlite/namespaces/UndeclaringDefaultNs.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/converters/ValueConverter.java" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/XMLSimpleReader.java" afterPath="$PROJECT_DIR$/src/main/java/org/xlite/XMLSimpleReader.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/test/java/info/documan/xlite/docx/Text.java" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/test/java/info/documan/xlite/StaxReaderTest.java" afterPath="$PROJECT_DIR$/src/test/java/org/xlite/StaxReaderTest.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/test/java/info/documan/xlite/namespaces/DifferentPrefixesSameNsTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/test/java/info/documan/xlite/namespaces/DifferentNsSamePrefixesTest.java" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/XMLattribute.java" afterPath="$PROJECT_DIR$/src/main/java/org/xlite/XMLattribute.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/converters/IntConverter.java" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/test/java/info/documan/xlite/CollectionConverterTest.java" afterPath="$PROJECT_DIR$/src/test/java/org/xlite/CollectionConverterTest.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/XliteException.java" afterPath="$PROJECT_DIR$/src/main/java/org/xlite/XliteException.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/converters/IntConverter.java" afterPath="$PROJECT_DIR$/src/main/java/org/xlite/converters/IntConverter.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/test/java/info/documan/xlite/SimpleWriterTest.java" afterPath="$PROJECT_DIR$/src/test/java/org/xlite/SimpleWriterTest.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/converters/AnnotatedClassConverter.java" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/test/java/info/documan/xlite/StaxEventReaderTest.java" afterPath="$PROJECT_DIR$/src/test/java/org/xlite/StaxEventReaderTest.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/test/java/info/documan/xlite/SubTreeStoreTest.java" afterPath="$PROJECT_DIR$/src/test/java/org/xlite/SubTreeStoreTest.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/converters/BooleanConverter.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/test/java/info/documan/xlite/docx/Header.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/test/java/info/documan/xlite/docx/Header.java" afterPath="$PROJECT_DIR$/src/test/java/org/xlite/docx/Header.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/info" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/XMLnamespaces.java" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/converters/ValueConverterWrapper.java" afterPath="$PROJECT_DIR$/src/main/java/org/xlite/converters/ValueConverterWrapper.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/XMLelement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/converters/ElementMapper.java" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/test/java/info/documan/xlite/MultielementCollectionTest.java" afterPath="$PROJECT_DIR$/src/test/java/org/xlite/MultielementCollectionTest.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/info/documan" afterPath="" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/org/xlite/converters" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/test/java/info/documan/xlite/namespaces/AttributeNsTest.java" afterPath="$PROJECT_DIR$/src/test/java/org/xlite/namespaces/AttributeNsTest.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/XMLelement.java" afterPath="$PROJECT_DIR$/src/main/java/org/xlite/XMLelement.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/NsContext.java" afterPath="$PROJECT_DIR$/src/main/java/org/xlite/NsContext.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/test/java/info/documan/xlite/docx/Footer.java" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/converters/ValueMapper.java" afterPath="$PROJECT_DIR$/src/main/java/org/xlite/converters/ValueMapper.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/SubTreeStore.java" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/MappingContext.java" afterPath="$PROJECT_DIR$/src/main/java/org/xlite/MappingContext.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/test/java/info/documan/xlite/namespaces/DifferentPrefixesSameNsTest.java" afterPath="$PROJECT_DIR$/src/test/java/org/xlite/namespaces/DifferentPrefixesSameNsTest.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/test/java/info/documan/xlite/namespaces/UndeclaringDefaultNs.java" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/XMLSimpleWriter.java" afterPath="$PROJECT_DIR$/src/main/java/org/xlite/XMLSimpleWriter.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/XMLSimpleWriter.java" afterPath="" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/test/java/org/xlite/DefaultValuesTest.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/converters/ValueConverter.java" afterPath="$PROJECT_DIR$/src/main/java/org/xlite/converters/ValueConverter.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/test/java/info/documan/xlite/BasicConvertersTest.java" afterPath="$PROJECT_DIR$/src/test/java/org/xlite/BasicConvertersTest.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/XmlStreamSettings.java" afterPath="$PROJECT_DIR$/src/main/java/org/xlite/XmlStreamSettings.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/test/java/info/documan/xlite/docx/Run.java" afterPath="$PROJECT_DIR$/src/test/java/org/xlite/docx/Run.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/converters/StringConverter.java" afterPath="$PROJECT_DIR$/src/main/java/org/xlite/converters/StringConverter.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/converters/ByteConverter.java" afterPath="$PROJECT_DIR$/src/main/java/org/xlite/converters/ByteConverter.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/test/java/info/documan/xlite/namespaces/DefaultNsOverridingTest.java" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test-output/testng-failed.xml" afterPath="$PROJECT_DIR$/test-output/testng-failed.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/converters/CollectionConverter.java" afterPath="$PROJECT_DIR$/src/main/java/org/xlite/converters/CollectionConverter.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/test/java/info/documan/xlite/docx/Text.java" afterPath="$PROJECT_DIR$/src/test/java/org/xlite/docx/Text.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/org/xlite" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/ArrayUtil.java" afterPath="$PROJECT_DIR$/src/main/java/org/xlite/ArrayUtil.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/test/java/info/documan/xlite/docx" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/NsContext.java" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xlite.iml" afterPath="$PROJECT_DIR$/xlite.iml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/converters/FloatConverter.java" afterPath="$PROJECT_DIR$/src/main/java/org/xlite/converters/FloatConverter.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/XliteException.java" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xlite.iws" afterPath="$PROJECT_DIR$/xlite.iws" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/ElementHolder.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/XMLSimpleReader.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/converters/ElementConverter.java" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/test/java/info/documan/xlite/XliteTest.java" afterPath="$PROJECT_DIR$/src/test/java/org/xlite/XliteTest.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/test/java/info/documan/xlite/docx/Body.java" afterPath="" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/test/java/org/xlite/namespaces" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test-output/Custom suite/testng-failed.xml" afterPath="$PROJECT_DIR$/test-output/Custom suite/testng-failed.xml" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/converters/CollectionConverting.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/converters/DoubleConverter.java" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/test/java/info/documan/xlite/BigWriteTest.java" afterPath="$PROJECT_DIR$/src/test/java/org/xlite/BigWriteTest.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/test/java/info/documan/xlite" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/test/java/info/documan/xlite/namespaces/RootNsTest.java" afterPath="$PROJECT_DIR$/src/test/java/org/xlite/namespaces/RootNsTest.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/converters/ElementHolderConverter.java" afterPath="$PROJECT_DIR$/src/main/java/org/xlite/converters/ElementHolderConverter.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/converters/FloatConverter.java" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test-output/Custom suite/xlite.xml" afterPath="$PROJECT_DIR$/test-output/Custom suite/xlite.xml" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/test/java/info/documan/xlite/namespaces/RootNsTest.java" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/converters/LongConverter.java" afterPath="$PROJECT_DIR$/src/main/java/org/xlite/converters/LongConverter.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/AnnotationProcessor.java" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/info/documan/xlite/AnnotationProcessor.java" afterPath="$PROJECT_DIR$/src/main/java/org/xlite/AnnotationProcessor.java" />
     </list>
     <ignored path="xlite.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -223,29 +79,18 @@
         <entry file="file://$PROJECT_DIR$/src/test/java/org/xlite/CustomConverterTest.java">
           <provider selected="true" editor-type-id="text-editor">
             <state line="68" column="51" selection-start="2432" selection-end="2432" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AnnotationProcessor.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="AnnotationProcessor.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/org/xlite/AnnotationProcessor.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="13" column="35" selection-start="239" selection-end="239" vertical-scroll-proportion="0.0">
+            <state line="76" column="34" selection-start="2736" selection-end="2772" vertical-scroll-proportion="0.13513513">
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="testng-failed.xml" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/test-output/testng-failed.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="12" column="0" selection-start="459" selection-end="459" vertical-scroll-proportion="0.3243243">
-              <folding />
             </state>
           </provider>
         </entry>
@@ -318,24 +163,6 @@
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
         </PATH_ELEMENT>
         <PATH_ELEMENT>
-          <option name="myItemId" value="test-output" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="xlite" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="xlite" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="xlite" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
           <option name="myItemId" value="src" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
         </PATH_ELEMENT>
@@ -345,108 +172,6 @@
         </PATH_ELEMENT>
         <PATH_ELEMENT>
           <option name="myItemId" value="java" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="xlite" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="xlite" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="xlite" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="xlite" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="src" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="test" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="java" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="xlite" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="namespaces" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="xlite" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="xlite" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="xlite" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="src" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="test" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="java" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="xlite" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="docx" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="xlite" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="xlite" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="xlite" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="src" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="test" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="java" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="xlite" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
         </PATH_ELEMENT>
       </PATH>
@@ -475,11 +200,15 @@
           <option name="myItemId" value="java" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
         </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="xlite" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
       </PATH>
     </subPane>
   </component>
   <component name="ProjectReloadState">
-    <option name="STATE" value="2" />
+    <option name="STATE" value="0" />
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="0.16666667" version="1" splitterProportion="0.5">
@@ -498,43 +227,245 @@
   <component name="PropertiesComponent">
     <property name="GoToFile.includeJavaFiles" value="false" />
     <property name="GoToClass.toSaveIncludeLibraries" value="false" />
+    <property name="RunManagerConfig.showSettingsBeforeRunnig" value="true" />
     <property name="MemberChooser.sorted" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
     <property name="GoToClass.includeLibraries" value="false" />
     <property name="MemberChooser.copyJavadoc" value="false" />
   </component>
-  <component name="RunManager" selected="TestNG.CustomConverterTest.customConverterTest">
-    <tempConfiguration default="false" name="CustomConverterTest.customConverterTest" type="TestNG" factoryName="TestNG" enabled="false" merge="false" runner="emma">
-      <module name="xlite" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="SUITE_NAME" />
-      <option name="PACKAGE_NAME" value="info.documan.xlite" />
-      <option name="MAIN_CLASS_NAME" value="org.xlite.CustomConverterTest" />
-      <option name="METHOD_NAME" value="customConverterTest" />
-      <option name="GROUP_NAME" />
-      <option name="TEST_OBJECT" value="METHOD" />
-      <option name="VM_PARAMETERS" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" />
-      <option name="OUTPUT_DIRECTORY" />
-      <option name="ANNOTATION_TYPE" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="ADDITIONAL_CLASS_PATH" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="wholeProject" />
-      </option>
-      <option name="PROPERTIES_FILE" />
-      <envs />
-      <properties />
-      <listeners />
-      <RunnerSettings RunnerId="Run" />
-      <ConfigurationWrapper RunnerId="Run" />
-      <method>
-        <option name="Make" value="true" />
-      </method>
-    </tempConfiguration>
+  <component name="RestoreUpdateTree">
+    <UpdateInfo date="12/11/08 11:34 PM" ActionInfo="_Update">
+      <UpdatedFiles>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Updated from server" />
+          <option name="myStatusName" value="Changed on server" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="CHANGED_ON_SERVER" />
+          <FILE-GROUP>
+            <option name="myUpdateName" value="Updated" />
+            <option name="myStatusName" value="Changed" />
+            <option name="mySupportsDeletion" value="false" />
+            <option name="myCanBeAbsent" value="false" />
+            <option name="myId" value="UPDATED" />
+          </FILE-GROUP>
+          <FILE-GROUP>
+            <option name="myUpdateName" value="Created" />
+            <option name="myStatusName" value="Created" />
+            <option name="mySupportsDeletion" value="false" />
+            <option name="myCanBeAbsent" value="false" />
+            <option name="myId" value="CREATED" />
+          </FILE-GROUP>
+          <FILE-GROUP>
+            <option name="myUpdateName" value="Deleted" />
+            <option name="myStatusName" value="Deleted" />
+            <option name="mySupportsDeletion" value="false" />
+            <option name="myCanBeAbsent" value="true" />
+            <option name="myId" value="REMOVED_FROM_REPOSITORY" />
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/test-output</PATH>
+          </FILE-GROUP>
+          <FILE-GROUP>
+            <option name="myUpdateName" value="Restored" />
+            <option name="myStatusName" value="Will be restored" />
+            <option name="mySupportsDeletion" value="false" />
+            <option name="myCanBeAbsent" value="false" />
+            <option name="myId" value="RESTORED" />
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/CollectionConverterTest$SubItem.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/CollectionConverterTest.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/CollectionConverterTest$One.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/docx/DocxDocument.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/docx/Body.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/docx/Footer.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/docx/Run.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/docx/Text.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/docx/Paragraph.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/docx/Header.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/SimpleWriterTest$A.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/SubTreeStoreTest$A.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/SimpleWriterTest$B.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/SubTreeStoreTest$B.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/SimpleWriterTest$C.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/SubTreeStoreTest$C.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/CustomConverterTest$Three.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/SampleXml$Three.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/SimpleWriterTest$D.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/SubTreeStoreTest$D.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/SampleXml$Two.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/CustomConverterTest.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/SampleXml$Four.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/SampleXml.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/StaxReaderTest.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/StaxEventReaderTest.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/CustomConverterTest$One.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/SampleXml$One.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/namespaces/AttributeNsTest$aaa.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/namespaces/UndeclaringDefaultNs$bbb.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/namespaces/AttributeNsTest$BBB.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/namespaces/DefaultNsOverridingTest.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/namespaces/AttributeNsTest$ccc.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/namespaces/UndeclaringDefaultNs$ddd.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/namespaces/AttributeNsTest$x111.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/namespaces/DifferentNsSamePrefixesTest.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/namespaces/DifferentPrefixesSameNsTest.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/namespaces/DefaultNSEachSubnode.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/namespaces/NamespaceScopeTest.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/namespaces/DefaultNsOverridingTest$WWW.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/namespaces/DefaultNsOverridingTest$bbb.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/namespaces/DefaultNsOverridingTest$CCC.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/namespaces/RootNsTest$aaa.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/namespaces/DifferentNsSamePrefixesTest$bbb.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/namespaces/DifferentPrefixesSameNsTest$bbb.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/namespaces/RootNsTest$BBB.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/namespaces/DefaultNSEachSubnode$bbb.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/namespaces/DefaultNsOverridingTest$x222.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/namespaces/DifferentNsSamePrefixesTest$CCC.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/namespaces/DifferentPrefixesSameNsTest$CCC.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/namespaces/RootNsTest$ccc.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/namespaces/DifferentNsSamePrefixesTest$x111.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/namespaces/DifferentPrefixesSameNsTest$x111.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/namespaces/DefaultNSEachSubnode$CCC.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/namespaces/RootNsTest$x111.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/namespaces/AttributeNsTest.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/namespaces/DefaultNSEachSubnode$x222.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/namespaces/UndeclaringDefaultNs$aaa.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/namespaces/DefaultNsOverridingTest$x666.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/namespaces/AttributeNsTest$bbb.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/namespaces/UndeclaringDefaultNs$ccc.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/namespaces/RootNsTest.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/namespaces/DefaultNsOverridingTest$aaa.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/namespaces/DefaultNsOverridingTest$BBB.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/namespaces/DifferentNsSamePrefixesTest$aaa.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/namespaces/DifferentPrefixesSameNsTest$aaa.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/namespaces/DefaultNsOverridingTest$ccc.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/namespaces/DefaultNSEachSubnode$aaa.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/namespaces/DefaultNsOverridingTest$x111.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/namespaces/DifferentNsSamePrefixesTest$BBB.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/namespaces/DifferentPrefixesSameNsTest$BBB.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/namespaces/NamespaceScopeTest$aaa.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/namespaces/RootNsTest$bbb.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/namespaces/DefaultNSEachSubnode$BBB.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/namespaces/DifferentNsSamePrefixesTest$ccc.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/namespaces/DifferentPrefixesSameNsTest$ccc.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/namespaces/NamespaceScopeTest$BBB.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/namespaces/RootNsTest$CCC.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/namespaces/UndeclaringDefaultNs.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/namespaces/DefaultNSEachSubnode$ccc.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/namespaces/NamespaceScopeTest$ccc.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/namespaces/DefaultNSEachSubnode$x111.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/namespaces/DifferentNsSamePrefixesTest$x222.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/namespaces/DifferentPrefixesSameNsTest$x222.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/namespaces/NamespaceScopeTest$x111.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/namespaces/RootNsTest$x222.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/BasicConvertersTest$Primitives.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/BigWriteTest.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/SimpleReaderTest.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/Test.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/SampleXml$Empty.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/XliteTest.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/SimpleWriterTest.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/SubTreeStoreTest.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/BasicConvertersTest.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/CustomConverterTest$Custom.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/CustomConverterTest$LowerCaseConverter.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/CollectionConverterTest$Item.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/CustomConverterTest$UpperCaseConverter.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/test-classes/info/documan/xlite/AnnotationProcessorTest.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/classes/info/documan/xlite/ArrayUtil.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/classes/info/documan/xlite/XMLattribute.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/classes/info/documan/xlite/NsContext.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/classes/info/documan/xlite/XMLSimpleWriter$Element.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/classes/info/documan/xlite/Xlite.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/classes/info/documan/xlite/SubTreeStore.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/classes/info/documan/xlite/converters/ValueMapper.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/classes/info/documan/xlite/converters/IntConverter.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/classes/info/documan/xlite/converters/CollectionConverter.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/classes/info/documan/xlite/converters/LongConverter.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/classes/info/documan/xlite/converters/ShortConverter.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/classes/info/documan/xlite/converters/RootMapper.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/classes/info/documan/xlite/converters/CollectionConverting.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/classes/info/documan/xlite/converters/AnnotatedClassConverter.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/classes/info/documan/xlite/converters/ByteConverter.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/classes/info/documan/xlite/converters/FloatConverter.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/classes/info/documan/xlite/converters/FieldConnector.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/classes/info/documan/xlite/converters/StringConverter.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/classes/info/documan/xlite/converters/DoubleConverter.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/classes/info/documan/xlite/converters/ValueConverter.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/classes/info/documan/xlite/converters/CharConverter.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/classes/info/documan/xlite/converters/ValueConverterWrapper.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/classes/info/documan/xlite/converters/BooleanConverter.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/classes/info/documan/xlite/XMLSimpleWriter$1.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/classes/info/documan/xlite/XMLSimpleReader.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/classes/info/documan/xlite/XmlStreamSettings.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/classes/info/documan/xlite/XMLSimpleReader$AttributeIterator.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/classes/info/documan/xlite/MappingContext.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/classes/info/documan/xlite/XMLnamespaces.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/classes/info/documan/xlite/SubTreeStore$Element.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/classes/info/documan/xlite/XliteException.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/classes/info/documan/xlite/XMLtext.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/classes/info/documan/xlite/XMLSimpleWriter.class</PATH>
+            <PATH vcs="svn" revision="552">$PROJECT_DIR$/target/classes/info/documan/xlite/AnnotationProcessor.class</PATH>
+          </FILE-GROUP>
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Modified" />
+          <option name="myStatusName" value="Modified" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="MODIFIED" />
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Skipped" />
+          <option name="myStatusName" value="Skipped" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="SKIPPED" />
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Merged with conflicts" />
+          <option name="myStatusName" value="Will be merged with conflicts" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="MERGED_WITH_CONFLICTS" />
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Merged" />
+          <option name="myStatusName" value="Will be merged" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="MERGED" />
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Not in repository" />
+          <option name="myStatusName" value="Not in repository" />
+          <option name="mySupportsDeletion" value="true" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="UNKNOWN" />
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Locally added" />
+          <option name="myStatusName" value="Locally added" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="LOCALLY_ADDED" />
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Locally removed" />
+          <option name="myStatusName" value="Locally removed" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="LOCALLY_REMOVED" />
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Switched" />
+          <option name="myStatusName" value="Switched" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="SWITCHED" />
+        </FILE-GROUP>
+      </UpdatedFiles>
+    </UpdateInfo>
+  </component>
+  <component name="RunManager" selected="TestNG.All tests">
     <configuration default="true" type="RSpecRunConfigurationType" factoryName="RSpec">
       <module name="" />
       <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="RUBY_ARGS" VALUE="-e STDOUT.sync=true;STDERR.sync=true;load($0=ARGV.shift)" />
@@ -648,8 +579,39 @@
       </option>
       <envs />
     </configuration>
+    <configuration default="false" name="All tests" type="TestNG" factoryName="TestNG" enabled="false" merge="false" sample_coverage="true" runner="emma">
+      <module name="xlite" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" value="" />
+      <option name="SUITE_NAME" value="" />
+      <option name="PACKAGE_NAME" value="org.xlite" />
+      <option name="MAIN_CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="GROUP_NAME" value="" />
+      <option name="TEST_OBJECT" value="PACKAGE" />
+      <option name="VM_PARAMETERS" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
+      <option name="OUTPUT_DIRECTORY" value="" />
+      <option name="ANNOTATION_TYPE" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="ADDITIONAL_CLASS_PATH" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="wholeProject" />
+      </option>
+      <option name="PROPERTIES_FILE" value="" />
+      <envs />
+      <properties />
+      <listeners />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method>
+        <option name="Make" value="true" />
+      </method>
+    </configuration>
     <list size="1">
-      <item index="0" class="java.lang.String" itemvalue="TestNG.CustomConverterTest.customConverterTest" />
+      <item index="0" class="java.lang.String" itemvalue="TestNG.All tests" />
     </list>
     <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
       <Host>localhost</Host>
@@ -717,9 +679,9 @@
       <window_info id="Dataflow to this" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32915717" sideWeight="0.5" order="8" side_tool="false" />
-      <window_info id="SVN Repositories" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32915717" sideWeight="0.5" order="-1" side_tool="false" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32915717" sideWeight="0.5" order="8" side_tool="false" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32915717" sideWeight="0.5" order="8" side_tool="false" />
+      <window_info id="SVN Repositories" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32915717" sideWeight="0.5" order="8" side_tool="false" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" />
@@ -728,7 +690,7 @@
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" />
       <window_info id="Web Preview" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="6" side_tool="false" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32992035" sideWeight="0.5" order="2" side_tool="false" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32915717" sideWeight="0.5" order="2" side_tool="false" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" />
       <window_info id="Maven Runner Output" active="false" anchor="bottom" auto_hide="true" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32992035" sideWeight="0.5" order="8" side_tool="false" />
       <window_info id="Maven projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.17868145" sideWeight="0.5" order="3" side_tool="false" />
@@ -753,7 +715,7 @@
     <option name="PERFORM_CHECKOUT_IN_BACKGROUND" value="true" />
     <option name="PERFORM_ADD_REMOVE_IN_BACKGROUND" value="true" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="big change" />
+    <option name="LAST_COMMIT_MESSAGE" value="delete test output dirs" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="REFORMAT_BEFORE_FILE_COMMIT" value="false" />
@@ -768,6 +730,7 @@
     <MESSAGE value="trunk moved" />
     <MESSAGE value="deleted old dir" />
     <MESSAGE value="big change" />
+    <MESSAGE value="delete test output dirs" />
   </component>
   <component name="VssConfiguration">
     <option name="CLIENT_PATH" value="" />
@@ -818,25 +781,16 @@
     <entry file="file://$PROJECT_DIR$/src/test/java/org/xlite/CustomConverterTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="68" column="51" selection-start="2432" selection-end="2432" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/xlite/AnnotationProcessor.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="35" selection-start="239" selection-end="239" vertical-scroll-proportion="0.0">
+        <state line="76" column="34" selection-start="2736" selection-end="2772" vertical-scroll-proportion="0.13513513">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test-output/testng-failed.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="0" selection-start="459" selection-end="459" vertical-scroll-proportion="0.3243243">
-          <folding />
         </state>
       </provider>
     </entry>
