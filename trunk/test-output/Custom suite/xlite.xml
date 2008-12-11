@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="xlite" failures="0" tests="1" time="0.262" errors="0">
-  <properties/>
-  <testcase name="customConverterTest" time="0.062" classname="org.xlite.CustomConverterTest"/>
-</testsuite>
