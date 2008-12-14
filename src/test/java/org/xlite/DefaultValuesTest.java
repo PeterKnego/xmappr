@@ -19,7 +19,7 @@ public class DefaultValuesTest {
     public static String xml = "<root>" +
             "<a>text1</a>" +
             "<b></b>" +
-//            "<c></c>" +
+            "<c></c>" +
             "</root>";
 
     @org.testng.annotations.Test
