@@ -46,11 +46,16 @@ public class AnnotationProcessor {
         return annotatedClassConverter;
     }
 
+    /**
+     * Processes @XMLnamespaces annotations defined on a Class.
+     *
+     * @param currentClass
+     * @param annotatedClassConverter
+     */
     private void processClassNamespaces(Class currentClass, AnnotatedClassConverter annotatedClassConverter) {
         NsContext classNS = new NsContext();
         XMLnamespaces nsAnnotation = (XMLnamespaces) currentClass.getAnnotation(XMLnamespaces.class);
         if (nsAnnotation != null && nsAnnotation.value().length != 0) {
-            boolean defaultFound = false;
             for (int i = 0; i < nsAnnotation.value().length; i++) {
                 classNS.addNamespace(nsAnnotation.value()[i]);
             }
@@ -58,14 +63,14 @@ public class AnnotationProcessor {
         annotatedClassConverter.setClassNamespaces(classNS);
     }
 
-    private ElementConverter lookupElementConverter(Class type) {
-        for (ElementConverter elementConverter : mappingContext.elementConverters) {
-            if (elementConverter.canConvert(type)) {
-                return elementConverter;
-            }
-        }
-        return null;
-    }
+//    private ElementConverter lookupElementConverter(Class type) {
+//        for (ElementConverter elementConverter : mappingContext.elementConverters) {
+//            if (elementConverter.canConvert(type)) {
+//                return elementConverter;
+//            }
+//        }
+//        return null;
+//    }
 
     /**
      * Searches given class for fields that have @XMLelement annotation.
@@ -94,11 +99,11 @@ public class AnnotationProcessor {
 
             // collect all @XMLelement annotations in a single array for easier processing
             XMLelement[] annotations = new XMLelement[0];
-            XMLelements multiAnno = (XMLelements) field.getAnnotation(XMLelements.class);
+            XMLelements multiAnno = field.getAnnotation(XMLelements.class);
             if (multiAnno != null && multiAnno.value().length != 0) {
                 annotations = multiAnno.value();
             }
-            XMLelement singleAnno = (XMLelement) field.getAnnotation(XMLelement.class);
+            XMLelement singleAnno = field.getAnnotation(XMLelement.class);
             if (singleAnno != null) {
                 annotations = Arrays.copyOf(annotations, annotations.length + 1);
                 annotations[annotations.length - 1] = singleAnno;
@@ -121,7 +126,7 @@ public class AnnotationProcessor {
                 if (collectionConverter != null) {
 
                     if (annotatedConverter != null) {
-                        throw new XliteException("Error: Can  not assign converter for collection " + field.getDeclaringClass().getName() +
+                        throw new XliteException("Error: Can  not assign converter for collection " + field.getName() +
                                 " in class " + field.getDeclaringClass().getSimpleName() +
                                 "When @XMLelement annotation is used on a collection, 'converter' value can not be used. " +
                                 "Use 'itemType' instead.");
@@ -129,7 +134,7 @@ public class AnnotationProcessor {
 
                     // if it's a collection, then @XMLelement must have "itemType" value defined
                     if (itemType == null) {
-                        throw new XliteException("Error: Can  not assign converter for collection " + field.getDeclaringClass().getName() +
+                        throw new XliteException("Error: Can not assign converter for collection " + field.getName() +
                                 " in class " + field.getDeclaringClass().getSimpleName() +
                                 "When @XMLelement annotation is used on a collection, 'itemType' value must be defined.");
                     }
@@ -138,7 +143,7 @@ public class AnnotationProcessor {
                 } else { // target field is a normal field (not a collection)
 
                     if (itemType != null) {
-                        throw new XliteException("Error: Wrong @XMLelement annotation value on field " + fieldConverter.getClass().getName() +
+                        throw new XliteException("Error: Wrong @XMLelement annotation value on field " + field.getName() +
                                 "in class " + field.getDeclaringClass().getName() + ". @XMLelement 'itemType' can only be used on " +
                                 "field types that implement Collection.");
                     }
@@ -149,7 +154,7 @@ public class AnnotationProcessor {
                             fieldConverter = annotatedConverter.newInstance();
 
                             // check that assigned converter can actually convert to the target field type
-                            if (collectionConverter == null && !fieldConverter.canConvert(field.getType())) {
+                            if (!fieldConverter.canConvert(field.getType())) {
                                 throw new XliteException("Error: assigned converter type does not match field type.\n" +
                                         "Converter " + fieldConverter.getClass().getName() + " can not be used to convert " +
                                         "data of type " + field.getType() + ".\n" +
@@ -176,8 +181,15 @@ public class AnnotationProcessor {
                 NsContext classNS = converter.getClassNamespaces();
                 QName qname = getQName(elementName, fieldNS, classNS);
 
+                 // get default value of this element
+                String defaultValue = annotation.defaultValue();
+                if (defaultValue.length() == 0) {
+                    defaultValue = null;
+                }
+
                 if (fieldConverter != null) {
                     fieldMapper.setConverter(fieldConverter);
+                    fieldMapper.setDefaultValue(defaultValue);
                 }
                 if (itemType != null) {
                     fieldMapper.addMapping(qname, itemType);
@@ -194,6 +206,13 @@ public class AnnotationProcessor {
         }
     }
 
+    /**
+     *
+     * @param elementName
+     * @param fieldNS
+     * @param classNS
+     * @return
+     */
     private QName getQName(String elementName, NsContext fieldNS, NsContext classNS) {
 
         // split xml element name into prefix and local part
@@ -229,9 +248,8 @@ public class AnnotationProcessor {
     private NsContext getFieldNamespaces(Field field) {
 
         NsContext fieldNS = new NsContext();
-        XMLnamespaces nsAnnotation = (XMLnamespaces) field.getAnnotation(XMLnamespaces.class);
+        XMLnamespaces nsAnnotation = field.getAnnotation(XMLnamespaces.class);
         if (nsAnnotation != null && nsAnnotation.value().length != 0) {
-            boolean defaultFound = false;
             for (int i = 0; i < nsAnnotation.value().length; i++) {
                 fieldNS.addNamespace(nsAnnotation.value()[i]);
             }
@@ -244,13 +262,11 @@ public class AnnotationProcessor {
      *
      * @param converter    AnnotatedClassMapper to which the ValueMapper is referenced
      * @param currentClass Class being inspected for @XMLattribute annotations
-     * @return Map of XML attribute names to {@link org.xlite.converters.ValueMapper} objects.
      */
     private void processAttributes(Class currentClass, AnnotatedClassConverter converter) {
-        XMLattribute annotation = null;
-        String attributeName;
+        XMLattribute annotation;
         for (Field field : currentClass.getDeclaredFields()) {
-            annotation = (XMLattribute) field.getAnnotation(XMLattribute.class);
+            annotation = field.getAnnotation(XMLattribute.class);
             if (annotation != null) {
 
                 // find the appropriate converter
@@ -307,14 +323,14 @@ public class AnnotationProcessor {
      * Searches class for a field that has @XMLtext annotation.
      *
      * @param currentClass
-     * @return {@link org.xlite.converters.ValueMapper} for the found field.
+     * @param converter
      */
     private void processValue(Class currentClass, AnnotatedClassConverter converter) {
         Field targetField = null;
         int found = 0;
-        XMLtext annotation = null, targetAnnotation = null;
+        XMLtext annotation, targetAnnotation = null;
         for (Field field : currentClass.getDeclaredFields()) {
-            annotation = (XMLtext) field.getAnnotation(XMLtext.class);
+            annotation = field.getAnnotation(XMLtext.class);
             if (annotation != null) {
                 found++;
                 targetField = field;
@@ -350,7 +366,7 @@ public class AnnotationProcessor {
                 }
             }
 
-            converter.setValueMapper(new ValueMapper(targetField, valueConverter, null));
+            converter.setTextMapper(new ValueMapper(targetField, valueConverter, null));
 
             System.out.println(currentClass.getSimpleName() + "." + targetField.getName() + " value "
                     + " converter:" + valueConverter.getClass().getSimpleName());

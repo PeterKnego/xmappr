@@ -18,7 +18,7 @@ public class DefaultValuesTest {
 
     public static String xml = "<root>" +
             "<a>text1</a>" +
-            "<b></b>" +
+            "<b/>" +
             "<c></c>" +
             "</root>";
 
@@ -48,10 +48,10 @@ public class DefaultValuesTest {
         @XMLelement
         public A a;
 
-        @XMLelement
+        @XMLelement (defaultValue = "0")
         public Integer b;
 
-        @XMLelement
+        @XMLelement (defaultValue = "0")
         public Integer c;
     }
 

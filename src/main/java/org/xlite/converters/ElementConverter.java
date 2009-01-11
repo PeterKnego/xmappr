@@ -10,8 +10,6 @@ import javax.xml.namespace.QName;
  * Classes implementing ElementConverter interface are used for serializing/deserializing xml
  * nodes to Java objects. They are responsible for reading/writing the xml stream on their own.
  * They must always read/write the full xml node including all subnodes.
- *
- * @author peter
  */
 public interface ElementConverter {
 
@@ -28,12 +26,14 @@ public interface ElementConverter {
      * Method responsible for reading a complete xml node from XMLSimpleReader and returning deserialized Object
      * that corresponds to this node. When XMLSimpleReader instance is passed to this method it is already
      * positioned on the xml node that is to be converted. Method can inspect all node's attributes, value and subnodes.
-     * When method returns, the stream should be positioned on the same node as it was when entering method.
+     * When method returns, the reader MUST be positioned on the same node as it was when entering method.
      *
      * @param reader
-     * @param mappingContext @return
+     * @param mappingContext
+     * @param defaultValue
+     * @return
      */
-    public Object fromElement(XMLSimpleReader reader, MappingContext mappingContext);
+    public Object fromElement(XMLSimpleReader reader, MappingContext mappingContext, String defaultValue);
 
     public void toElement(Object object, QName nodeName, XMLSimpleWriter writer, MappingContext mappingContext);
 

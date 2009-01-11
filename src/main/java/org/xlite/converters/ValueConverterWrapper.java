@@ -21,10 +21,14 @@ public class ValueConverterWrapper implements ElementConverter {
         return valueConverter.canConvert(type);
     }
 
-    public Object fromElement(XMLSimpleReader reader, MappingContext mappingContext) {
+    public Object fromElement(XMLSimpleReader reader, MappingContext mappingContext, String defaultValue) {
         String text = reader.getText();
         if (text == null || text.length() == 0) {
-            return null;
+            if (defaultValue != null) {
+                return valueConverter.fromValue(defaultValue);
+            } else {
+                return null;
+            }
         }
         return valueConverter.fromValue(text);
     }

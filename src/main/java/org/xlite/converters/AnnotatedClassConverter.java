@@ -8,7 +8,10 @@ import java.util.Map;
 
 import org.xlite.*;
 
+//todo Write javadoc
+
 /**
+ * This is a default ElementConverter that tries to convert any class by inspecting it's.
  * User: peter
  * Date: Feb 28, 2008
  * Time: 10:19:19 PM
@@ -16,15 +19,11 @@ import org.xlite.*;
 public class AnnotatedClassConverter implements ElementConverter {
 
     private SubTreeStore elementStorage;
-
     private Class targetClass;
-
-    private ValueMapper valueMapper;
-
+    //todo textMapper is ambiguous name used in two contexts (class ValueMapper representing value of a field and
+    private ValueMapper textMapper;
     private Map<QName, ElementMapper> elementMappersByName = new HashMap<QName, ElementMapper>();
-
     private Map<QName, ValueMapper> attributeMappers = new HashMap<QName, ValueMapper>();
-
     private NsContext classNamespaces;
 
     public AnnotatedClassConverter(Class targetClass) {
@@ -47,12 +46,12 @@ public class AnnotatedClassConverter implements ElementConverter {
         this.classNamespaces = classNamespaces;
     }
 
-    public void setValueMapper(ValueMapper valueMapper) {
-        this.valueMapper = valueMapper;
+    public void setTextMapper(ValueMapper textMapper) {
+        this.textMapper = textMapper;
     }
 
-    public ValueMapper getValueMapper() {
-        return valueMapper;
+    public ValueMapper getTextMapper() {
+        return textMapper;
     }
 
     public void addElementMapper(QName qName, ElementMapper elementMapper) {
@@ -71,20 +70,14 @@ public class AnnotatedClassConverter implements ElementConverter {
         this.targetClass = targetClass;
     }
 
-    /**
-     * This is a default ElementConverter that tries to convert all classes.
-     *
-     * @param type
-     * @return
-     */
     public boolean canConvert(Class type) {
         return targetClass.equals(type);
     }
 
-    public Object fromElement(XMLSimpleReader reader, MappingContext mappingContext) {
+    public Object fromElement(XMLSimpleReader reader, MappingContext mappingContext, String defaultValue) {
 
         // instantiate object that maps to the current XML element
-        Object currentObject = null;
+        Object currentObject;
         try {
             currentObject = targetClass.newInstance();
         } catch (InstantiationException e) {
@@ -96,8 +89,8 @@ public class AnnotatedClassConverter implements ElementConverter {
 
         // XML element value
         String value = reader.getText();
-        if (valueMapper != null) {
-            valueMapper.setValue(currentObject, value);
+        if (textMapper != null) {
+            textMapper.setValue(currentObject, value);
         }
 
         // XML element attributes
@@ -154,8 +147,8 @@ public class AnnotatedClassConverter implements ElementConverter {
         }
 
         // write element's value
-        if (valueMapper != null && object != null) {
-            writer.addText(valueMapper.getValue(object));
+        if (textMapper != null && object != null) {
+            writer.addText(textMapper.getValue(object));
         }
 
         // write subelements

@@ -18,10 +18,10 @@ public class MultielementCollectionTest {
     public static String xml = "<root>" +
             "<a>textA1</a>" +
             "<a>textA2</a>" +
-            "<unknown>XXX</unknown>" +
+//            "<unknown>XXX</unknown>" +
             "<b>textB1</b>" +
             "<b>textB2</b>" +
-            "<data>YYY</data>" +
+//            "<data>YYY</data>" +
             "</root>";
 
     @org.testng.annotations.Test
@@ -29,6 +29,8 @@ public class MultielementCollectionTest {
 
         StringReader reader = new StringReader(xml);
         Xlite xlite = new Xlite(Root.class, "root");
+        xlite.setStoringUnknownElements(false);
+        xlite.setPrettyPrint(false);
 
         Root one = (Root) xlite.fromXML(reader);
 
@@ -46,15 +48,15 @@ public class MultielementCollectionTest {
     }
 
     public static class Root {
-        @XMLelements(
-                {@XMLelement(name = "a", itemType = A.class),
-                @XMLelement(name = "b", itemType = B.class),
-                @XMLelement(name = "unknown", itemType = ElementHolder.class)}
-        )
+        @XMLelements({
+                @XMLelement(name = "a", itemType = A.class),
+                @XMLelement(name = "b", itemType = B.class)
+//                @XMLelement(name = "unknown", itemType = ElementHolder.class)
+        })
 //        @XMLelement(name = "a", itemType = A.class)
         public List letters;
 
-        @XMLelement("data")
+//        @XMLelement("data")
         public ElementHolder holder;
     }
 

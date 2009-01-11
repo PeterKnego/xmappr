@@ -6,6 +6,8 @@ import org.xlite.converters.ValueConverter;
 import javax.xml.namespace.QName;
 import java.util.List;
 
+//todo write javadoc - IMPORTANT, as this is one of the core classes
+
 /**
  * @author peter
  */
@@ -18,7 +20,7 @@ public class MappingContext {
 
     private SubTreeStore elementStore;
 
-    public MappingContext(List<ElementConverter> elementConverters, List<ValueConverter> valueConverters, Class rootClass) {
+    public MappingContext(List<ElementConverter> elementConverters, List<ValueConverter> valueConverters) {
         this.elementConverters = elementConverters;
         this.valueConverters = valueConverters;
         annotationProcessor = new AnnotationProcessor(this);
@@ -40,12 +42,19 @@ public class MappingContext {
         predefinedNamespaces.addNamespace(namespace);
     }
 
+    /**
+     * Delegates processing of the next XML element in the reader to the appropriate converter. It finds the right
+     * ElementConverter for the given Class and uses it to process current XML element.<br><br>
+     * It's mainly used by custom converters to forward processing of a subelement to appropriate converter.
+     * @param targetType
+     * @param reader
+     * @return
+     */
     public Object processNextElement(Class targetType, XMLSimpleReader reader) {
         // find the converter for given Class
         ElementConverter converter = lookupElementConverter(targetType);
-        return converter.fromElement(reader, this);
+        return converter.fromElement(reader, this, "");
     }
-
 
     public void processNextObject(Object object, QName elementName, XMLSimpleWriter writer) {
         // find the converter for given Object
@@ -62,6 +71,12 @@ public class MappingContext {
         return null;
     }
 
+    /**
+     * Finds the appropriate ElementConverter for the given Class among the registered ElementConverters. If none
+     *  is found, an instance of AnnotatedClassConverter is returned.
+     * @param type
+     * @return
+     */
     public ElementConverter lookupElementConverter(Class type) {
         for (ElementConverter elementConverter : elementConverters) {
             if (elementConverter.canConvert(type)) {

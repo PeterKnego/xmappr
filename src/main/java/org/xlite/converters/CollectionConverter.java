@@ -20,7 +20,7 @@ public class CollectionConverter implements ElementConverter, CollectionConverti
         return Collection.class.isAssignableFrom(type);
     }
 
-    public Object fromElement(XMLSimpleReader reader, MappingContext mappingContext) {
+    public Object fromElement(XMLSimpleReader reader, MappingContext mappingContext, String defaultValue) {
 //        ElementConverter converter = mappingContext.lookupElementConverter(targetType);
 //        return converter.fromElement(reader, mappingContext);
         throw new XliteException("CollectionConverter.fromElement() method should not be called directly. " +
