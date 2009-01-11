@@ -24,8 +24,8 @@ public class BasicConvertersTest {
             "<dbv>1.6</dbv>" +
             "<flv>-1.1</flv>" +
             "<chv>g</chv>" +
-            "<node/>"+
-            "<int/>"+
+            "<node/>" +
+            "<int/>" +
             "</primitives> ";
 
 
@@ -47,7 +47,7 @@ public class BasicConvertersTest {
         Assert.assertEquals(primitives.byt, 127);
         Assert.assertEquals(primitives.db, -1.6d, 0.0d);
         Assert.assertEquals(primitives.fl, 1.1f, 0.0f);
-        Assert.assertEquals(primitives.ch,'f');
+        Assert.assertEquals(primitives.ch, 'f');
 
         //node text
         Assert.assertEquals(primitives.value, "A text value");
@@ -58,7 +58,11 @@ public class BasicConvertersTest {
         Assert.assertEquals(primitives.bytv, -127);
         Assert.assertEquals(primitives.dbv, 1.6d, 0.0d);
         Assert.assertEquals(primitives.flv, -1.1f, 0.0f);
-        Assert.assertEquals(primitives.chv,'g');
+        Assert.assertEquals(primitives.chv, 'g');
+
+        // default values used
+        Assert.assertEquals(primitives.intNode, 0);
+        Assert.assertEquals(primitives.stringNode, null);
 
     }
 
@@ -87,7 +91,7 @@ public class BasicConvertersTest {
         @XMLelement("node")
         public String stringNode;
 
-        @XMLelement("int")
+        @XMLelement(name = "int", defaultValue = "0")
         public int intNode;
 
         @XMLelement

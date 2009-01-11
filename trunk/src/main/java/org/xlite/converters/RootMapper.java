@@ -9,6 +9,7 @@ import org.xlite.MappingContext;
 import org.xlite.XliteException;
 
 /**
+ * RootMapper sits at the top of the Mapper hierarchy
  * @author peter
  */
 public class RootMapper {
@@ -29,7 +30,7 @@ public class RootMapper {
 
     public Object getRootObject(XMLSimpleReader reader) {
         if (reader.findFirstElement(rootNodeName)) {
-            return elementConverter.fromElement(reader, mappingContext);
+            return elementConverter.fromElement(reader, mappingContext, "");
         } else {
             throw new XliteException("Root node <" + rootNodeName + "> could not be found in XML data");
         }

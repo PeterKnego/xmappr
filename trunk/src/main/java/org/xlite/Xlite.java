@@ -23,7 +23,6 @@ public class Xlite {
     private List<ValueConverter> valueConverters;
     private MappingContext mappingContext;
 
-
     private boolean initialized = false;
     private Class rootClass;
     private String rootElementName;
@@ -44,7 +43,7 @@ public class Xlite {
         this.rootClass = rootClass;
         this.rootElementName = nodeName;
         this.rootElementNS = namespaceURI;
-        this.mappingContext = new MappingContext(elementConverters, valueConverters, rootClass);
+        this.mappingContext = new MappingContext(elementConverters, valueConverters);
     }
 
     public void setPrettyPrint(boolean prettyPrint){
@@ -132,7 +131,7 @@ public class Xlite {
         initialize();
 
         XMLInputFactory factory = XMLInputFactory.newInstance();
-        XMLStreamReader xmlreader = null;
+        XMLStreamReader xmlreader;
         try {
             xmlreader = factory.createXMLStreamReader(reader);
         } catch (XMLStreamException e) {
@@ -148,7 +147,7 @@ public class Xlite {
 
         XMLOutputFactory factory = XMLOutputFactory.newInstance();
         factory.setProperty("javax.xml.stream.isRepairingNamespaces", true);
-        XMLStreamWriter parser = null;
+        XMLStreamWriter parser;
         try {
             parser = factory.createXMLStreamWriter(writer);
         } catch (XMLStreamException e) {

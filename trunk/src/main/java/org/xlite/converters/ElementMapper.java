@@ -11,22 +11,33 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+
+//todo write javadoc - IMPORTANT
 /**
  * @author peter
  */
 public class ElementMapper {
 
     private Field targetField;
-    private CollectionConverting collectionConverter;
     private MappingContext mappingContext;
     public ElementConverter elementConverter;
+
+    // the following three fields are used in handling Collection mapping
+    private CollectionConverting collectionConverter;
     private Map<Class, QName> itemTypes = new HashMap<Class, QName>();
     private Map<QName, ElementConverter> converterCache = new HashMap<QName, ElementConverter>();
+
+    // default value as set by the @XMLelement(defaultValue=??) annotation
+    private String defaultValue;
 
     public ElementMapper(Field targetField, CollectionConverting collectionConverter, MappingContext mappingContext) {
         this.targetField = targetField;
         this.mappingContext = mappingContext;
         this.collectionConverter = collectionConverter;
+    }
+
+    public void setDefaultValue(String defaultValue) {
+        this.defaultValue = defaultValue;
     }
 
     public void setConverter(ElementConverter fieldConverter) {
@@ -41,7 +52,7 @@ public class ElementMapper {
 
     public void readElement(QName nodeName, Object targetObject, XMLSimpleReader reader) {
         if (collectionConverter == null) {
-            setFieldValue(nodeName, targetObject, reader);
+            setFieldValue(targetObject, reader);
         } else {
             collectionAddItem(nodeName, targetObject, reader);
         }
@@ -60,22 +71,22 @@ public class ElementMapper {
             // find the converter for given node name
             ElementConverter converter = converterCache.get(nodeName);
             if (converter == null) {
-                throw new XliteException("Error: could not find converter for node: "+ nodeName+
+                throw new XliteException("Error: could not find converter for node: " + nodeName +
                         " in collection " + collection.getClass().getName() +
                         " in class " + collection.getClass().getEnclosingClass() +
                         ". Collection contains element types that are not defined in @XMLelement annotation.");
             }
 
-            Object value = converter.fromElement(reader, mappingContext);
+            Object value = converter.fromElement(reader, mappingContext, defaultValue);
             collectionConverter.addItem(collection, value);
         } catch (IllegalAccessException e) {
             throw new XliteException("Field value could not be set! ", e);
         }
     }
 
-    private void setFieldValue(QName nodeName, Object targetObject, XMLSimpleReader reader) {
+    private void setFieldValue(Object targetObject, XMLSimpleReader reader) {
         try {
-            Object value = elementConverter.fromElement(reader, mappingContext);
+            Object value = elementConverter.fromElement(reader, mappingContext, defaultValue);
             targetField.set(targetObject, value);
         } catch (IllegalAccessException e) {
             throw new XliteException("Field value could not be set! ", e);
@@ -97,8 +108,7 @@ public class ElementMapper {
                     converter.toElement(obj, name, writer, mappingContext);
                 }
 
-            // normal field
-            } else {
+            } else {   // normal field
                 elementConverter.toElement(targetField.get(object), nodeName, writer, mappingContext);
             }
         } catch (IllegalAccessException e) {

@@ -12,7 +12,7 @@ public class ElementHolderConverter implements ElementConverter {
         return ElementHolder.class.isAssignableFrom(type);
     }
 
-    public Object fromElement(XMLSimpleReader reader, MappingContext mappingContext) {
+    public Object fromElement(XMLSimpleReader reader, MappingContext mappingContext, String defaultValue) {
         ElementHolder elementHolder = new ElementHolder(500, 500);
         reader.saveSubTree(elementHolder.getStore(), elementHolder);
         return elementHolder;

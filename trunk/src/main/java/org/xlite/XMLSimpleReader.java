@@ -10,7 +10,7 @@ import java.util.*;
  * A wrapper around {@link javax.xml.stream.XMLStreamReader}, that simplifies usage. It's no longer necessary to create
  * a loop pulling and processing events. A simple usage example:<br><br>
  * {@code XMLSimpleReader reader = new XMLSimpleReader(xmlStreamReader);}<br>
- * {@code reader.getNodeName();}
+ * {@code reader.getNodeName();}<br>
  * {@code reader.getAttributes();}
  *
  * @author peter
@@ -25,7 +25,7 @@ public class XMLSimpleReader {
     private boolean isStoringUnknownElements;
     private SubTreeStore eventCache;
 
-    private int DP;
+//    private int DP;
 
     public XMLSimpleReader(XMLStreamReader reader) {
         this(reader, false);
@@ -266,7 +266,7 @@ public class XMLSimpleReader {
 
     public void saveSubTree(SubTreeStore store, Object object) {
         if (eventCache == null) {
-            throw new XliteException("Error: passed SubTreeStore is null. This ");
+            throw new XliteException("Error: passed SubTreeStore is null.");
         }
 //        printStore(eventCache, "TEST");
         // save a starting position of this block
@@ -275,7 +275,7 @@ public class XMLSimpleReader {
         // calculate current depth of xml nodes in store
 //        int depth = lastEventCache.getDepth() + currentEventCache.getDepth();
         int depth = eventCache.getDepth();
-        int lineNo = reader.getLocation().getLineNumber();
+//        int lineNo = reader.getLocation().getLineNumber();
 
         //copy cached xml events from event cache
         store.copyFrom(eventCache);
@@ -294,8 +294,8 @@ public class XMLSimpleReader {
             event = nextEvent();
         }
 
-        QName qName;
-        String name;
+//        QName qName;
+//        String name;
         boolean loop = true;
         while (loop) {
             switch (event) {
@@ -365,7 +365,7 @@ public class XMLSimpleReader {
         }
     }
 
-    public void addAtributes(SubTreeStore store, String encoding) {
+    private void addAtributes(SubTreeStore store, String encoding) {
         QName qName;
         String name;
         for (int i = 0, n = reader.getAttributeCount(); i < n; ++i) {
@@ -376,7 +376,7 @@ public class XMLSimpleReader {
         }
     }
 
-    public void addNamespaces(SubTreeStore store, String encoding) {
+    private void addNamespaces(SubTreeStore store, String encoding) {
         String uri;
         String prefix;
         for (int i = 0, n = reader.getNamespaceCount(); i < n; ++i) {
@@ -386,35 +386,38 @@ public class XMLSimpleReader {
         }
     }
 
-    public static void printStore(SubTreeStore store, String name) {
+//    This is only used for debugging
+//    public static void printStore(SubTreeStore store, String name) {
+//
+//        SubTreeStore.Element element = store.getNextElement(0);
+//        System.out.print(name + ": ");
+//        while (element != null) {
+//            System.out.print(element.command + "(" + new String(element.data) + ") ");
+//            element = store.getNextElement();
+//        }
+//        System.out.println("");
+//    }
 
-        SubTreeStore.Element element = store.getNextElement(0);
-        System.out.print(name + ": ");
-        while (element != null) {
-            System.out.print(element.command + "(" + new String(element.data) + ") ");
-            element = store.getNextElement();
-        }
-        System.out.println("");
-    }
 
-    public static void printLastBlock(SubTreeStore store, String name) {
-
-        SubTreeStore.Element element = store.getNextElement(0);
-        int loc = 0;
-        while (element != null) {
-            if (SubTreeStore.isBlockStart(element)) {
-                loc = element.location;
-            }
-            element = store.getNextElement();
-        }
-
-        element = store.getNextElement(loc);
-        System.out.print(name + "(" + element.location + "): ");
-        while (element != null) {
-            System.out.print(element.command + "(" + new String(element.data) + ") ");
-            element = store.getNextElement();
-        }
-        System.out.println("");
-    }
+//    This is only used for debugging
+//    public static void printLastBlock(SubTreeStore store, String name) {
+//
+//        SubTreeStore.Element element = store.getNextElement(0);
+//        int loc = 0;
+//        while (element != null) {
+//            if (SubTreeStore.isBlockStart(element)) {
+//                loc = element.location;
+//            }
+//            element = store.getNextElement();
+//        }
+//
+//        element = store.getNextElement(loc);
+//        System.out.print(name + "(" + element.location + "): ");
+//        while (element != null) {
+//            System.out.print(element.command + "(" + new String(element.data) + ") ");
+//            element = store.getNextElement();
+//        }
+//        System.out.println("");
+//    }
 
 }
