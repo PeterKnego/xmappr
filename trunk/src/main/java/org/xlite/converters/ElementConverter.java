@@ -31,10 +31,12 @@ public interface ElementConverter {
      * @param reader
      * @param mappingContext
      * @param defaultValue
+     * @param defaultValue
      * @return
      */
     public Object fromElement(XMLSimpleReader reader, MappingContext mappingContext, String defaultValue);
 
-    public void toElement(Object object, QName nodeName, XMLSimpleWriter writer, MappingContext mappingContext);
+    public void toElement(Object object, QName nodeName, XMLSimpleWriter writer,
+                          MappingContext mappingContext, String defaultValue);
 
 }

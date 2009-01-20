@@ -33,10 +33,14 @@ public class ValueConverterWrapper implements ElementConverter {
         return valueConverter.fromValue(text);
     }
 
-    public void toElement(Object object, QName nodeName, XMLSimpleWriter writer, MappingContext mappingContext) {
+    public void toElement(Object object, QName nodeName, XMLSimpleWriter writer, MappingContext mappingContext, String defaultValue) {
         if (object != null) {
             writer.startElement(nodeName);
-            writer.addText(valueConverter.toValue(object));
+            String value = valueConverter.toValue(object);
+            // if value equals default value => empty elemnt
+            if (!value.equals(defaultValue)) {
+                writer.addText(value);
+            }
             writer.endElement();
         }
     }

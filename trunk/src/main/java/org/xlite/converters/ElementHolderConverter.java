@@ -18,7 +18,7 @@ public class ElementHolderConverter implements ElementConverter {
         return elementHolder;
     }
 
-    public void toElement(Object object, QName nodeName, XMLSimpleWriter writer, MappingContext mappingContext) {
+    public void toElement(Object object, QName nodeName, XMLSimpleWriter writer, MappingContext mappingContext, String defaultValue) {
         ElementHolder elementHolder;
         if (ElementHolder.class.isAssignableFrom(object.getClass())) {
             elementHolder = (ElementHolder) object;

@@ -59,7 +59,7 @@ public class MappingContext {
     public void processNextObject(Object object, QName elementName, XMLSimpleWriter writer) {
         // find the converter for given Object
         ElementConverter converter = lookupElementConverter(object.getClass());
-        converter.toElement(object, elementName, writer, this);
+        converter.toElement(object, elementName, writer, this, "");
     }
 
     public ValueConverter lookupValueConverter(Class type) {

@@ -27,7 +27,7 @@ public class CollectionConverter implements ElementConverter, CollectionConverti
                 "Rather for every object in a collection, a .fromElement() method should be called on it's assigned converter");
     }
 
-    public void toElement(Object object, QName nodeName, XMLSimpleWriter writer, MappingContext mappingContext) {
+    public void toElement(Object object, QName nodeName, XMLSimpleWriter writer, MappingContext mappingContext, String defaultValue) {
         throw new XliteException("CollectionConverter.toElement() method should not be called directly. " +
                 "Rather for every object in a collection, a .toElement() method should be called on it's assigned converter");
     }
