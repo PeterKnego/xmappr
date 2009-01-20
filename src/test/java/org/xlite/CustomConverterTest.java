@@ -60,7 +60,7 @@ public class CustomConverterTest {
             return custom;
         }
 
-        public void toElement(Object object, QName elementName, XMLSimpleWriter writer, MappingContext mappingContext) {
+        public void toElement(Object object, QName elementName, XMLSimpleWriter writer, MappingContext mappingContext, String defaultValue) {
             //To change body of implemented methods use File | Settings | File Templates.
         }
 

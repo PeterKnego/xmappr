@@ -105,11 +105,11 @@ public class ElementMapper {
                 for (Object obj : collection) {
                     QName name = itemTypes.get(obj.getClass());
                     ElementConverter converter = converterCache.get(name);
-                    converter.toElement(obj, name, writer, mappingContext);
+                    converter.toElement(obj, name, writer, mappingContext, defaultValue);
                 }
 
             } else {   // normal field
-                elementConverter.toElement(targetField.get(object), nodeName, writer, mappingContext);
+                elementConverter.toElement(targetField.get(object), nodeName, writer, mappingContext, defaultValue);
             }
         } catch (IllegalAccessException e) {
             throw new XliteException("Field value could not be read! ", e);

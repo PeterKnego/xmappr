@@ -134,7 +134,8 @@ public class AnnotatedClassConverter implements ElementConverter {
         return currentObject;
     }
 
-    public void toElement(Object object, QName elementName, XMLSimpleWriter writer, MappingContext mappingContext) {
+    public void toElement(Object object, QName elementName, XMLSimpleWriter writer,
+                          MappingContext mappingContext, String defaultValue) {
 
         // write a start tag
         writer.startElement(elementName);
