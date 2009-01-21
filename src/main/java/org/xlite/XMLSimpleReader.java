@@ -7,8 +7,8 @@ import javax.xml.stream.XMLStreamReader;
 import java.util.*;
 
 /**
- * A wrapper around {@link javax.xml.stream.XMLStreamReader}, that simplifies usage. It's no longer necessary to create
- * a loop pulling and processing events. A simple usage example:<br><br>
+ * A wrapper around {@link javax.xml.stream.XMLStreamReader}, that enables access to XML on the element level.
+ * It's no longer necessary to create a loop pulling and processing events. A simple usage example:<br><br>
  * {@code XMLSimpleReader reader = new XMLSimpleReader(xmlStreamReader);}<br>
  * {@code reader.getNodeName();}<br>
  * {@code reader.getAttributes();}

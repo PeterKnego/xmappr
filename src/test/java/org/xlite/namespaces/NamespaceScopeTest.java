@@ -18,15 +18,16 @@ import org.xlite.Xlite;
  */
 public class NamespaceScopeTest {
 
-      static String xml = "<aaa xmlns:lower = \"lowercase\" >\n" +
-              "          <lower:BBB xmlns:lower = \"uppercase\" >\n" +
-              "               <lower:x111 />\n" +
-              "               <ccc xmlns:lower = \"xnumber\" >\n" +
-              "                    <lower:x111 />\n" +
-              "               </ccc>\n" +
-              "          </lower:BBB>\n" +
-              "          <lower:x111 />\n" +
-              "     </aaa>";
+      static String xml = "" +
+              "<aaa xmlns:lower = \"lowercase\" >\n" +
+              "  <lower:BBB xmlns:lower = \"uppercase\" >\n" +
+              "    <lower:x111 />\n" +
+              "    <ccc xmlns:lower = \"xnumber\" >\n" +
+              "      <lower:x111 />\n" +
+              "    </ccc>\n" +
+              "  </lower:BBB>\n" +
+              "  <lower:x111 />\n" +
+              "</aaa>";
 
     @org.testng.annotations.Test
     public void test() throws IOException, SAXException {

@@ -19,17 +19,18 @@ import java.io.IOException;
  */
 public class RootNsTest {
 
-    static String xml = "<lower:aaa xmlns:lower=\"lowercase\" xmlns:upper=\"uppercase\" xmlns:xnumber=\"xnumber\">\n" +
-            "          <lower:bbb >\n" +
-            "               <lower:ccc />\n" +
-            "          </lower:bbb>\n" +
-            "          <upper:BBB >\n" +
-            "               <upper:CCC />\n" +
-            "          </upper:BBB>\n" +
-            "          <xnumber:x111 >\n" +
-            "               <xnumber:x222 />\n" +
-            "          </xnumber:x111>\n" +
-            "     </lower:aaa>";
+    static String xml = "" +
+            "<lower:aaa xmlns:lower=\"lowercase\" xmlns:upper=\"uppercase\" xmlns:xnumber=\"xnumber\">\n" +
+            "  <lower:bbb >\n" +
+            "    <lower:ccc />\n" +
+            "  </lower:bbb>\n" +
+            "  <upper:BBB >\n" +
+            "    <upper:CCC />\n" +
+            "  </upper:BBB>\n" +
+            "  <xnumber:x111 >\n" +
+            "    <xnumber:x222 />\n" +
+            "  </xnumber:x111>\n" +
+            "</lower:aaa>";
 
     @org.testng.annotations.Test
     public void test() throws IOException, SAXException {

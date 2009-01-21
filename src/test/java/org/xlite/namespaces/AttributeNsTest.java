@@ -17,7 +17,8 @@ import java.io.StringWriter;
  */
 public class AttributeNsTest {
 
-    static String xml = "<lower:aaa xmlns:lower = \"lowercase\" xmlns:upper = \"uppercase\"\n" +
+    static String xml =
+            "<lower:aaa xmlns:lower = \"lowercase\" xmlns:upper = \"uppercase\"\n" +
             "          xmlns:xnumber = \"xnumber\" xmlns=\"defaultNS\" >\n" +
             "  <lower:bbb lower:zz = \"11\" >\n" +
             "    <lower:ccc upper:WW = \"22\" />\n" +

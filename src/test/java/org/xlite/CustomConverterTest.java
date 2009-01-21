@@ -13,17 +13,17 @@ import java.io.StringReader;
  */
 public class CustomConverterTest {
 
-    static String xml =
+    static String xml = "" +
             "<one>" +
-                    "should be upper case" +
-                    "<custom>" +
-                    "this is a text of a custom field" +
-                    "<three val=\"SHOULD BE LOWER CASE\" attr2=\"42\">" +
-                    "textThree" +
-                    "</three>" +
-                    "<ignored>this node is ignored</ignored>" +
-                    "</custom>" +
-                    "</one>";
+            "should be upper case" +
+            "<custom>" +
+            "this is a text of a custom field" +
+            "<three val=\"SHOULD BE LOWER CASE\" attr2=\"42\">" +
+            "textThree" +
+            "</three>" +
+            "<ignored>this node is ignored</ignored>" +
+            "</custom>" +
+            "</one>";
 
     @org.testng.annotations.Test()
     @ExpectedExceptions(XliteException.class)

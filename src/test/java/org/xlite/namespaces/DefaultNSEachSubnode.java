@@ -19,7 +19,8 @@ import org.xlite.XMLnamespaces;
  */
 public class DefaultNSEachSubnode {
 
-       static String xml = "<aaa >\n" +
+       static String xml =
+               "<aaa >\n" +
                "  <bbb xmlns = \"lowercase\" >\n" +
                "    <ccc />\n" +
                "  </bbb>\n" +

@@ -19,24 +19,24 @@ import org.xlite.XMLtext;
  */
 public class CollectionConverterTest {
 
-    static String xml =
+    static String xml = "" +
             "<one>\n" +
-                    "just some text\n" +
-                    "<item>\n" +
-                      "first item text\n" +
-                      "<subitem>sub12<e></e></subitem>\n" +
-                      "<subitem>sub11</subitem>\n" +
-                      "<ignored>Ignored<subignored/><subignored2/><subignored3/></ignored>\n" +
-                    "</item>\n" +
-                    "<item>\n" +
-                    "second item text\n" +
-                    "<subitem>sub21<ignored>IIIgnored</ignored></subitem>\n" +
+            "just some text\n" +
+            "<item>\n" +
+            "first item text\n" +
+            "<subitem>sub12<e></e></subitem>\n" +
+            "<subitem>sub11</subitem>\n" +
+            "<ignored>Ignored<subignored/><subignored2/><subignored3/></ignored>\n" +
+            "</item>\n" +
+            "<item>\n" +
+            "second item text\n" +
+            "<subitem>sub21<ignored>IIIgnored</ignored></subitem>\n" +
 //                      "<ignored>Ignored<subignored/><subignored2/><subignored3/></ignored>" +
-                    "<subitem>sub22</subitem>\n" +
-                    "<subitem>sub23</subitem>\n" +
-                    "</item>\n" +
-                    "<ignored>Ignored<subignored/><subignored2/><subignored3/></ignored>\n" +
-                    "</one>\n";
+            "<subitem>sub22</subitem>\n" +
+            "<subitem>sub23</subitem>\n" +
+            "</item>\n" +
+            "<ignored>Ignored<subignored/><subignored2/><subignored3/></ignored>\n" +
+            "</one>\n";
 
     @org.testng.annotations.Test
     public void collectionConverterTest() throws IOException, SAXException {

@@ -19,23 +19,24 @@ import java.io.IOException;
  */
 public class DefaultNsOverridingTest {
 
-    static String xml = "<aaa xmlns:upper = \"uppercase\" xmlns:xnumber = \"xnumber\" >\n" +
-            "          <bbb xmlns = \"lowercase\" >\n" +
-            "               <ccc />\n" +
-            "               <upper:WWW />\n" +
-            "               <xnumber:x666 />\n" +
-            "          </bbb>\n" +
-            "          <BBB xmlns = \"uppercase\" >\n" +
-            "               <upper:WWW />\n" +
-            "               <xnumber:x666 />\n" +
-            "               <CCC />\n" +
-            "          </BBB>\n" +
-            "          <x111 xmlns = \"xnumber\" >\n" +
-            "               <x222 />\n" +
-            "               <upper:WWW />\n" +
-            "               <xnumber:x666 />\n" +
-            "          </x111>\n" +
-            "     </aaa>";
+    static String xml = "" +
+            "<aaa xmlns:upper = \"uppercase\" xmlns:xnumber = \"xnumber\" >\n" +
+            "  <bbb xmlns = \"lowercase\" >\n" +
+            "       <ccc />\n" +
+            "       <upper:WWW />\n" +
+            "       <xnumber:x666 />\n" +
+            "  </bbb>\n" +
+            "  <BBB xmlns = \"uppercase\" >\n" +
+            "       <upper:WWW />\n" +
+            "       <xnumber:x666 />\n" +
+            "       <CCC />\n" +
+            "  </BBB>\n" +
+            "  <x111 xmlns = \"xnumber\" >\n" +
+            "       <x222 />\n" +
+            "       <upper:WWW />\n" +
+            "       <xnumber:x666 />\n" +
+            "  </x111>\n" +
+            "</aaa>";
 
     @org.testng.annotations.Test
     public void test() throws IOException, SAXException {

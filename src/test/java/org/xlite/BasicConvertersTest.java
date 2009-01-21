@@ -16,16 +16,17 @@ import org.xlite.XMLtext;
  */
 public class BasicConvertersTest {
 
-    static String xml = "<primitives i=\"1000\" bool=\"true\" byt=\"127\" db=\"-1.6\" fl=\"1.1\" ch=\"f\" >" +
+    static String xml = "" +
+            "<primitives i=\"1000\" bool=\"true\" byt=\"127\" db=\"-1.6\" fl=\"1.1\" ch=\"f\" >" +
             "A text value" +
-            "<iv>999</iv>" +
-            "<boolv>false</boolv>" +
-            "<bytv>-127</bytv>" +
-            "<dbv>1.6</dbv>" +
-            "<flv>-1.1</flv>" +
-            "<chv>g</chv>" +
-            "<node/>" +
-            "<int/>" +
+            "  <iv>999</iv>" +
+            "  <boolv>false</boolv>" +
+            "  <bytv>-127</bytv>" +
+            "  <dbv>1.6</dbv>" +
+            "  <flv>-1.1</flv>" +
+            "  <chv>g</chv>" +
+            "  <node/>" +
+            "  <int/>" +
             "</primitives> ";
 
 
