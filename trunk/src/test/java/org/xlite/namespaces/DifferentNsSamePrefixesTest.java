@@ -15,21 +15,23 @@ import org.xlite.Xlite;
 
 /**
  * Test where xml elements belong to different namespaces although they have the same prefixes.
+ *
  * @author peter
  */
 public class DifferentNsSamePrefixesTest {
 
-      static String xml = "<aaa >\n" +
-              "          <lower:bbb xmlns:lower = \"lowercase\" >\n" +
-              "               <lower:ccc />\n" +
-              "          </lower:bbb>\n" +
-              "          <lower:BBB xmlns:lower = \"uppercase\" >\n" +
-              "               <lower:CCC />\n" +
-              "          </lower:BBB>\n" +
-              "          <lower:x111 xmlns:lower = \"xnumber\" >\n" +
-              "               <lower:x222 />\n" +
-              "          </lower:x111>\n" +
-              "</aaa>";
+    static String xml = "" +
+            "<aaa >\n" +
+            "  <lower:bbb xmlns:lower = \"lowercase\" >\n" +
+            "     <lower:ccc />\n" +
+            "  </lower:bbb>\n" +
+            "  <lower:BBB xmlns:lower = \"uppercase\" >\n" +
+            "    <lower:CCC />\n" +
+            "  </lower:BBB>\n" +
+            "  <lower:x111 xmlns:lower = \"xnumber\" >\n" +
+            "    <lower:x222 />\n" +
+            "  </lower:x111>\n" +
+            "</aaa>";
 
     @org.testng.annotations.Test
     public void test() throws IOException, SAXException {
@@ -42,7 +44,7 @@ public class DifferentNsSamePrefixesTest {
         Assert.assertTrue(a.node_BBB.node_CCC != null);
         Assert.assertTrue(a.node_x111.node_x222 != null);
 
-                // writing back to XML
+        // writing back to XML
         StringWriter sw = new StringWriter();
         xlite.toXML(a, sw);
         System.out.println(xml);

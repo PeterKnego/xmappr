@@ -19,17 +19,18 @@ import java.io.StringWriter;
  */
 public class DifferentPrefixesSameNsTest {
 
-    static String xml = "<lower:aaa xmlns:lower = \"lowercase\" xmlns:upper = \"lowercase\"\n" +
-            "          xmlns:xnumber = \"lowercase\" >\n" +
-            "          <lower:bbb >\n" +
-            "               <lower:ccc />\n" +
-            "          </lower:bbb>\n" +
-            "          <upper:BBB >\n" +
-            "               <upper:CCC />\n" +
-            "          </upper:BBB>\n" +
-            "          <xnumber:x111 >\n" +
-            "               <xnumber:x222 />\n" +
-            "          </xnumber:x111>\n" +
+    static String xml = "" +
+            "<lower:aaa xmlns:lower = \"lowercase\" xmlns:upper = \"lowercase\"\n" +
+            "  xmlns:xnumber = \"lowercase\" >\n" +
+            "  <lower:bbb >\n" +
+            "       <lower:ccc />\n" +
+            "  </lower:bbb>\n" +
+            "  <upper:BBB >\n" +
+            "       <upper:CCC />\n" +
+            "  </upper:BBB>\n" +
+            "  <xnumber:x111 >\n" +
+            "       <xnumber:x222 />\n" +
+            "  </xnumber:x111>\n" +
             "</lower:aaa>";
 
     @org.testng.annotations.Test

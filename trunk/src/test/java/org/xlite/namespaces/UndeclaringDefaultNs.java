@@ -17,13 +17,14 @@ import org.xlite.XMLnamespaces;
  * @author peter
  */
 public class UndeclaringDefaultNs {
-       static String xml = "<aaa xmlns = \"lowercase\" >\n" +
-               "          <bbb >\n" +
-               "               <ccc xmlns = \"\" >\n" +
-               "                    <ddd />\n" +
-               "               </ccc>\n" +
-               "          </bbb>\n" +
-               "     </aaa>";
+       static String xml = "" +
+               "<aaa xmlns = \"lowercase\" >\n" +
+               "  <bbb >\n" +
+               "    <ccc xmlns = \"\" >\n" +
+               "      <ddd />\n" +
+               "    </ccc>\n" +
+               "  </bbb>\n" +
+               "</aaa>";
 
     @org.testng.annotations.Test
     public void test() throws IOException, SAXException {
