@@ -6,6 +6,7 @@ import org.xml.sax.SAXException;
 import org.xlite.Xlite;
 import org.xlite.XMLelement;
 import org.xlite.XMLtext;
+import org.testng.Assert;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -40,6 +41,9 @@ public class DefaultValuesTest {
         System.out.println("");
         System.out.println(ssw);
 
+        Assert.assertEquals(root.a.text,  "text1");
+        Assert.assertEquals(root.b,  0);
+        Assert.assertEquals(root.c,  3);
         XMLUnit.setIgnoreWhitespace(true);
         XMLAssert.assertXMLEqual(xml, ssw);
     }
@@ -49,10 +53,10 @@ public class DefaultValuesTest {
         public A a;
 
         @XMLelement (defaultValue = "0")
-        public Integer b;
+        public int b;
 
-        @XMLelement (defaultValue = "0")
-        public Integer c;
+        @XMLelement (defaultValue = "3")
+        public int c;
     }
 
     public static class A {
