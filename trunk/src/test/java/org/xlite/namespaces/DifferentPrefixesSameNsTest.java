@@ -4,9 +4,7 @@ import org.custommonkey.xmlunit.XMLAssert;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.testng.Assert;
 import org.xml.sax.SAXException;
-import org.xlite.XMLelement;
-import org.xlite.Xlite;
-import org.xlite.XMLnamespaces;
+import org.xlite.*;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -36,11 +34,13 @@ public class DifferentPrefixesSameNsTest {
     @org.testng.annotations.Test
     public void test() throws IOException, SAXException {
         StringReader reader = new StringReader(xml);
-        Xlite xlite = new Xlite(aaa.class, "l:aaa");
+        Configuration conf = new AnnotationConfiguration(aaa.class, "l:aaa");
 
         // predefined namespaces
-        xlite.addNamespace("l=lowercase");
-        xlite.addNamespace("u=lowercase");
+        conf.addNamespace("l=lowercase");
+        conf.addNamespace("u=lowercase");
+
+        Xlite xlite = new Xlite(conf);
         aaa a = (aaa) xlite.fromXML(reader);
 
         Assert.assertTrue(a.node_bbb.node_ccc != null);

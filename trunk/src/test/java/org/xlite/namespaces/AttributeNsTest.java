@@ -4,9 +4,7 @@ import org.custommonkey.xmlunit.XMLAssert;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.testng.Assert;
 import org.xml.sax.SAXException;
-import org.xlite.XMLelement;
-import org.xlite.XMLattribute;
-import org.xlite.Xlite;
+import org.xlite.*;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -19,24 +17,28 @@ public class AttributeNsTest {
 
     static String xml =
             "<lower:aaa xmlns:lower = \"lowercase\" xmlns:upper = \"uppercase\"\n" +
-            "          xmlns:xnumber = \"xnumber\" xmlns=\"defaultNS\" >\n" +
-            "  <lower:bbb lower:zz = \"11\" >\n" +
-            "    <lower:ccc upper:WW = \"22\" />\n" +
-            "  </lower:bbb>\n" +
-            "  <upper:BBB lower:sss = \"***\" xnumber:S111 = \"???\" />\n" +
-            "  <xnumber:x111 RRR=\"rrrdata\" />\n" +
-            "</lower:aaa>";
+                    "          xmlns:xnumber = \"xnumber\" xmlns=\"defaultNS\" >\n" +
+                    "  <lower:bbb lower:zz = \"11\" >\n" +
+                    "    <lower:ccc upper:WW = \"22\" />\n" +
+                    "  </lower:bbb>\n" +
+                    "  <upper:BBB lower:sss = \"***\" xnumber:S111 = \"???\" />\n" +
+                    "  <xnumber:x111 RRR=\"rrrdata\" />\n" +
+                    "</lower:aaa>";
 
     @org.testng.annotations.Test
     public void test() throws IOException, SAXException {
         StringReader reader = new StringReader(xml);
-        Xlite xlite = new Xlite(aaa.class, "l:aaa");
+
+        //default namespace
+        Configuration conf = new AnnotationConfiguration(aaa.class, "l:aaa");
 
         // predefined namespaces
-        xlite.addNamespace("l=lowercase");
-        xlite.addNamespace("u=uppercase");
-        xlite.addNamespace("xn=xnumber");
-        xlite.addNamespace("defaultNS");      // default namespace
+        conf.addNamespace("l=lowercase");
+        conf.addNamespace("u=uppercase");
+        conf.addNamespace("xn=xnumber");
+        conf.addNamespace("defaultNS");
+
+        Xlite xlite = new Xlite(conf);
         aaa a = (aaa) xlite.fromXML(reader);
 
         Assert.assertEquals(a.node_bbb.zz, 11);

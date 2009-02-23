@@ -1,7 +1,5 @@
 package org.xlite.namespaces;
 
-import org.xlite.XMLelement;
-
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.IOException;
@@ -10,36 +8,37 @@ import org.testng.Assert;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.custommonkey.xmlunit.XMLAssert;
 import org.xml.sax.SAXException;
-import org.xlite.XMLnamespaces;
-import org.xlite.Xlite;
+import org.xlite.*;
 
 /**
  * @author peter
  */
 public class NamespaceScopeTest {
 
-      static String xml = "" +
-              "<aaa xmlns:lower = \"lowercase\" >\n" +
-              "  <lower:BBB xmlns:lower = \"uppercase\" >\n" +
-              "    <lower:x111 />\n" +
-              "    <ccc xmlns:lower = \"xnumber\" >\n" +
-              "      <lower:x111 />\n" +
-              "    </ccc>\n" +
-              "  </lower:BBB>\n" +
-              "  <lower:x111 />\n" +
-              "</aaa>";
+    static String xml = "" +
+            "<aaa xmlns:lower = \"lowercase\" >\n" +
+            "  <lower:BBB xmlns:lower = \"uppercase\" >\n" +
+            "    <lower:x111 />\n" +
+            "    <ccc xmlns:lower = \"xnumber\" >\n" +
+            "      <lower:x111 />\n" +
+            "    </ccc>\n" +
+            "  </lower:BBB>\n" +
+            "  <lower:x111 />\n" +
+            "</aaa>";
 
     @org.testng.annotations.Test
     public void test() throws IOException, SAXException {
         StringReader reader = new StringReader(xml);
-        Xlite xlite = new Xlite(aaa.class, "aaa");
+        Configuration conf = new AnnotationConfiguration(aaa.class, "aaa");
+
+        Xlite xlite = new Xlite(conf);
         aaa a = (aaa) xlite.fromXML(reader);
 
         Assert.assertNotNull(a.node_BBB.node_ccc.node_x111);
         Assert.assertNotNull(a.node_BBB.node_x111);
         Assert.assertNotNull(a.node_x111);
 
-                // writing back to XML
+        // writing back to XML
         StringWriter sw = new StringWriter();
         xlite.toXML(a, sw);
 //        System.out.println(sw);

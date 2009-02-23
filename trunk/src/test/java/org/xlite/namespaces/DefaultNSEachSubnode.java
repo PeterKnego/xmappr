@@ -1,7 +1,5 @@
 package org.xlite.namespaces;
 
-import org.xlite.XMLelement;
-
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.IOException;
@@ -10,8 +8,7 @@ import org.testng.Assert;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.custommonkey.xmlunit.XMLAssert;
 import org.xml.sax.SAXException;
-import org.xlite.Xlite;
-import org.xlite.XMLnamespaces;
+import org.xlite.*;
 
 /**
  * Test where each subnode defines it's default namespace
@@ -35,7 +32,11 @@ public class DefaultNSEachSubnode {
     @org.testng.annotations.Test
     public void test() throws IOException, SAXException {
         StringReader reader = new StringReader(xml);
-        Xlite xlite = new Xlite(aaa.class, "aaa");
+
+
+
+        Configuration conf = new AnnotationConfiguration(aaa.class, "aaa");
+        Xlite xlite = new Xlite(conf);
         aaa a = (aaa) xlite.fromXML(reader);
 
         Assert.assertTrue(a.node_bbb.node_ccc != null);

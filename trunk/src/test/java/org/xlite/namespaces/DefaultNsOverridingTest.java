@@ -4,9 +4,7 @@ import org.custommonkey.xmlunit.XMLAssert;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.testng.Assert;
 import org.xml.sax.SAXException;
-import org.xlite.XMLnamespaces;
-import org.xlite.XMLelement;
-import org.xlite.Xlite;
+import org.xlite.*;
 
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -41,11 +39,13 @@ public class DefaultNsOverridingTest {
     @org.testng.annotations.Test
     public void test() throws IOException, SAXException {
         StringReader reader = new StringReader(xml);
-        Xlite xlite = new Xlite(aaa.class, "aaa"); //todo THIS SHOULD BE AN ERROR <l:aaa> should not match <aaa>
+        Configuration conf = new AnnotationConfiguration(aaa.class, "aaa"); //todo THIS SHOULD BE AN ERROR <l:aaa> should not match <aaa>
 
         // predefined namespaces
-        xlite.addNamespace("u=uppercase");
-        xlite.addNamespace("xn=xnumber");
+        conf.addNamespace("u=uppercase");
+        conf.addNamespace("xn=xnumber");
+
+        Xlite xlite = new Xlite(conf);
         aaa a = (aaa) xlite.fromXML(reader);
 
         Assert.assertTrue(a.node_bbb.node_ccc != null);
