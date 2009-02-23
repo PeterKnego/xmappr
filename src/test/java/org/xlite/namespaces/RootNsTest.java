@@ -4,9 +4,7 @@ import org.testng.Assert;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.custommonkey.xmlunit.XMLAssert;
 import org.xml.sax.SAXException;
-import org.xlite.XMLnamespaces;
-import org.xlite.XMLelement;
-import org.xlite.Xlite;
+import org.xlite.*;
 
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -36,11 +34,13 @@ public class RootNsTest {
     public void test() throws IOException, SAXException {
         StringReader reader = new StringReader(xml);
         StringWriter writer = new StringWriter();
-        Xlite xlite = new Xlite(aaa.class, "l:aaa");
+        Configuration conf = new AnnotationConfiguration(aaa.class, "l:aaa");
 
         // predefined namespaces
-        xlite.addNamespace("l=lowercase");
-        xlite.addNamespace("u=uppercase");
+        conf.addNamespace("l=lowercase");
+        conf.addNamespace("u=uppercase");
+
+        Xlite xlite = new Xlite(conf);
         aaa a = (aaa) xlite.fromXML(reader);
 
         Assert.assertTrue(a.node_bbb.node_ccc != null);

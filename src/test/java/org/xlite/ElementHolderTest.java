@@ -29,7 +29,8 @@ public class ElementHolderTest {
     public void test() throws IOException, SAXException {
 
         StringReader reader = new StringReader(xml);
-        Xlite xlite = new Xlite(RootOne.class, "root");
+        Configuration conf = new AnnotationConfiguration(RootOne.class, "root");
+        Xlite xlite = new Xlite(conf);
 
         RootOne one = (RootOne) xlite.fromXML(reader);
 
@@ -50,7 +51,7 @@ public class ElementHolderTest {
         @XMLelements(
                 {@XMLelement(name = "a", itemType = A.class)
 //                @XMLelement(name = "unknown", converter = ElementHolderConverter.class)}
-                        }
+                }
         )
         public List letters;
 

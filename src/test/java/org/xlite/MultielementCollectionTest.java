@@ -28,10 +28,11 @@ public class MultielementCollectionTest {
     public void test() throws IOException, SAXException {
 
         StringReader reader = new StringReader(xml);
-        Xlite xlite = new Xlite(Root.class, "root");
-        xlite.setStoringUnknownElements(false);
-        xlite.setPrettyPrint(false);
+        Configuration conf = new AnnotationConfiguration(Root.class, "root");
+        conf.setStoringUnknownElements(false);
+        conf.setPrettyPrint(false);
 
+        Xlite xlite = new Xlite(conf);
         Root one = (Root) xlite.fromXML(reader);
 
         // writing back to XML
@@ -56,7 +57,7 @@ public class MultielementCollectionTest {
 //        @XMLelement(name = "a", itemType = A.class)
         public List letters;
 
-//        @XMLelement("data")
+        //        @XMLelement("data")
         public ElementHolder holder;
     }
 

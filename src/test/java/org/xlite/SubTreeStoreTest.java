@@ -38,7 +38,7 @@ public class SubTreeStoreTest {
     static String xml = "<a xmlns=\"ns1\" xmlns:s=\"ns2\" xmlns:w=\"ns3\">\n" +
             "<s:b>\n" +
             "<c>CCCCCCC\n" +
-            "<e>EEEE</e>\n"+
+            "<e>EEEE</e>\n" +
             "<w:emptico xmlns:w=\"www\"/>\n" +
             "<w:one aa=\"prvi\">\n" +
             "<w:empty/>\n" +
@@ -53,11 +53,13 @@ public class SubTreeStoreTest {
     public void testStoringNodes() throws IOException, SAXException, XpathException {
         StringReader reader = new StringReader(xml);
 
-        Xlite xlite = new Xlite(A.class, "a", "ns1");
-        xlite.setStoringUnknownElements(true);
-        xlite.addNamespace("ns1");
-        xlite.addNamespace("s=ns2");
-        xlite.addNamespace("w=ns3");
+        Configuration conf = new AnnotationConfiguration(A.class, "a", "ns1");
+        conf.setStoringUnknownElements(true);
+        conf.addNamespace("ns1");
+        conf.addNamespace("s=ns2");
+        conf.addNamespace("w=ns3");
+
+        Xlite xlite = new Xlite(conf);
         A a = (A) xlite.fromXML(reader);
 
 //        XMLSimpleReader.printStore(xlite.getElementStore(), "STORE");
@@ -76,7 +78,7 @@ public class SubTreeStoreTest {
     }
 
     public static class A {
-//        @XMLnamespaces("s=ns2")
+        //        @XMLnamespaces("s=ns2")
         @XMLelement("s:b")
         public B b;
     }

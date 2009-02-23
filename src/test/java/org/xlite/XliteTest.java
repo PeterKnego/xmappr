@@ -17,8 +17,9 @@ public class XliteTest {
     public void basicTest() {
 
         StringReader reader = new StringReader(SampleXml.xml);
-        Xlite xlite = new Xlite(SampleXml.One.class, "one");
-        xlite.setStoringUnknownElements(true);
+        Configuration conf = new AnnotationConfiguration(SampleXml.One.class, "one");
+        conf.setStoringUnknownElements(true);
+        Xlite xlite = new Xlite(conf);
 
         SampleXml.One one = (SampleXml.One) xlite.fromXML(reader);
         Assert.assertEquals(one.attr, "text1");
@@ -29,7 +30,7 @@ public class XliteTest {
         Assert.assertEquals(one.emptyNode.attrEmpty, -1.6d, 0.0d);
 
         Assert.assertTrue(one.two.attr4);
-        Assert.assertEquals(one.two.character, 'x');        
+        Assert.assertEquals(one.two.character, 'x');
         Assert.assertEquals(one.two.text, "textTwo");
 
         Assert.assertEquals(one.two.three1.attr, 42);
@@ -39,7 +40,6 @@ public class XliteTest {
         Assert.assertTrue(one.two.four.b);
         Assert.assertEquals(one.two.four.c, 'f');
         Assert.assertEquals(one.two.four.f, -15.555f, 0.0f);
-
 
 
     }

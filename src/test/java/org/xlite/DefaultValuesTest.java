@@ -27,8 +27,9 @@ public class DefaultValuesTest {
     public void test() throws IOException, SAXException {
 
         StringReader reader = new StringReader(xml);
-        Xlite xlite = new Xlite(Root.class, "root");
-        xlite.setPrettyPrint(false);
+        Configuration conf = new AnnotationConfiguration(Root.class, "root");
+        conf.setPrettyPrint(false);
+        Xlite xlite = new Xlite(conf);
 
         Root root = (Root) xlite.fromXML(reader);
 
@@ -41,9 +42,9 @@ public class DefaultValuesTest {
         System.out.println("");
         System.out.println(ssw);
 
-        Assert.assertEquals(root.a.text,  "text1");
-        Assert.assertEquals(root.b,  0);
-        Assert.assertEquals(root.c,  3);
+        Assert.assertEquals(root.a.text, "text1");
+        Assert.assertEquals(root.b, 0);
+        Assert.assertEquals(root.c, 3);
         XMLUnit.setIgnoreWhitespace(true);
         XMLAssert.assertXMLEqual(xml, ssw);
     }
@@ -52,10 +53,10 @@ public class DefaultValuesTest {
         @XMLelement
         public A a;
 
-        @XMLelement (defaultValue = "0")
+        @XMLelement(defaultValue = "0")
         public int b;
 
-        @XMLelement (defaultValue = "3")
+        @XMLelement(defaultValue = "3")
         public int c;
     }
 

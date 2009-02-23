@@ -30,7 +30,8 @@ public class CustomConverterTest {
     public void customConverterTest() {
 
         StringReader reader = new StringReader(xml);
-        Xlite xlite = new Xlite(One.class, "one");
+        Configuration conf = new AnnotationConfiguration(One.class, "one");
+        Xlite xlite = new Xlite(conf);
         One one = (One) xlite.fromXML(reader);
 
         Assert.assertEquals(one.text, "SHOULD BE UPPER CASE"); // should be converted to upper case

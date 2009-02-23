@@ -42,8 +42,10 @@ public class CollectionConverterTest {
     public void collectionConverterTest() throws IOException, SAXException {
 
         StringReader reader = new StringReader(xml);
-        Xlite xlite = new Xlite(One.class, "one");
-        xlite.setStoringUnknownElements(true);
+        Configuration conf = new AnnotationConfiguration(One.class, "one");
+        conf.setStoringUnknownElements(true);
+
+        Xlite xlite = new Xlite(conf);
         One one = (One) xlite.fromXML(reader);
 
         Assert.assertEquals(one.text, "just some text"); // should be converted to upper case

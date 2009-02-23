@@ -31,16 +31,17 @@ public class SimpleWriterTest {
     public void testEquality() throws XMLStreamException, IOException, SAXException {
         StringReader reader = new StringReader(xml1);
 
-        Xlite xlite = new Xlite(A.class, "a", "ns1");
-        xlite.addNamespace("ns1");
-//        xlite.addNamespace("s=ns2");
+        Configuration conf = new AnnotationConfiguration(A.class, "a", "ns1");
+        conf.addNamespace("ns1");
+
+        Xlite xlite = new Xlite(conf);
         A a = (A) xlite.fromXML(reader);
-        System.out.println(xml1);
+//        System.out.println(xml1);
 
         // writing back to XML
         StringWriter sw = new StringWriter();
         xlite.toXML(a, sw);
-        System.out.println(sw);
+//        System.out.println(sw);
         XMLUnit.setIgnoreWhitespace(true);
         XMLAssert.assertXMLEqual(xml1, sw.toString());
     }
