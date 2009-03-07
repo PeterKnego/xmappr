@@ -42,24 +42,12 @@ public class AnnotatedClassConverter implements ElementConverter {
         this.textMapper = textMapper;
     }
 
-    public ValueMapper getTextMapper() {
-        return textMapper;
-    }
-
     public void addElementMapper(QName qName, ElementMapper elementMapper) {
         elementMappersByName.put(qName, elementMapper);
     }
 
     public void addAttributeConverter(QName attributeQName, ValueMapper valueMapper) {
         attributeMappers.put(attributeQName, valueMapper);
-    }
-
-    public Class getTargetClass() {
-        return targetClass;
-    }
-
-    public void setTargetClass(Class targetClass) {
-        this.targetClass = targetClass;
     }
 
     public boolean canConvert(Class type) {
@@ -76,7 +64,6 @@ public class AnnotatedClassConverter implements ElementConverter {
             throw new XliteException("Could not instantiate class " + targetClass.getName(), e);
         } catch (IllegalAccessException e) {
             throw new XliteException("Could not instantiate class " + targetClass.getName(), e);
-
         }
 
         // XML element value

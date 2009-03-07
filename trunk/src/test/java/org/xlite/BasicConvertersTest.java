@@ -4,12 +4,17 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.io.StringReader;
+import java.io.StringWriter;
+import java.io.IOException;
 import java.lang.reflect.Field;
 
 import org.xlite.Xlite;
 import org.xlite.XMLelement;
 import org.xlite.XMLattribute;
 import org.xlite.XMLtext;
+import org.custommonkey.xmlunit.XMLUnit;
+import org.custommonkey.xmlunit.XMLAssert;
+import org.xml.sax.SAXException;
 
 /**
  * @author peter
@@ -32,7 +37,7 @@ public class BasicConvertersTest {
 
 
     @Test
-    public void mainTest() throws IllegalAccessException {
+    public void mainTest() throws IllegalAccessException, IOException, SAXException {
         StringReader reader = new StringReader(xml);
         Configuration conf = new AnnotationConfiguration(Primitives.class, "primitives");
         conf.setStoringUnknownElements(true);
@@ -57,7 +62,7 @@ public class BasicConvertersTest {
         Assert.assertEquals(primitives.value, "A text value");
 
         // subelements
-        Assert.assertEquals(primitives.iv, 999);
+        Assert.assertEquals(primitives.iv.intValue(), 999);
         Assert.assertEquals(primitives.lv, 999999);
         Assert.assertFalse(primitives.boolv);
         Assert.assertEquals(primitives.bytv, -127);
@@ -68,6 +73,18 @@ public class BasicConvertersTest {
         // default values used
         Assert.assertEquals(primitives.intNode, 0);
         Assert.assertEquals(primitives.stringNode, null);
+
+         // writing back to XML
+        StringWriter sw = new StringWriter();
+        xf.toXML(primitives, sw);
+        String ssw = sw.toString();
+        System.out.println("");
+        System.out.println(xml);
+        System.out.println("");
+        System.out.println(ssw);
+
+        XMLUnit.setIgnoreWhitespace(true);
+        XMLAssert.assertXMLEqual(xml, ssw);
 
     }
 
@@ -97,13 +114,13 @@ public class BasicConvertersTest {
         public String value;
 
         @XMLelement("node")
-        public String stringNode;
+        public String stringNode = "";
 
         @XMLelement(name = "int", defaultValue = "0")
         public int intNode;
 
         @XMLelement
-        public int iv;
+        public Integer iv;
 
         @XMLelement
         public long lv;
