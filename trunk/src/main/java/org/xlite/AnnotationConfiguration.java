@@ -109,7 +109,6 @@ public class AnnotationConfiguration implements Configuration {
     private void setupElementConverters() {
         elementConverters = new ArrayList<ElementConverter>();
         elementConverters.add(new CollectionConverter());
-        elementConverters.add(new ElementStoreConverter());
 
         // wraps every ValueConverter so that it can be used as a ElementConverter
         for (ValueConverter valueConverter : valueConverters) {

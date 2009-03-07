@@ -62,8 +62,6 @@ public class SubTreeStoreTest {
         Xlite xlite = new Xlite(conf);
         A a = (A) xlite.fromXML(reader);
 
-//        XMLSimpleReader.printStore(xlite.getElementStore(), "STORE");
-
         // writing back to XML
         StringWriter sw = new StringWriter();
         xlite.toXML(a, sw);

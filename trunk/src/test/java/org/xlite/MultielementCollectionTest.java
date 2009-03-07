@@ -55,8 +55,6 @@ public class MultielementCollectionTest {
         })
         public List letters;
 
-        @XMLelement("data")
-        public ElementStore store;
     }
 
     public static class A {
