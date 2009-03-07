@@ -3,10 +3,7 @@ package org.xlite;
 import org.custommonkey.xmlunit.XMLAssert;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.xml.sax.SAXException;
-import org.xlite.XMLelement;
-import org.xlite.XMLelements;
-import org.xlite.Xlite;
-import org.xlite.XMLtext;
+import org.xlite.converters.ElementStoreConverter;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -16,13 +13,12 @@ import java.util.List;
 /**
  * @author peter
  */
-public class ElementHolderTest {
+public class ElementStoreTest {
     public static String xml = "<root>" +
             "<b></b>" +
             "<a>text1</a>" +
             "<a></a>" +
-//            "<unknown>textUnknown</unknown>" +
-//            "<unknown2>textUnknown2</unknown2>" +
+            "<unknown>textUnknown</unknown>" +
             "</root>";
 
     @org.testng.annotations.Test
@@ -30,6 +26,7 @@ public class ElementHolderTest {
 
         StringReader reader = new StringReader(xml);
         Configuration conf = new AnnotationConfiguration(RootOne.class, "root");
+        conf.setPrettyPrint(false);
         Xlite xlite = new Xlite(conf);
 
         RootOne one = (RootOne) xlite.fromXML(reader);
@@ -48,15 +45,14 @@ public class ElementHolderTest {
     }
 
     public static class RootOne {
-        @XMLelements(
-                {@XMLelement(name = "a", itemType = A.class)
-//                @XMLelement(name = "unknown", converter = ElementHolderConverter.class)}
-                }
-        )
+        @XMLelements({
+                @XMLelement(name = "a", itemType = A.class),
+                @XMLelement(name = "b", itemType = B.class)
+        })
         public List letters;
 
-        @XMLelement
-        public B b;
+        @XMLelement(name="unknown")
+        public ElementStore store;
     }
 
     public static class A {

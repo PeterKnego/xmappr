@@ -4,7 +4,6 @@ import javax.xml.stream.*;
 import java.io.Reader;
 import java.io.Writer;
 
-
 /**
  * User: peter
  * Date: Feb 25, 2008
@@ -18,7 +17,6 @@ public class Xlite {
         this.annotationConfiguration = annotationConfiguration;
     }
 
-
     public Object fromXML(Reader reader) {
         annotationConfiguration.initialize();
 
@@ -29,6 +27,7 @@ public class Xlite {
         } catch (XMLStreamException e) {
             throw new XliteException("Error initalizing XMLStreamReader", e);
         }
+
         XMLSimpleReader simpleReader = new XMLSimpleReader(xmlreader, annotationConfiguration.isStoringUnknownElements());
 
         return annotationConfiguration.getRootElementMapper().getRootObject(simpleReader);
@@ -50,7 +49,46 @@ public class Xlite {
         annotationConfiguration.getRootElementMapper().toXML(source, simpleWriter);
     }
 
-    public SubTreeStore getNodeStore() {
-        return annotationConfiguration.getNodeStore();
+     public void toXML(Object source, ObjectStore store, Writer writer) {
+        annotationConfiguration.initialize();
+
+        XMLOutputFactory factory = XMLOutputFactory.newInstance();
+        factory.setProperty("javax.xml.stream.isRepairingNamespaces", true);
+        XMLStreamWriter parser;
+        try {
+            parser = factory.createXMLStreamWriter(writer);
+        } catch (XMLStreamException e) {
+            throw new XliteException("Error initalizing XMLStreamWriter", e);
+        }
+        XMLSimpleWriter simpleWriter = new XMLSimpleWriter(parser, store, new XmlStreamSettings(), annotationConfiguration.isPrettyPrint());
+
+        annotationConfiguration.getRootElementMapper().toXML(source, simpleWriter);
     }
+
+    public static class Result {
+        ObjectStore store;
+        Object object;
+
+        public Result( Object object, ObjectStore store) {
+            this.store = store;
+            this.object = object;
+        }
+
+        public ObjectStore getStore() {
+            return store;
+        }
+
+        public void setStore(ObjectStore store) {
+            this.store = store;
+        }
+
+        public Object getObject() {
+            return object;
+        }
+
+        public void setObject(Object object) {
+            this.object = object;
+        }
+    }
+
 }

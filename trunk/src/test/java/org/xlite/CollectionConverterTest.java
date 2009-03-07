@@ -30,15 +30,15 @@ public class CollectionConverterTest {
             "</item>\n" +
             "<item>\n" +
             "second item text\n" +
-            "<subitem>sub21<ignored>IIIgnored</ignored></subitem>\n" +
+            "   <subitem>sub21<ignored>IIIgnored</ignored></subitem>\n" +
 //                      "<ignored>Ignored<subignored/><subignored2/><subignored3/></ignored>" +
-            "<subitem>sub22</subitem>\n" +
-            "<subitem>sub23</subitem>\n" +
+            "   <subitem>sub22</subitem>\n" +
+            "   <subitem>sub23</subitem>\n" +
             "</item>\n" +
             "<ignored>Ignored<subignored/><subignored2/><subignored3/></ignored>\n" +
             "</one>\n";
 
-    @org.testng.annotations.Test
+//    @org.testng.annotations.Test
     public void collectionConverterTest() throws IOException, SAXException {
 
         StringReader reader = new StringReader(xml);

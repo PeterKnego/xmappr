@@ -11,11 +11,11 @@ public class AnnotationConfiguration implements Configuration {
 
     private RootMapper rootElementMapper;
 
+    private MappingContext mappingContext;
+
     private List<ElementConverter> elementConverters;
 
     private List<ValueConverter> valueConverters;
-
-    private MappingContext mappingContext;
 
     private boolean initialized = false;
 
@@ -72,7 +72,7 @@ public class AnnotationConfiguration implements Configuration {
 
         // initialize storing unknown nodes
         if (isStoringUnknownElements) {
-            mappingContext.setElementStore(new SubTreeStore(cacheSize));
+            mappingContext.setElementStore(new ObjectStore(cacheSize));
         } else {
             mappingContext.setElementStore(null);
         }
@@ -109,7 +109,7 @@ public class AnnotationConfiguration implements Configuration {
     private void setupElementConverters() {
         elementConverters = new ArrayList<ElementConverter>();
         elementConverters.add(new CollectionConverter());
-        elementConverters.add(new ElementHolderConverter());
+        elementConverters.add(new ElementStoreConverter());
 
         // wraps every ValueConverter so that it can be used as a ElementConverter
         for (ValueConverter valueConverter : valueConverters) {
@@ -136,7 +136,4 @@ public class AnnotationConfiguration implements Configuration {
         mappingContext.addNamespace(namespace);
     }
 
-    public SubTreeStore getNodeStore() {
-        return mappingContext.getElementStore();
-    }
 }

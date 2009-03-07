@@ -19,12 +19,18 @@ public class XMLSimpleWriter {
     private XmlStreamSettings settings = new XmlStreamSettings();
     private List<Element> elementCache = new ArrayList<Element>();
     private List<Element> predefinedNamespaces = new ArrayList<Element>();
+    private ObjectStore objectStore;
 
     public final boolean isPrettyPrinting;
     private StringBuilder tabs = new StringBuilder("\n");
 
     public XMLSimpleWriter(XMLStreamWriter writer, XmlStreamSettings settings, boolean prettyPrint) {
+        this(writer, null, settings, prettyPrint);
+    }
+
+    public XMLSimpleWriter(XMLStreamWriter writer, ObjectStore objectStore, XmlStreamSettings settings, boolean prettyPrint) {
         this.settings = settings;
+        this.objectStore = objectStore;
         this.writer = writer;
         this.isPrettyPrinting = prettyPrint;
     }
@@ -164,12 +170,16 @@ public class XMLSimpleWriter {
         elementCache.add(new Element(Element.NAMESPACE, prefix, "", namespaceURI, ""));
     }
 
-    public void restoreSubTrees(SubTreeStore store, Object reference) {
-        List<Integer> locations = store.getLocations(reference);
+    public void restoreSubTrees(Object reference) {
+
+        // restore only if objectStore is set
+        if(objectStore == null) return;
+
+        List<Integer> locations = objectStore.getLocations(reference);
         if (locations != null) {
             for (Integer location : locations) {
                 try {
-                    restoreSubTree(store, location);
+                    restoreSubTree(objectStore, location);
                 } catch (XMLStreamException e) {
                     throw new XliteException(e);
                 } catch (UnsupportedEncodingException e) {
@@ -179,11 +189,11 @@ public class XMLSimpleWriter {
         }
     }
 
-    private void restoreSubTree(SubTreeStore store, int location) throws XMLStreamException, UnsupportedEncodingException {
+    private void restoreSubTree(ObjectStore store, int location) throws XMLStreamException, UnsupportedEncodingException {
 
         flushElementCache();
 
-//        XMLSimpleReader.printStore(store, "RE-STORE");
+//        XMLSimpleReader.printStore(objectStore, "RE-STORE");
 
         String prefix, localName, nsURI, value, data;
         String encoding = settings.encoding;  // default encoding
@@ -191,15 +201,15 @@ public class XMLSimpleWriter {
         Map<String, String> nsCache = new HashMap<String, String>();
         boolean emptyNode = true;
 
-        SubTreeStore.Element element = store.getNextElement(location);
-        if (!SubTreeStore.isBlockStart(element)) {
+        ObjectStore.Element element = store.getNextElement(location);
+        if (!ObjectStore.isBlockStart(element)) {
             throw new IllegalArgumentException("Error: XMLSimpleWriter.restoreSubTree was given a wrong location " +
                     "argument: no saved data block is found on given location!");
         }
 
-        while (!SubTreeStore.isBlockEnd(element)) {
+        while (!ObjectStore.isBlockEnd(element)) {
             switch (element.command) {
-                case SubTreeStore.NAMESPACE_CACHE:
+                case ObjectStore.NAMESPACE_CACHE:
                     data = new String(element.data);
                     first = data.indexOf('=');
                     prefix = data.substring(0, first);
