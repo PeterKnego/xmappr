@@ -9,7 +9,7 @@ import java.util.*;
  * Date: Feb 21, 2008
  * Time: 3:49:11 PM
  */
-public class SubTreeStore {
+public class ObjectStore {
 
 
     private byte[] data;
@@ -27,11 +27,11 @@ public class SubTreeStore {
     public static final int NAMESPACE_CACHE = 97;
     private int markedPosition = 0;
 
-    public SubTreeStore(int size) {
+    public ObjectStore(int size) {
         this(size, 1000000);
     }
 
-    public SubTreeStore(int size, int sizeIncrement) {
+    public ObjectStore(int size, int sizeIncrement) {
         data = new byte[size];
         increment = sizeIncrement;
         references = new IdentityHashMap<Object, List<Integer>>(size / 500);
@@ -128,7 +128,7 @@ public class SubTreeStore {
         byte command = (byte) commandID;
         // sanity check
         if (command != commandID) {
-            throw new XliteException("ERROR: SubTreeStore.addElement() received a commandID parameter that does not cast to byte!");
+            throw new XliteException("ERROR: ObjectStore.addElement() received a commandID parameter that does not cast to byte!");
         }
 
         needsResize(len + 3);
@@ -176,7 +176,7 @@ public class SubTreeStore {
         return new Element(comm, holder, start);
     }
 
-    public void copyFrom(SubTreeStore source) {
+    public void copyFrom(ObjectStore source) {
         Element element = source.getNextElement(0);
         while (element != null) {
             if (element.command == NAMESPACE_CACHE) {
@@ -234,7 +234,7 @@ public class SubTreeStore {
         return depth;
     }
 
-    public void copyNamespaceCache(SubTreeStore store) {
+    public void copyNamespaceCache(ObjectStore store) {
         namespaceCache.putAll(store.getCachedNamespaces());
     }
 

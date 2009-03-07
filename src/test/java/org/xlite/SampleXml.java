@@ -11,20 +11,20 @@ public class SampleXml {
 
     static String xml =
             "<one attr1=\"text1\" attr2=\"1111\" attr3=\"1.1\">" +
-                    "just a<!-- comment should be ignored -->text" +
+                    "just a<!-- comment should be ignored --> text" +
                     "<ignored>Ignored<subignored/></ignored>" +
                     "<emptyNode attrEmpty=\"-1.6\"/>" +
                     "<two attr4=\"true\" attr5=\"x\" >" +
                     "textTwo" +
-                    "<three1 val=\"42\">" +
-                    "textThree" +
-                    "</three1>" +
-                    "<nodeWithSubnodes>" +
-                    "<integer>2008</integer>" +
-                    "<bool>true</bool>" +
-                    "<char>f</char>" +
-                    "<float>-15.555</float>" +
-                    "</nodeWithSubnodes>" +
+                    "   <three1 val=\"42\">" +
+                    "   textThree" +
+                    "   </three1>" +
+                    "   <nodeWithSubnodes>" +
+                    "       <integer>2008</integer>" +
+                    "       <bool>true</bool>" +
+                    "       <char>f</char>" +
+                    "       <float>-15.555</float>" +
+                    "   </nodeWithSubnodes>" +
                     "</two>" +
                     "</one>";
 

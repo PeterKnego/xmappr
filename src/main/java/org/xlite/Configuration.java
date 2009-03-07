@@ -27,5 +27,4 @@ public interface Configuration {
 
     void addNamespace(String namespace);
 
-    SubTreeStore getNodeStore();
 }

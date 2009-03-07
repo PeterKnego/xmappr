@@ -36,9 +36,7 @@ public class SimpleReaderTest {
     @org.testng.annotations.Test
     public void emptyElementWithAttributeTest() throws XMLStreamException {
         XMLSimpleReader reader = getReader(xml1);
-        StringWriter sw = new StringWriter();
-        XMLSimpleWriter writer = getWriter(sw);
- 
+
         reader.findFirstElement();
         Element rootElement = processSubElements(reader).get(0);
 //        printElements(rootElement, "");
@@ -57,7 +55,7 @@ public class SimpleReaderTest {
         XMLSimpleReader reader = getReader(xml2);
         reader.findFirstElement();
         Element rootElement = processSubElements(reader).get(0);
-        printElements(rootElement, "");
+//        printElements(rootElement, "");
         Assert.assertEquals(rootElement.name.getLocalPart(), "a");
         Assert.assertEquals(rootElement.subelements.get(0).name.getLocalPart(), "b");  // first subnode of <a>
         Assert.assertEquals(rootElement.subelements.get(1).name.getLocalPart(), "c");
@@ -145,13 +143,6 @@ public class SimpleReaderTest {
 
     }
 
-     @org.testng.annotations.Test
-    public void anotherTest() throws XMLStreamException {
-        XMLSimpleReader reader = getReader(SampleXml.xml);
-         reader.findFirstElement(new QName("one")); // first node we start with
-         Element rootElement = processSubElements(reader).get(0);
-    }
-
     public static List<Element> processSubElements(XMLSimpleReader reader) {
         List<Element> elements = new ArrayList<Element>();
         while (reader.moveDown()) {
@@ -159,16 +150,18 @@ public class SimpleReaderTest {
             elements.add(element);
             element.name = reader.getName();
             Iterator<Map.Entry<QName, String>> attrIterator = reader.getAttributeIterator();
-            while(attrIterator.hasNext()){
+            while (attrIterator.hasNext()) {
                 Map.Entry<QName, String> entry = attrIterator.next();
                 element.attributes.put(entry.getKey(), entry.getValue());
             }
 //            System.out.println("NODE-"+element.name.getLocalPart());
+//            System.out.println("text1: "+reader.getText());
             List<Element> subElements = processSubElements(reader);
             if (!subElements.isEmpty()) {
                 element.subelements.addAll(subElements);
             }
             element.value = reader.getText();
+//            System.out.println("text2: "+reader.getText());
             reader.moveUp();
         }
         return elements;

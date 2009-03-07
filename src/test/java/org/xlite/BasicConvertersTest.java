@@ -17,9 +17,10 @@ import org.xlite.XMLtext;
 public class BasicConvertersTest {
 
     static String xml = "" +
-            "<primitives i=\"1000\" bool=\"true\" byt=\"127\" db=\"-1.6\" fl=\"1.1\" ch=\"f\" >" +
+            "<primitives i=\"1000\" l=\"9999\" bool=\"true\" byt=\"127\" db=\"-1.6\" fl=\"1.1\" ch=\"f\" >" +
             "A text value" +
             "  <iv>999</iv>" +
+            "  <lv>999999</lv>" +
             "  <boolv>false</boolv>" +
             "  <bytv>-127</bytv>" +
             "  <dbv>1.6</dbv>" +
@@ -39,12 +40,13 @@ public class BasicConvertersTest {
 
         Primitives primitives = (Primitives) xf.fromXML(reader);
 
-        for (Field field : Primitives.class.getDeclaredFields()) {
-            System.out.println(field.getName() + "=" + field.get(primitives));
-        }
+//        for (Field field : Primitives.class.getDeclaredFields()) {
+//            System.out.println(field.getName() + "=" + field.get(primitives));
+//        }
 
         //attributes
         Assert.assertEquals(primitives.i, 1000);
+        Assert.assertEquals(primitives.l, 9999);
         Assert.assertTrue(primitives.bool);
         Assert.assertEquals(primitives.byt, 127);
         Assert.assertEquals(primitives.db, -1.6d, 0.0d);
@@ -56,6 +58,7 @@ public class BasicConvertersTest {
 
         // subelements
         Assert.assertEquals(primitives.iv, 999);
+        Assert.assertEquals(primitives.lv, 999999);
         Assert.assertFalse(primitives.boolv);
         Assert.assertEquals(primitives.bytv, -127);
         Assert.assertEquals(primitives.dbv, 1.6d, 0.0d);
@@ -71,6 +74,9 @@ public class BasicConvertersTest {
     public static class Primitives {
         @XMLattribute
         public int i;
+
+        @XMLattribute
+        public long l;
 
         @XMLattribute
         public boolean bool;
@@ -98,6 +104,9 @@ public class BasicConvertersTest {
 
         @XMLelement
         public int iv;
+
+        @XMLelement
+        public long lv;
 
         @XMLelement
         public boolean boolv;

@@ -15,9 +15,11 @@ import org.xlite.converters.*;
 public class AnnotationProcessor {
 
     private MappingContext mappingContext;
+    private ObjectStore elementStore;
 
-    public AnnotationProcessor(MappingContext mappingContext) {
+    public AnnotationProcessor(MappingContext mappingContext, ObjectStore elementStore) {
         this.mappingContext = mappingContext;
+        this.elementStore = elementStore;
     }
 
     /**
@@ -30,7 +32,6 @@ public class AnnotationProcessor {
     public ElementConverter processClass(Class currentClass) {
 
         AnnotatedClassConverter annotatedClassConverter = new AnnotatedClassConverter(currentClass);
-        annotatedClassConverter.setElementStorage(mappingContext.getElementStore());
 
         // find and process @XMLnamespaces annotation
         processClassNamespaces(currentClass, annotatedClassConverter);
@@ -181,7 +182,7 @@ public class AnnotationProcessor {
                 NsContext classNS = converter.getClassNamespaces();
                 QName qname = getQName(elementName, fieldNS, classNS);
 
-                 // get default value of this element
+                // get default value of this element
                 String defaultValue = annotation.defaultValue();
                 if (defaultValue.length() == 0) {
                     defaultValue = null;
@@ -208,7 +209,6 @@ public class AnnotationProcessor {
 
     //todo write javadoc
     /**
-     *
      * @param elementName
      * @param fieldNS
      * @param classNS

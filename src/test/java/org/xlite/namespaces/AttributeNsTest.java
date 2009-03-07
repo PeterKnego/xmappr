@@ -52,7 +52,6 @@ public class AttributeNsTest {
         xlite.toXML(a, sw);
         System.out.println(xml);
         System.out.println(sw.toString());
-        aaa a2 = (aaa) xlite.fromXML(new StringReader(sw.toString()));
 
         // writing back to XML
         XMLUnit.setIgnoreWhitespace(true);

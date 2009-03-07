@@ -18,7 +18,7 @@ import org.xlite.*;
  */
 public class AnnotatedClassConverter implements ElementConverter {
 
-    private SubTreeStore elementStorage;
+
     private Class targetClass;
     //todo textMapper is ambiguous name used in two contexts (class ValueMapper representing value of a field and
     private ValueMapper textMapper;
@@ -28,14 +28,6 @@ public class AnnotatedClassConverter implements ElementConverter {
 
     public AnnotatedClassConverter(Class targetClass) {
         this.targetClass = targetClass;
-    }
-
-    public SubTreeStore getElementStorage() {
-        return elementStorage;
-    }
-
-    public void setElementStorage(SubTreeStore elementStorage) {
-        this.elementStorage = elementStorage;
     }
 
     public NsContext getClassNamespaces() {
@@ -121,9 +113,7 @@ public class AnnotatedClassConverter implements ElementConverter {
 //                        " subConverter:" + subMapper.elementConverter);
                 subMapper.readElement(qname, currentObject, reader);
             } else {  // unknown subMapper
-                if (elementStorage != null) {
-                    reader.saveSubTree(elementStorage, currentObject);
-                }
+                reader.saveSubTree(currentObject);
             }
 //            String nm = "null";
 //            nm = (reader.reader.getEventType() == 1 || reader.reader.getEventType() == 2) ? reader.reader.getName().getLocalPart() : "";
@@ -163,9 +153,7 @@ public class AnnotatedClassConverter implements ElementConverter {
         }
 
         // write  unknown (stored) subelements
-        if (elementStorage != null) {
-            writer.restoreSubTrees(elementStorage, object);
-        }
+        writer.restoreSubTrees(object);
 
         // write end tag
         writer.endElement();

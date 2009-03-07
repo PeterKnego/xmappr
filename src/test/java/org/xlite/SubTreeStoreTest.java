@@ -49,7 +49,7 @@ public class SubTreeStoreTest {
             "</s:b>\n" +
             "</a>";
 
-    @Test
+//    @Test
     public void testStoringNodes() throws IOException, SAXException, XpathException {
         StringReader reader = new StringReader(xml);
 

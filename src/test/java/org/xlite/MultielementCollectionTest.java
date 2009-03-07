@@ -3,7 +3,6 @@ package org.xlite;
 import org.custommonkey.xmlunit.XMLAssert;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.xml.sax.SAXException;
-import org.xlite.*;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -21,7 +20,7 @@ public class MultielementCollectionTest {
 //            "<unknown>XXX</unknown>" +
             "<b>textB1</b>" +
             "<b>textB2</b>" +
-//            "<data>YYY</data>" +
+            "<data>YYY</data>" +
             "</root>";
 
     @org.testng.annotations.Test
@@ -29,7 +28,7 @@ public class MultielementCollectionTest {
 
         StringReader reader = new StringReader(xml);
         Configuration conf = new AnnotationConfiguration(Root.class, "root");
-        conf.setStoringUnknownElements(false);
+        conf.setStoringUnknownElements(true);
         conf.setPrettyPrint(false);
 
         Xlite xlite = new Xlite(conf);
@@ -52,13 +51,12 @@ public class MultielementCollectionTest {
         @XMLelements({
                 @XMLelement(name = "a", itemType = A.class),
                 @XMLelement(name = "b", itemType = B.class)
-//                @XMLelement(name = "unknown", itemType = ElementHolder.class)
+//                @XMLelement(name = "unknown", itemType = ElementStore.class)
         })
-//        @XMLelement(name = "a", itemType = A.class)
         public List letters;
 
-        //        @XMLelement("data")
-        public ElementHolder holder;
+        @XMLelement("data")
+        public ElementStore store;
     }
 
     public static class A {
