@@ -28,9 +28,27 @@ public class Xlite {
             throw new XliteException("Error initalizing XMLStreamReader", e);
         }
 
-        XMLSimpleReader simpleReader = new XMLSimpleReader(xmlreader, annotationConfiguration.isStoringUnknownElements());
+        XMLSimpleReader simpleReader = new XMLSimpleReader(xmlreader, false);
 
         return annotationConfiguration.getRootElementMapper().getRootObject(simpleReader);
+    }
+
+    public Result fromXMLwithUnknown(Reader reader) {
+        annotationConfiguration.initialize();
+
+        XMLInputFactory factory = XMLInputFactory.newInstance();
+        XMLStreamReader xmlreader;
+        try {
+            xmlreader = factory.createXMLStreamReader(reader);
+        } catch (XMLStreamException e) {
+            throw new XliteException("Error initalizing XMLStreamReader", e);
+        }
+
+
+        XMLSimpleReader simpleReader = new XMLSimpleReader(xmlreader, true);
+
+       Object object =  annotationConfiguration.getRootElementMapper().getRootObject(simpleReader);
+        return new Result(object, simpleReader.getObjectStore());
     }
 
     public void toXML(Object source, Writer writer) {

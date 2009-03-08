@@ -32,11 +32,12 @@ public class MultielementCollectionTest {
         conf.setPrettyPrint(false);
 
         Xlite xlite = new Xlite(conf);
-        Root one = (Root) xlite.fromXML(reader);
+        Xlite.Result result = xlite.fromXMLwithUnknown(reader);
+        Root one = (Root) result.getObject();
 
         // writing back to XML
         StringWriter sw = new StringWriter();
-        xlite.toXML(one, sw);
+        xlite.toXML(one, result.getStore(), sw);
         String ssw = sw.toString();
         System.out.println("");
         System.out.println(xml);
@@ -44,7 +45,7 @@ public class MultielementCollectionTest {
         System.out.println(ssw);
 
         XMLUnit.setIgnoreWhitespace(true);
-//        XMLAssert.assertXMLEqual(xml, ssw);
+        XMLAssert.assertXMLEqual(xml, ssw);
     }
 
     public static class Root {

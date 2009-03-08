@@ -34,8 +34,13 @@ public class XMLSimpleReader {
         this.reader = reader;
         this.isStoringUnknownElements = isStoringUnknownElements;
         if (this.isStoringUnknownElements) {
+            objectStore = new ObjectStore(200, 200);
             eventCache = new ObjectStore(200, 200);
         }
+    }
+
+    public ObjectStore getObjectStore() {
+        return objectStore;
     }
 
     private int nextEvent() {
