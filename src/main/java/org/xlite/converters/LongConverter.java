@@ -3,7 +3,7 @@ package org.xlite.converters;
 /**
  * @author peter
  */
-public class LongConverter implements ValueConverter {
+public class LongConverter extends ValueConverter {
 
     public boolean canConvert(Class type) {
         return type.equals(long.class) || Long.class.isAssignableFrom(type);

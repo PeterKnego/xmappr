@@ -3,6 +3,7 @@ package org.xlite.converters;
 import org.xlite.MappingContext;
 import org.xlite.XMLSimpleReader;
 import org.xlite.XMLSimpleWriter;
+import org.xlite.XliteException;
 
 import javax.xml.namespace.QName;
 
@@ -26,8 +27,9 @@ public class ValueConverterWrapper implements ElementConverter {
         if (text == null || text.length() == 0) {
             if (defaultValue != null) {
                 return valueConverter.fromValue(defaultValue);
-            } else {
-                return null;
+            } else if (!valueConverter.convertsEmpty()) {
+                throw new XliteException("Converter of type "+valueConverter.getClass()+" can not convert empty elements. " +
+                        "Either element must not be empty or you a default value must be cupploied via @XMLelement(defaultValue = \"val\")");
             }
         }
         return valueConverter.fromValue(text);

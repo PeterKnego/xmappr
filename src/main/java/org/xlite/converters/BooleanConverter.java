@@ -3,7 +3,7 @@ package org.xlite.converters;
 /**
  * @author peter
  */
-public class BooleanConverter implements ValueConverter {
+public class BooleanConverter extends ValueConverter {
 
     private final String positive;
     private final String negative;
@@ -22,10 +22,11 @@ public class BooleanConverter implements ValueConverter {
     }
 
     public Object fromValue(String value) {
-            return positive.equalsIgnoreCase(value) ? Boolean.TRUE : Boolean.FALSE;
+        return value.length() == 0 || positive.equalsIgnoreCase(value) ? Boolean.TRUE : Boolean.FALSE;
     }
 
     public String toValue(Object object) {
         return object == null ? null : ((Boolean) object ? positive : negative);
     }
+
 }

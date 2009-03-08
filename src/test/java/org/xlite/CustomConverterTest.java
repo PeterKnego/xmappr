@@ -67,7 +67,7 @@ public class CustomConverterTest {
 
     }
 
-    public static class UpperCaseConverter implements ValueConverter {
+    public static class UpperCaseConverter extends ValueConverter {
 
         public boolean canConvert(Class type) {
             return String.class.equals(type);
@@ -82,7 +82,7 @@ public class CustomConverterTest {
         }
     }
 
-    public static class LowerCaseConverter implements ValueConverter {
+    public static class LowerCaseConverter extends ValueConverter {
 
         public boolean canConvert(Class type) {
             return String.class.equals(type);
