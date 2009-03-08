@@ -3,7 +3,7 @@ package org.xlite.converters;
 /**
  * @author peter
  */
-public class ShortConverter implements ValueConverter {
+public class ShortConverter extends ValueConverter {
 
     public boolean canConvert(Class type) {
         return type.equals(short.class) || Short.class.isAssignableFrom(type);

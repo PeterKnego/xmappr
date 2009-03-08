@@ -6,7 +6,7 @@ package org.xlite.converters;
  * Date: Mar 2, 2008
  * Time: 10:02:25 PM
  */
-public class StringConverter implements ValueConverter {
+public class StringConverter extends ValueConverter {
 
     public boolean canConvert(Class type) {
         return String.class.isAssignableFrom(type);
@@ -20,4 +20,8 @@ public class StringConverter implements ValueConverter {
         return (String) object;
     }
 
- }
+    @Override
+    public boolean convertsEmpty() {
+        return true;
+    }
+}

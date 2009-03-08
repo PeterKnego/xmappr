@@ -3,7 +3,8 @@ package org.xlite.converters;
 /**
  * @author peter
  */
-public class CharConverter implements ValueConverter{
+public class CharConverter extends ValueConverter{
+    
     public boolean canConvert(Class type) {
         return type.equals(char.class) || Character.class.isAssignableFrom(type);
     }

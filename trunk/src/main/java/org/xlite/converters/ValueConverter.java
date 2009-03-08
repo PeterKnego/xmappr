@@ -5,11 +5,15 @@ package org.xlite.converters;
  * Date: Mar 2, 2008
  * Time: 10:50:40 AM
  */
-public interface ValueConverter {
+public abstract class ValueConverter {
 
-    boolean canConvert(Class type);
+    public abstract boolean canConvert(Class type);
 
-    public Object fromValue(String value);
+    public abstract Object fromValue(String value);
 
-    public String toValue(Object object);
+    public abstract String toValue(Object object);
+
+    public boolean convertsEmpty(){
+        return false;
+    }
 }

@@ -22,11 +22,11 @@ import org.xml.sax.SAXException;
 public class BasicConvertersTest {
 
     static String xml = "" +
-            "<primitives i=\"1000\" l=\"9999\" bool=\"true\" byt=\"127\" db=\"-1.6\" fl=\"1.1\" ch=\"f\" >" +
+            "<primitives i=\"1000\" l=\"9999\" bool=\"false\" byt=\"127\" db=\"-1.6\" fl=\"1.1\" ch=\"f\" >" +
             "A text value" +
             "  <iv>999</iv>" +
             "  <lv>999999</lv>" +
-            "  <boolv>false</boolv>" +
+            "  <boolv/>" +
             "  <bytv>-127</bytv>" +
             "  <dbv>1.6</dbv>" +
             "  <flv>-1.1</flv>" +
@@ -52,7 +52,7 @@ public class BasicConvertersTest {
         //attributes
         Assert.assertEquals(primitives.i, 1000);
         Assert.assertEquals(primitives.l, 9999);
-        Assert.assertTrue(primitives.bool);
+        Assert.assertFalse(primitives.bool);
         Assert.assertEquals(primitives.byt, 127);
         Assert.assertEquals(primitives.db, -1.6d, 0.0d);
         Assert.assertEquals(primitives.fl, 1.1f, 0.0f);
@@ -64,7 +64,7 @@ public class BasicConvertersTest {
         // subelements
         Assert.assertEquals(primitives.iv.intValue(), 999);
         Assert.assertEquals(primitives.lv, 999999);
-        Assert.assertFalse(primitives.boolv);
+        Assert.assertTrue(primitives.boolv);
         Assert.assertEquals(primitives.bytv, -127);
         Assert.assertEquals(primitives.dbv, 1.6d, 0.0d);
         Assert.assertEquals(primitives.flv, -1.1f, 0.0f);
@@ -72,7 +72,7 @@ public class BasicConvertersTest {
 
         // default values used
         Assert.assertEquals(primitives.intNode, 0);
-        Assert.assertEquals(primitives.stringNode, null);
+        Assert.assertEquals(primitives.stringNode, "");
 
          // writing back to XML
         StringWriter sw = new StringWriter();
@@ -125,7 +125,7 @@ public class BasicConvertersTest {
         @XMLelement
         public long lv;
 
-        @XMLelement
+        @XMLelement(defaultValue = "true")
         public boolean boolv;
 
         @XMLelement

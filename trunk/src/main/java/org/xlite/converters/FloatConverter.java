@@ -3,7 +3,7 @@ package org.xlite.converters;
 /**
  * @author peter
  */
-public class FloatConverter implements ValueConverter {
+public class FloatConverter extends ValueConverter {
 
     public boolean canConvert(Class type) {
         return type.equals(float.class) || Float.class.isAssignableFrom(type);
