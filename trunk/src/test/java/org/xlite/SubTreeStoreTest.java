@@ -49,7 +49,7 @@ public class SubTreeStoreTest {
             "</s:b>\n" +
             "</a>";
 
-//    @Test
+    @Test
     public void testStoringNodes() throws IOException, SAXException, XpathException {
         StringReader reader = new StringReader(xml);
 
@@ -60,11 +60,12 @@ public class SubTreeStoreTest {
         conf.addNamespace("w=ns3");
 
         Xlite xlite = new Xlite(conf);
-        A a = (A) xlite.fromXML(reader);
+        Xlite.Result result = xlite.fromXMLwithUnknown(reader);
+        A a = (A) result.getObject();
 
         // writing back to XML
         StringWriter sw = new StringWriter();
-        xlite.toXML(a, sw);
+        xlite.toXML(a,result.getStore(), sw);
         String ssw = sw.toString();
         System.out.println("");
         System.out.println(xml);
