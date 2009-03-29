@@ -18,20 +18,10 @@ public class MappingContext {
     private AnnotationProcessor annotationProcessor;
     private NsContext predefinedNamespaces = new NsContext();
 
-    private ObjectStore elementStore;
-
     public MappingContext(List<ElementConverter> elementConverters, List<ValueConverter> valueConverters) {
         this.elementConverters = elementConverters;
         this.valueConverters = valueConverters;
-        annotationProcessor = new AnnotationProcessor(this, elementStore);
-    }
-
-    public ObjectStore getElementStore() {
-        return elementStore;
-    }
-
-    public void setElementStore(ObjectStore elementStore) {
-        this.elementStore = elementStore;
+        annotationProcessor = new AnnotationProcessor(this);
     }
 
     public NsContext getPredefinedNamespaces() {

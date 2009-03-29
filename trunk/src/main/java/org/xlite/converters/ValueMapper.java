@@ -17,13 +17,13 @@ import java.lang.reflect.Field;
  */
 public class ValueMapper {
 
-    private Field targetField;
+    private FieldAccessor targetField;
     private ValueConverter valueConverter;
     private String defaultValue;
     private Object defaultObject;
 
     public ValueMapper(Field targetField, ValueConverter valueConverter, String defaultValue) {
-        this.targetField = targetField;
+        this.targetField = new FieldAccessor(targetField);
         this.valueConverter = valueConverter;
         this.defaultValue = defaultValue;
         if (defaultValue != null) {
@@ -38,19 +38,15 @@ public class ValueMapper {
      * @param elementValue Value to be set.
      */
     public void setValue(Object object, String elementValue) {
-        try {
-            if (elementValue.length() == 0) {
+        if (elementValue.length() == 0) {
 
-                // default value is used
-                if (defaultValue != null && defaultValue.length() != 0) {
-                    targetField.set(object, defaultValue);
-                }
-            } else {
-                Object value = valueConverter.fromValue(elementValue);
-                targetField.set(object, value);
+            // default value is used
+            if (defaultValue != null && defaultValue.length() != 0) {
+                targetField.set(object, defaultValue);
             }
-        } catch (IllegalAccessException e) {
-            throw new XliteException("Field could not be written to! ", e);
+        } else {
+            Object value = valueConverter.fromValue(elementValue);
+            targetField.set(object, value);
         }
     }
 
@@ -62,16 +58,12 @@ public class ValueMapper {
      */
     public String getValue(Object object) {
         Object targetObject;
-        try {
-            targetObject = targetField.get(object);
-            if (targetObject == null) {
-                // use default value if defined
-                return defaultObject != null ? valueConverter.toValue(defaultObject) : "";
-            } else {
-                return valueConverter.toValue(targetObject);
-            }
-        } catch (IllegalAccessException e) {
-            throw new XliteException("Field could not be read! ", e);
+        targetObject = targetField.get(object);
+        if (targetObject == null) {
+            // use default value if defined
+            return defaultObject != null ? valueConverter.toValue(defaultObject) : "";
+        } else {
+            return valueConverter.toValue(targetObject);
         }
     }
 

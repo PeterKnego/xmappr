@@ -33,8 +33,6 @@ public class DefaultNSEachSubnode {
     public void test() throws IOException, SAXException {
         StringReader reader = new StringReader(xml);
 
-
-
         Configuration conf = new AnnotationConfiguration(aaa.class, "aaa");
         Xlite xlite = new Xlite(conf);
         aaa a = (aaa) xlite.fromXML(reader);

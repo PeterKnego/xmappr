@@ -90,7 +90,15 @@ public class BasicConvertersTest {
 
     public static class Primitives {
         @XMLattribute
-        public int i;
+        private int i;
+
+        public int getI() {
+            return i;
+        }
+
+        public void setI(int i) {
+            this.i = i;
+        }
 
         @XMLattribute
         public long l;

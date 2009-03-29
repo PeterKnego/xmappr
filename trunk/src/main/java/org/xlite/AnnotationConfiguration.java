@@ -25,8 +25,6 @@ public class AnnotationConfiguration implements Configuration {
 
     private boolean isStoringUnknownElements;
 
-    private int cacheSize = 1000000;
-
     private String rootElementNS = XMLConstants.NULL_NS_URI;
 
     private boolean isPrettyPrint = true;
@@ -64,18 +62,7 @@ public class AnnotationConfiguration implements Configuration {
         isStoringUnknownElements = storing;
     }
 
-    public void setCacheSize(int sizeBytes) {
-        cacheSize = sizeBytes;
-    }
-
     public void initialize() {
-
-        // initialize storing unknown nodes
-        if (isStoringUnknownElements) {
-            mappingContext.setElementStore(new ObjectStore(cacheSize));
-        } else {
-            mappingContext.setElementStore(null);
-        }
 
         // one-time initialization
         if (!initialized) {

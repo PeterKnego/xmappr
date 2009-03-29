@@ -23,8 +23,6 @@ public interface Configuration {
 
     void setStoringUnknownElements(boolean storing);
 
-    void setCacheSize(int sizeBytes);
-
     void addNamespace(String namespace);
 
 }
