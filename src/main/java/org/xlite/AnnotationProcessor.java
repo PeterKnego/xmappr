@@ -15,11 +15,9 @@ import org.xlite.converters.*;
 public class AnnotationProcessor {
 
     private MappingContext mappingContext;
-    private ObjectStore elementStore;
 
-    public AnnotationProcessor(MappingContext mappingContext, ObjectStore elementStore) {
+    public AnnotationProcessor(MappingContext mappingContext) {
         this.mappingContext = mappingContext;
-        this.elementStore = elementStore;
     }
 
     /**
@@ -29,7 +27,7 @@ public class AnnotationProcessor {
      * @param currentClass
      * @return
      */
-    public ElementConverter processClass(Class currentClass) {
+    public ElementConverter processClass(Class<?> currentClass) {
 
         AnnotatedClassConverter annotatedClassConverter = new AnnotatedClassConverter(currentClass);
 
@@ -53,7 +51,7 @@ public class AnnotationProcessor {
      * @param currentClass
      * @param annotatedClassConverter
      */
-    private void processClassNamespaces(Class currentClass, AnnotatedClassConverter annotatedClassConverter) {
+    private void processClassNamespaces(Class<?> currentClass, AnnotatedClassConverter annotatedClassConverter) {
         NsContext classNS = new NsContext();
         XMLnamespaces nsAnnotation = (XMLnamespaces) currentClass.getAnnotation(XMLnamespaces.class);
         if (nsAnnotation != null && nsAnnotation.value().length != 0) {
@@ -79,7 +77,7 @@ public class AnnotationProcessor {
      * @param currentClass A class to be inspected for @XMLelement annotations.
      * @param converter    AnnotatedClassMapper that coresponds in
      */
-    private void processElements(Class currentClass, AnnotatedClassConverter converter) {
+    private void processElements(Class<? extends Object> currentClass, AnnotatedClassConverter converter) {
 
         for (Field field : currentClass.getDeclaredFields()) {
 
@@ -112,7 +110,7 @@ public class AnnotationProcessor {
 
             // process @XMLelement annotations
             for (XMLelement annotation : annotations) {
-                Class itemType = annotation.itemType();
+                Class<? extends Object> itemType = annotation.itemType();
                 Class<? extends ElementConverter> annotatedConverter = annotation.converter();
 
                 // set to default values according to annotations
@@ -264,7 +262,7 @@ public class AnnotationProcessor {
      * @param converter    AnnotatedClassMapper to which the ValueMapper is referenced
      * @param currentClass Class being inspected for @XMLattribute annotations
      */
-    private void processAttributes(Class currentClass, AnnotatedClassConverter converter) {
+    private void processAttributes(Class<? extends Object> currentClass, AnnotatedClassConverter converter) {
         XMLattribute annotation;
         for (Field field : currentClass.getDeclaredFields()) {
             annotation = field.getAnnotation(XMLattribute.class);

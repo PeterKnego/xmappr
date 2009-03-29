@@ -18,7 +18,7 @@ import java.util.Map;
  */
 public class ElementMapper {
 
-    private Field targetField;
+    private FieldAccessor targetField;
     private MappingContext mappingContext;
     public ElementConverter elementConverter;
 
@@ -31,7 +31,7 @@ public class ElementMapper {
     private String defaultValue;
 
     public ElementMapper(Field targetField, CollectionConverting collectionConverter, MappingContext mappingContext) {
-        this.targetField = targetField;
+        this.targetField = new FieldAccessor(targetField);
         this.mappingContext = mappingContext;
         this.collectionConverter = collectionConverter;
     }
@@ -59,60 +59,47 @@ public class ElementMapper {
     }
 
     private void collectionAddItem(QName nodeName, Object targetObject, XMLSimpleReader reader) {
-        try {
-            Collection collection = (Collection) targetField.get(targetObject);
+        Collection collection = (Collection) targetField.get(targetObject);
 
-            // initialize collection if needed
-            if (collection == null) {
-                collection = collectionConverter.initializeCollection(targetField.getType());
-                targetField.set(targetObject, collection);
-            }
-
-            // find the converter for given node name
-            ElementConverter converter = converterCache.get(nodeName);
-            if (converter == null) {
-                throw new XliteException("Error: could not find converter for node: " + nodeName +
-                        " in collection " + collection.getClass().getName() +
-                        " in class " + collection.getClass().getEnclosingClass() +
-                        ". Collection contains element types that are not defined in @XMLelement annotation.");
-            }
-
-            Object value = converter.fromElement(reader, mappingContext, defaultValue);
-            collectionConverter.addItem(collection, value);
-        } catch (IllegalAccessException e) {
-            throw new XliteException("Field value could not be set! ", e);
+        // initialize collection if needed
+        if (collection == null) {
+            collection = collectionConverter.initializeCollection(targetField.getType());
+            targetField.set(targetObject, collection);
         }
+
+        // find the converter for given node name
+        ElementConverter converter = converterCache.get(nodeName);
+        if (converter == null) {
+            throw new XliteException("Error: could not find converter for node: " + nodeName +
+                    " in collection " + collection.getClass().getName() +
+                    " in class " + collection.getClass().getEnclosingClass() +
+                    ". Collection contains element types that are not defined in @XMLelement annotation.");
+        }
+
+        Object value = converter.fromElement(reader, mappingContext, defaultValue);
+        collectionConverter.addItem(collection, value);
     }
 
     private void setFieldValue(Object targetObject, XMLSimpleReader reader) {
-        try {
-            Object value = elementConverter.fromElement(reader, mappingContext, defaultValue);
-            targetField.set(targetObject, value);
-        } catch (IllegalAccessException e) {
-            throw new XliteException("Field value could not be set! ", e);
-        }
+        Object value = elementConverter.fromElement(reader, mappingContext, defaultValue);
+        targetField.set(targetObject, value);
     }
 
     public void writeElement(Object object, QName nodeName, XMLSimpleWriter writer) {
-        try {
-
-            // it's a collection
-            if (collectionConverter != null) {
-                Collection collection = (Collection) targetField.get(object);
-                if (collection == null) {
-                    return;
-                }
-                for (Object obj : collection) {
-                    QName name = itemTypes.get(obj.getClass());
-                    ElementConverter converter = converterCache.get(name);
-                    converter.toElement(obj, name, writer, mappingContext, defaultValue);
-                }
-
-            } else {   // normal field
-                elementConverter.toElement(targetField.get(object), nodeName, writer, mappingContext, defaultValue);
+        // it's a collection
+        if (collectionConverter != null) {
+            Collection collection = (Collection) targetField.get(object);
+            if (collection == null) {
+                return;
             }
-        } catch (IllegalAccessException e) {
-            throw new XliteException("Field value could not be read! ", e);
+            for (Object obj : collection) {
+                QName name = itemTypes.get(obj.getClass());
+                ElementConverter converter = converterCache.get(name);
+                converter.toElement(obj, name, writer, mappingContext, defaultValue);
+            }
+
+        } else {   // normal field
+            elementConverter.toElement(targetField.get(object), nodeName, writer, mappingContext, defaultValue);
         }
     }
 
