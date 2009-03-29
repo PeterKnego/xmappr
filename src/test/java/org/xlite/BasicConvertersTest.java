@@ -49,7 +49,7 @@ public class BasicConvertersTest {
 //            System.out.println(field.getName() + "=" + field.get(primitives));
 //        }
 
-        //attributes
+        // attributes
         Assert.assertEquals(primitives.i, 1000);
         Assert.assertEquals(primitives.l, 9999);
         Assert.assertFalse(primitives.bool);
@@ -58,7 +58,7 @@ public class BasicConvertersTest {
         Assert.assertEquals(primitives.fl, 1.1f, 0.0f);
         Assert.assertEquals(primitives.ch, 'f');
 
-        //node text
+        // text
         Assert.assertEquals(primitives.value, "A text value");
 
         // subelements
@@ -89,6 +89,8 @@ public class BasicConvertersTest {
     }
 
     public static class Primitives {
+
+        // tests mapping element attribute to private field
         @XMLattribute
         private int i;
 
@@ -118,8 +120,17 @@ public class BasicConvertersTest {
         @XMLattribute
         public char ch;
 
+        // tests mapping element value to private field
         @XMLtext
-        public String value;
+        private String value;
+
+        public String getValue() {
+            return value;
+        }
+
+        public void setValue(String value) {
+            this.value = value;
+        }
 
         @XMLelement("node")
         public String stringNode = "";
@@ -127,8 +138,17 @@ public class BasicConvertersTest {
         @XMLelement(name = "int", defaultValue = "0")
         public int intNode;
 
+        public Integer getIv() {
+            return iv;
+        }
+
+        public void setIv(Integer iv) {
+            this.iv = iv;
+        }
+
+        // tests mapping element to private field
         @XMLelement
-        public Integer iv;
+        private Integer iv;
 
         @XMLelement
         public long lv;
