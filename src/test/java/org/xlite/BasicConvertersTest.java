@@ -1,20 +1,14 @@
 package org.xlite;
 
+import org.custommonkey.xmlunit.XMLAssert;
+import org.custommonkey.xmlunit.XMLUnit;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import org.xml.sax.SAXException;
 
+import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.io.IOException;
-import java.lang.reflect.Field;
-
-import org.xlite.Xlite;
-import org.xlite.XMLelement;
-import org.xlite.XMLattribute;
-import org.xlite.XMLtext;
-import org.custommonkey.xmlunit.XMLUnit;
-import org.custommonkey.xmlunit.XMLAssert;
-import org.xml.sax.SAXException;
 
 /**
  * @author peter
@@ -44,10 +38,6 @@ public class BasicConvertersTest {
         Xlite xf = new Xlite(conf);
 
         Primitives primitives = (Primitives) xf.fromXML(reader);
-
-//        for (Field field : Primitives.class.getDeclaredFields()) {
-//            System.out.println(field.getName() + "=" + field.get(primitives));
-//        }
 
         // attributes
         Assert.assertEquals(primitives.i, 1000);
