@@ -4,6 +4,8 @@ import javax.xml.XMLConstants;
 import javax.xml.namespace.QName;
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.List;
+import java.util.ArrayList;
 
 import org.xlite.converters.*;
 
@@ -77,9 +79,9 @@ public class AnnotationProcessor {
      * @param currentClass A class to be inspected for @XMLelement annotations.
      * @param converter    AnnotatedClassMapper that coresponds in
      */
-    private void processElements(Class<? extends Object> currentClass, AnnotatedClassConverter converter) {
+    private void processElements(Class<?> currentClass, AnnotatedClassConverter converter) {
 
-        for (Field field : currentClass.getDeclaredFields()) {
+        for (Field field : getAllFields(currentClass)) {
 
             // find the converter by the field type
             ElementConverter converterByType = mappingContext.lookupElementConverter(field.getType());
@@ -110,7 +112,7 @@ public class AnnotationProcessor {
 
             // process @XMLelement annotations
             for (XMLelement annotation : annotations) {
-                Class<? extends Object> itemType = annotation.itemType();
+                Class<?> itemType = annotation.itemType();
                 Class<? extends ElementConverter> annotatedConverter = annotation.converter();
 
                 // set to default values according to annotations
@@ -262,9 +264,9 @@ public class AnnotationProcessor {
      * @param converter    AnnotatedClassMapper to which the ValueMapper is referenced
      * @param currentClass Class being inspected for @XMLattribute annotations
      */
-    private void processAttributes(Class<? extends Object> currentClass, AnnotatedClassConverter converter) {
+    private void processAttributes(Class<?> currentClass, AnnotatedClassConverter converter) {
         XMLattribute annotation;
-        for (Field field : currentClass.getDeclaredFields()) {
+        for (Field field : getAllFields(currentClass)) {
             annotation = field.getAnnotation(XMLattribute.class);
             if (annotation != null) {
 
@@ -312,8 +314,8 @@ public class AnnotationProcessor {
 
                 converter.addAttributeConverter(qname, new ValueMapper(field, valueConverter, defaultValue));
 
-                System.out.println(currentClass.getSimpleName() + "." + field.getName() + " attribute:" + qname
-                        + " converter:" + valueConverter.getClass().getSimpleName());
+//                System.out.println(currentClass.getSimpleName() + "." + field.getName() + " attribute:" + qname
+//                        + " converter:" + valueConverter.getClass().getSimpleName());
             }
         }
     }
@@ -328,7 +330,7 @@ public class AnnotationProcessor {
         Field targetField = null;
         int found = 0;
         XMLtext annotation, targetAnnotation = null;
-        for (Field field : currentClass.getDeclaredFields()) {
+        for (Field field : getAllFields(currentClass)) {
             annotation = field.getAnnotation(XMLtext.class);
             if (annotation != null) {
                 found++;
@@ -367,9 +369,23 @@ public class AnnotationProcessor {
 
             converter.setTextMapper(new ValueMapper(targetField, valueConverter, null));
 
-            System.out.println(currentClass.getSimpleName() + "." + targetField.getName() + " value "
-                    + " converter:" + valueConverter.getClass().getSimpleName());
+//            System.out.println(currentClass.getSimpleName() + "." + targetField.getName() + " value "
+//                    + " converter:" + valueConverter.getClass().getSimpleName());
         }
+    }
+
+    private List<Field> getAllFields(Class clazz) {
+        List<Field> fields = new ArrayList<Field>();
+        Class cl = clazz;
+        do {
+            for (Field field : cl.getDeclaredFields()) {
+                if (!field.isSynthetic()) {
+                    fields.add(field);
+                }
+            }
+            cl = cl.getSuperclass();
+        } while (cl != Object.class);
+        return fields;
     }
 
 
