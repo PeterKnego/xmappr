@@ -28,7 +28,6 @@ public class MultielementCollectionTest {
 
         StringReader reader = new StringReader(xml);
         Configuration conf = new AnnotationConfiguration(Root.class, "root");
-        conf.setStoringUnknownElements(true);
         conf.setPrettyPrint(false);
 
         Xlite xlite = new Xlite(conf);

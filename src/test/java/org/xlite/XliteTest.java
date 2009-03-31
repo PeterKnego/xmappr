@@ -18,7 +18,6 @@ public class XliteTest {
 
         StringReader reader = new StringReader(SampleXml.xml);
         Configuration conf = new AnnotationConfiguration(SampleXml.One.class, "one");
-        conf.setStoringUnknownElements(true);
         Xlite xlite = new Xlite(conf);
 
         SampleXml.One one = (SampleXml.One) xlite.fromXML(reader);

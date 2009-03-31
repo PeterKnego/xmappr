@@ -317,6 +317,7 @@ public class AnnotationProcessor {
 //                System.out.println(currentClass.getSimpleName() + "." + field.getName() + " attribute:" + qname
 //                        + " converter:" + valueConverter.getClass().getSimpleName());
             }
+            
         }
     }
 
