@@ -54,7 +54,6 @@ public class SubTreeStoreTest {
         StringReader reader = new StringReader(xml);
 
         Configuration conf = new AnnotationConfiguration(A.class, "a", "ns1");
-        conf.setStoringUnknownElements(true);
         conf.addNamespace("ns1");
         conf.addNamespace("s=ns2");
         conf.addNamespace("w=ns3");

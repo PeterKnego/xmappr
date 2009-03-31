@@ -23,8 +23,6 @@ public class AnnotationConfiguration implements Configuration {
 
     private String rootElementName;
 
-    private boolean isStoringUnknownElements;
-
     private String rootElementNS = XMLConstants.NULL_NS_URI;
 
     private boolean isPrettyPrint = true;
@@ -52,14 +50,6 @@ public class AnnotationConfiguration implements Configuration {
 
     public void setPrettyPrint(boolean prettyPrint) {
         this.isPrettyPrint = prettyPrint;
-    }
-
-    public boolean isStoringUnknownElements() {
-        return isStoringUnknownElements;
-    }
-
-    public void setStoringUnknownElements(boolean storing) {
-        isStoringUnknownElements = storing;
     }
 
     public void initialize() {

@@ -27,7 +27,6 @@ public class ParentClassTest {
 
         StringReader reader = new StringReader(ParentClassTest.xml);
         Configuration conf = new AnnotationConfiguration(Child.class, "base");
-        conf.setStoringUnknownElements(false);
         Xlite xlite = new Xlite(conf);
 
         Child child = (Child) xlite.fromXML(reader);

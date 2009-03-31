@@ -19,10 +19,6 @@ public interface Configuration {
 
     void setPrettyPrint(boolean prettyPrint);
 
-    boolean isStoringUnknownElements();
-
-    void setStoringUnknownElements(boolean storing);
-
     void addNamespace(String namespace);
 
 }

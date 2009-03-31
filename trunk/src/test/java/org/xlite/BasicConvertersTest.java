@@ -34,7 +34,6 @@ public class BasicConvertersTest {
     public void mainTest() throws IllegalAccessException, IOException, SAXException {
         StringReader reader = new StringReader(xml);
         Configuration conf = new AnnotationConfiguration(Primitives.class, "primitives");
-        conf.setStoringUnknownElements(true);
         Xlite xf = new Xlite(conf);
 
         Primitives primitives = (Primitives) xf.fromXML(reader);
