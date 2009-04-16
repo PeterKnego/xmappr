@@ -66,4 +66,5 @@ public class MultielementCollectionTest {
         @XMLtext
         public String text;
     }
+    
 }

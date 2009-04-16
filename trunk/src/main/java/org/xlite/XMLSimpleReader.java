@@ -247,7 +247,7 @@ public class XMLSimpleReader {
     public void saveSubTree(Object reference) {
 
         // restore only if objectStore is set
-        if(objectStore == null) return;
+        if (objectStore == null) return;
 
         if (eventCache == null) {
             throw new XliteException("Error: saved ObjectStore is null.");

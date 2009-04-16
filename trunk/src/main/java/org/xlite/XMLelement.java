@@ -19,7 +19,6 @@ public @interface XMLelement {
     String value() default "";
     String name() default "";
     String defaultValue() default "";
-    Class initializeType() default Object.class;
     Class itemType() default Object.class;
 
     Class<? extends ElementConverter> converter() default ElementConverter.class;
