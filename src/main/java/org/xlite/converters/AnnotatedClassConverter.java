@@ -65,10 +65,12 @@ public class AnnotatedClassConverter implements ElementConverter {
             throw new XliteException("Could not instantiate class " + targetClass.getName(), e);
         }
 
-        // XML element value
-        String value = reader.getText();
+        // collect XML text values
+
+        TextCollector textCollector = null;
         if (textMapper != null) {
-            textMapper.setValue(currentObject, value);
+            textCollector = new TextCollector();
+            textCollector.append(reader.getText());
         }
 
         // XML element attributes
@@ -98,13 +100,22 @@ public class AnnotatedClassConverter implements ElementConverter {
 //                System.out.println("START:" + name + " thisConverter:" + this.toString() +
 //                        " subConverter:" + subMapper.elementConverter);
                 subMapper.readElement(qname, currentObject, reader);
-            } else {  // unknown subMapper
+
+            // unknown subMapper
+            } else {
                 reader.saveSubTree(currentObject);
             }
 //            String nm = "null";
 //            nm = (reader.reader.getEventType() == 1 || reader.reader.getEventType() == 2) ? reader.reader.getName().getLocalPart() : "";
 //            System.out.println("BEFORE moveUp: "+reader.reader.getEventType()+" "+nm);
             reader.moveUp();
+            if (textCollector != null) {
+                textCollector.append(reader.getText());
+            }
+        }
+
+        if (textCollector != null) {
+            textMapper.setValue(currentObject, textCollector.toString());
         }
 
         return currentObject;
@@ -143,7 +154,30 @@ public class AnnotatedClassConverter implements ElementConverter {
 
         // write end tag
         writer.endElement();
+    }
 
+    public static class TextCollector {
+
+        private StringBuilder texts;
+        private String onetext;
+
+        public TextCollector append(String data) {
+            if (onetext == null) {
+                onetext = data;
+            } else {
+                if (texts == null) {
+                    texts = new StringBuilder(onetext);
+                }
+                texts.append(data);
+            }
+            return this;
+        }
+
+        @Override
+        public String toString() {
+            if (texts != null) return texts.toString();
+            return onetext;
+        }
     }
 
 //    public void printContents(String prefix) {
@@ -159,3 +193,5 @@ public class AnnotatedClassConverter implements ElementConverter {
 //
 //    }
 }
+
+
