@@ -7,8 +7,6 @@ package org.xlite;
  */
 public class XliteException extends RuntimeException {
 
-//todo Extend this class with more fine-graind classes: ConfigurationException, XmlException
-
     private Throwable cause;
 
     public XliteException() {

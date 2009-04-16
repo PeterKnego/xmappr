@@ -20,7 +20,6 @@ public class AnnotatedClassConverter implements ElementConverter {
 
 
     private Class targetClass;
-    //todo textMapper is ambiguous name used in two contexts (class ValueMapper representing value of a field and
     private ValueMapper textMapper;
     private Map<QName, ElementMapper> elementMappersByName = new HashMap<QName, ElementMapper>();
     private Map<QName, ValueMapper> attributeMappers = new HashMap<QName, ValueMapper>();

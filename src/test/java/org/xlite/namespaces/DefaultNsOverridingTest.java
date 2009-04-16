@@ -39,7 +39,7 @@ public class DefaultNsOverridingTest {
     @org.testng.annotations.Test
     public void test() throws IOException, SAXException {
         StringReader reader = new StringReader(xml);
-        Configuration conf = new AnnotationConfiguration(aaa.class, "aaa"); //todo THIS SHOULD BE AN ERROR <l:aaa> should not match <aaa>
+        Configuration conf = new AnnotationConfiguration(aaa.class, "aaa");
 
         // predefined namespaces
         conf.addNamespace("u=uppercase");
