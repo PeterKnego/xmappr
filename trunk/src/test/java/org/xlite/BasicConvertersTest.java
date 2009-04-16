@@ -18,15 +18,16 @@ public class BasicConvertersTest {
     static String xml = "" +
             "<primitives i=\"1000\" l=\"9999\" bool=\"false\" byt=\"127\" db=\"-1.6\" fl=\"1.1\" ch=\"f\" >" +
             "A text value" +
-            "  <iv>999</iv>" +
-            "  <lv>999999</lv>" +
-            "  <boolv/>" +
-            "  <bytv>-127</bytv>" +
-            "  <dbv>1.6</dbv>" +
-            "  <flv>-1.1</flv>" +
-            "  <chv>g</chv>" +
-            "  <node/>" +
-            "  <int/>" +
+            "<iv>999</iv>" +
+            " and some more on the next line"+
+            "<lv>999999</lv>" +
+            "<boolv/>" +
+            "<bytv>-127</bytv>" +
+            "<dbv>1.6</dbv>" +
+            "<flv>-1.1</flv>" +
+            "<chv>g</chv>" +
+            "<node/>" +
+            "<int/>" +
             "</primitives> ";
 
 
@@ -48,7 +49,7 @@ public class BasicConvertersTest {
         Assert.assertEquals(primitives.ch, 'f');
 
         // text
-        Assert.assertEquals(primitives.value, "A text value");
+        Assert.assertEquals(primitives.value, "A text value and some more on the next line");
 
         // subelements
         Assert.assertEquals(primitives.iv.intValue(), 999);

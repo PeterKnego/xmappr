@@ -100,8 +100,9 @@ public class XMLSimpleReader {
                     }
                     return false;
                 case XMLStreamConstants.CHARACTERS:
-                    String text = reader.getText().trim();
-                    if (processEvents && text.length() > 0) {
+                    if (processEvents && !reader.isWhiteSpace()) {
+                        String text = reader.getText();
+                        System.out.println("TEXT"+ elementStack.peek().hashCode()+":"+text+"|");
                         if (isStoringUnknownElements) {
                             storeElement(eventCache);
                         }
@@ -168,6 +169,7 @@ public class XMLSimpleReader {
         if (elementStack.isEmpty()) {
             throw new XliteException("Error: there are no XML nodes available to be read.");
         }
+        System.out.println("TEXT-OUT"+elementStack.peek().hashCode()+":"+elementStack.peek().text.toString());
         return elementStack.peek().text.toString();
     }
 
