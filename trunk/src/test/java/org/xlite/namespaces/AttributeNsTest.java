@@ -18,9 +18,9 @@ public class AttributeNsTest {
     static String xml =
             "<lower:aaa xmlns:lower = \"lowercase\" xmlns:upper = \"uppercase\"\n" +
                     "          xmlns:xnumber = \"xnumber\" xmlns=\"defaultNS\" >\n" +
-                    "  <lower:bbb lower:zz = \"11\" >\n" +
-                    "    <lower:ccc upper:WW = \"22\" />\n" +
-                    "  </lower:bbb>\n" +
+                    "  <lower:bbbb lower:zz = \"11\" >\n" +
+                    "    <lower:cccc upper:WW = \"22\" />\n" +
+                    "  </lower:bbbb>\n" +
                     "  <upper:BBB lower:sss = \"***\" xnumber:S111 = \"???\" />\n" +
                     "  <xnumber:x111 RRR=\"rrrdata\" />\n" +
                     "</lower:aaa>";
@@ -41,8 +41,8 @@ public class AttributeNsTest {
         Xlite xlite = new Xlite(conf);
         aaa a = (aaa) xlite.fromXML(reader);
 
-        Assert.assertEquals(a.node_bbb.zz, 11);
-        Assert.assertEquals(a.node_bbb.node_ccc.WW, 22);
+        Assert.assertEquals(a.node_bbbb.zz, 11);
+        Assert.assertEquals(a.node_bbbb.node_ccc.WW, 22);
         Assert.assertEquals(a.node_BBB.sss, "***");
         Assert.assertEquals(a.node_BBB.S111, "???");
         Assert.assertNotNull(a.node_x111);
@@ -59,8 +59,8 @@ public class AttributeNsTest {
     }
 
     public static class aaa {
-        @XMLelement("l:bbb")
-        public bbb node_bbb;
+        @XMLelement("l:bbbb")
+        public bbbb node_bbbb;
 
         @XMLelement("u:BBB")
         public BBB node_BBB;
@@ -69,8 +69,8 @@ public class AttributeNsTest {
         public x111 node_x111;
     }
 
-    public static class bbb {
-        @XMLelement("l:ccc")
+    public static class bbbb {
+        @XMLelement("l:cccc")
         public ccc node_ccc;
 
         @XMLattribute("l:zz")

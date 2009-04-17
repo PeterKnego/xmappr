@@ -65,12 +65,7 @@ public class XMLSimpleReader {
 
         // checkAndReset the accumulated Text
         if (!elementStack.isEmpty()) {
-            StringBuilder sb = elementStack.peek().text;
-            if (sb == null) {
-                elementStack.peek().text = new StringBuilder();
-            } else {
-                sb.delete(0, sb.length());
-            }
+            elementStack.peek().reset();
         }
         // read stream settings at the beginning of the document
         if (reader.getEventType() == XMLStreamConstants.START_DOCUMENT) {
@@ -102,11 +97,11 @@ public class XMLSimpleReader {
                 case XMLStreamConstants.CHARACTERS:
                     if (processEvents && !reader.isWhiteSpace()) {
                         String text = reader.getText();
-                        System.out.println("TEXT"+ elementStack.peek().hashCode()+":"+text+"|");
+                        System.out.println("TEXT" + elementStack.peek().hashCode() + ":" + text + "|");
                         if (isStoringUnknownElements) {
                             storeElement(eventCache);
                         }
-                        elementStack.peek().text.append(text);
+                        elementStack.peek().addText(text);
                     }
                     break;
             }
@@ -165,12 +160,18 @@ public class XMLSimpleReader {
         elementStack.pop();
     }
 
-    public String getText() {
+    public List<String> getText() {
         if (elementStack.isEmpty()) {
             throw new XliteException("Error: there are no XML nodes available to be read.");
         }
-        System.out.println("TEXT-OUT"+elementStack.peek().hashCode()+":"+elementStack.peek().text.toString());
-        return elementStack.peek().text.toString();
+        System.out.println("TEXT-OUT" + elementStack.peek().hashCode() + ":" + elementStack.peek().text);
+        return elementStack.peek().texts;
+    }
+
+    public String getFirstText() {
+        String result = elementStack.peek().getFirstText();
+        System.out.println("getFirstText:" + result);
+        return result;
     }
 
     public QName getName() {
@@ -187,8 +188,37 @@ public class XMLSimpleReader {
 
     public static class Element implements Iterable {
         public QName name;
-        public StringBuilder text;
+        private StringBuilder text = new StringBuilder();
+        private List<String> texts = new ArrayList<String>();
         private Map<QName, String> attributes = new HashMap<QName, String>();
+
+        public void addText(String text) {
+            this.text.append(text);
+        }
+
+        public void reset() {
+            if (text.length() != 0) {
+                texts.add(text.toString());
+                text = new StringBuilder();
+            }
+        }
+
+        public String getFirstText() {
+            if (texts.size() == 0) {
+                if (text.length() == 0) {
+                    return "";
+                } else {
+                    return text.toString();
+                }
+            } else {
+                return texts.get(0);
+            }
+        }
+
+        public List<String> getTexts() {
+            reset();
+            return texts;
+        }
 
         public void putAttribute(QName qname, String value) {
             attributes.put(qname, value);

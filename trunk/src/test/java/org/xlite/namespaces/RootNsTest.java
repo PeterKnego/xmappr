@@ -19,9 +19,9 @@ public class RootNsTest {
 
     static String xml = "" +
             "<lower:aaa xmlns:lower=\"lowercase\" xmlns:upper=\"uppercase\" xmlns:xnumber=\"xnumber\">\n" +
-            "  <lower:bbb >\n" +
-            "    <lower:ccc />\n" +
-            "  </lower:bbb>\n" +
+            "  <lower:bbbb >\n" +
+            "    <lower:cccc />\n" +
+            "  </lower:bbbb>\n" +
             "  <upper:BBB >\n" +
             "    <upper:CCC />\n" +
             "  </upper:BBB>\n" +
@@ -43,7 +43,7 @@ public class RootNsTest {
         Xlite xlite = new Xlite(conf);
         aaa a = (aaa) xlite.fromXML(reader);
 
-        Assert.assertTrue(a.node_bbb.node_ccc != null);
+        Assert.assertTrue(a.node_bbbb.node_cccc != null);
         Assert.assertTrue(a.node_BBB.node_CCC != null);
         Assert.assertTrue(a.node_x111.node_x222 != null);
 
@@ -59,8 +59,8 @@ public class RootNsTest {
     }
 
     public static class aaa {
-        @XMLelement("l:bbb")
-        public bbb node_bbb;
+        @XMLelement("l:bbbb")
+        public bbbb node_bbbb;
 
         @XMLelement("u:BBB")
         public BBB node_BBB;
@@ -70,12 +70,12 @@ public class RootNsTest {
         public x111 node_x111;
     }
 
-    public static class bbb {
-        @XMLelement("l:ccc")
-        public ccc node_ccc;
+    public static class bbbb {
+        @XMLelement("l:cccc")
+        public cccc node_cccc;
     }
 
-    public static class ccc {
+    public static class cccc {
     }
 
     public static class BBB {

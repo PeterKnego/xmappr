@@ -17,7 +17,7 @@ public class ParentClassTest {
     public static String xml = "" +
             "<base i=\"1000\" l=\"9999\" >" +
             "A text value" +
-            "  <iv>999</iv>" +
+            "<iv>999</iv>" +
             "  <bytv>-127</bytv>" +
             "  <dbv>1.6</dbv>" +
             "</base> ";

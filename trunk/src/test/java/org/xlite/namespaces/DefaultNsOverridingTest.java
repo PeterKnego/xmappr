@@ -19,11 +19,11 @@ public class DefaultNsOverridingTest {
 
     static String xml = "" +
             "<aaa xmlns:upper = \"uppercase\" xmlns:xnumber = \"xnumber\" >\n" +
-            "  <bbb xmlns = \"lowercase\" >\n" +
-            "       <ccc />\n" +
+            "  <bbbb xmlns = \"lowercase\" >\n" +
+            "       <cccc />\n" +
             "       <upper:WWW />\n" +
             "       <xnumber:x666 />\n" +
-            "  </bbb>\n" +
+            "  </bbbb>\n" +
             "  <BBB xmlns = \"uppercase\" >\n" +
             "       <upper:WWW />\n" +
             "       <xnumber:x666 />\n" +
@@ -48,9 +48,9 @@ public class DefaultNsOverridingTest {
         Xlite xlite = new Xlite(conf);
         aaa a = (aaa) xlite.fromXML(reader);
 
-        Assert.assertTrue(a.node_bbb.node_ccc != null);
-        Assert.assertTrue(a.node_bbb.node_WWW != null);
-        Assert.assertTrue(a.node_bbb.node_x666 != null);
+        Assert.assertTrue(a.node_bbbb.node_cccc != null);
+        Assert.assertTrue(a.node_bbbb.node_WWW != null);
+        Assert.assertTrue(a.node_bbbb.node_x666 != null);
         Assert.assertTrue(a.node_BBB.node_CCC != null);
         Assert.assertTrue(a.node_BBB.node_WWW != null);
         Assert.assertTrue(a.node_BBB.node_x666 != null);
@@ -69,8 +69,8 @@ public class DefaultNsOverridingTest {
 
     public static class aaa {
         @XMLnamespaces("lowercase")
-        @XMLelement("bbb")
-        public bbb node_bbb;
+        @XMLelement("bbbb")
+        public bbbb node_bbbb;
 
         @XMLnamespaces("uppercase")
         @XMLelement("BBB")
@@ -82,9 +82,9 @@ public class DefaultNsOverridingTest {
     }
 
     @XMLnamespaces("lowercase")
-    public static class bbb {
-        @XMLelement("ccc")
-        public ccc node_ccc;
+    public static class bbbb {
+        @XMLelement("cccc")
+        public cccc node_cccc;
 
         @XMLelement("u:WWW")
         public WWW node_WWW;
@@ -93,7 +93,7 @@ public class DefaultNsOverridingTest {
         public x666 node_x666;
     }
 
-    public static class ccc {
+    public static class cccc {
     }
 
     @XMLnamespaces("uppercase")

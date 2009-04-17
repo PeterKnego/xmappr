@@ -16,11 +16,11 @@ import org.xlite.*;
 public class UndeclaringDefaultNs {
     static String xml = "" +
             "<aaa xmlns = \"lowercase\" >\n" +
-            "  <bbb >\n" +
-            "    <ccc xmlns = \"\" >\n" +
+            "  <bbbb >\n" +
+            "    <cccc xmlns = \"\" >\n" +
             "      <ddd />\n" +
-            "    </ccc>\n" +
-            "  </bbb>\n" +
+            "    </cccc>\n" +
+            "  </bbbb>\n" +
             "</aaa>";
 
     @org.testng.annotations.Test
@@ -46,13 +46,13 @@ public class UndeclaringDefaultNs {
     }
 
     public static class aaa {
-        @XMLelement("bbb")
+        @XMLelement("bbbb")
         public bbb node_bbb;
     }
 
     public static class bbb {
         @XMLnamespaces("")
-        @XMLelement("ccc")
+        @XMLelement("cccc")
         public ccc node_ccc;
     }
 

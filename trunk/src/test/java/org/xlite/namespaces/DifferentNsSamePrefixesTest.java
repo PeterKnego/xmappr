@@ -19,9 +19,9 @@ public class DifferentNsSamePrefixesTest {
 
     static String xml = "" +
             "<aaa >\n" +
-            "  <lower:bbb xmlns:lower = \"lowercase\" >\n" +
-            "     <lower:ccc />\n" +
-            "  </lower:bbb>\n" +
+            "  <lower:bbbb xmlns:lower = \"lowercase\" >\n" +
+            "     <lower:cccc />\n" +
+            "  </lower:bbbb>\n" +
             "  <lower:BBB xmlns:lower = \"uppercase\" >\n" +
             "    <lower:CCC />\n" +
             "  </lower:BBB>\n" +
@@ -38,7 +38,7 @@ public class DifferentNsSamePrefixesTest {
         Xlite xlite = new Xlite(conf);
         aaa a = (aaa) xlite.fromXML(reader);
 
-        Assert.assertTrue(a.node_bbb.node_ccc != null);
+        Assert.assertTrue(a.node_bbbb.node_cccc != null);
         Assert.assertTrue(a.node_BBB.node_CCC != null);
         Assert.assertTrue(a.node_x111.node_x222 != null);
 
@@ -54,8 +54,8 @@ public class DifferentNsSamePrefixesTest {
     // node aaa is in default namespace
     public static class aaa {
         @XMLnamespaces("lower=lowercase")
-        @XMLelement("lower:bbb")
-        public bbb node_bbb;
+        @XMLelement("lower:bbbb")
+        public bbbb node_bbbb;
 
         @XMLnamespaces("lower=uppercase")
         @XMLelement("lower:BBB")
@@ -66,13 +66,13 @@ public class DifferentNsSamePrefixesTest {
         public x111 node_x111;
     }
 
-    public static class bbb {
+    public static class bbbb {
         @XMLnamespaces("lower=lowercase")
-        @XMLelement("lower:ccc")
-        public ccc node_ccc;
+        @XMLelement("lower:cccc")
+        public cccc node_cccc;
     }
 
-    public static class ccc {
+    public static class cccc {
     }
 
     public static class BBB {

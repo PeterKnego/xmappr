@@ -20,9 +20,9 @@ public class DifferentPrefixesSameNsTest {
     static String xml = "" +
             "<lower:aaa xmlns:lower = \"lowercase\" xmlns:upper = \"lowercase\"\n" +
             "  xmlns:xnumber = \"lowercase\" >\n" +
-            "  <lower:bbb >\n" +
-            "       <lower:ccc />\n" +
-            "  </lower:bbb>\n" +
+            "  <lower:bbbb >\n" +
+            "       <lower:cccc />\n" +
+            "  </lower:bbbb>\n" +
             "  <upper:BBB >\n" +
             "       <upper:CCC />\n" +
             "  </upper:BBB>\n" +
@@ -43,7 +43,7 @@ public class DifferentPrefixesSameNsTest {
         Xlite xlite = new Xlite(conf);
         aaa a = (aaa) xlite.fromXML(reader);
 
-        Assert.assertTrue(a.node_bbb.node_ccc != null);
+        Assert.assertTrue(a.node_bbbb.node_cccc != null);
         Assert.assertTrue(a.node_BBB.node_CCC != null);
         Assert.assertTrue(a.node_x111.node_x222 != null);
 
@@ -57,8 +57,8 @@ public class DifferentPrefixesSameNsTest {
     }
 
     public static class aaa {
-        @XMLelement("l:bbb")
-        public bbb node_bbb;
+        @XMLelement("l:bbbb")
+        public bbbb node_bbbb;
 
         @XMLelement("u:BBB")
         public BBB node_BBB;
@@ -68,12 +68,12 @@ public class DifferentPrefixesSameNsTest {
         public x111 node_x111;
     }
 
-    public static class bbb {
-        @XMLelement("l:ccc")
-        public ccc node_ccc;
+    public static class bbbb {
+        @XMLelement("l:cccc")
+        public cccc node_cccc;
     }
 
-    public static class ccc {
+    public static class cccc {
     }
 
     public static class BBB {
