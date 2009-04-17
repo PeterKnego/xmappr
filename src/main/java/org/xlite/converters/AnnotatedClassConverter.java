@@ -67,11 +67,11 @@ public class AnnotatedClassConverter implements ElementConverter {
 
         // collect XML text values
 
-        TextCollector textCollector = null;
-        if (textMapper != null) {
-            textCollector = new TextCollector();
-            textCollector.append(reader.getText());
-        }
+//        TextCollector textCollector = null;
+//        if (textMapper != null) {
+//            textCollector = new TextCollector();
+//            textCollector.append(reader.getText());
+//        }
 
         // XML element attributes
         Iterator<Map.Entry<QName, String>> attributeSet = reader.getAttributeIterator();
@@ -101,7 +101,7 @@ public class AnnotatedClassConverter implements ElementConverter {
 //                        " subConverter:" + subMapper.elementConverter);
                 subMapper.readElement(qname, currentObject, reader);
 
-            // unknown subMapper
+                // unknown subMapper
             } else {
                 reader.saveSubTree(currentObject);
             }
@@ -109,13 +109,14 @@ public class AnnotatedClassConverter implements ElementConverter {
 //            nm = (reader.reader.getEventType() == 1 || reader.reader.getEventType() == 2) ? reader.reader.getName().getLocalPart() : "";
 //            System.out.println("BEFORE moveUp: "+reader.reader.getEventType()+" "+nm);
             reader.moveUp();
-            if (textCollector != null) {
-                textCollector.append(reader.getText());
-            }
+//            if (textCollector != null) {
+//                textCollector.append(reader.getText());
+//            }
         }
 
-        if (textCollector != null) {
-            textMapper.setValue(currentObject, textCollector.toString());
+        if (textMapper != null) {
+//            textMapper.setValue(currentObject, textCollector.toString());
+            textMapper.setValue(currentObject, reader.getFirstText());
         }
 
         return currentObject;

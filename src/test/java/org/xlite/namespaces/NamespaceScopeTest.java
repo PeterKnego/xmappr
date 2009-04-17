@@ -19,9 +19,9 @@ public class NamespaceScopeTest {
             "<aaa xmlns:lower = \"lowercase\" >\n" +
             "  <lower:BBB xmlns:lower = \"uppercase\" >\n" +
             "    <lower:x111 />\n" +
-            "    <ccc xmlns:lower = \"xnumber\" >\n" +
+            "    <cccc xmlns:lower = \"xnumber\" >\n" +
             "      <lower:x111 />\n" +
-            "    </ccc>\n" +
+            "    </cccc>\n" +
             "  </lower:BBB>\n" +
             "  <lower:x111 />\n" +
             "</aaa>";
@@ -61,7 +61,7 @@ public class NamespaceScopeTest {
     public static class BBB {
 
         @XMLnamespaces("l=xnumber")
-        @XMLelement("ccc")
+        @XMLelement("cccc")
         public ccc node_ccc;
 
         @XMLelement("l:x111")

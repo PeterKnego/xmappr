@@ -16,15 +16,15 @@ public class SampleXml {
                     "<emptyNode attrEmpty=\"-1.6\"/>" +
                     "<two attr4=\"true\" attr5=\"x\" >" +
                     "textTwo" +
-                    "   <three1 val=\"42\">" +
-                    "   textThree" +
-                    "   </three1>" +
-                    "   <nodeWithSubnodes>" +
-                    "       <integer>2008</integer>" +
-                    "       <bool>true</bool>" +
-                    "       <char>f</char>" +
-                    "       <float>-15.555</float>" +
-                    "   </nodeWithSubnodes>" +
+                    "<three1 val=\"42\">" +
+                    "textThree" +
+                    "</three1>" +
+                    "<nodeWithSubnodes>" +
+                    "<integer>2008</integer>" +
+                    "<bool>true</bool>" +
+                    "<char>f</char>" +
+                    "<float>-15.555</float>" +
+                    "</nodeWithSubnodes>" +
                     "</two>" +
                     "</one>";
 

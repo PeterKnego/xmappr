@@ -23,13 +23,13 @@ public class ValueConverterWrapper implements ElementConverter {
     }
 
     public Object fromElement(XMLSimpleReader reader, MappingContext mappingContext, String defaultValue) {
-        String text = reader.getText();
+        String text = reader.getFirstText();
         if (text == null || text.length() == 0) {
             if (defaultValue != null) {
                 return valueConverter.fromValue(defaultValue);
             } else if (!valueConverter.convertsEmpty()) {
                 throw new XliteException("Converter of type "+valueConverter.getClass()+" can not convert empty elements. " +
-                        "Either element must not be empty or you a default value must be cupploied via @XMLelement(defaultValue = \"val\")");
+                        "Either element must not be empty or a default value must be supplied via @XMLelement(defaultValue = \"val\")");
             }
         }
         return valueConverter.fromValue(text);

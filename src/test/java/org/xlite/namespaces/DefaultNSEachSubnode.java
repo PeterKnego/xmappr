@@ -18,9 +18,9 @@ public class DefaultNSEachSubnode {
 
        static String xml =
                "<aaa >\n" +
-               "  <bbb xmlns = \"lowercase\" >\n" +
-               "    <ccc />\n" +
-               "  </bbb>\n" +
+               "  <bbbb xmlns = \"lowercase\" >\n" +
+               "    <cccc />\n" +
+               "  </bbbb>\n" +
                "  <BBB xmlns = \"uppercase\" >\n" +
                "    <CCC />\n" +
                "  </BBB>\n" +
@@ -37,7 +37,7 @@ public class DefaultNSEachSubnode {
         Xlite xlite = new Xlite(conf);
         aaa a = (aaa) xlite.fromXML(reader);
 
-        Assert.assertTrue(a.node_bbb.node_ccc != null);
+        Assert.assertTrue(a.node_bbb.node_cccc != null);
         Assert.assertTrue(a.node_BBB.node_CCC != null);
         Assert.assertTrue(a.node_x111.node_x222 != null);
 
@@ -52,8 +52,8 @@ public class DefaultNSEachSubnode {
 
     public static class aaa {
         @XMLnamespaces("lowercase")
-        @XMLelement("bbb")
-        public bbb node_bbb;
+        @XMLelement("bbbb")
+        public bbbb node_bbb;
 
         @XMLnamespaces("uppercase")
         @XMLelement("BBB")
@@ -65,12 +65,12 @@ public class DefaultNSEachSubnode {
     }
 
     @XMLnamespaces("lowercase")
-    public static class bbb {
-        @XMLelement("ccc")
-        public ccc node_ccc;
+    public static class bbbb {
+        @XMLelement("cccc")
+        public cccc node_cccc;
     }
 
-    public static class ccc {
+    public static class cccc {
     }
 
     @XMLnamespaces("uppercase")

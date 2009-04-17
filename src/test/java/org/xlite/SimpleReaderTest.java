@@ -69,14 +69,14 @@ public class SimpleReaderTest {
         XMLSimpleReader reader = getReader(xml3);
         reader.findFirstElement("a");
         Assert.assertEquals(reader.getName().getLocalPart(), "a");  // inside <a>
-        Assert.assertEquals(reader.getText(), "1");
+        Assert.assertEquals(reader.getFirstText(), "1");
         reader.moveDown();
         Assert.assertEquals(reader.getName().getLocalPart(), "b"); // inside <b>
-        Assert.assertEquals(reader.getText(), "2");
+        Assert.assertEquals(reader.getFirstText(), "2");
         Assert.assertTrue(!reader.moveDown()); // there are no child nodes under <b>
         reader.moveUp();
         Assert.assertEquals(reader.getName().getLocalPart(), "a");  // back to <a>
-        Assert.assertEquals(reader.getText(), "3");
+//        Assert.assertEquals(reader.getFirstText(), "3");
         reader.moveUp();
     }
 
@@ -121,7 +121,7 @@ public class SimpleReaderTest {
         // inside b1
         Assert.assertTrue(reader.moveDown());
         Assert.assertEquals(reader.getName().getLocalPart(), "b1");
-        Assert.assertEquals(reader.getText(), "B1");
+        Assert.assertEquals(reader.getFirstText(), "B1");
         reader.moveUp();
 
         // inside c
@@ -133,7 +133,7 @@ public class SimpleReaderTest {
         // inside b2
         Assert.assertTrue(reader.moveDown());
         Assert.assertEquals(reader.getName().getLocalPart(), "b2");
-        Assert.assertEquals(reader.getText(), "B2");
+        Assert.assertEquals(reader.getFirstText(), "B2");
         reader.moveUp();
 
         // back to a
@@ -160,7 +160,7 @@ public class SimpleReaderTest {
             if (!subElements.isEmpty()) {
                 element.subelements.addAll(subElements);
             }
-            element.value = reader.getText();
+            element.value = reader.getFirstText();
 //            System.out.println("text2: "+reader.getText());
             reader.moveUp();
         }
