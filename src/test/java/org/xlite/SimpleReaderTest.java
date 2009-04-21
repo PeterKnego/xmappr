@@ -151,10 +151,27 @@ public class SimpleReaderTest {
         writer.addAttribute(new QName("a"), "abc");
         writer.addAttribute(new QName("b"), "123");
         writer.addAttribute(new QName("c"), "mama");
-        writer.addText("text");
+//        writer.addText("text");
         writer.endElement();
+        writer.endDocument();
 
-        System.out.println("writerTest: "+sw.toString());
+        System.out.println("writerTest: " + sw.toString());
+    }
+
+    @org.testng.annotations.Test
+    public void writer() throws XMLStreamException {
+        StringWriter sw = new StringWriter();
+        XMLOutputFactory factory = XMLOutputFactory.newInstance();
+        factory.setProperty("javax.xml.stream.isRepairingNamespaces", true);
+        XMLStreamWriter writer = factory.createXMLStreamWriter(sw);
+
+        writer.writeEmptyElement("root");
+        writer.writeAttribute("a","123");
+        writer.writeAttribute("b","456");
+        writer.writeEndDocument();
+        writer.flush();
+        writer.close();
+        System.out.println(sw.toString());
     }
 
 

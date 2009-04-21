@@ -43,8 +43,8 @@ public class MultiattributeMapTest {
         System.out.println("");
         System.out.println(sw.toString());
 
-//        XMLUnit.setIgnoreWhitespace(true);
-//        XMLAssert.assertXMLEqual(xml, ssw);
+        XMLUnit.setIgnoreWhitespace(true);
+        XMLAssert.assertXMLEqual(xml, sw.toString());
     }
 
     public static class Root {

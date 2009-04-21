@@ -88,7 +88,7 @@ public class XMLSimpleWriter {
                     elementCache.get(0).command = Element.EMPTY_NODE;
                 }
                 flushElementCache();
-                prettyPrintDecreaseDepth();               
+                prettyPrintDecreaseDepth();
 
             // this node contains internal elements (text or subelements) and should have a normal closing tag
             } else {
@@ -106,14 +106,15 @@ public class XMLSimpleWriter {
     public void endDocument() {
         try {
 //            System.out.println("end document:");
+            flushElementCache();
             writer.writeEndDocument();
+            writer.flush();
         } catch (XMLStreamException e) {
             throw new XliteException(e);
         }
     }
 
     public void addAttribute(String prefix, String localName, String namespaceURI, String value) {
-            System.out.println("attr: " + prefix + ":" + localName + "=" + value + "  ns=" + namespaceURI);
         elementCache.add(new Element(Element.ATTRIBUTE, prefix, localName, namespaceURI, value));
     }
 
