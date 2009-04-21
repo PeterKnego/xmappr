@@ -22,7 +22,7 @@ public class AnnotatedClassConverter implements ElementConverter {
     private Class targetClass;
     private ValueMapper textMapper;
     private Map<QName, ElementMapper> elementMappersByName = new HashMap<QName, ElementMapper>();
-    private Map<QName, ValueMapper> attributeMappers = new HashMap<QName, ValueMapper>();
+    private Map<QName, AttributeMapper> attributeMappers = new HashMap<QName, AttributeMapper>();
     private NsContext classNamespaces;
 
     public AnnotatedClassConverter(Class targetClass) {
@@ -45,8 +45,8 @@ public class AnnotatedClassConverter implements ElementConverter {
         elementMappersByName.put(qName, elementMapper);
     }
 
-    public void addAttributeConverter(QName attributeQName, ValueMapper valueMapper) {
-        attributeMappers.put(attributeQName, valueMapper);
+    public void addAttributeConverter(QName attributeQName, AttributeMapper attributeMapper) {
+        attributeMappers.put(attributeQName, attributeMapper);
     }
 
     public boolean canConvert(Class type) {
@@ -80,10 +80,10 @@ public class AnnotatedClassConverter implements ElementConverter {
             QName attrQName = entry.getKey();
             String attrValue = entry.getValue();
             // find the attribute mapper
-            ValueMapper attrMapper = attributeMappers.get(attrQName);
-            // if mapper exists, use it to set field to attribute value
+            AttributeMapper attrMapper = attributeMappers.get(attrQName);
+            // if mapper exists, use it to setValue field to attribute value
             if (attrMapper != null && attrValue.length() != 0) {
-                attrMapper.setValue(currentObject, attrValue);
+                attrMapper.setValue(attrQName, currentObject, attrValue);
             }
 //            System.out.println("ATTR: " + attrQName);
         }
@@ -98,7 +98,7 @@ public class AnnotatedClassConverter implements ElementConverter {
             ElementMapper subMapper = elementMappersByName.get(qname);
             if (subMapper != null) {  // converter is found
 //                System.out.println("START:" + name + " thisConverter:" + this.toString() +
-//                        " subConverter:" + subMapper.elementConverter);
+//                        " subConverter:" + subMapper.valueConverter);
                 subMapper.readElement(qname, currentObject, reader);
 
                 // unknown subMapper
@@ -116,7 +116,7 @@ public class AnnotatedClassConverter implements ElementConverter {
 
         if (textMapper != null) {
 //            textMapper.setValue(currentObject, textCollector.toString());
-            textMapper.setValue(currentObject, reader.getFirstText());
+            textMapper.setValue(currentObject, reader.getText());
         }
 
         return currentObject;
@@ -130,8 +130,8 @@ public class AnnotatedClassConverter implements ElementConverter {
 
         // write attributes
         for (QName attrName : attributeMappers.keySet()) {
-            ValueMapper mapper = attributeMappers.get(attrName);
-            String value = mapper.getValue(object);
+            AttributeMapper mapper = attributeMappers.get(attrName);
+            String value = mapper.getValue(attrName, object);
             writer.addAttribute(attrName, value);
         }
 

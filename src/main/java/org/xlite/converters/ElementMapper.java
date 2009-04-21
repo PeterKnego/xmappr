@@ -27,7 +27,7 @@ public class ElementMapper {
     private Map<Class, QName> itemTypes = new HashMap<Class, QName>();
     private Map<QName, ElementConverter> converterCache = new HashMap<QName, ElementConverter>();
 
-    // default value as set by the @XMLelement(defaultValue=??) annotation
+    // default value as setValue by the @XMLelement(defaultValue=??) annotation
     private String defaultValue;
 
     public ElementMapper(Field targetField, CollectionConverting collectionConverter, MappingContext mappingContext) {
@@ -59,12 +59,12 @@ public class ElementMapper {
     }
 
     private void collectionAddItem(QName nodeName, Object targetObject, XMLSimpleReader reader) {
-        Collection collection = (Collection) targetField.get(targetObject);
+        Collection collection = (Collection) targetField.getValue(targetObject);
 
         // initialize collection if needed
         if (collection == null) {
             collection = collectionConverter.initializeCollection(targetField.getType());
-            targetField.set(targetObject, collection);
+            targetField.setValue(targetObject, collection);
         }
 
         // find the converter for given node name
@@ -82,13 +82,13 @@ public class ElementMapper {
 
     private void setFieldValue(Object targetObject, XMLSimpleReader reader) {
         Object value = elementConverter.fromElement(reader, mappingContext, defaultValue);
-        targetField.set(targetObject, value);
+        targetField.setValue(targetObject, value);
     }
 
     public void writeElement(Object object, QName nodeName, XMLSimpleWriter writer) {
         // it's a collection
         if (collectionConverter != null) {
-            Collection collection = (Collection) targetField.get(object);
+            Collection collection = (Collection) targetField.getValue(object);
             if (collection == null) {
                 return;
             }
@@ -99,7 +99,7 @@ public class ElementMapper {
             }
 
         } else {   // normal field
-            elementConverter.toElement(targetField.get(object), nodeName, writer, mappingContext, defaultValue);
+            elementConverter.toElement(targetField.getValue(object), nodeName, writer, mappingContext, defaultValue);
         }
     }
 

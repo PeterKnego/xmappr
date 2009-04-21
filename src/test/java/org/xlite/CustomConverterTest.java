@@ -51,7 +51,7 @@ public class CustomConverterTest {
 
         public Object fromElement(XMLSimpleReader reader, MappingContext mappingContext, String defaultValue) {
             Custom custom = new Custom();
-            custom.value = reader.getFirstText();
+            custom.value = reader.getText();
             while (reader.moveDown()) {
                 if (reader.getName().getLocalPart().equals("three")) {
                     custom.three = (Three) mappingContext.processNextElement(Three.class, reader);

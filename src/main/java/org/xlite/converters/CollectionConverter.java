@@ -33,7 +33,8 @@ public class CollectionConverter implements ElementConverter, CollectionConverti
     }
 
     public Collection initializeCollection(Class targetType) {
-        if (!isCollectionType(targetType)) {
+        // is target class a Collection?
+        if (!Collection.class.isAssignableFrom(targetType)) {
             throw new XliteException("Error: Target class " + targetType.getName() + " can not be cast to java.util.Collection!");
         }
         Class<? extends Collection> concreteType = getConcreteCollectionType(targetType);
@@ -51,10 +52,6 @@ public class CollectionConverter implements ElementConverter, CollectionConverti
             return ArrayList.class;
         }
         return targetType;
-    }
-
-    private boolean isCollectionType(Class type) {
-        return Collection.class.isAssignableFrom(type);
     }
 
     public void addItem(Collection collection, Object object) {

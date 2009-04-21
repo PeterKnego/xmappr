@@ -5,8 +5,6 @@
  */
 package org.xlite.converters;
 
-import org.xlite.XliteException;
-
 import java.lang.reflect.Field;
 
 /**
@@ -31,6 +29,14 @@ public class ValueMapper {
         }
     }
 
+    public Object getObject(Object parent) {
+        return targetField.getValue(parent);
+    }
+
+    public void setObject(Object parent, Object value){
+        targetField.setValue(parent, value);
+    }
+
     /**
      * Assigns a value to the Field.
      *
@@ -38,15 +44,16 @@ public class ValueMapper {
      * @param elementValue Value to be set.
      */
     public void setValue(Object object, String elementValue) {
+        // value is empty?
         if (elementValue.length() == 0) {
 
             // default value is used
             if (defaultValue != null && defaultValue.length() != 0) {
-                targetField.set(object, defaultValue);
+                targetField.setValue(object, defaultValue);
             }
         } else {
             Object value = valueConverter.fromValue(elementValue);
-            targetField.set(object, value);
+            targetField.setValue(object, value);
         }
     }
 
@@ -58,7 +65,7 @@ public class ValueMapper {
      */
     public String getValue(Object object) {
         Object targetObject;
-        targetObject = targetField.get(object);
+        targetObject = targetField.getValue(object);
         if (targetObject == null) {
             // use default value if defined
             return defaultObject != null ? valueConverter.toValue(defaultObject) : "";

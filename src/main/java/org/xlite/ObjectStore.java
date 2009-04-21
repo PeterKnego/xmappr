@@ -158,7 +158,7 @@ public class ObjectStore {
 //            writingFinished = true;
 //        }
 
-        // set the location where reading will start
+        // setValue the location where reading will start
         if (location != -1) {
             readPos = location;
         }
