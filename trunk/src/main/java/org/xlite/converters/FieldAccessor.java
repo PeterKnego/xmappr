@@ -25,7 +25,7 @@ public class FieldAccessor {
         }
     }
 
-    public void set(Object obj, Object value) {
+    public void setValue(Object obj, Object value) {
         if (setter == null) {
             try {
                 targetField.set(obj, value);
@@ -43,13 +43,17 @@ public class FieldAccessor {
         }
     }
 
-    public Object get(Object obj) {
+    public Object getValue(Object obj) {
         if (getter == null) {
+
+            Object o = null;
             try {
-                return targetField.get(obj);
+                o = targetField.get(obj);
             } catch (IllegalAccessException e) {
                 throw new XliteException("Field could not be read from! ", e);
             }
+            return o;
+
         } else {
             try {
                 return getter.invoke(obj);
@@ -63,6 +67,10 @@ public class FieldAccessor {
 
     public Class getType() {
         return targetField.getType();
+    }
+
+    public Field getTargetField() {
+        return targetField;
     }
 
     private Method findAccessorMethod(String prepend, Class... type) {

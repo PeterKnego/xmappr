@@ -69,14 +69,14 @@ public class SimpleReaderTest {
         XMLSimpleReader reader = getReader(xml3);
         reader.findFirstElement("a");
         Assert.assertEquals(reader.getName().getLocalPart(), "a");  // inside <a>
-        Assert.assertEquals(reader.getFirstText(), "1");
+        Assert.assertEquals(reader.getText(), "1");
         reader.moveDown();
         Assert.assertEquals(reader.getName().getLocalPart(), "b"); // inside <b>
-        Assert.assertEquals(reader.getFirstText(), "2");
+        Assert.assertEquals(reader.getText(), "2");
         Assert.assertTrue(!reader.moveDown()); // there are no child nodes under <b>
         reader.moveUp();
         Assert.assertEquals(reader.getName().getLocalPart(), "a");  // back to <a>
-//        Assert.assertEquals(reader.getFirstText(), "3");
+//        Assert.assertEquals(reader.getText(), "3");
         reader.moveUp();
     }
 
@@ -121,7 +121,7 @@ public class SimpleReaderTest {
         // inside b1
         Assert.assertTrue(reader.moveDown());
         Assert.assertEquals(reader.getName().getLocalPart(), "b1");
-        Assert.assertEquals(reader.getFirstText(), "B1");
+        Assert.assertEquals(reader.getText(), "B1");
         reader.moveUp();
 
         // inside c
@@ -133,7 +133,7 @@ public class SimpleReaderTest {
         // inside b2
         Assert.assertTrue(reader.moveDown());
         Assert.assertEquals(reader.getName().getLocalPart(), "b2");
-        Assert.assertEquals(reader.getFirstText(), "B2");
+        Assert.assertEquals(reader.getText(), "B2");
         reader.moveUp();
 
         // back to a
@@ -142,6 +142,21 @@ public class SimpleReaderTest {
 
 
     }
+
+    @org.testng.annotations.Test
+    public void writerTest() throws XMLStreamException {
+        StringWriter sw = new StringWriter();
+        XMLSimpleWriter writer = getWriter(sw);
+        writer.startElement(new QName("root"));
+        writer.addAttribute(new QName("a"), "abc");
+        writer.addAttribute(new QName("b"), "123");
+        writer.addAttribute(new QName("c"), "mama");
+        writer.addText("text");
+        writer.endElement();
+
+        System.out.println("writerTest: "+sw.toString());
+    }
+
 
     public static List<Element> processSubElements(XMLSimpleReader reader) {
         List<Element> elements = new ArrayList<Element>();
@@ -160,7 +175,7 @@ public class SimpleReaderTest {
             if (!subElements.isEmpty()) {
                 element.subelements.addAll(subElements);
             }
-            element.value = reader.getFirstText();
+            element.value = reader.getText();
 //            System.out.println("text2: "+reader.getText());
             reader.moveUp();
         }

@@ -23,7 +23,7 @@ public class ValueConverterWrapper implements ElementConverter {
     }
 
     public Object fromElement(XMLSimpleReader reader, MappingContext mappingContext, String defaultValue) {
-        String text = reader.getFirstText();
+        String text = reader.getText();
         if (text == null || text.length() == 0) {
             if (defaultValue != null) {
                 return valueConverter.fromValue(defaultValue);

@@ -65,7 +65,7 @@ public class XMLSimpleReader {
 
         // checkAndReset the accumulated Text
         if (!elementStack.isEmpty()) {
-            elementStack.peek().reset();
+            elementStack.peek().resetText();
         }
         // read stream settings at the beginning of the document
         if (reader.getEventType() == XMLStreamConstants.START_DOCUMENT) {
@@ -160,18 +160,10 @@ public class XMLSimpleReader {
         elementStack.pop();
     }
 
-    public List<String> getText() {
-        if (elementStack.isEmpty()) {
-            throw new XliteException("Error: there are no XML nodes available to be read.");
-        }
-        System.out.println("TEXT-OUT" + elementStack.peek().hashCode() + ":" + elementStack.peek().text);
-        return elementStack.peek().texts;
-    }
-
-    public String getFirstText() {
-        String result = elementStack.peek().getFirstText();
-        System.out.println("getFirstText:" + result);
-        return result;
+    public String getText() {
+        String txt = elementStack.peek().text.toString();
+        System.out.println("OUT:"+txt);
+        return txt;
     }
 
     public QName getName() {
@@ -188,36 +180,19 @@ public class XMLSimpleReader {
 
     public static class Element implements Iterable {
         public QName name;
-        private StringBuilder text = new StringBuilder();
-        private List<String> texts = new ArrayList<String>();
+        private StringBuilder text;
         private Map<QName, String> attributes = new HashMap<QName, String>();
 
         public void addText(String text) {
             this.text.append(text);
         }
 
-        public void reset() {
-            if (text.length() != 0) {
-                texts.add(text.toString());
+        public void resetText() {
+            if (text == null) {
                 text = new StringBuilder();
-            }
-        }
-
-        public String getFirstText() {
-            if (texts.size() == 0) {
-                if (text.length() == 0) {
-                    return "";
-                } else {
-                    return text.toString();
-                }
             } else {
-                return texts.get(0);
+                text.delete(0, text.length());
             }
-        }
-
-        public List<String> getTexts() {
-            reset();
-            return texts;
         }
 
         public void putAttribute(QName qname, String value) {
@@ -278,7 +253,7 @@ public class XMLSimpleReader {
 
     public void saveSubTree(Object reference) {
 
-        // restore only if objectStore is set
+        // restore only if objectStore is setValue
         if (objectStore == null) return;
 
         if (eventCache == null) {

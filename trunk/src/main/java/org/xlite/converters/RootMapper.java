@@ -21,7 +21,7 @@ public class RootMapper {
 
     public RootMapper(QName rootNodeName, Class rootClass, MappingContext mappingContext) {
         elementConverter = mappingContext.lookupElementConverter(rootClass);
-//        ElementMapper mapper = new ElementMapper(null, null, null, elementConverter, mappingContext);
+//        ElementMapper mapper = new ElementMapper(null, null, null, valueConverter, mappingContext);
         this.rootNodeName = rootNodeName;
         this.mappingContext = mappingContext;
     }

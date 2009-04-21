@@ -113,7 +113,7 @@ public class XMLSimpleWriter {
     }
 
     public void addAttribute(String prefix, String localName, String namespaceURI, String value) {
-//            System.out.println("attr: " + prefix + ":" + localName + "=" + value + "  ns=" + namespaceURI);
+            System.out.println("attr: " + prefix + ":" + localName + "=" + value + "  ns=" + namespaceURI);
         elementCache.add(new Element(Element.ATTRIBUTE, prefix, localName, namespaceURI, value));
     }
 
@@ -172,7 +172,7 @@ public class XMLSimpleWriter {
 
     public void restoreSubTrees(Object reference) {
 
-        // restore only if objectStore is set
+        // restore only if objectStore is setValue
         if(objectStore == null) return;
 
         List<Integer> locations = objectStore.getLocations(reference);
