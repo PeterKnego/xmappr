@@ -327,20 +327,31 @@ public class AnnotationProcessor {
                     // target field is a Map so a converter must be choosen by it's "itemType" property
                     if (Map.class.isAssignableFrom(field.getType())) {
 
-                        if (annotatedConverter != null) {
-                            throw new XliteException("Error: Can  not assign converter for collection " + field.getName() +
+                        // both 'itemType' and 'converter' are defined on @XMLattribute
+                        if (annotatedConverter != null && itemType != String.class) {
+                            throw new XliteException("Error: Can  not assign converter for Map " + field.getName() +
                                     " in class " + field.getDeclaringClass().getSimpleName() +
-                                    "When @XMLattribute annotation is used on a map, 'converter' value can not be used. " +
-                                    "Use 'itemType' instead.");
-                        }
+                                    "When @XMLattribute annotation is used on a Map, 'converter' and 'itemType' values" +
+                                    " can not be used at the same time.");
 
-                        // if it's a collection, then @XMLattribute must have "itemType" value defined
-                        if (itemType == null) {
-                            throw new XliteException("Error: Can not assign converter for map " + field.getName() +
+                        } else if (annotatedConverter != null) { // 'converter'
+                            try {
+                                fieldConverter = annotatedConverter.newInstance();
+                            } catch (InstantiationException e) {
+                                throw new XliteException("Could not instantiate converter " + annotation.converter().getName() + ". ", e);
+                            } catch (IllegalAccessException e) {
+                                throw new XliteException("Could not instantiate converter " + annotation.converter().getName() + ". ", e);
+                            }
+
+                        } else if (itemType != String.class) { // 'itemType'
+                            fieldConverter = mappingContext.lookupValueConverter(itemType);
+
+                        } else { // empty @XMLattribute defined
+                            throw new XliteException("Error: Can not assign converter for Map " + field.getName() +
                                     " in class " + field.getDeclaringClass().getSimpleName() +
-                                    "When @XMLattribute annotation is used on a Map, 'itemType' value must be defined.");
+                                    "When @XMLattribute annotation is used on a Map, either 'converter' or 'itemType' value " +
+                                    "must be defined");
                         }
-                        fieldConverter = mappingContext.lookupValueConverter(itemType);
 
                     } else { // target field is a normal field (not a collection)
 
