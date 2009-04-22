@@ -29,14 +29,6 @@ public class ValueMapper {
         }
     }
 
-    public Object getObject(Object parent) {
-        return targetField.getValue(parent);
-    }
-
-    public void setObject(Object parent, Object value){
-        targetField.setValue(parent, value);
-    }
-
     /**
      * Assigns a value to the Field.
      *
@@ -73,4 +65,11 @@ public class ValueMapper {
         }
     }
 
+    public FieldAccessor getTargetField() {
+        return targetField;
+    }
+
+    public ValueConverter getValueConverter() {
+        return valueConverter;
+    }
 }
