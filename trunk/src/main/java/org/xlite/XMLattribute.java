@@ -19,7 +19,7 @@ public @interface XMLattribute {
     String value() default "";
     String name() default "";
     String defaultValue() default "";
-    Class itemType() default Object.class;
+    Class itemType() default String.class;
     
     Class<? extends ValueConverter> converter() default ValueConverter.class;
 }

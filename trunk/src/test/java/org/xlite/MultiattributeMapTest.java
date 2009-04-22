@@ -20,7 +20,7 @@ import java.util.HashMap;
  * To change this template use File | Settings | File Templates.
  */
 public class MultiattributeMapTest {
-    public static String xml = "<root a='abc' b='123' c='mama' d='ata'/>";
+    public static String xml = "<root a='abc' b='123' c='mama' d='daddy'/>";
 
     @org.testng.annotations.Test
     public void test() throws IOException, SAXException {
@@ -33,7 +33,11 @@ public class MultiattributeMapTest {
         Root one = (Root) xlite.fromXML(reader);
 
         Assert.assertEquals(one.attrs.get(new QName("a")), "abc");
-        Assert.assertEquals(one.attrs.get(new QName("b")), "123");
+        Assert.assertEquals(one.attrs.get(new QName("b")), 123);
+        Assert.assertEquals(one.attrs.get(new QName("c")),"mama");
+        for (Object key : one.attrs.keySet()) {
+            System.out.println(one.attrs.get(key).getClass());
+        }
 
         // writing back to XML
         StringWriter sw = new StringWriter();
@@ -49,14 +53,13 @@ public class MultiattributeMapTest {
 
     public static class Root {
         @XMLattributes({
-                @XMLattribute(name = "a", itemType = String.class),
+                @XMLattribute(name = "a"),
                 @XMLattribute(name = "b", itemType = Integer.class),
-                @XMLattribute(name = "c", itemType = String.class),
-                @XMLattribute(name = "d", itemType = String.class)
-//                @XMLattribute(name = "a"),
-//                @XMLattribute(name = "b")
+                @XMLattribute(name = "c"),
+                @XMLattribute(name = "d")
         })
         public Map attrs;
 
     }
+
 }
