@@ -15,17 +15,18 @@ import java.util.*;
  */
 public class AttributeMapper {
 
-    private FieldAccessor targetField;
-    private ValueConverter valueConverter;
-    private String defaultValue;
+    ValueMapper valueMapper;
 
     public AttributeMapper(Field targetField, ValueConverter valueConverter, String defaultValue) {
-        this.targetField = new FieldAccessor(targetField);
-        this.valueConverter = valueConverter;
-        this.defaultValue = defaultValue;
+        this.valueMapper = new ValueMapper(targetField, valueConverter, defaultValue);
+    }
+
+    private FieldAccessor getTargetField(){
+        return valueMapper.getTargetField();
     }
 
     public void setValue(QName attributeName, Object object, String elementValue) {
+        FieldAccessor targetField = valueMapper.getTargetField();
         // is it a Map?
         if (Map.class.isAssignableFrom(targetField.getType())) {
             Map<QName, Object> targetMap = (Map<QName, Object>) targetField.getValue(object);
@@ -33,19 +34,20 @@ public class AttributeMapper {
                 targetMap = initializeMap(targetField.getType());
                 targetField.setValue(object, targetMap);
             }
-            targetMap.put(attributeName, valueConverter.fromValue(elementValue));
+            targetMap.put(attributeName, valueMapper.getValueConverter().fromValue(elementValue));
         } else {
-            targetField.setValue(object, valueConverter.fromValue(elementValue));
+            valueMapper.setValue(object, elementValue);
         }
     }
 
     public String getValue(QName attributeName, Object object) {
+        FieldAccessor targetField = valueMapper.getTargetField();
         // is it a Map?
         if (Map.class.isAssignableFrom(targetField.getType())) {
             Map<QName, String> target = (Map<QName, String>) targetField.getValue(object);
-            return valueConverter.toValue(target.get(attributeName));
+            return valueMapper.getValueConverter().toValue(target.get(attributeName));
         } else {
-            return valueConverter.toValue(targetField.getValue(object));
+            return valueMapper.getValue(object);
 
         }
     }
