@@ -320,9 +320,6 @@ public class AnnotationProcessor {
                     Class<? extends ValueConverter> annotatedConverter = annotation.converter();
 
                     // setValue to default values according to annotations
-                    if (itemType.equals(Object.class)) {
-                        itemType = null;
-                    }
                     if (annotatedConverter.equals(ValueConverter.class)) {
                         annotatedConverter = null;
                     }
@@ -347,7 +344,7 @@ public class AnnotationProcessor {
 
                     } else { // target field is a normal field (not a collection)
 
-                        if (itemType != null) {
+                        if (!itemType.equals(String.class)) {
                             throw new XliteException("Error: Wrong @XMLattribute annotation value on field " + field.getName() +
                                     " in class " + field.getDeclaringClass().getName() + ". @XMLattribute 'itemType' can only be used on " +
                                     "field types that implement Map.");

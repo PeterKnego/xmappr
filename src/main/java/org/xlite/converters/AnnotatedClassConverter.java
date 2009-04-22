@@ -1,10 +1,7 @@
 package org.xlite.converters;
 
 import javax.xml.namespace.QName;
-import java.util.HashMap;
-import java.util.IdentityHashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 import org.xlite.*;
 
@@ -21,8 +18,8 @@ public class AnnotatedClassConverter implements ElementConverter {
 
     private Class targetClass;
     private ValueMapper textMapper;
-    private Map<QName, ElementMapper> elementMappersByName = new HashMap<QName, ElementMapper>();
-    private Map<QName, AttributeMapper> attributeMappers = new HashMap<QName, AttributeMapper>();
+    private Map<QName, ElementMapper> elementMappersByName = new LinkedHashMap<QName, ElementMapper>();
+    private Map<QName, AttributeMapper> attributeMappers = new LinkedHashMap<QName, AttributeMapper>();
     private NsContext classNamespaces;
 
     public AnnotatedClassConverter(Class targetClass) {

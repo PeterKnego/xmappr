@@ -50,7 +50,7 @@ public class MultielementCollectionTest {
     public static class Root {
         @XMLelements({
                 @XMLelement(name = "a", itemType = A.class),
-                @XMLelement(name = "b", itemType = B.class)
+                @XMLelement(name = "b", itemType = String.class)
 //                @XMLelement(name = "unknown", itemType = ElementStore.class)
         })
         public List letters;
