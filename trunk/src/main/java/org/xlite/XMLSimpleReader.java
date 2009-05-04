@@ -184,10 +184,12 @@ public class XMLSimpleReader {
         private Map<QName, String> attributes = new HashMap<QName, String>();
 
         public void addText(String text) {
+            System.out.println("TEXT:"+this.text.toString()+" ADD:"+text);
             this.text.append(text);
         }
 
         public void resetText() {
+            System.out.println("TEXT RESET");
             if (text == null) {
                 text = new StringBuilder();
             } else {
