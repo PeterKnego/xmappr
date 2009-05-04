@@ -334,7 +334,7 @@ public class AnnotationProcessor {
                                     "When @XMLattribute annotation is used on a Map, 'converter' and 'itemType' values" +
                                     " can not be used at the same time.");
 
-                        } else if (annotatedConverter != null) { // 'converter'
+                        } else if (annotatedConverter != null) { // 'converter' defined
                             try {
                                 fieldConverter = annotatedConverter.newInstance();
                             } catch (InstantiationException e) {
@@ -343,14 +343,8 @@ public class AnnotationProcessor {
                                 throw new XliteException("Could not instantiate converter " + annotation.converter().getName() + ". ", e);
                             }
 
-                        } else if (itemType != String.class) { // 'itemType'
+                        } else  { // 'itemType' either defined or default 'String.class'
                             fieldConverter = mappingContext.lookupValueConverter(itemType);
-
-                        } else { // empty @XMLattribute defined
-                            throw new XliteException("Error: Can not assign converter for Map " + field.getName() +
-                                    " in class " + field.getDeclaringClass().getSimpleName() +
-                                    "When @XMLattribute annotation is used on a Map, either 'converter' or 'itemType' value " +
-                                    "must be defined");
                         }
 
                     } else { // target field is a normal field (not a collection)
