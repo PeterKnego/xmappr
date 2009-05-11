@@ -17,7 +17,7 @@ public class AnnotatedClassConverter implements ElementConverter {
 
 
     private Class<? extends Object> targetClass;
-    private ValueMapper textMapper;
+    private TextMapper textMapper;
     private Map<QName, ElementMapper> elementMappers = new LinkedHashMap<QName, ElementMapper>();
     private Map<QName, AttributeMapper> attributeMappers = new LinkedHashMap<QName, AttributeMapper>();
     private NsContext classNamespaces;
@@ -34,7 +34,7 @@ public class AnnotatedClassConverter implements ElementConverter {
         this.classNamespaces = classNamespaces;
     }
 
-    public void setTextMapper(ValueMapper textMapper) {
+    public void setTextMapper(TextMapper textMapper) {
         this.textMapper = textMapper;
     }
 
@@ -111,7 +111,7 @@ public class AnnotatedClassConverter implements ElementConverter {
             }
         }
 
-        if (textCollector != null ) {
+        if (textCollector != null) {
             textMapper.setValue(currentObject, textCollector.getFirst());
 //            textMapper.setValue(currentObject, reader.getText());
         }
@@ -172,7 +172,7 @@ public class AnnotatedClassConverter implements ElementConverter {
             return this;
         }
 
-        public String getFirst(){
+        public String getFirst() {
             if (texts != null) return texts.get(0);
             return onetext;
         }
