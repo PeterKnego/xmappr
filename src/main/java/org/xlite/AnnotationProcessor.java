@@ -485,6 +485,11 @@ public class AnnotationProcessor {
             throw new XliteException("Error: Multiple @XMLtext annotations in class "
                     + currentClass.getName() + ". Max one @XMLtext annotation can be present in a class.");
         }
+
+        //todo check if field is a Collection and also if it has XMLelement(s) annotations - act accordingly
+        // intermixed TextMapper.isIntermixed? (+constuctor to set value)
+        // TextMapper.isCollection?
+
         if (found == 1) {
 
             // find the appropriate converter
@@ -510,7 +515,7 @@ public class AnnotationProcessor {
                 }
             }
 
-            converter.setTextMapper(new ValueMapper(targetField, valueConverter, null));
+            converter.setTextMapper(new TextMapper(targetField, valueConverter, targetAnnotation.targetType()));
 
 //            System.out.println(currentClass.getSimpleName() + "." + targetField.getName() + " value "
 //                    + " converter:" + valueConverter.getClass().getSimpleName());

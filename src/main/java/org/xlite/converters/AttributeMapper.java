@@ -21,10 +21,6 @@ public class AttributeMapper {
         this.valueMapper = new ValueMapper(targetField, valueConverter, defaultValue);
     }
 
-    private FieldAccessor getTargetField(){
-        return valueMapper.getTargetField();
-    }
-
     public void setValue(QName attributeName, Object object, String elementValue) {
         FieldAccessor targetField = valueMapper.getTargetField();
         // is it a Map?
@@ -48,7 +44,6 @@ public class AttributeMapper {
             return valueMapper.getValueConverter().toValue(target.get(attributeName));
         } else {
             return valueMapper.getValue(object);
-
         }
     }
 
@@ -57,7 +52,7 @@ public class AttributeMapper {
         if (!Map.class.isAssignableFrom(targetType)) {
             throw new XliteException("Error: Target class " + targetType.getName() + " can not be cast to java.util.Map!");
         }
-        Class<? extends Map> concreteType = getConcreteCollectionType(targetType);
+        Class<? extends Map> concreteType = getConcreteMapType(targetType);
         try {
             return concreteType.newInstance();
         } catch (InstantiationException e) {
@@ -67,7 +62,7 @@ public class AttributeMapper {
         }
     }
 
-    private Class<? extends Map> getConcreteCollectionType(Class targetType) {
+    private Class<? extends Map> getConcreteMapType(Class targetType) {
         if (targetType == Map.class) {
             return LinkedHashMap.class;
         }
