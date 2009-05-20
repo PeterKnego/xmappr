@@ -97,7 +97,7 @@ public class XMLSimpleReader {
                 case XMLStreamConstants.CHARACTERS:
                     if (processEvents && !reader.isWhiteSpace()) {
                         String text = reader.getText();
-                        System.out.println("TEXT" + elementStack.peek().hashCode() + ":" + text + "|");
+//                        System.out.println("TEXT" + elementStack.peek().hashCode() + ":" + text + "|");
                         if (isStoringUnknownElements) {
                             storeElement(eventCache);
                         }
@@ -161,9 +161,9 @@ public class XMLSimpleReader {
     }
 
     public String getText() {
-        String txt = elementStack.peek().text.toString();
-        System.out.println("OUT:"+txt);
-        return txt;
+        StringBuilder text = elementStack.peek().text;
+        if (text.length() == 0) return "";
+        return text.toString();
     }
 
     public QName getName() {
@@ -184,12 +184,10 @@ public class XMLSimpleReader {
         private Map<QName, String> attributes = new HashMap<QName, String>();
 
         public void addText(String text) {
-            System.out.println("TEXT:"+this.text.toString()+" ADD:"+text);
             this.text.append(text);
         }
 
         public void resetText() {
-            System.out.println("TEXT RESET");
             if (text == null) {
                 text = new StringBuilder();
             } else {

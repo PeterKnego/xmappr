@@ -85,7 +85,7 @@ public class ElementMapper {
         targetField.setValue(targetObject, value);
     }
 
-    public void writeElement(Object object, QName nodeName, XMLSimpleWriter writer) {
+    public void writeElement(Object object, QName nodeName, XMLSimpleWriter writer, TextMapper textMapper) {
         // it's a collection
         if (collectionConverter != null) {
             Collection collection = (Collection) targetField.getValue(object);
@@ -93,9 +93,13 @@ public class ElementMapper {
                 return;
             }
             for (Object obj : collection) {
-                QName name = itemTypes.get(obj.getClass());
-                ElementConverter converter = converterCache.get(name);
-                converter.toElement(obj, name, writer, mappingContext, defaultValue);
+                if (textMapper != null && textMapper.isTargetType(obj)) {
+                    writer.addText(textMapper.getValue(obj));
+                } else {
+                    QName name = itemTypes.get(obj.getClass());
+                    ElementConverter converter = converterCache.get(name);
+                    converter.toElement(obj, name, writer, mappingContext, defaultValue);
+                }
             }
 
         } else {   // normal field

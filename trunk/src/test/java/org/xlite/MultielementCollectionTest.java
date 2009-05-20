@@ -17,9 +17,10 @@ public class MultielementCollectionTest {
     public static String xml = "<root>" +
             "<a>textA1</a>" +
             "<a>textA2</a>" +
-//            "<unknown>XXX</unknown>" +
+            "just some text"+
             "<b>textB1</b>" +
             "<b>textB2</b>" +
+            "some more text"+
             "<data>YYY</data>" +
             "</root>";
 
@@ -50,9 +51,10 @@ public class MultielementCollectionTest {
     public static class Root {
         @XMLelements({
                 @XMLelement(name = "a", itemType = A.class),
-                @XMLelement(name = "b", itemType = String.class)
+                @XMLelement(name = "b", itemType = B.class)
 //                @XMLelement(name = "unknown", itemType = ElementStore.class)
         })
+        @XMLtext
         public List letters;
 
     }
