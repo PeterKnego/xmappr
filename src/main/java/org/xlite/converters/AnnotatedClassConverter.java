@@ -62,13 +62,6 @@ public class AnnotatedClassConverter implements ElementConverter {
             throw new XliteException("Could not instantiate class " + targetClass.getName(), e);
         }
 
-        // collect XML text values
-        TextCollector textCollector = null;
-        if (textMapper != null) {
-            textCollector = new TextCollector();
-            textCollector.append(reader.getText());
-        }
-
         // XML element attributes
         Iterator<Map.Entry<QName, String>> attributeSet = reader.getAttributeIterator();
         while (attributeSet.hasNext()) {
@@ -83,6 +76,9 @@ public class AnnotatedClassConverter implements ElementConverter {
             }
 //            System.out.println("ATTR: " + attrQName);
         }
+
+        String text = reader.getText();
+        if (text.length() != 0 && textMapper!= null) textMapper.setValue(currentObject, text);
 
         // XML subelements
         QName qname;
@@ -106,16 +102,17 @@ public class AnnotatedClassConverter implements ElementConverter {
 //            System.out.println("BEFORE moveUp: "+reader.reader.getEventType()+" "+nm);
             reader.moveUp();
 
-            if (textCollector != null) {
-                textCollector.append(reader.getText());
+            if (textMapper != null && textMapper.isIntermixed()) {
+                text = reader.getText();
+                if (text.length() != 0) textMapper.setValue(currentObject, text);
             }
+
         }
 
-        if (textCollector != null) {
-            textMapper.setValue(currentObject, textCollector.getFirst());
-//            textMapper.setValue(currentObject, reader.getText());
+        if (textMapper != null && textMapper.isIntermixed()) {
+            text = reader.getText();
+            if (text.length() != 0) textMapper.setValue(currentObject, text);
         }
-
         return currentObject;
     }
 
@@ -133,8 +130,8 @@ public class AnnotatedClassConverter implements ElementConverter {
         }
 
         // write element's value
-        if (textMapper != null && object != null) {
-            writer.addText(textMapper.getValue(object));
+        if (textMapper != null && object != null && !textMapper.isIntermixed()) {
+                writer.addText(textMapper.getValue(object));
         }
 
         // write subelements
@@ -142,7 +139,7 @@ public class AnnotatedClassConverter implements ElementConverter {
         for (QName subName : elementMappers.keySet()) {
             ElementMapper elementMapper = elementMappers.get(subName);
             if (!alreadyProcessed.containsKey(elementMapper)) {
-                elementMapper.writeElement(object, subName, writer);
+                elementMapper.writeElement(object, subName, writer, textMapper);
                 alreadyProcessed.put(elementMapper, 0);
             }
         }

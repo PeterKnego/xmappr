@@ -16,6 +16,6 @@ import java.lang.annotation.Target;
 @Target(value = {ElementType.FIELD})
 @Retention(value = RetentionPolicy.RUNTIME)
 public @interface XMLtext {
-    Class targetType() default String.class;
+    Class itemType() default String.class;
     Class<? extends ValueConverter> converter() default ValueConverter.class;
 }
