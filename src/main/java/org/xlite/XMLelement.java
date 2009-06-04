@@ -13,6 +13,8 @@ import java.lang.annotation.Target;
  * Time: 4:28:09 PM
  */
 
+//todo Write extensive javadoc!!!!
+
 @Target(value = {ElementType.FIELD})
 @Retention(value = RetentionPolicy.RUNTIME)
 public @interface XMLelement {
@@ -20,6 +22,7 @@ public @interface XMLelement {
     String name() default "";
     String defaultValue() default "";
     Class itemType() default Object.class;
+//    boolean anyName() default false;
 
     Class<? extends ElementConverter> converter() default ElementConverter.class;
 }

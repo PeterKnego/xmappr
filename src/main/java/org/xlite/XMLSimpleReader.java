@@ -7,7 +7,7 @@ import javax.xml.stream.XMLStreamReader;
 import java.util.*;
 
 /**
- * A wrapper around {@link javax.xml.stream.XMLStreamReader}, that enables access to XML on the element level.
+ * A wrapper around {@link javax.xml.stream.XMLStreamReader} that enables access to XML on the element level.
  * It's no longer necessary to create a loop pulling and processing events. A simple usage example:<br><br>
  * {@code XMLSimpleReader reader = new XMLSimpleReader(xmlStreamReader);}<br>
  * {@code reader.getNodeName();}<br>
@@ -70,7 +70,7 @@ public class XMLSimpleReader {
         // read stream settings at the beginning of the document
         if (reader.getEventType() == XMLStreamConstants.START_DOCUMENT) {
             settings.encoding = reader.getEncoding() == null ? "UTF-8" : reader.getEncoding();
-            settings.version = reader.getVersion() == null ? "1.0" : reader.getEncoding();
+            settings.version = reader.getVersion() == null ? "1.0" : reader.getVersion();
         }
 
         for (int event = nextEvent(); true; event = nextEvent()) {

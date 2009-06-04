@@ -47,6 +47,14 @@ public class AttributeMapper {
         }
     }
 
+    public boolean isTargetMap(){
+        return Map.class.isAssignableFrom(valueMapper.getTargetField().getType());
+    }
+    
+    public Object getTarget(Object parent){
+        return valueMapper.getTargetField().getValue(parent);
+    }
+
     private Map<QName, Object> initializeMap(Class targetType) {
         // is target class a Collection?
         if (!Map.class.isAssignableFrom(targetType)) {
