@@ -20,12 +20,13 @@ import java.util.HashMap;
  * To change this template use File | Settings | File Templates.
  */
 public class MultiattributeMapTest {
-    public static String xml = "<root a='abc' b='123' c='mama' d='daddy'/>";
+    public static String in = "<root a='abc' b='123' c='mama' d='daddy' d1='daddy1' e='eee' f='555' g='ggg' />";
+    public static String out = "<root a='abc' b='123' c='mama' d='daddy' d1='daddy1' d2='daddy2' e='eee' f='555' g='ggg' h='hhh' />";
 
     @org.testng.annotations.Test
     public void test() throws IOException, SAXException {
 
-        StringReader reader = new StringReader(xml);
+        StringReader reader = new StringReader(in);
         Configuration conf = new AnnotationConfiguration(Root.class, "root");
         conf.setPrettyPrint(false);
 
@@ -35,20 +36,25 @@ public class MultiattributeMapTest {
         Assert.assertEquals(one.attrs.get(new QName("a")), "abc");
         Assert.assertEquals(one.attrs.get(new QName("b")), 123);
         Assert.assertEquals(one.attrs.get(new QName("c")),"mama");
+        one.attrs.put(new QName("d2"),"daddy2");   // this one is mapped to wildcard attribute "*"
+        one.attrs2.put(new QName("h"),"hhh");
+        one.attrs2.put(new QName("x"),"xxx");  // this one is not mapped and will be ignored
         for (Object key : one.attrs.keySet()) {
-            System.out.println(one.attrs.get(key).getClass());
+            QName qn = (QName) key;
+            System.out.print(one.attrs.get(key).getClass());
+            System.out.println("  "+qn.getLocalPart()+"="+one.attrs.get(key));
         }
 
         // writing back to XML
         StringWriter sw = new StringWriter();
         xlite.toXML(one, sw);
         System.out.println("");
-        System.out.println(xml);
+        System.out.println(in);
         System.out.println("");
         System.out.println(sw.toString());
 
         XMLUnit.setIgnoreWhitespace(true);
-        XMLAssert.assertXMLEqual(xml, sw.toString());
+        XMLAssert.assertXMLEqual(out, sw.toString());
     }
 
     public static class Root {
@@ -56,10 +62,17 @@ public class MultiattributeMapTest {
                 @XMLattribute(name = "a"),
                 @XMLattribute(name = "b", itemType = Integer.class),
                 @XMLattribute(name = "c"),
-                @XMLattribute(name = "d")
+                @XMLattribute("*")
         })
         public Map attrs;
 
+        @XMLattributes({
+                @XMLattribute(name = "e"),
+                @XMLattribute(name = "f", itemType = Integer.class),
+                @XMLattribute(name = "g"),
+                @XMLattribute(name = "h")
+        })
+        public Map attrs2;
     }
 
 }

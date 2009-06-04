@@ -16,13 +16,15 @@ import org.xlite.*;
 public class AnnotatedClassConverter implements ElementConverter {
 
 
-    private Class<? extends Object> targetClass;
+    private Class<?> targetClass;
     private TextMapper textMapper;
+    private ElementMapper elementCatcher;
+    private AttributeMapper attributeCatcher;
     private Map<QName, ElementMapper> elementMappers = new LinkedHashMap<QName, ElementMapper>();
     private Map<QName, AttributeMapper> attributeMappers = new LinkedHashMap<QName, AttributeMapper>();
     private NsContext classNamespaces;
 
-    public AnnotatedClassConverter(Class<? extends Object> targetClass) {
+    public AnnotatedClassConverter(Class<?> targetClass) {
         this.targetClass = targetClass;
     }
 
@@ -34,6 +36,14 @@ public class AnnotatedClassConverter implements ElementConverter {
         this.classNamespaces = classNamespaces;
     }
 
+    public void setElementCatcher(ElementMapper elementCatcher) {
+        this.elementCatcher = elementCatcher;
+    }
+
+    public void setAttributeCatcher(AttributeMapper attributeCatcher) {
+        this.attributeCatcher = attributeCatcher;
+    }
+
     public void setTextMapper(TextMapper textMapper) {
         this.textMapper = textMapper;
     }
@@ -42,7 +52,7 @@ public class AnnotatedClassConverter implements ElementConverter {
         elementMappers.put(qName, elementMapper);
     }
 
-    public void addAttributeConverter(QName attributeQName, AttributeMapper attributeMapper) {
+    public void addAttributeMapper(QName attributeQName, AttributeMapper attributeMapper) {
         attributeMappers.put(attributeQName, attributeMapper);
     }
 
@@ -68,17 +78,23 @@ public class AnnotatedClassConverter implements ElementConverter {
             Map.Entry<QName, String> entry = attributeSet.next();
             QName attrQName = entry.getKey();
             String attrValue = entry.getValue();
+
             // find the attribute mapper
             AttributeMapper attrMapper = attributeMappers.get(attrQName);
-            // if mapper exists, use it to setValue field to attribute value
-            if (attrMapper != null && attrValue.length() != 0) {
-                attrMapper.setValue(attrQName, currentObject, attrValue);
+
+            if (attrValue.length() != 0) {
+                // if mapper for this attribute is defined, use it to setValue field to attribute value
+                if (attrMapper != null) {
+                    attrMapper.setValue(attrQName, currentObject, attrValue);
+                } else if (attributeCatcher != null) { // if there is a Mapper defined thet catches any attribute name
+                    attributeCatcher.setValue(attrQName, currentObject, attrValue);
+                }
             }
 //            System.out.println("ATTR: " + attrQName);
         }
 
         String text = reader.getText();
-        if (text.length() != 0 && textMapper!= null) textMapper.setValue(currentObject, text);
+        if (text.length() != 0 && textMapper != null) textMapper.setValue(currentObject, text);
 
         // XML subelements
         QName qname;
@@ -122,16 +138,42 @@ public class AnnotatedClassConverter implements ElementConverter {
         // write a start tag
         writer.startElement(elementName);
 
-        // write attributes
+        // write directly mapped attributes
         for (QName attrName : attributeMappers.keySet()) {
             AttributeMapper mapper = attributeMappers.get(attrName);
             String value = mapper.getValue(attrName, object);
-            writer.addAttribute(attrName, value);
+            if (value != null) {
+                writer.addAttribute(attrName, value);
+            }
         }
+        // handle attributeCatcher (wildcard mapped attributes)
+        if (attributeCatcher != null) {
+            // is target a Map?
+            if (attributeCatcher.isTargetMap()) {
+                Map attrs = (Map) attributeCatcher.getTarget(object);
+                QName aName;
+                for (Object key : attrs.keySet()) {
+                    // check type of attribute name
+                    if (QName.class == key.getClass()) {
+                        aName = (QName) key;
+                    }  else if(String.class == key.getClass()) {
+                        aName = new QName((String)key);
+                    }  else {
+                       continue;
+                    }
+                    // check that this attribute name is not already handled by direct mappers
+                    if (!attributeMappers.containsKey(aName)) {
+                        String value = attributeCatcher.getValue(aName, object);
+                        writer.addAttribute(aName, value);
+                    }
+                }
+            }
+        }
+
 
         // write element's value
         if (textMapper != null && object != null && !textMapper.isIntermixed()) {
-                writer.addText(textMapper.getValue(object));
+            writer.addText(textMapper.getValue(object));
         }
 
         // write subelements

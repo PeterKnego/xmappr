@@ -215,78 +215,6 @@ public class AnnotationProcessor {
      * @param currentClass Class being inspected for @XMLattribute annotations
      */
 
-    private void processAttributesOld(Class<?> currentClass, AnnotatedClassConverter converter) {
-
-        XMLattribute annotation;
-        for (Field field : getAllFields(currentClass)) {
-
-            // collect all @XMLattribute annotations in a single array for easier processing
-            XMLattribute[] annotations = new XMLattribute[0];
-            XMLattributes multiAnno = field.getAnnotation(XMLattributes.class);
-            if (multiAnno != null && multiAnno.value().length != 0) {
-                annotations = multiAnno.value();
-            }
-            XMLattribute singleAnno = field.getAnnotation(XMLattribute.class);
-            if (singleAnno != null) {
-                annotations = Arrays.copyOf(annotations, annotations.length + 1);
-                annotations[annotations.length - 1] = singleAnno;
-            }
-
-
-            annotation = field.getAnnotation(XMLattribute.class);
-            if (annotation != null) {
-
-                // find the appropriate converter
-                ValueConverter valueConverter;
-                if (annotation.converter().equals(ValueConverter.class)) {  // default converter
-                    valueConverter = mappingContext.lookupValueConverter(field.getType());
-
-                } else {  // custom converter assigned via annotation
-                    try {
-                        valueConverter = annotation.converter().newInstance();
-
-                        // check that assigned converter can actually converto to the target field type
-                        if (!valueConverter.canConvert(field.getType())) {
-                            throw new XliteException("Error: assigned converter type does not match field type.\n" +
-                                    "Converter " + valueConverter.getClass().getName() + " can not be used to convert " +
-                                    "data of type " + field.getType() + ".\n" +
-                                    "Please check XML annotations on field '" + field.getName() +
-                                    "' in class " + field.getDeclaringClass().getName() + ".");
-                        }
-                    } catch (InstantiationException e) {
-                        throw new XliteException("Could not instantiate converter " + annotation.converter().getName() + ". ", e);
-                    } catch (IllegalAccessException e) {
-                        throw new XliteException("Could not instantiate converter " + annotation.converter().getName() + ". ", e);
-                    }
-                }
-
-                // getValue QName that field maps to
-                String elementName = annotation.value().length() != 0 ? annotation.value() :
-                        (annotation.name().length() != 0 ? annotation.name() : field.getName());
-                QName qname = getQName(elementName, getFieldNamespaces(field), converter.getClassNamespaces());
-
-                // SPECIAL CASE!!!
-                // XML attributes with empty prefix DO NOT belong to default namespace
-                if (qname.getPrefix().equals(XMLConstants.DEFAULT_NS_PREFIX)) {
-                    String localPart = qname.getLocalPart();
-                    qname = new QName(localPart);
-                }
-
-                // getValue default value of this attribute
-                String defaultValue = annotation.defaultValue();
-                if (defaultValue.length() == 0) {
-                    defaultValue = null;
-                }
-
-                converter.addAttributeConverter(qname, new AttributeMapper(field, valueConverter, defaultValue));
-
-//                System.out.println(currentClass.getSimpleName() + "." + field.getName() + " attribute:" + qname
-//                        + " converter:" + valueConverter.getClass().getSimpleName());
-            }
-
-        }
-    }
-
     private void processAttributes(Class<?> currentClass, AnnotatedClassConverter converter) {
 
         for (Field field : getAllFields(currentClass)) {
@@ -315,11 +243,17 @@ public class AnnotationProcessor {
                 for (XMLattribute annotation : annotations) {
                     Class<?> itemType = annotation.itemType();
                     Class<? extends ValueConverter> annotatedConverter = annotation.converter();
+                    boolean isAttributeCatcher = false;
 
                     // setValue to default values according to annotations
                     if (annotatedConverter.equals(ValueConverter.class)) {
                         annotatedConverter = null;
                     }
+
+                    // getValue QName that field maps to
+                    String elementName = annotation.value().length() != 0 ? annotation.value() :
+                            (annotation.name().length() != 0 ? annotation.name() : field.getName());
+                    QName qname = getQName(elementName, getFieldNamespaces(field), converter.getClassNamespaces());
 
                     // target field is a Map so a converter must be choosen by it's "itemType" property
                     if (Map.class.isAssignableFrom(field.getType())) {
@@ -340,8 +274,28 @@ public class AnnotationProcessor {
                                 throw new XliteException("Could not instantiate converter " + annotation.converter().getName() + ". ", e);
                             }
 
-                        } else  { // 'itemType' either defined or default 'String.class'
+                        } else { // 'itemType' either defined or default 'String.class'
                             fieldConverter = mappingContext.lookupValueConverter(itemType);
+                        }
+
+                        // attribute catcher
+                        if (elementName.equals("*")) {
+                            isAttributeCatcher = true;
+
+                            // attribute catcher must not have 'itemType' defined
+                            if (itemType != String.class) {
+                                throw new XliteException("Error: Can  not assign converter for Map " + field.getName() +
+                                        " in class " + field.getDeclaringClass().getSimpleName() +
+                                        "When @XMLattribute annotation with a wildcard name (\"*\") is used on a Map, 'itemType' value" +
+                                        " must not be defined.");
+
+                            }
+                            if (annotatedConverter != null) {
+
+                            } else {
+                                // default converter for attribute catcher
+                                fieldConverter = mappingContext.lookupValueConverter(String.class);
+                            }
                         }
 
                     } else { // target field is a normal field (not a collection)
@@ -376,27 +330,34 @@ public class AnnotationProcessor {
                             // converter was not declared via annotation, so we just use a converter derived from field type
                             fieldConverter = converterByType;
                         }
+
+                        // attribute catcher
+                        if (elementName.equals("*")) {
+
+                        }
                     }
 
-                    // getValue QName that field maps to
-                    String elementName = annotation.value().length() != 0 ? annotation.value() :
-                            (annotation.name().length() != 0 ? annotation.name() : field.getName());
-                    QName qname = getQName(elementName, getFieldNamespaces(field), converter.getClassNamespaces());
 
-                    // SPECIAL CASE!!!
-                    // XML attributes with empty prefix DO NOT belong to default namespace
-                    if (qname.getPrefix().equals(XMLConstants.DEFAULT_NS_PREFIX)) {
-                        String localPart = qname.getLocalPart();
-                        qname = new QName(localPart);
+                    if (isAttributeCatcher) {
+                        // assign an attribute catcher
+                        converter.setAttributeCatcher(new AttributeMapper(field, fieldConverter, null));
+                    } else {
+                       // normal one-to-one attribute mapping
+
+                        // SPECIAL CASE!!!
+                        // XML attributes with empty prefix DO NOT belong to default namespace
+                        if (qname.getPrefix().equals(XMLConstants.DEFAULT_NS_PREFIX)) {
+                            String localPart = qname.getLocalPart();
+                            qname = new QName(localPart);
+                        }
+                        // getValue default value of this element
+                        String defaultValue = annotation.defaultValue();
+                        if (defaultValue.length() == 0) {
+                            defaultValue = null;
+                        }
+
+                        converter.addAttributeMapper(qname, new AttributeMapper(field, fieldConverter, defaultValue));
                     }
-
-                    // getValue default value of this element
-                    String defaultValue = annotation.defaultValue();
-                    if (defaultValue.length() == 0) {
-                        defaultValue = null;
-                    }
-
-                    converter.addAttributeConverter(qname, new AttributeMapper(field, fieldConverter, defaultValue));
 
 //                String conv = fieldMapper.valueConverter.getClass().equals(ValueConverterWrapper.class) ?
 //                        ((ValueConverterWrapper) fieldMapper.valueConverter).valueConverter.getClass().getSimpleName() :
@@ -490,7 +451,7 @@ public class AnnotationProcessor {
             if (targetAnnotation.converter().equals(ValueConverter.class)) {  // default converter
                 // is target tye a collection?
                 Class targetType;
-                if(Collection.class.isAssignableFrom(targetField.getType())){
+                if (Collection.class.isAssignableFrom(targetField.getType())) {
                     // choose converter according to 'itemType' value in @XMLtext annotation
                     targetType = targetAnnotation.itemType();
                 } else {
