@@ -1,8 +1,9 @@
 package org.xlite;
 
-import org.custommonkey.xmlunit.XMLAssert;
-import org.custommonkey.xmlunit.XMLUnit;
 import org.xml.sax.SAXException;
+import org.custommonkey.xmlunit.XMLUnit;
+import org.custommonkey.xmlunit.XMLAssert;
+import org.xlite.converters.DOMelementConverter;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -10,18 +11,24 @@ import java.io.StringWriter;
 import java.util.List;
 
 /**
- * @author peter
+ * Created by IntelliJ IDEA.
+ * User: peter
+ * Date: Jun 4, 2009
+ * Time: 4:29:25 PM
+ * To change this template use File | Settings | File Templates.
  */
-public class MultielementCollectionTest {
+public class DOMelementConverterTest {
 
     public static String xml = "<root>" +
-            "<a>textA1</a>" +
             "<b>textB2</b>" +
-            "just some text"+
-            "<a>textA2</a>" +
+            "<a>textA2" +
+            "<a2 a2attr1='some' a2attr2='someMore' >a2text</a2>" +
+            "</a>" +
+            "just some text" +
+            "<a>textA1</a>" +
             "<b>textB1</b>" +
-            "some more text"+
-//            "<data>YYY</data>" +
+            "some more text" +
+            "<data>YYY</data>" +
             "</root>";
 
     @org.testng.annotations.Test
@@ -32,14 +39,11 @@ public class MultielementCollectionTest {
         conf.setPrettyPrint(false);
 
         Xlite xlite = new Xlite(conf);
-//        Xlite.Result result = xlite.fromXMLwithUnknown(reader);
-//        Root one = (Root) result.getObject();
-        Root one = (Root) xlite.fromXML(reader);
+        Root root = (Root) xlite.fromXML(reader);
 
         // writing back to XML
         StringWriter sw = new StringWriter();
-//        xlite.toXML(one, result.getStore(), sw);
-        xlite.toXML(one, sw);
+        xlite.toXML(root, sw);
         String ssw = sw.toString();
         System.out.println("");
         System.out.println(xml);
@@ -52,22 +56,16 @@ public class MultielementCollectionTest {
 
     public static class Root {
         @XMLelements({
-                @XMLelement(name = "a", itemType = A.class),
-                @XMLelement(name = "b", itemType = B.class)
+                @XMLelement(name = "b", itemType = B.class),
+                @XMLelement("*")
         })
         @XMLtext
-        public List letters;
+        public List subelements;
 
-    }
-
-    public static class A {
-        @XMLtext
-        public String text;
     }
 
     public static class B {
         @XMLtext
         public String text;
     }
-
 }

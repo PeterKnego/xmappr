@@ -74,6 +74,7 @@ public class XMLSimpleWriter {
     }
 
     public void startElement(QName qname) {
+//        System.out.println("ELEMENT: "+qname.getLocalPart());
         startNode(qname.getPrefix(), qname.getLocalPart(), qname.getNamespaceURI());
     }
 
@@ -126,6 +127,7 @@ public class XMLSimpleWriter {
     }
 
     public void addText(String text) {
+//        System.out.println("  TEXT: "+text);
         try {
             flushElementCache();
             prettyPrint();

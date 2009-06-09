@@ -68,7 +68,9 @@ public class ElementMapper {
         }
 
         // find the converter for given node name
-        ElementConverter converter = converterCache.get(nodeName);
+        ElementConverter cachedConverter = converterCache.get(nodeName);
+        ElementConverter converter = cachedConverter != null ? cachedConverter : elementConverter;
+
         if (converter == null) {
             throw new XliteException("Error: could not find converter for node: " + nodeName +
                     " in collection " + collection.getClass().getName() +
@@ -85,6 +87,18 @@ public class ElementMapper {
         targetField.setValue(targetObject, value);
     }
 
+    public boolean isTargetCollection() {
+        return collectionConverter != null;
+    }
+
+    public Object getTarget(Object parent) {
+        return targetField.getValue(parent);
+    }
+
+    public boolean canConvert(Class clazz) {
+        return elementConverter.canConvert(clazz);
+    }
+
     public void writeElement(Object object, QName nodeName, XMLSimpleWriter writer, TextMapper textMapper) {
         // it's a collection
         if (collectionConverter != null) {
@@ -93,6 +107,7 @@ public class ElementMapper {
                 return;
             }
             for (Object obj : collection) {
+                System.out.println("---OBJ:"+obj);
                 if (textMapper != null && textMapper.isTargetType(obj)) {
                     writer.addText(textMapper.getValue(obj));
                 } else {
@@ -107,21 +122,4 @@ public class ElementMapper {
         }
     }
 
-//    private ElementConverter findConverter(Class type) {
-//        ElementConverter converter = null;
-//
-//        // search the mapper cache
-//        for (Map.Entry<Class, ElementConverter> entry : converterCache.entrySet()) {
-//            if (entry.getKey().equals(type)) {
-//                converter = entry.getValue();
-//                return converter;
-//            }
-//        }
-//
-//        // if not in cache, lookup globally
-//        converter = mappingContext.lookupElementConverter(type);
-//        // store in cache for future use
-//        converterCache.put(type, converter);
-//        return converter;
-//    }
 }
