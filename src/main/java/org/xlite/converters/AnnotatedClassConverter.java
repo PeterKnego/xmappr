@@ -2,6 +2,7 @@ package org.xlite.converters;
 
 import javax.xml.namespace.QName;
 import java.util.*;
+import java.lang.reflect.Field;
 
 import org.xlite.*;
 
@@ -18,9 +19,10 @@ public class AnnotatedClassConverter implements ElementConverter {
 
     private Class<?> targetClass;
     private TextMapper textMapper;
-    private ElementMapper elementCatcher;
+        private ElementMapper elementCatcher;
     private AttributeMapper attributeCatcher;
-    private Map<QName, ElementMapper> elementMappers = new LinkedHashMap<QName, ElementMapper>();
+//    private Map<ElementMapper, QName> elementMappers = new HashSet<ElementMapper>();
+    private Map<QName, ElementMapper> elementMappersByName = new LinkedHashMap<QName, ElementMapper>();
     private Map<QName, AttributeMapper> attributeMappers = new LinkedHashMap<QName, AttributeMapper>();
     private NsContext classNamespaces;
 
@@ -49,7 +51,8 @@ public class AnnotatedClassConverter implements ElementConverter {
     }
 
     public void addElementMapper(QName qName, ElementMapper elementMapper) {
-        elementMappers.put(qName, elementMapper);
+        elementMappersByName.put(qName, elementMapper);
+//        elementMappers.add(elementMapper);
     }
 
     public void addAttributeMapper(QName attributeQName, AttributeMapper attributeMapper) {
@@ -94,7 +97,8 @@ public class AnnotatedClassConverter implements ElementConverter {
         }
 
         String text = reader.getText();
-        if (text.length() != 0 && textMapper != null) textMapper.setValue(currentObject, text);
+        if (text.length() != 0 && textMapper != null)
+            textMapper.setValue(currentObject, text);
 
         // XML subelements
         QName qname;
@@ -103,14 +107,16 @@ public class AnnotatedClassConverter implements ElementConverter {
 //          String  name = qname.getPrefix().length() == 0 ? qname.getLocalPart() : (qname.getPrefix() + ":" + qname.getLocalPart());
 
             // find ElementMapper for converting XML element with given name
-            ElementMapper subMapper = elementMappers.get(qname);
+            ElementMapper subMapper = elementMappersByName.get(qname);
             if (subMapper != null) {  // converter is found
 //                System.out.println("START:" + name + " thisConverter:" + this.toString() +
 //                        " subConverter:" + subMapper.valueConverter);
                 subMapper.readElement(qname, currentObject, reader);
 
-                // unknown subMapper
-            } else {
+            } else if (elementCatcher != null) {
+                elementCatcher.readElement(qname, currentObject, reader);
+
+            } else { // unknown subMapper
                 reader.saveSubTree(currentObject);
             }
 //            String nm = "null";
@@ -125,10 +131,6 @@ public class AnnotatedClassConverter implements ElementConverter {
 
         }
 
-        if (textMapper != null && textMapper.isIntermixed()) {
-            text = reader.getText();
-            if (text.length() != 0) textMapper.setValue(currentObject, text);
-        }
         return currentObject;
     }
 
@@ -156,10 +158,10 @@ public class AnnotatedClassConverter implements ElementConverter {
                     // check type of attribute name
                     if (QName.class == key.getClass()) {
                         aName = (QName) key;
-                    }  else if(String.class == key.getClass()) {
-                        aName = new QName((String)key);
-                    }  else {
-                       continue;
+                    } else if (String.class == key.getClass()) {
+                        aName = new QName((String) key);
+                    } else {
+                        continue;
                     }
                     // check that this attribute name is not already handled by direct mappers
                     if (!attributeMappers.containsKey(aName)) {
@@ -178,13 +180,23 @@ public class AnnotatedClassConverter implements ElementConverter {
 
         // write subelements
         Map<ElementMapper, Integer> alreadyProcessed = new IdentityHashMap<ElementMapper, Integer>();
-        for (QName subName : elementMappers.keySet()) {
-            ElementMapper elementMapper = elementMappers.get(subName);
+        for (QName subName : elementMappersByName.keySet()) {
+            ElementMapper elementMapper = elementMappersByName.get(subName);
             if (!alreadyProcessed.containsKey(elementMapper)) {
                 elementMapper.writeElement(object, subName, writer, textMapper);
                 alreadyProcessed.put(elementMapper, 0);
             }
         }
+
+//        // handle elementCatcher
+//        if (elementCatcher != null) {
+//            if (elementCatcher.isTargetCollection()) {
+//                elementCatcher.writeElement(object, null, writer, textMapper);
+//            } else {
+//                Object target = elementCatcher.getTarget(object);
+//                // todo finish this
+//            }
+//        }
 
         // write  unknown (stored) subelements
         writer.restoreSubTrees(object);
@@ -225,11 +237,12 @@ public class AnnotatedClassConverter implements ElementConverter {
 //                    + " field:" + attrEntry.getValue().targetField.getName() + "(" + attrEntry.getValue().targetField.getType() + ")");
 //        }
 //
-//        for (Map.Entry<QName, ElementMapper> elementEntry : elementMappers.entrySet()) {
+//        for (Map.Entry<QName, ElementMapper> elementEntry : elementMappersByName.entrySet()) {
 //            System.out.println(prefix + "element:" + elementEntry.getKey());
 //        }
 //
 //    }
+
 }
 
 
