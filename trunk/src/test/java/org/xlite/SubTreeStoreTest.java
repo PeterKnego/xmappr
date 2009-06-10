@@ -35,26 +35,28 @@ public class SubTreeStoreTest {
 //            "</a>";
 
 
-    static String xml = "<a xmlns=\"ns1\" xmlns:s=\"ns2\" xmlns:w=\"ns3\">\n" +
+    static String xml = "<x:a xmlns:x=\"ns1\" xmlns:s=\"ns2\" xmlns:w=\"ns3\">\n" +
             "<s:b>\n" +
-            "<c>CCCCCCC\n" +
-            "<e>EEEE</e>\n" +
-            "<w:emptico xmlns:w=\"www\"/>\n" +
+            "<x:c>CCCCCCC\n" +
+            "<x:d attrD=\"DDD\" ></x:d>\n" +
+            "<x:e>EEEE</x:e>\n" +
+//            "<w:emptico xmlns:w=\"www\"/>\n" +
+            "<x:subignored asub=\"666\">\n" +
+            "<x:subsub/>\n" +
+            "</x:subignored>\n" +
             "<w:one aa=\"prvi\">\n" +
             "<w:empty/>\n" +
             "</w:one>\n" +
-            "<subignored asub=\"666\"><subsub/></subignored>\n" +
-            "<d attrD=\"DDD\" ></d>\n" +
-            "</c>\n" +
+            "</x:c>\n" +
             "</s:b>\n" +
-            "</a>";
+            "</x:a>";
 
     @Test
     public void testStoringNodes() throws IOException, SAXException, XpathException {
         StringReader reader = new StringReader(xml);
 
-        Configuration conf = new AnnotationConfiguration(A.class, "a", "ns1");
-        conf.addNamespace("ns1");
+        Configuration conf = new AnnotationConfiguration(A.class, "x:a");
+        conf.addNamespace("x=ns1");
         conf.addNamespace("s=ns2");
         conf.addNamespace("w=ns3");
 
@@ -81,14 +83,14 @@ public class SubTreeStoreTest {
         public B b;
     }
 
-    //    @XMLnamespaces("ns2")
     public static class B {
-        @XMLelement
+        @XMLelement("x:c")
         public C c;
     }
 
     public static class C {
-        @XMLelement
+
+        @XMLelement("x:d")
         public D d;
 
         @XMLtext

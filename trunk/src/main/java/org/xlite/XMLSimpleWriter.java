@@ -243,7 +243,6 @@ public class XMLSimpleWriter {
                     startNode(prefix, localName, nsURI);
                     break;
                 case XMLStreamConstants.END_ELEMENT:
-
                     endElement();
                     break;
                 case XMLStreamConstants.ATTRIBUTE:

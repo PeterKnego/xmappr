@@ -31,8 +31,8 @@ public class SimpleWriterTest {
     public void testEquality() throws XMLStreamException, IOException, SAXException {
         StringReader reader = new StringReader(xml1);
 
-        Configuration conf = new AnnotationConfiguration(A.class, "a", "ns1");
-        conf.addNamespace("ns1");
+        Configuration conf = new AnnotationConfiguration(A.class, "a","ns1");
+//        conf.addNamespace("ns1");
 
         Xlite xlite = new Xlite(conf);
         A a = (A) xlite.fromXML(reader);
