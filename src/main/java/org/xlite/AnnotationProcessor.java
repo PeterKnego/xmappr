@@ -90,7 +90,11 @@ public class AnnotationProcessor {
             }
             XMLelement singleAnno = field.getAnnotation(XMLelement.class);
             if (singleAnno != null) {
-                annotations = Arrays.copyOf(annotations, annotations.length + 1);
+//                annotations = Arrays.copyOf(annotations, annotations.length + 1);
+                XMLelement[] copy = new XMLelement[annotations.length + 1];
+                System.arraycopy(annotations, 0, copy, 0, annotations.length);
+                annotations = copy;
+                annotations[annotations.length - 1] = singleAnno;
                 annotations[annotations.length - 1] = singleAnno;
             }
 
@@ -135,10 +139,10 @@ public class AnnotationProcessor {
                     // element catcher for wildcard names
                     if (elementName.equals("*")) {
                         // double use of element catcher @XMLelement("*") within a single class
-                        if(isElementCatcher){
-                           throw new XliteException("Error: Incorrect use of XMLelement(\"*\")" + field.getName() +
+                        if (isElementCatcher) {
+                            throw new XliteException("Error: Incorrect use of XMLelement(\"*\")" + field.getName() +
                                     " in class " + field.getDeclaringClass().getSimpleName() +
-                                    "Wildcard name mapping @XMLelement(\"*\") can be used only one time within a class"); 
+                                    "Wildcard name mapping @XMLelement(\"*\") can be used only one time within a class");
                         }
                         isElementCatcher = true;
 
@@ -259,7 +263,10 @@ public class AnnotationProcessor {
             }
             XMLattribute singleAnno = field.getAnnotation(XMLattribute.class);
             if (singleAnno != null) {
-                annotations = Arrays.copyOf(annotations, annotations.length + 1);
+//                annotations = Arrays.copyOf(annotations, annotations.length + 1);
+                XMLattribute[] copy = new XMLattribute[annotations.length + 1];
+                System.arraycopy(annotations, 0, copy, 0, annotations.length );
+                annotations = copy;
                 annotations[annotations.length - 1] = singleAnno;
             }
 

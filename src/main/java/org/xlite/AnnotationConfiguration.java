@@ -32,6 +32,13 @@ public class AnnotationConfiguration implements Configuration {
     }
 
     public AnnotationConfiguration(Class rootClass, String nodeName, String namespaceURI) {
+                try {
+            Class cls = Class.forName("javax.xml.stream.XMLOutputFactory", false, this.getClass().getClassLoader());
+        } catch (ClassNotFoundException e) {
+            throw new XliteException("Error initalizing XMLOutputFactory. If you are using Xlite on a JDK 1.5, " +
+                    "then you must have XML stream library (javax.xml.stream) on your path. ",e);
+        }
+
         setupValueConverters();
         setupElementConverters();
         this.rootClass = rootClass;

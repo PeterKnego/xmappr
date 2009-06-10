@@ -11,7 +11,7 @@ import org.xml.sax.SAXException;
 import org.xlite.*;
 
 /**
- * Test where each subnode defines it's default namespace
+ * Test where each subnode defines its default namespace
  * @author peter
  */
 public class DefaultNSEachSubnode {
@@ -64,8 +64,8 @@ public class DefaultNSEachSubnode {
         public x111 node_x111;
     }
 
-    @XMLnamespaces("lowercase")
     public static class bbbb {
+        @XMLnamespaces("lowercase")
         @XMLelement("cccc")
         public cccc node_cccc;
     }
@@ -73,8 +73,8 @@ public class DefaultNSEachSubnode {
     public static class cccc {
     }
 
-    @XMLnamespaces("uppercase")
     public static class BBB {
+        @XMLnamespaces("uppercase")
         @XMLelement("CCC")
         public CCC node_CCC;
     }
@@ -82,8 +82,8 @@ public class DefaultNSEachSubnode {
     public static class CCC {
     }
 
-    @XMLnamespaces("xnumber")
     public static class x111 {
+        @XMLnamespaces("xnumber")
         @XMLelement("x222")
         public x222 node_x222;
     }

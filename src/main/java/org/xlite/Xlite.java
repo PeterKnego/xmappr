@@ -3,6 +3,8 @@ package org.xlite;
 import javax.xml.stream.*;
 import java.io.Reader;
 import java.io.Writer;
+import java.lang.reflect.Method;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * User: peter
@@ -47,7 +49,7 @@ public class Xlite {
 
         XMLSimpleReader simpleReader = new XMLSimpleReader(xmlreader, true);
 
-       Object object =  annotationConfiguration.getRootElementMapper().getRootObject(simpleReader);
+        Object object = annotationConfiguration.getRootElementMapper().getRootObject(simpleReader);
         return new Result(object, simpleReader.getObjectStore());
     }
 
@@ -67,7 +69,7 @@ public class Xlite {
         annotationConfiguration.getRootElementMapper().toXML(source, simpleWriter);
     }
 
-     public void toXML(Object source, ObjectStore store, Writer writer) {
+    public void toXML(Object source, ObjectStore store, Writer writer) {
         annotationConfiguration.initialize();
 
         XMLOutputFactory factory = XMLOutputFactory.newInstance();
@@ -87,7 +89,7 @@ public class Xlite {
         ObjectStore store;
         Object object;
 
-        public Result( Object object, ObjectStore store) {
+        public Result(Object object, ObjectStore store) {
             this.store = store;
             this.object = object;
         }
