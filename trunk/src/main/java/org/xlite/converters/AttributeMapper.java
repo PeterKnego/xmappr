@@ -63,11 +63,9 @@ public class AttributeMapper {
         Class<? extends Map> concreteType = getConcreteMapType(targetType);
         try {
             return concreteType.newInstance();
-        } catch (InstantiationException e) {
+        } catch (Exception e) {
             throw new XliteException("Could not instantiate collection " + targetType.getName() + ". ", e);
-        } catch (IllegalAccessException e) {
-            throw new XliteException("Could not instantiate collection " + targetType.getName() + ". ", e);
-        }
+        } 
     }
 
     private Class<? extends Map> getConcreteMapType(Class targetType) {

@@ -87,18 +87,6 @@ public class ElementMapper {
         targetField.setValue(targetObject, value);
     }
 
-    public boolean isTargetCollection() {
-        return collectionConverter != null;
-    }
-
-    public Object getTarget(Object parent) {
-        return targetField.getValue(parent);
-    }
-
-    public boolean canConvert(Class clazz) {
-        return elementConverter.canConvert(clazz);
-    }
-
     public void writeElement(Object object, QName nodeName, XMLSimpleWriter writer, TextMapper textMapper) {
         // it's a collection
         if (collectionConverter != null) {
@@ -107,7 +95,7 @@ public class ElementMapper {
                 return;
             }
             for (Object obj : collection) {
-                System.out.println("---OBJ:"+obj);
+//                System.out.println("---OBJ:"+obj);
                 if (textMapper != null && textMapper.isTargetType(obj)) {
                     writer.addText(textMapper.getValue(obj));
                 } else {

@@ -69,10 +69,6 @@ public class FieldAccessor {
         return targetField.getType();
     }
 
-    public Field getTargetField() {
-        return targetField;
-    }
-
     private Method findAccessorMethod(String prepend, Class... type) {
         StringBuilder getter = new StringBuilder(prepend);
         getter.append(targetField.getName());

@@ -27,18 +27,10 @@ public class ObjectStore {
     public static final int NAMESPACE_CACHE = 97;
     private int markedPosition = 0;
 
-    public ObjectStore(int size) {
-        this(size, 1000000);
-    }
-
     public ObjectStore(int size, int sizeIncrement) {
         data = new byte[size];
         increment = sizeIncrement;
         references = new IdentityHashMap<Object, List<Integer>>(size / 500);
-    }
-
-    public int getStoreSize() {
-        return data.length;
     }
 
     public void reset() {
@@ -88,10 +80,6 @@ public class ObjectStore {
 
     public static boolean isBlockEnd(Element element) {
         return element.command == END_BLOCK;
-    }
-
-    public static boolean isCachedNamespace(Element element) {
-        return element.command == NAMESPACE_CACHE;
     }
 
     public void cacheNamespace(String prefix, String namespaceURI, String encoding) {
@@ -214,9 +202,10 @@ public class ObjectStore {
 
     private void needsResize(int size) {
         if (position + size >= data.length - 1) {
-            data = ArrayUtil.arrayCopy(data, Math.max(data.length + increment, data.length + size));
-//            System.out.println("new length: " + data.length+ "  "+data.hashCode());
-//            System.gc();
+            int newLength = Math.max(data.length + increment, data.length + size);
+            byte[] copy = new byte[newLength];
+            System.arraycopy(data, 0, copy, 0, Math.min(data.length, newLength));
+            data = copy;
         }
     }
 
@@ -234,9 +223,9 @@ public class ObjectStore {
         return depth;
     }
 
-    public void copyNamespaceCache(ObjectStore store) {
-        namespaceCache.putAll(store.getCachedNamespaces());
-    }
+//    public void copyNamespaceCache(ObjectStore store) {
+//        namespaceCache.putAll(store.getCachedNamespaces());
+//    }
 
     public static class Element {
         public byte command;

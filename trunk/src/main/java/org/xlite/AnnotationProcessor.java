@@ -95,7 +95,6 @@ public class AnnotationProcessor {
                 System.arraycopy(annotations, 0, copy, 0, annotations.length);
                 annotations = copy;
                 annotations[annotations.length - 1] = singleAnno;
-                annotations[annotations.length - 1] = singleAnno;
             }
 
             // are there any @XMLelement annotations on this field?
@@ -265,7 +264,7 @@ public class AnnotationProcessor {
             if (singleAnno != null) {
 //                annotations = Arrays.copyOf(annotations, annotations.length + 1);
                 XMLattribute[] copy = new XMLattribute[annotations.length + 1];
-                System.arraycopy(annotations, 0, copy, 0, annotations.length );
+                System.arraycopy(annotations, 0, copy, 0, annotations.length);
                 annotations = copy;
                 annotations[annotations.length - 1] = singleAnno;
             }
@@ -487,10 +486,13 @@ public class AnnotationProcessor {
 
             // find the appropriate converter
             ValueConverter valueConverter;
+            CollectionConverting collectionConverter = null;
             if (targetAnnotation.converter().equals(ValueConverter.class)) {  // default converter
                 // is target tye a collection?
                 Class targetType;
                 if (Collection.class.isAssignableFrom(targetField.getType())) {
+
+                    collectionConverter = (CollectionConverting) mappingContext.lookupElementConverter(targetField.getType());;
                     // choose converter according to 'itemType' value in @XMLtext annotation
                     targetType = targetAnnotation.itemType();
                 } else {
@@ -522,7 +524,8 @@ public class AnnotationProcessor {
             boolean isIntermixed = targetField.getAnnotation(XMLelements.class) != null
                     || targetField.getAnnotation(XMLelement.class) != null;
 
-            converter.setTextMapper(new TextMapper(targetField, valueConverter, targetAnnotation.itemType(), isIntermixed));
+            converter.setTextMapper(new TextMapper(targetField, valueConverter, targetAnnotation.itemType(),
+                    collectionConverter, isIntermixed));
 
 //            System.out.println(currentClass.getSimpleName() + "." + targetField.getName() + " value "
 //                    + " converter:" + valueConverter.getClass().getSimpleName());
@@ -534,10 +537,10 @@ public class AnnotationProcessor {
      *
      * @param field
      */
-    private void checkClashingAnnotations(Field field) {
-        // todo finish this
-
-    }
+//    private void checkClashingAnnotations(Field field) {
+//        // todo finish this
+//
+//    }
 
     // todo Check if this method returns duplicate field if a field is overriden.
     /**

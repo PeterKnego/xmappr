@@ -8,7 +8,6 @@ import org.xlite.XliteException;
 import javax.xml.namespace.QName;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -40,14 +39,12 @@ public class CollectionConverter implements ElementConverter, CollectionConverti
         Class<? extends Collection> concreteType = getConcreteCollectionType(targetType);
         try {
             return concreteType.newInstance();
-        } catch (InstantiationException e) {
+        } catch (Exception e) {
             throw new XliteException("Could not instantiate collection " + targetType.getName() + ". ", e);
-        } catch (IllegalAccessException e) {
-            throw new XliteException("Could not instantiate collection " + targetType.getName() + ". ", e);
-        }
+        } 
     }
 
-    private Class<? extends Collection> getConcreteCollectionType(Class<? extends Collection> targetType) {
+    private static Class<? extends Collection> getConcreteCollectionType(Class<? extends Collection> targetType) {
         if (targetType == List.class || targetType == Collection.class) {
             return ArrayList.class;
         }
@@ -56,10 +53,6 @@ public class CollectionConverter implements ElementConverter, CollectionConverti
 
     public void addItem(Collection collection, Object object) {
         collection.add(object);
-    }
-
-    public Iterator getIterator(Collection collection) {
-        return collection.iterator();
     }
 
 }

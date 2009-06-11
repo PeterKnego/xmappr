@@ -26,7 +26,7 @@ public class BooleanConverter extends ValueConverter {
     }
 
     public String toValue(Object object) {
-        return object == null ? null : ((Boolean) object ? positive : negative);
+        return ((Boolean) object ? positive : negative);
     }
 
 }

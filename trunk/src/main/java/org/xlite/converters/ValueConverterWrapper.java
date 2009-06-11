@@ -39,7 +39,7 @@ public class ValueConverterWrapper implements ElementConverter {
         if (object != null) {
             writer.startElement(nodeName);
             String value = valueConverter.toValue(object);
-            // if value equals default value => empty elemnt
+            // if value equals default value => empty element
             if (!value.equals(defaultValue)) {
                 writer.addText(value);
             }

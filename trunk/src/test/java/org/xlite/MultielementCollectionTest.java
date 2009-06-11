@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  * @author peter
@@ -15,6 +16,7 @@ import java.util.List;
 public class MultielementCollectionTest {
 
     public static String xml = "<root>" +
+            "text at beginning"+
             "<a>textA1</a>" +
             "<b>textB2</b>" +
             "just some text"+
@@ -56,7 +58,7 @@ public class MultielementCollectionTest {
                 @XMLelement(name = "b", itemType = B.class)
         })
         @XMLtext
-        public List letters;
+        public ArrayList letters;
 
     }
 

@@ -11,6 +11,7 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 /**
  * Created by IntelliJ IDEA.
@@ -64,7 +65,7 @@ public class MultiattributeMapTest {
                 @XMLattribute(name = "c"),
                 @XMLattribute("*")
         })
-        public Map attrs;
+        public LinkedHashMap attrs;
 
         @XMLattributes({
                 @XMLattribute(name = "e"),

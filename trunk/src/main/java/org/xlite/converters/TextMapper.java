@@ -18,13 +18,16 @@ public class TextMapper {
 
     private FieldAccessor accessor;
     private ValueConverter valueConverter;
+    private CollectionConverting collectionConverter;
     private Class targetType;
     private boolean isIntermixed;
 
-    public TextMapper(Field accessor, ValueConverter valueConverter, Class targetType, boolean isIntermixed) {
+    public TextMapper(Field accessor, ValueConverter valueConverter, Class targetType,
+                      CollectionConverting collectionConverter, boolean isIntermixed) {
         this.accessor = new FieldAccessor(accessor);
         this.valueConverter = valueConverter;
         this.targetType = targetType;
+        this.collectionConverter = collectionConverter;
         this.isIntermixed = isIntermixed;
     }
 
@@ -52,7 +55,7 @@ public class TextMapper {
         if (isCollection()) {
             Collection collection = (Collection) accessor.getValue(object);
             if (collection == null) {
-                collection = initializeCollection(accessor.getType());
+                collection = collectionConverter.initializeCollection(accessor.getType());
                 accessor.setValue(object, collection);
             }
             collection.add(valueConverter.fromValue(elementValue));
@@ -74,28 +77,6 @@ public class TextMapper {
         } else {
             return valueConverter.toValue(accessor.getValue(object));
         }
-    }
-
-    public Collection initializeCollection(Class targetType) {
-        // is target class a Collection?
-        if (!Collection.class.isAssignableFrom(targetType)) {
-            throw new XliteException("Error: Target class " + targetType.getName() + " can not be cast to java.util.Collection!");
-        }
-        Class<? extends Collection> concreteType = getConcreteCollectionType(targetType);
-        try {
-            return concreteType.newInstance();
-        } catch (InstantiationException e) {
-            throw new XliteException("Could not instantiate collection " + targetType.getName() + ". ", e);
-        } catch (IllegalAccessException e) {
-            throw new XliteException("Could not instantiate collection " + targetType.getName() + ". ", e);
-        }
-    }
-
-    private Class<? extends Collection> getConcreteCollectionType(Class<? extends Collection> targetType) {
-        if (targetType == List.class || targetType == Collection.class) {
-            return ArrayList.class;
-        }
-        return targetType;
     }
 
 }
