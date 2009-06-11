@@ -20,7 +20,7 @@ public class ElementMapper {
 
     private FieldAccessor targetField;
     private MappingContext mappingContext;
-    public ElementConverter elementConverter;
+    private ElementConverter elementConverter;
 
     // the following three fields are used in handling Collection mapping
     private CollectionConverting collectionConverter;

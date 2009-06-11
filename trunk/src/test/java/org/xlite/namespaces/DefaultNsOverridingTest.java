@@ -17,7 +17,7 @@ import java.io.IOException;
  */
 public class DefaultNsOverridingTest {
 
-    static String xml = "" +
+    private static String xml = "" +
             "<aaa xmlns:upper = \"uppercase\" xmlns:xnumber = \"xnumber\" >\n" +
             "  <bbbb xmlns = \"lowercase\" >\n" +
             "       <cccc />\n" +

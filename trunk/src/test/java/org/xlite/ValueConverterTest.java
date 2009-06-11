@@ -14,7 +14,7 @@ import java.io.StringReader;
  */
 public class ValueConverterTest {
 
-    static String inXml = "" +
+    private static String inXml = "" +
             "<test>" +
             "<node></node>" +
             "</test";
@@ -30,7 +30,7 @@ public class ValueConverterTest {
 
     }
 
-    public static class Test {
+    private static class Test {
         @XMLelement
         public Integer node;
     }

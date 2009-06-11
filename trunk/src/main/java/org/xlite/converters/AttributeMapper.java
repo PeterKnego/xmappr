@@ -15,7 +15,7 @@ import java.util.*;
  */
 public class AttributeMapper {
 
-    ValueMapper valueMapper;
+    private ValueMapper valueMapper;
 
     public AttributeMapper(Field targetField, ValueConverter valueConverter, String defaultValue) {
         this.valueMapper = new ValueMapper(targetField, valueConverter, defaultValue);

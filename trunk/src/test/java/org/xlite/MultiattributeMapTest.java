@@ -21,8 +21,8 @@ import java.util.LinkedHashMap;
  * To change this template use File | Settings | File Templates.
  */
 public class MultiattributeMapTest {
-    public static String in = "<root a='abc' b='123' c='mama' d='daddy' d1='daddy1' e='eee' f='555' g='ggg' />";
-    public static String out = "<root a='abc' b='123' c='mama' d='daddy' d1='daddy1' d2='daddy2' e='eee' f='555' g='ggg' h='hhh' />";
+    private static String in = "<root a='abc' b='123' c='mama' d='daddy' d1='daddy1' e='eee' f='555' g='ggg' />";
+    private static String out = "<root a='abc' b='123' c='mama' d='daddy' d1='daddy1' d2='daddy2' e='eee' f='555' g='ggg' h='hhh' />";
 
     @org.testng.annotations.Test
     public void test() throws IOException, SAXException {

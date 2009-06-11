@@ -17,7 +17,7 @@ import java.io.StringWriter;
  */
 public class DefaultValuesTest {
 
-    public static String xml = "<root>" +
+    private static String xml = "<root>" +
             "<a>text1</a>" +
             "<b/>" +
             "<c></c>" +
@@ -65,8 +65,4 @@ public class DefaultValuesTest {
         public String text;
     }
 
-    public static class B {
-        @XMLtext
-        public String text;
-    }
 }

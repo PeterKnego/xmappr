@@ -14,7 +14,7 @@ import org.xlite.*;
  * @author peter
  */
 public class UndeclaringDefaultNs {
-    static String xml = "" +
+    private static String xml = "" +
             "<aaa xmlns = \"lowercase\" >\n" +
             "  <bbbb >\n" +
             "    <cccc xmlns = \"\" >\n" +

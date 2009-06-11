@@ -35,7 +35,7 @@ public class SubTreeStoreTest {
 //            "</a>";
 
 
-    static String xml = "<x:a xmlns:x=\"ns1\" xmlns:s=\"ns2\" xmlns:w=\"ns3\">\n" +
+    private static String xml = "<x:a xmlns:x=\"ns1\" xmlns:s=\"ns2\" xmlns:w=\"ns3\">\n" +
             "<s:b>\n" +
             "<x:c>CCCCCCC\n" +
             "<x:d attrD=\"DDD\" ></x:d>\n" +

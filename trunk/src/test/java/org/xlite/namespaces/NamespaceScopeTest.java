@@ -15,7 +15,7 @@ import org.xlite.*;
  */
 public class NamespaceScopeTest {
 
-    static String xml = "" +
+    private static String xml = "" +
             "<aaa xmlns:lower = \"lowercase\" >\n" +
             "  <lower:BBB xmlns:lower = \"uppercase\" >\n" +
             "    <lower:x111 />\n" +

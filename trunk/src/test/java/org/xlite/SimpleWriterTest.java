@@ -19,7 +19,7 @@ import org.xlite.XMLelement;
  */
 public class SimpleWriterTest {
 
-    static String xml1 = "<a xmlns=\"ns1\" xmlns:sec=\"ns2\">\n" +
+    private static String xml1 = "<a xmlns=\"ns1\" xmlns:sec=\"ns2\">\n" +
             "<sec:b>\n" +
             "<c>\n" +
             "<d attr=\"DDD\" />\n" +

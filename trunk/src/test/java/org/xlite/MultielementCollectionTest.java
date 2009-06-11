@@ -15,7 +15,7 @@ import java.util.ArrayList;
  */
 public class MultielementCollectionTest {
 
-    public static String xml = "<root>" +
+    private static String xml = "<root>" +
             "text at beginning"+
             "<a>textA1</a>" +
             "<b>textB2</b>" +
@@ -31,7 +31,7 @@ public class MultielementCollectionTest {
 
         StringReader reader = new StringReader(xml);
         Configuration conf = new AnnotationConfiguration(Root.class, "root");
-        conf.setPrettyPrint(false);
+        conf.setPrettyPrint(true);
 
         Xlite xlite = new Xlite(conf);
 //        Xlite.Result result = xlite.fromXMLwithUnknown(reader);
@@ -52,7 +52,7 @@ public class MultielementCollectionTest {
         XMLAssert.assertXMLEqual(xml, ssw);
     }
 
-    public static class Root {
+    private static class Root {
         @XMLelements({
                 @XMLelement(name = "a", itemType = A.class),
                 @XMLelement(name = "b", itemType = B.class)
@@ -62,12 +62,12 @@ public class MultielementCollectionTest {
 
     }
 
-    public static class A {
+    private static class A {
         @XMLtext
         public String text;
     }
 
-    public static class B {
+    private static class B {
         @XMLtext
         public String text;
     }

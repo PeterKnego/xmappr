@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class DOMelementConverterTest {
 
-    public static String xml = "<root>" +
+    private static String xml = "<root>" +
             "first some text"+
             "<b>textB2</b>" +
             "<a>textA2" +
@@ -55,7 +55,7 @@ public class DOMelementConverterTest {
         XMLAssert.assertXMLEqual(xml, ssw);
     }
 
-    public static class Root {
+    private static class Root {
         @XMLelements({
                 @XMLelement(name = "b", itemType = B.class),
                 @XMLelement("*")
@@ -65,7 +65,7 @@ public class DOMelementConverterTest {
 
     }
 
-    public static class B {
+    private static class B {
         @XMLtext
         public String text;
     }

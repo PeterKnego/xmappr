@@ -21,7 +21,7 @@ public class XMLSimpleWriter {
     private List<Element> predefinedNamespaces = new ArrayList<Element>();
     private ObjectStore objectStore;
 
-    public final boolean isPrettyPrinting;
+    private  final boolean isPrettyPrinting;
     private StringBuilder tabs = new StringBuilder("\n");
 
     public XMLSimpleWriter(XMLStreamWriter writer, XmlStreamSettings settings, boolean prettyPrint) {
@@ -183,8 +183,6 @@ public class XMLSimpleWriter {
             for (Integer location : locations) {
                 try {
                     restoreSubTree(objectStore, location);
-                } catch (XMLStreamException e) {
-                    throw new XliteException(e);
                 } catch (UnsupportedEncodingException e) {
                     throw new XliteException(e);
                 }
@@ -192,7 +190,7 @@ public class XMLSimpleWriter {
         }
     }
 
-    private void restoreSubTree(ObjectStore store, int location) throws XMLStreamException, UnsupportedEncodingException {
+    private void restoreSubTree(ObjectStore store, int location) throws UnsupportedEncodingException {
 
         flushElementCache();
 
