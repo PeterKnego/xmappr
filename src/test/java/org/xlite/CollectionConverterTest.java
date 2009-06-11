@@ -28,7 +28,7 @@ import javax.xml.stream.*;
  */
 public class CollectionConverterTest {
 
-    static String xml = "" +
+    private static String xml = "" +
             "<one>" +
             "just some text" +
             "<item>" +

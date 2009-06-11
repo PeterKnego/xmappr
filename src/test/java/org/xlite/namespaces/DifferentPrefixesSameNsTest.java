@@ -17,7 +17,7 @@ import java.io.StringWriter;
  */
 public class DifferentPrefixesSameNsTest {
 
-    static String xml = "" +
+    private static String xml = "" +
             "<lower:aaa xmlns:lower = \"lowercase\" xmlns:upper = \"lowercase\"\n" +
             "  xmlns:xnumber = \"lowercase\" >\n" +
             "  <lower:bbbb >\n" +

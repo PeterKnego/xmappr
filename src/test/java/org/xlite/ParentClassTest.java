@@ -14,7 +14,7 @@ import java.lang.reflect.Constructor;
  */
 public class ParentClassTest {
 
-    public static String xml = "" +
+    private static String xml = "" +
             "<base i=\"1000\" l=\"9999\" >" +
             "A text value" +
             "<iv>999</iv>" +

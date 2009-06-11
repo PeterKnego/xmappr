@@ -13,7 +13,7 @@ import java.io.StringReader;
  */
 public class CustomConverterTest {
 
-    static String xml = "" +
+    private static String xml = "" +
             "<one>" +
             "should be upper case" +
             "<custom>" +

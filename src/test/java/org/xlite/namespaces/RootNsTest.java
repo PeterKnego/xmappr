@@ -17,7 +17,7 @@ import java.io.IOException;
  */
 public class RootNsTest {
 
-    static String xml = "" +
+    private static String xml = "" +
             "<lower:aaa xmlns:lower=\"lowercase\" xmlns:upper=\"uppercase\" xmlns:xnumber=\"xnumber\">\n" +
             "  <lower:bbbb >\n" +
             "    <lower:cccc />\n" +

@@ -15,7 +15,7 @@ import java.io.StringWriter;
  */
 public class BasicConvertersTest {
 
-    static String inXml = "" +
+    private static String inXml = "" +
             "<primitives i=\"1000\" l=\"9999\" bool=\"false\" byt=\"127\" db=\"-1.6\" fl=\"1.1\" ch=\"f\" >" +
             "A text value" +
             "<iv>999</iv>" +
@@ -30,7 +30,7 @@ public class BasicConvertersTest {
             "<short/>" +
             "</primitives> ";
 
-    static String outXml = "" +
+    private static String outXml = "" +
             "<primitives i=\"1000\" l=\"9999\" byt=\"127\" db=\"-1.6\" fl=\"1.1\" ch=\"f\" >" +
             "A text value" +
             "<iv>999</iv>" +

@@ -17,7 +17,7 @@ import org.xlite.*;
  */
 public class DifferentNsSamePrefixesTest {
 
-    static String xml = "" +
+    private static String xml = "" +
             "<aaa >\n" +
             "  <lower:bbbb xmlns:lower = \"lowercase\" >\n" +
             "     <lower:cccc />\n" +

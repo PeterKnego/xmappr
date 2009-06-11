@@ -12,7 +12,7 @@ import javax.xml.namespace.QName;
  */
 public class ValueConverterWrapper implements ElementConverter {
 
-    public ValueConverter valueConverter;
+    private ValueConverter valueConverter;
 
     public ValueConverterWrapper(ValueConverter valueConverter) {
         this.valueConverter = valueConverter;

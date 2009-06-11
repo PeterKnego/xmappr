@@ -17,7 +17,7 @@ import java.util.*;
  */
 public class XMLSimpleReader {
 
-    public XMLStreamReader reader;  //todo make private
+    private XMLStreamReader reader;
     private XmlStreamSettings settings = new XmlStreamSettings();
 
     private Stack<Element> elementStack = new Stack<Element>();

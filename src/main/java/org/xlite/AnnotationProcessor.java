@@ -492,7 +492,7 @@ public class AnnotationProcessor {
                 Class targetType;
                 if (Collection.class.isAssignableFrom(targetField.getType())) {
 
-                    collectionConverter = (CollectionConverting) mappingContext.lookupElementConverter(targetField.getType());;
+                    collectionConverter = (CollectionConverting) mappingContext.lookupElementConverter(targetField.getType());
                     // choose converter according to 'itemType' value in @XMLtext annotation
                     targetType = targetAnnotation.itemType();
                 } else {

@@ -31,7 +31,7 @@ public class SimpleReaderTest {
         return new XMLSimpleWriter(parser, new XmlStreamSettings(), true);
     }
 
-    static String xml1 = "<a><b><c><d attr=\"DDD\" /></c></b></a>";
+    private static String xml1 = "<a><b><c><d attr=\"DDD\" /></c></b></a>";
 
     @org.testng.annotations.Test
     public void emptyElementWithAttributeTest() throws XMLStreamException {
@@ -48,7 +48,7 @@ public class SimpleReaderTest {
 
     }
 
-    static String xml2 = "<a><b/><c/><d></d></a>";
+    private static String xml2 = "<a><b/><c/><d></d></a>";
 
     @org.testng.annotations.Test
     public void simpleTest2() throws XMLStreamException {
@@ -62,7 +62,7 @@ public class SimpleReaderTest {
         Assert.assertEquals(rootElement.subelements.get(2).name.getLocalPart(), "d");
     }
 
-    static String xml3 = "<a>1<b>2</b>3</a>";
+    private static String xml3 = "<a>1<b>2</b>3</a>";
 
     @org.testng.annotations.Test
     public void textTest() throws XMLStreamException {
@@ -80,7 +80,7 @@ public class SimpleReaderTest {
         reader.moveUp();
     }
 
-    static String xml4 = "<a><b><c></c><d></d></b></a>";
+    private static String xml4 = "<a><b><c></c><d></d></b></a>";
 
     @org.testng.annotations.Test
     public void skippingChildElementsTest() throws XMLStreamException {
@@ -108,7 +108,7 @@ public class SimpleReaderTest {
 
     }
 
-    static String xml6 = "<a><b1>B1</b1><c><d><e/></d></c><b2>B2</b2></a>";
+    private static String xml6 = "<a><b1>B1</b1><c><d><e/></d></c><b2>B2</b2></a>";
 
     @org.testng.annotations.Test
     public void skippedElementsTest() throws XMLStreamException {
@@ -175,7 +175,7 @@ public class SimpleReaderTest {
     }
 
 
-    public static List<Element> processSubElements(XMLSimpleReader reader) {
+    private static List<Element> processSubElements(XMLSimpleReader reader) {
         List<Element> elements = new ArrayList<Element>();
         while (reader.moveDown()) {
             Element element = new Element();
@@ -206,7 +206,7 @@ public class SimpleReaderTest {
         List<Element> subelements = new ArrayList<Element>();
     }
 
-    public static void printElements(Element element, String prefix) {
+    private static void printElements(Element element, String prefix) {
         System.out.print(prefix + "<" + element.name.getLocalPart());
         for (QName qName : element.attributes.keySet()) {
             System.out.print(" " + qName + "=\"" + element.attributes.get(qName) + "\"");

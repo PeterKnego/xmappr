@@ -14,9 +14,9 @@ public class ObjectStore {
 
     private byte[] data;
     private IdentityHashMap<Object, List<Integer>> references;
-    Map<String, String> namespaceCache = new HashMap<String, String>();
+    private Map<String, String> namespaceCache = new HashMap<String, String>();
 
-    public int elementNumber = 0;
+    private int elementNumber = 0;
     private int position = 0;
     private int readPos = 0;
     private int increment;
