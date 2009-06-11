@@ -15,8 +15,23 @@ import java.io.StringWriter;
  */
 public class BasicConvertersTest {
 
-    static String xml = "" +
+    static String inXml = "" +
             "<primitives i=\"1000\" l=\"9999\" bool=\"false\" byt=\"127\" db=\"-1.6\" fl=\"1.1\" ch=\"f\" >" +
+            "A text value" +
+            "<iv>999</iv>" +
+            "<lv>999999</lv>" +
+            "<boolv/>" +
+            "<boolNull/>" +
+            "<bytv>-127</bytv>" +
+            "<dbv>1.6</dbv>" +
+            "<flv>-1.1</flv>" +
+            "<chv>g</chv>" +
+            "<node/>" +
+            "<short/>" +
+            "</primitives> ";
+
+    static String outXml = "" +
+            "<primitives i=\"1000\" l=\"9999\" byt=\"127\" db=\"-1.6\" fl=\"1.1\" ch=\"f\" >" +
             "A text value" +
             "<iv>999</iv>" +
             "<lv>999999</lv>" +
@@ -26,13 +41,13 @@ public class BasicConvertersTest {
             "<flv>-1.1</flv>" +
             "<chv>g</chv>" +
             "<node/>" +
-            "<int/>" +
+            "<short/>" +
             "</primitives> ";
 
 
     @Test
     public void mainTest() throws IllegalAccessException, IOException, SAXException {
-        StringReader reader = new StringReader(xml);
+        StringReader reader = new StringReader(inXml);
         Configuration conf = new AnnotationConfiguration(Primitives.class, "primitives");
         Xlite xf = new Xlite(conf);
 
@@ -53,27 +68,33 @@ public class BasicConvertersTest {
         // subelements
         Assert.assertEquals(primitives.iv.intValue(), 999);
         Assert.assertEquals(primitives.lv, 999999);
-        Assert.assertTrue(primitives.boolv);
         Assert.assertEquals(primitives.bytv, -127);
         Assert.assertEquals(primitives.dbv, 1.6d, 0.0d);
         Assert.assertEquals(primitives.flv, -1.1f, 0.0f);
         Assert.assertEquals(primitives.chv, 'g');
 
         // default values used
-        Assert.assertEquals(primitives.intNode, 0);
+        Assert.assertTrue(primitives.boolv);
+        Assert.assertTrue(primitives.boolNull);
+        Assert.assertEquals(primitives.shortNode, 0);
         Assert.assertEquals(primitives.stringNode, "");
 
-         // writing back to XML
+        // change some values
+        // since bool is reference type (Boolean) it will be ommited from output
+        primitives.bool = null;
+        primitives.boolNull = null;
+        
+        // writing back to XML
         StringWriter sw = new StringWriter();
         xf.toXML(primitives, sw);
         String ssw = sw.toString();
         System.out.println("");
-        System.out.println(xml);
+        System.out.println(inXml);
         System.out.println("");
         System.out.println(ssw);
 
         XMLUnit.setIgnoreWhitespace(true);
-        XMLAssert.assertXMLEqual(xml, ssw);
+        XMLAssert.assertXMLEqual(outXml, ssw);
 
     }
 
@@ -95,7 +116,7 @@ public class BasicConvertersTest {
         public long l;
 
         @XMLattribute
-        public boolean bool;
+        public Boolean bool;
 
         @XMLattribute
         public byte byt;
@@ -124,8 +145,8 @@ public class BasicConvertersTest {
         @XMLelement("node")
         public String stringNode = "";
 
-        @XMLelement(name = "int", defaultValue = "0")
-        public int intNode;
+        @XMLelement(name = "short", defaultValue = "0")
+        public short shortNode;
 
         public Integer getIv() {
             return iv;
@@ -144,6 +165,9 @@ public class BasicConvertersTest {
 
         @XMLelement(defaultValue = "true")
         public boolean boolv;
+
+        @XMLelement(defaultValue = "true")
+        public Boolean boolNull;
 
         @XMLelement
         public byte bytv;

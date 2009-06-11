@@ -20,6 +20,7 @@ import java.util.List;
 public class DOMelementConverterTest {
 
     public static String xml = "<root>" +
+            "first some text"+
             "<b>textB2</b>" +
             "<a>textA2" +
             "<a2 a2attr1='some' a2attr2='someMore' >a2text</a2>" +

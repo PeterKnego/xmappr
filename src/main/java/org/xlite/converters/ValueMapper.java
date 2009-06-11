@@ -59,7 +59,7 @@ public class ValueMapper {
         Object targetObject = targetField.getValue(object);
         if (targetObject == null) {
             // use default value if defined
-            return defaultObject != null ? valueConverter.toValue(defaultObject) : "";
+            return defaultObject != null ? valueConverter.toValue(defaultObject) : null;
         } else {
             return valueConverter.toValue(targetObject);
         }

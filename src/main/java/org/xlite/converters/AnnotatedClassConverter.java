@@ -188,46 +188,11 @@ public class AnnotatedClassConverter implements ElementConverter {
             }
         }
 
-//        // handle elementCatcher
-//        if (elementCatcher != null) {
-//            if (elementCatcher.isTargetCollection()) {
-//                elementCatcher.writeElement(object, null, writer, textMapper);
-//            } else {
-//                Object target = elementCatcher.getTarget(object);
-//                // todo finish this
-//            }
-//        }
-
         // write  unknown (stored) subelements
         writer.restoreSubTrees(object);
 
         // write end tag
         writer.endElement();
-    }
-
-    public static class TextCollector {
-
-        private List<String> texts;
-        private String onetext;
-
-        public TextCollector append(String data) {
-            if (onetext == null) {
-                onetext = data;
-            } else {
-                if (texts == null) {
-                    texts = new ArrayList<String>();
-                    texts.add(onetext);
-                }
-                texts.add(data);
-            }
-            return this;
-        }
-
-        public String getFirst() {
-            if (texts != null) return texts.get(0);
-            return onetext;
-        }
-
     }
 
 //    public void printContents(String prefix) {

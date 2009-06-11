@@ -3,6 +3,7 @@ package org.xlite;
 import org.custommonkey.xmlunit.XMLAssert;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.testng.Assert;
+import org.testng.annotations.ExpectedExceptions;
 import org.xml.sax.SAXException;
 import org.xlite.XMLelement;
 
@@ -10,9 +11,17 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.IOException;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Vector;
 
 import org.xlite.Xlite;
 import org.xlite.XMLtext;
+import org.xlite.converters.CollectionConverting;
+import org.xlite.converters.CollectionConverter;
+import org.xlite.converters.ElementConverter;
+
+import javax.xml.namespace.QName;
+import javax.xml.stream.*;
 
 /**
  * @author peter
@@ -20,25 +29,22 @@ import org.xlite.XMLtext;
 public class CollectionConverterTest {
 
     static String xml = "" +
-            "<one>\n" +
-            "just some text\n" +
-            "<item>\n" +
-            "first item text\n" +
-            "<subitem>sub12<e></e></subitem>\n" +
+            "<one>" +
+            "just some text" +
+            "<item>" +
+            "first item text" +
+            "<subitem>sub12</subitem>\n" +
             "<subitem>sub11</subitem>\n" +
-            "<ignored>Ignored<subignored/><subignored2/><subignored3/></ignored>\n" +
             "</item>\n" +
-            "<item>\n" +
-            "second item text\n" +
-            "   <subitem>sub21<ignored>IIIgnored</ignored></subitem>\n" +
-//                      "<ignored>Ignored<subignored/><subignored2/><subignored3/></ignored>" +
-            "   <subitem>sub22</subitem>\n" +
-            "   <subitem>sub23</subitem>\n" +
+            "<item>" +
+            "second item text" +
+            "<subitem>sub21</subitem>\n" +
+            "<subitem>sub22</subitem>\n" +
+            "<subitem>sub23</subitem>\n" +
             "</item>\n" +
-            "<ignored>Ignored<subignored/><subignored2/><subignored3/></ignored>\n" +
             "</one>\n";
 
-//    @org.testng.annotations.Test
+    @org.testng.annotations.Test
     public void collectionConverterTest() throws IOException, SAXException {
 
         StringReader reader = new StringReader(xml);
@@ -66,6 +72,35 @@ public class CollectionConverterTest {
 
         XMLUnit.setIgnoreWhitespace(true);
         XMLAssert.assertXMLEqual(xml, writer.toString());
+    }
+
+    @org.testng.annotations.Test
+    @ExpectedExceptions(XliteException.class)
+    public void toElementTest() throws XMLStreamException {
+        ElementConverter cc = new CollectionConverter();
+        XMLOutputFactory of = XMLOutputFactory.newInstance();
+        XMLStreamWriter xsw = of.createXMLStreamWriter(new StringWriter());
+        XMLSimpleWriter sw = new XMLSimpleWriter(xsw, null, false);
+        cc.toElement(new Object(), new QName("something"), sw, new MappingContext(null, null), "");
+    }
+
+    @org.testng.annotations.Test
+    @ExpectedExceptions(XliteException.class)
+    public void fromElementTest() throws XMLStreamException {
+        ElementConverter cc = new CollectionConverter();
+        XMLInputFactory of = XMLInputFactory.newInstance();
+        XMLStreamReader xsr = of.createXMLStreamReader(new StringReader(""));
+        XMLSimpleReader sr = new XMLSimpleReader(xsr, false);
+        cc.fromElement(sr, new MappingContext(null, null), "");
+
+    }
+
+    @org.testng.annotations.Test
+    @ExpectedExceptions(XliteException.class)
+    public void initializeCollectionTest() throws XMLStreamException {
+        CollectionConverting cc = new CollectionConverter();
+        cc.initializeCollection(HashMap.class);
+
     }
 
     public static class One {

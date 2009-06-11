@@ -98,17 +98,10 @@ public class Xlite {
             return store;
         }
 
-        public void setStore(ObjectStore store) {
-            this.store = store;
-        }
-
         public Object getObject() {
             return object;
         }
 
-        public void setObject(Object object) {
-            this.object = object;
-        }
     }
 
 }
