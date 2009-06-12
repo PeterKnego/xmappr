@@ -56,6 +56,9 @@ public class SimpleWriterTest {
     public static class B {
         @XMLelement
         public C c;
+
+        @XMLelement
+        public C c2;
     }
 
     public static class C {

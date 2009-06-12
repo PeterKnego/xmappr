@@ -55,7 +55,7 @@ public class DOMelementConverterTest {
         XMLAssert.assertXMLEqual(xml, ssw);
     }
 
-    private static class Root {
+    public static class Root {
         @XMLelements({
                 @XMLelement(name = "b", itemType = B.class),
                 @XMLelement("*")
@@ -65,7 +65,7 @@ public class DOMelementConverterTest {
 
     }
 
-    private static class B {
+    public static class B {
         @XMLtext
         public String text;
     }

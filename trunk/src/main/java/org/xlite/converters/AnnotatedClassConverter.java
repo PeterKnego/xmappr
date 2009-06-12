@@ -19,9 +19,9 @@ public class AnnotatedClassConverter implements ElementConverter {
 
     private Class<?> targetClass;
     private TextMapper textMapper;
-        private ElementMapper elementCatcher;
+    private ElementMapper elementCatcher;
     private AttributeMapper attributeCatcher;
-//    private Map<ElementMapper, QName> elementMappers = new HashSet<ElementMapper>();
+    //    private Map<ElementMapper, QName> elementMappers = new HashSet<ElementMapper>();
     private Map<QName, ElementMapper> elementMappersByName = new LinkedHashMap<QName, ElementMapper>();
     private Map<QName, AttributeMapper> attributeMappers = new LinkedHashMap<QName, AttributeMapper>();
     private NsContext classNamespaces;
@@ -136,6 +136,10 @@ public class AnnotatedClassConverter implements ElementConverter {
 
     public void toElement(Object object, QName elementName, XMLSimpleWriter writer,
                           MappingContext mappingContext, String defaultValue) {
+
+        if (object == null) {
+            return;
+        }
 
         // write a start tag
         writer.startElement(elementName);
