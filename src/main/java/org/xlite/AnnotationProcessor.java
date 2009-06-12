@@ -102,7 +102,6 @@ public class AnnotationProcessor {
 
                 // find the converter by the field type
                 ElementConverter converterByType = mappingContext.lookupElementConverter(field.getType());
-                System.out.println("element: "+field.getType());
 
                 // getValue converter for the class that the field references
                 ElementConverter fieldConverter = null;

@@ -35,9 +35,7 @@ public class FieldAccessor {
         } else {
             try {
                 setter.invoke(obj, value);
-            } catch (IllegalAccessException e) {
-                throw new XliteException("Setter method could not be called! ", e);
-            } catch (InvocationTargetException e) {
+            } catch (Exception e) {
                 throw new XliteException("Setter method could not be called! ", e);
             }
         }
@@ -57,9 +55,7 @@ public class FieldAccessor {
         } else {
             try {
                 return getter.invoke(obj);
-            } catch (IllegalAccessException e) {
-                throw new XliteException("Getter method could not be called! ", e);
-            } catch (InvocationTargetException e) {
+            } catch (Exception e) {
                 throw new XliteException("Getter method could not be called! ", e);
             }
         }

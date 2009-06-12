@@ -113,6 +113,9 @@ public class AnnotationConfiguration implements Configuration {
         valueConverters.add(new BooleanConverter());
         valueConverters.add(new ByteConverter());
         valueConverters.add(new CharConverter());
+        valueConverters.add(new BigDecimalConverter());        
+        valueConverters.add(new BigIntegerConverter());        
+        valueConverters.add(new ByteArrayConverter());        
 
     }
 
