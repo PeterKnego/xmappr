@@ -40,7 +40,7 @@ public class AnnotationProcessor {
         // find and process @XMLelement annotations
         processElements(currentClass, annotatedClassConverter);
 
-        mappingContext.elementConverters.add(annotatedClassConverter);
+//        mappingContext.elementConverters.add(annotatedClassConverter);
 
         return annotatedClassConverter;
     }
@@ -102,6 +102,7 @@ public class AnnotationProcessor {
 
                 // find the converter by the field type
                 ElementConverter converterByType = mappingContext.lookupElementConverter(field.getType());
+                System.out.println("element: "+field.getType());
 
                 // getValue converter for the class that the field references
                 ElementConverter fieldConverter = null;

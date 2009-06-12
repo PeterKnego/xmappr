@@ -52,7 +52,7 @@ public class MultielementCollectionTest {
         XMLAssert.assertXMLEqual(xml, ssw);
     }
 
-    private static class Root {
+    public static class Root {
         @XMLelements({
                 @XMLelement(name = "a", itemType = A.class),
                 @XMLelement(name = "b", itemType = B.class)
@@ -62,12 +62,12 @@ public class MultielementCollectionTest {
 
     }
 
-    private static class A {
+    public static class A {
         @XMLtext
         public String text;
     }
 
-    private static class B {
+    public static class B {
         @XMLtext
         public String text;
     }
