@@ -83,7 +83,9 @@ public class ElementMapper {
     }
 
     private void setFieldValue(Object targetObject, XMLSimpleReader reader) {
+        // process XML element and create an appropriate object
         Object value = elementConverter.fromElement(reader, mappingContext, defaultValue);
+        // refere this object to a field
         targetField.setValue(targetObject, value);
     }
 

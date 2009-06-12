@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * @author peter
  */
-public class NsContext implements NamespaceContext, Iterable<Map.Entry<String, String>> {
+public class NsContext implements Iterable<Map.Entry<String, String>> {
 
     private Map<String, String> prefixToNS = new HashMap<String, String>();
     private Map<String, String> nsToPrefix = new HashMap<String, String>();
@@ -43,11 +43,4 @@ public class NsContext implements NamespaceContext, Iterable<Map.Entry<String, S
         return prefixToNS.get(prefix);
     }
 
-    public String getPrefix(String namespaceURI) {
-        return nsToPrefix.get(namespaceURI);
-    }
-
-    public Iterator getPrefixes(String namespaceURI) {
-        throw new UnsupportedOperationException("Method getPrefixes(String namespaceURI) in class NsContext is not implemented");
-    }
 }
