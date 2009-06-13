@@ -1,26 +1,26 @@
-package org.xlite;
+package org.xlite.namespaces;
 
 import org.testng.annotations.ExpectedExceptions;
+import org.xlite.*;
 
 import java.io.StringReader;
 
 /**
  * Created by IntelliJ IDEA.
  * User: peter
- * Date: Jun 12, 2009
- * Time: 9:39:44 AM
+ * Date: Jun 14, 2009
+ * Time: 12:02:21 AM
  * To change this template use File | Settings | File Templates.
  */
-public class LoopTest {
-
+public class PrefixNotDefinedTest {
     private static String inXml = "" +
-            "<test>" +
-            "<node></node>" +
+            "<test xmlns:x='someNS'>" +
+            "<x:node>some text</x:node>" +
             "</test";
 
     @org.testng.annotations.Test
     @ExpectedExceptions(XliteConfigurationException.class)
-    public void configurationLoopTest() {
+    public void test() {
         StringReader reader = new StringReader(inXml);
         Configuration conf = new AnnotationConfiguration(Test.class, "test");
         Xlite xf = new Xlite(conf);
@@ -29,16 +29,10 @@ public class LoopTest {
 
     }
 
-    // classes Test and Back have a circular reference
 
-    private static class Test {
-        @XMLelement
-        public Back node;
+    public static class Test {
+        // prefix 'x' is not declared 
+        @XMLelement("x:node")
+        public String node;
     }
-
-    private static class Back {
-        @XMLelement
-        public Test node;
-    }
-
 }

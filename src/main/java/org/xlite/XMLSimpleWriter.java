@@ -163,12 +163,6 @@ public class XMLSimpleWriter {
         }
     }
 
-    public void addNamespaces(NsContext namespaces) {
-        for (Map.Entry<String, String> namespace : namespaces) {
-            addNamespace(namespace.getKey(), namespace.getValue());
-        }
-    }
-
     private void addNamespace(String prefix, String namespaceURI) {
         elementCache.add(new Element(Element.NAMESPACE, prefix, "", namespaceURI, ""));
     }

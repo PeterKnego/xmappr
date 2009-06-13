@@ -133,7 +133,8 @@ public class AnnotationProcessor {
                     // getValue QName that field maps to
                     String elementName = annotation.value().length() != 0 ? annotation.value() :
                             (annotation.name().length() != 0 ? annotation.name() : field.getName());
-                    QName qname = getQName(elementName, getFieldNamespaces(field), converter.getClassNamespaces());
+                    QName qname = getQName(elementName, getFieldNamespaces(field), converter.getClassNamespaces(),
+                            currentClass.getName(), field.getName());
 
                     // element catcher for wildcard names
                     if (elementName.equals("*")) {
@@ -291,7 +292,8 @@ public class AnnotationProcessor {
                     // getValue QName that field maps to
                     String elementName = annotation.value().length() != 0 ? annotation.value() :
                             (annotation.name().length() != 0 ? annotation.name() : field.getName());
-                    QName qname = getQName(elementName, getFieldNamespaces(field), converter.getClassNamespaces());
+                    QName qname = getQName(elementName, getFieldNamespaces(field), converter.getClassNamespaces(),
+                            currentClass.getName(), field.getName());
 
                     // target field is a Map so a converter must be choosen by it's "itemType" property
                     if (Map.class.isAssignableFrom(field.getType())) {
@@ -416,7 +418,7 @@ public class AnnotationProcessor {
      * @param classNS
      * @return
      */
-    private QName getQName(String elementName, NsContext fieldNS, NsContext classNS) {
+    private QName getQName(String elementName, NsContext fieldNS, NsContext classNS, String className, String fieldName) {
 
         // split xml element name into prefix and local part
         int index = elementName.indexOf(':');
@@ -434,9 +436,17 @@ public class AnnotationProcessor {
             localPart = elementName;
         }
 
+
         String fieldNsURI = fieldNS.getNamespaceURI(prefix);
         String classNsURI = classNS.getNamespaceURI(prefix);
         String predefinedNsURI = mappingContext.getPredefinedNamespaces().getNamespaceURI(prefix);
+
+        // used prefix must be defined in at least one namespace
+        if (prefix.length() != 0 && (fieldNsURI == null && classNsURI == null && predefinedNsURI == null)) {
+            throw new XliteConfigurationException("ERROR: used name prefix is not defined in any namespace.\n" +
+                    "Name prefix '" + prefix + "' used on field '" + fieldName +
+                    "' in class " + className + " is not defined in any declared XML namespace.\n");
+        }
 
         // choose the namespaceURI that is not null from field, class, predefined or
         // finally DEFAULT_NS_PREFIX (in that order)
@@ -504,7 +514,7 @@ public class AnnotationProcessor {
 
                 // check that assigned converter can actually convert to the target field type
                 if (!valueConverter.canConvert(targetType)) {
-                    throw new XliteException("Error: assigned converter type does not match field type.\n" +
+                    throw new XliteConfigurationException("Error: assigned converter type does not match field type.\n" +
                             "Converter " + valueConverter.getClass().getName() + " can not be used to convert " +
                             "data of type " + targetField.getType() + ".\n" +
                             "Please check XML annotations on field '" + targetField.getName() +
@@ -513,9 +523,7 @@ public class AnnotationProcessor {
             } else {  // custom converter assigned via annotation
                 try {
                     valueConverter = targetAnnotation.converter().newInstance();
-                } catch (InstantiationException e) {
-                    throw new XliteException("Could not instantiate converter " + targetAnnotation.converter().getName() + ". ", e);
-                } catch (IllegalAccessException e) {
+                } catch (Exception e) {
                     throw new XliteException("Could not instantiate converter " + targetAnnotation.converter().getName() + ". ", e);
                 }
             }
@@ -543,6 +551,7 @@ public class AnnotationProcessor {
 //    }
 
     // todo Check if this method returns duplicate field if a field is overriden.
+
     /**
      * Collects all fields (public and private) in a given class and its superclasses.
      *
