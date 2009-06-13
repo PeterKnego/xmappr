@@ -12,7 +12,6 @@ import java.util.Map;
 public class NsContext implements Iterable<Map.Entry<String, String>> {
 
     private Map<String, String> prefixToNS = new HashMap<String, String>();
-    private Map<String, String> nsToPrefix = new HashMap<String, String>();
 
     public void addNamespace(String namespace) {
 
@@ -31,7 +30,6 @@ public class NsContext implements Iterable<Map.Entry<String, String>> {
             nsURI = namespace;
         }
 //        System.out.println("namespace nsURi=" + nsURI + " prefix=" + prefix);
-        nsToPrefix.put(nsURI, prefix);
         prefixToNS.put(prefix, nsURI);
     }
 

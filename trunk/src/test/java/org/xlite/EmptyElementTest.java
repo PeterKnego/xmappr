@@ -12,7 +12,7 @@ import java.io.StringReader;
  * Time: 11:39:51 PM
  * To change this template use File | Settings | File Templates.
  */
-public class ValueConverterTest {
+public class EmptyElementTest {
 
     private static String inXml = "" +
             "<test>" +
@@ -30,7 +30,7 @@ public class ValueConverterTest {
 
     }
 
-    private static class Test {
+    public static class Test {
         @XMLelement
         public Integer node;
     }

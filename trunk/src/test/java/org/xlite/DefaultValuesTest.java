@@ -44,7 +44,7 @@ public class DefaultValuesTest {
 
         Assert.assertEquals(root.a.text, "text1");
         Assert.assertEquals(root.b, 0);
-        Assert.assertEquals(root.c, 3);
+        Assert.assertEquals(root.c, new Integer(3));
         XMLUnit.setIgnoreWhitespace(true);
         XMLAssert.assertXMLEqual(xml, ssw);
     }
@@ -57,7 +57,7 @@ public class DefaultValuesTest {
         public int b;
 
         @XMLelement(defaultValue = "3")
-        public int c;
+        public Integer c;
     }
 
     public static class A {
