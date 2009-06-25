@@ -66,7 +66,7 @@ public class SubTreeStoreTest {
 
         // writing back to XML
         StringWriter sw = new StringWriter();
-        xlite.toXML(a,result.getStore(), sw);
+        xlite.toXML(a, result.getStore(), sw);
         String ssw = sw.toString();
         System.out.println("");
         System.out.println(xml);

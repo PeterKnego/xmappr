@@ -41,7 +41,7 @@ public class ByteArrayConverterTest {
 
         Test test = (Test) xlite.fromXML(reader);
 
-            // writing back to XML
+        // writing back to XML
         StringWriter sw = new StringWriter();
         xlite.toXML(test, sw);
         String ssw = sw.toString();

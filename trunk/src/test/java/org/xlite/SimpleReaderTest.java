@@ -166,8 +166,8 @@ public class SimpleReaderTest {
         XMLStreamWriter writer = factory.createXMLStreamWriter(sw);
 
         writer.writeEmptyElement("root");
-        writer.writeAttribute("a","123");
-        writer.writeAttribute("b","456");
+        writer.writeAttribute("a", "123");
+        writer.writeAttribute("b", "456");
         writer.writeEndDocument();
         writer.flush();
         writer.close();

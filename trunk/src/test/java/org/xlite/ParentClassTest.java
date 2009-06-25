@@ -47,7 +47,7 @@ public class ParentClassTest {
 
     }
 
-    public static class Child extends Parent{
+    public static class Child extends Parent {
         @XMLattribute
         public long l;
 

@@ -16,13 +16,13 @@ import java.util.ArrayList;
 public class MultielementCollectionTest {
 
     private static String xml = "<root>" +
-            "text at beginning"+
+            "text at beginning" +
             "<a>textA1</a>" +
             "<b>textB2</b>" +
-            "just some text"+
+            "just some text" +
             "<a>textA2</a>" +
             "<b>textB1</b>" +
-            "some more text"+
+            "some more text" +
 //            "<data>YYY</data>" +
             "</root>";
 

@@ -26,7 +26,6 @@ public class CustomConverterTest {
             "</one>";
 
     @org.testng.annotations.Test()
-    @ExpectedExceptions(XliteException.class)
     public void customConverterTest() {
 
         StringReader reader = new StringReader(xml);
@@ -42,6 +41,16 @@ public class CustomConverterTest {
 
     }
 
+    @org.testng.annotations.Test()
+    @ExpectedExceptions(XliteException.class)
+    public void wrongConverterTypeTest() {
+
+        StringReader reader = new StringReader(xml);
+        Configuration conf = new AnnotationConfiguration(Wrong.class, "one");
+        Xlite xlite = new Xlite(conf);
+        xlite.fromXML(reader);
+    }
+
     public static class CustomElementConverter implements ElementConverter {
 
         public boolean canConvert(Class type) {
@@ -49,19 +58,19 @@ public class CustomConverterTest {
         }
 
 
-        public Object fromElement(XMLSimpleReader reader, MappingContext mappingContext, String defaultValue) {
+        public Object fromElement(XMLSimpleReader reader, MappingContext mappingContext, String defaultValue, String format) {
             Custom custom = new Custom();
             custom.value = reader.getText();
             while (reader.moveDown()) {
                 if (reader.getName().getLocalPart().equals("three")) {
-                    custom.three = (Three) mappingContext.processNextElement(Three.class, reader);
+                    custom.three = (Three) mappingContext.processNextElement(Three.class, reader, null, null);
                 }
                 reader.moveUp();
             }
             return custom;
         }
 
-        public void toElement(Object object, QName elementName, XMLSimpleWriter writer, MappingContext mappingContext, String defaultValue) {
+        public void toElement(Object object, QName elementName, XMLSimpleWriter writer, MappingContext mappingContext, String defaultValue, String format) {
             //To change body of implemented methods use File | Settings | File Templates.
         }
 
@@ -73,11 +82,11 @@ public class CustomConverterTest {
             return String.class.equals(type);
         }
 
-        public Object fromValue(String value) {
+        public Object fromValue(String value, String format) {
             return value.toUpperCase();
         }
 
-        public String toValue(Object object) {
+        public String toValue(Object object, String format) {
             return null;  //To change body of implemented methods use File | Settings | File Templates.
         }
     }
@@ -88,11 +97,11 @@ public class CustomConverterTest {
             return String.class.equals(type);
         }
 
-        public Object fromValue(String value) {
+        public Object fromValue(String value, String format) {
             return value.toLowerCase();
         }
 
-        public String toValue(Object object) {
+        public String toValue(Object object, String format) {
             return null;  //To change body of implemented methods use File | Settings | File Templates.
         }
     }
@@ -118,11 +127,14 @@ public class CustomConverterTest {
         @XMLattribute(name = "val", converter = LowerCaseConverter.class)
         public String attr;
 
-        @XMLattribute(converter = LowerCaseConverter.class)
-        // should throw an exception
-        public int attr2;
-
         @XMLtext
         public String textField;
+    }
+
+
+    public static class Wrong {
+        // should throw an exception
+        @XMLattribute(converter = LowerCaseConverter.class)
+        public int attr;
     }
 }
