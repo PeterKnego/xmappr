@@ -15,11 +15,11 @@ public class BigIntegerConverter extends ValueConverter {
         return BigInteger.class.isAssignableFrom(type);
     }
 
-    public Object fromValue(String value) {
+    public Object fromValue(String value, String format) {
         return new BigInteger(value);
     }
 
-    public String toValue(Object object) {
+    public String toValue(Object object, String format) {
         return ((BigInteger) object).toString();
     }
 }

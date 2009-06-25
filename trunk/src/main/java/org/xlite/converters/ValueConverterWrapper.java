@@ -22,23 +22,23 @@ public class ValueConverterWrapper implements ElementConverter {
         return valueConverter.canConvert(type);
     }
 
-    public Object fromElement(XMLSimpleReader reader, MappingContext mappingContext, String defaultValue) {
+    public Object fromElement(XMLSimpleReader reader, MappingContext mappingContext, String defaultValue, String format) {
         String text = reader.getText();
         if (text == null || text.length() == 0) {
             if (defaultValue != null) {
-                return valueConverter.fromValue(defaultValue);
+                return valueConverter.fromValue(defaultValue, format);
             } else if (!valueConverter.convertsEmpty()) {
                 throw new XliteException("Converter of type "+valueConverter.getClass()+" can not convert empty elements. " +
                         "Either element must not be empty or a default value must be supplied via @XMLelement(defaultValue = \"val\")");
             }
         }
-        return valueConverter.fromValue(text);
+        return valueConverter.fromValue(text, format);
     }
 
-    public void toElement(Object object, QName nodeName, XMLSimpleWriter writer, MappingContext mappingContext, String defaultValue) {
+    public void toElement(Object object, QName nodeName, XMLSimpleWriter writer, MappingContext mappingContext, String defaultValue, String format) {
         if (object != null) {
             writer.startElement(nodeName);
-            String value = valueConverter.toValue(object);
+            String value = valueConverter.toValue(object, format);
             // if value equals default value => empty element
             if (!value.equals(defaultValue)) {
                 writer.addText(value);

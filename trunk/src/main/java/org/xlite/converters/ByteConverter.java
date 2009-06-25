@@ -9,11 +9,11 @@ public class ByteConverter extends ValueConverter {
         return type.equals(byte.class) || Byte.class.isAssignableFrom(type);
     }
 
-    public Object fromValue(String value) {
+    public Object fromValue(String value, String format) {
         return Byte.valueOf(value);
     }
 
-    public String toValue(Object object) {
+    public String toValue(Object object, String format) {
         return ((Byte) object).toString();
     }
 }

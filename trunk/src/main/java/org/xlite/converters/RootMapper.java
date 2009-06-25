@@ -28,7 +28,7 @@ public class RootMapper {
 
     public Object getRootObject(XMLSimpleReader reader) {
         if (reader.findFirstElement(rootNodeName)) {
-            return elementConverter.fromElement(reader, mappingContext, "");
+            return elementConverter.fromElement(reader, mappingContext, "", null);
         } else {
             throw new XliteException("Root node <" + rootNodeName + "> could not be found in XML data");
         }
@@ -36,7 +36,7 @@ public class RootMapper {
 
     public void toXML(Object object, XMLSimpleWriter writer) {
         writer.predefineNamespaces(mappingContext.getPredefinedNamespaces());
-        elementConverter.toElement(object, rootNodeName, writer, mappingContext, "");
+        elementConverter.toElement(object, rootNodeName, writer, mappingContext, "", null);
         writer.endDocument();
     }
 

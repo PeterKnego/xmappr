@@ -27,8 +27,11 @@ public class ElementMapper {
     private Map<Class, QName> itemTypes = new HashMap<Class, QName>();
     private Map<QName, ElementConverter> converterCache = new HashMap<QName, ElementConverter>();
 
-    // default value as setValue by the @XMLelement(defaultValue=??) annotation
+    // default value as set by the @XMLelement(defaultValue="..") annotation
     private String defaultValue;
+
+    // converter formatting options as set by the @XMLelement(format="..") annotation
+    private String format;
 
     public ElementMapper(Field targetField, CollectionConverting collectionConverter, MappingContext mappingContext) {
         this.targetField = new FieldAccessor(targetField);
@@ -38,6 +41,10 @@ public class ElementMapper {
 
     public void setDefaultValue(String defaultValue) {
         this.defaultValue = defaultValue;
+    }
+
+    public void setFormat(String format) {
+        this.format = format;
     }
 
     public void setConverter(ElementConverter fieldConverter) {
@@ -78,13 +85,13 @@ public class ElementMapper {
                     ". Collection contains element types that are not defined in @XMLelement annotation.");
         }
 
-        Object value = converter.fromElement(reader, mappingContext, defaultValue);
+        Object value = converter.fromElement(reader, mappingContext, defaultValue, format);
         collectionConverter.addItem(collection, value);
     }
 
     private void setFieldValue(Object targetObject, XMLSimpleReader reader) {
         // process XML element and create an appropriate object
-        Object value = elementConverter.fromElement(reader, mappingContext, defaultValue);
+        Object value = elementConverter.fromElement(reader, mappingContext, defaultValue, format);
         // refere this object to a field
         targetField.setValue(targetObject, value);
     }
@@ -103,12 +110,12 @@ public class ElementMapper {
                 } else {
                     QName name = itemTypes.get(obj.getClass());
                     ElementConverter converter = converterCache.get(name);
-                    converter.toElement(obj, name, writer, mappingContext, defaultValue);
+                    converter.toElement(obj, name, writer, mappingContext, defaultValue, format);
                 }
             }
 
         } else {   // normal field
-            elementConverter.toElement(targetField.getValue(object), nodeName, writer, mappingContext, defaultValue);
+            elementConverter.toElement(targetField.getValue(object), nodeName, writer, mappingContext, defaultValue, format);
         }
     }
 
