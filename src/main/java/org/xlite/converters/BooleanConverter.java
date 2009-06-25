@@ -21,11 +21,11 @@ public class BooleanConverter extends ValueConverter {
         return type.equals(boolean.class) || Boolean.class.isAssignableFrom(type);
     }
 
-    public Object fromValue(String value) {
+    public Object fromValue(String value, String format) {
         return value.length() == 0 || positive.equalsIgnoreCase(value) ? Boolean.TRUE : Boolean.FALSE;
     }
 
-    public String toValue(Object object) {
+    public String toValue(Object object, String format) {
         return ((Boolean) object ? positive : negative);
     }
 

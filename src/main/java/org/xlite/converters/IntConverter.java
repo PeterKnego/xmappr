@@ -9,11 +9,11 @@ public class IntConverter extends ValueConverter {
         return type.equals(int.class) || Integer.class.isAssignableFrom(type);
     }
 
-    public Object fromValue(String value) {
+    public Object fromValue(String value, String format) {
         return Integer.valueOf(value);
     }
 
-    public String toValue(Object object) {
+    public String toValue(Object object, String format) {
         return ((Integer) object).toString();
     }
 }

@@ -9,11 +9,11 @@ public class FloatConverter extends ValueConverter {
         return type.equals(float.class) || Float.class.isAssignableFrom(type);
     }
 
-    public Object fromValue(String value) {
+    public Object fromValue(String value, String format) {
         return Float.valueOf(value);
     }
 
-    public String toValue(Object object) {
+    public String toValue(Object object, String format) {
         return ((Float) object).toString();
     }
 

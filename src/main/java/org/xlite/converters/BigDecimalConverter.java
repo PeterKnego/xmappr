@@ -15,11 +15,11 @@ public class BigDecimalConverter  extends ValueConverter {
         return BigDecimal.class.isAssignableFrom(type);
     }
 
-    public Object fromValue(String value) {
+    public Object fromValue(String value, String format) {
         return new BigDecimal(value);
     }
 
-    public String toValue(Object object) {
+    public String toValue(Object object, String format) {
         return ((BigDecimal) object).toString();
     }
 }

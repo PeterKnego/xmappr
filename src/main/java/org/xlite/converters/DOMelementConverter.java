@@ -22,7 +22,7 @@ public class DOMelementConverter implements ElementConverter {
         return DOMelement.class.isAssignableFrom(type);
     }
 
-    public Object fromElement(XMLSimpleReader reader, MappingContext mappingContext, String defaultValue) {
+    public Object fromElement(XMLSimpleReader reader, MappingContext mappingContext, String defaultValue, String format) {
         DOMelement element = new DOMelement();
         element.setName(reader.getName());
 
@@ -45,7 +45,7 @@ public class DOMelementConverter implements ElementConverter {
         while (reader.moveDown()) {
 
             // recursivelly call DOMelementConverter
-            element.appendElement((DOMelement) this.fromElement(reader, mappingContext, null));
+            element.appendElement((DOMelement) this.fromElement(reader, mappingContext, null, null));
 
             reader.moveUp();
 
@@ -55,7 +55,7 @@ public class DOMelementConverter implements ElementConverter {
         return element;
     }
 
-    public void toElement(Object object, QName elementName, XMLSimpleWriter writer, MappingContext mappingContext, String defaultValue) {
+    public void toElement(Object object, QName elementName, XMLSimpleWriter writer, MappingContext mappingContext, String defaultValue, String format) {
         DOMelement element = (DOMelement) object;
 
         // write a start tag
@@ -72,7 +72,7 @@ public class DOMelementConverter implements ElementConverter {
         for (Object o : element.getElements()) {
              if(DOMelement.isElement(o)){
                  DOMelement subElement = (DOMelement) o;
-                 this.toElement(subElement, null, writer, mappingContext, null);
+                 this.toElement(subElement, null, writer, mappingContext, null, null);
              } else if(DOMelement.isText(o)){
                  writer.addText((String) o);
              }

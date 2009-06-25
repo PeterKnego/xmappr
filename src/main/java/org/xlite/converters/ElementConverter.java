@@ -31,9 +31,10 @@ public interface ElementConverter {
      * @param reader XMLSimpleReader to read XML data from.
      * @param mappingContext
      * @param defaultValue Default value to use if xml element is empty.
+     * @param format Format string passed in from @XMLelement(format="..."). Used to set conversion options.
      * @return
      */
-    public Object fromElement(XMLSimpleReader reader, MappingContext mappingContext, String defaultValue);
+    public Object fromElement(XMLSimpleReader reader, MappingContext mappingContext, String defaultValue, String format);
 
     /**
      * Takes an Object and serializes it to a XML element and writes it out to XmlSimpleWriter.
@@ -43,9 +44,9 @@ public interface ElementConverter {
      * @param writer XmlSimpleWriter to write data to.
      * @param mappingContext
      * @param defaultValue If serialized object equals default value (for simple elements), then an empty element
-     * must be written to the writter.
+     * @param format Format string passed in from @XMLelement(format="..."). Used to set conversion options.
      */
     public void toElement(Object object, QName nodeName, XMLSimpleWriter writer,
-                          MappingContext mappingContext, String defaultValue);
+                          MappingContext mappingContext, String defaultValue, String format);
 
 }

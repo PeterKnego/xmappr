@@ -3,7 +3,6 @@ package org.xlite;
 import org.xlite.converters.ElementConverter;
 import org.xlite.converters.ValueConverter;
 
-import javax.xml.namespace.QName;
 import java.util.List;
 import java.util.Stack;
 import java.util.ArrayList;
@@ -46,10 +45,10 @@ public class MappingContext {
      * @param reader
      * @return
      */
-    public Object processNextElement(Class targetType, XMLSimpleReader reader) {
+    public Object processNextElement(Class targetType, XMLSimpleReader reader, String defaultValue, String format) {
         // find the converter for given Class
         ElementConverter converter = lookupElementConverter(targetType);
-        return converter.fromElement(reader, this, "");
+        return converter.fromElement(reader, this, defaultValue, format);
     }
 
     public ValueConverter lookupValueConverter(Class type) {

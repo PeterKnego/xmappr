@@ -19,14 +19,14 @@ public class CollectionConverter implements ElementConverter, CollectionConverti
         return Collection.class.isAssignableFrom(type);
     }
 
-    public Object fromElement(XMLSimpleReader reader, MappingContext mappingContext, String defaultValue) {
+    public Object fromElement(XMLSimpleReader reader, MappingContext mappingContext, String defaultValue, String format) {
 //        ElementConverter converter = mappingContext.lookupElementConverter(itemType);
 //        return converter.fromElement(reader, mappingContext);
         throw new XliteException("CollectionConverter.fromElement() method should not be called directly. " +
                 "Rather for every object in a collection, a .fromElement() method should be called on it's assigned converter");
     }
 
-    public void toElement(Object object, QName nodeName, XMLSimpleWriter writer, MappingContext mappingContext, String defaultValue) {
+    public void toElement(Object object, QName nodeName, XMLSimpleWriter writer, MappingContext mappingContext, String defaultValue, String format) {
         throw new XliteException("CollectionConverter.toElement() method should not be called directly. " +
                 "Rather for every object in a collection, a .toElement() method should be called on it's assigned converter");
     }

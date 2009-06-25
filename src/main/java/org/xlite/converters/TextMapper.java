@@ -1,11 +1,7 @@
 package org.xlite.converters;
 
-import org.xlite.XliteException;
-
 import java.lang.reflect.Field;
-import java.util.List;
 import java.util.Collection;
-import java.util.ArrayList;
 
 /**
  * Created by IntelliJ IDEA.
@@ -21,14 +17,16 @@ public class TextMapper {
     private CollectionConverting collectionConverter;
     private Class targetType;
     private boolean isIntermixed;
+    private String format;
 
     public TextMapper(Field accessor, ValueConverter valueConverter, Class targetType,
-                      CollectionConverting collectionConverter, boolean isIntermixed) {
+                      CollectionConverting collectionConverter, boolean isIntermixed, String format) {
         this.accessor = new FieldAccessor(accessor);
         this.valueConverter = valueConverter;
         this.targetType = targetType;
         this.collectionConverter = collectionConverter;
         this.isIntermixed = isIntermixed;
+        this.format = format;
     }
 
 
@@ -58,9 +56,9 @@ public class TextMapper {
                 collection = collectionConverter.initializeCollection(accessor.getType());
                 accessor.setValue(object, collection);
             }
-            collection.add(valueConverter.fromValue(elementValue));
+            collection.add(valueConverter.fromValue(elementValue, format));
         } else {
-            accessor.setValue(object, elementValue);
+            accessor.setValue(object, valueConverter.fromValue(elementValue, format));
         }
     }
 
@@ -73,9 +71,9 @@ public class TextMapper {
     public String getValue(Object object) {
         // is it a Collection?
         if (isCollection()) {
-            return valueConverter.toValue(object);
+            return valueConverter.toValue(object, format);
         } else {
-            return valueConverter.toValue(accessor.getValue(object));
+            return valueConverter.toValue(accessor.getValue(object), format);
         }
     }
 

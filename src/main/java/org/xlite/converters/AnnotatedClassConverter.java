@@ -2,7 +2,6 @@ package org.xlite.converters;
 
 import javax.xml.namespace.QName;
 import java.util.*;
-import java.lang.reflect.Field;
 
 import org.xlite.*;
 
@@ -63,15 +62,13 @@ public class AnnotatedClassConverter implements ElementConverter {
         return targetClass.equals(type);
     }
 
-    public Object fromElement(XMLSimpleReader reader, MappingContext mappingContext, String defaultValue) {
+    public Object fromElement(XMLSimpleReader reader, MappingContext mappingContext, String defaultValue, String format) {
 
         // instantiate object that maps to the current XML element
         Object currentObject;
         try {
             currentObject = targetClass.newInstance();
-        } catch (InstantiationException e) {
-            throw new XliteException("Could not instantiate class " + targetClass.getName(), e);
-        } catch (IllegalAccessException e) {
+        } catch (Exception e) {
             throw new XliteException("Could not instantiate class " + targetClass.getName(), e);
         }
 
@@ -135,7 +132,7 @@ public class AnnotatedClassConverter implements ElementConverter {
     }
 
     public void toElement(Object object, QName elementName, XMLSimpleWriter writer,
-                          MappingContext mappingContext, String defaultValue) {
+                          MappingContext mappingContext, String defaultValue, String format) {
 
         if (object == null) {
             return;
@@ -169,8 +166,8 @@ public class AnnotatedClassConverter implements ElementConverter {
                     }
                     // check that this attribute name is not already handled by direct mappers
                     if (!attributeMappers.containsKey(aName)) {
-                        String value = attributeCatcher.getValue(aName, object);
-                        writer.addAttribute(aName, value);
+                        String value = attributeCatcher.getValue(key, object);
+                        if (value != null) writer.addAttribute(aName, value);
                     }
                 }
             }

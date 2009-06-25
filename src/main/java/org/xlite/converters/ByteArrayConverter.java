@@ -14,11 +14,11 @@ public class ByteArrayConverter extends ValueConverter {
         return type.isArray() && (byte.class.equals(dataType) || Byte.class.isAssignableFrom(dataType));
     }
 
-    public Object fromValue(String value) {
+    public Object fromValue(String value, String format) {
         return Base64.decode(value);
     }
 
-    public String toValue(Object object) {
+    public String toValue(Object object, String format) {
         return String.valueOf(Base64.encode((byte[]) object));
     }
 }

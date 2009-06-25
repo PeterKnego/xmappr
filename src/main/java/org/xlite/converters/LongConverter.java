@@ -9,11 +9,11 @@ public class LongConverter extends ValueConverter {
         return type.equals(long.class) || Long.class.isAssignableFrom(type);
     }
 
-    public Object fromValue(String value) {
+    public Object fromValue(String value, String format) {
         return Long.valueOf(value);
     }
 
-    public String toValue(Object object) {
+    public String toValue(Object object, String format) {
         return ((Long) object).toString();
     }
 }

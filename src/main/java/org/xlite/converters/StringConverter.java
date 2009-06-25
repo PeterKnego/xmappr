@@ -12,11 +12,11 @@ public class StringConverter extends ValueConverter {
         return String.class.isAssignableFrom(type);
     }
 
-    public Object fromValue(String value) {
+    public Object fromValue(String value, String format) {
         return value.intern();
     }
 
-    public String toValue(Object object) {
+    public String toValue(Object object, String format) {
         return (String) object;
     }
 

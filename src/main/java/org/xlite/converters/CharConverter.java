@@ -9,16 +9,11 @@ public class CharConverter extends ValueConverter{
         return type.equals(char.class) || Character.class.isAssignableFrom(type);
     }
 
-    public Object fromValue(String value) {
-         if (value.length() == 0) {
-            return null;
-        } else {
+    public Object fromValue(String value, String format) {
             return value.charAt(0);
-        }
     }
 
-    public String toValue(Object object) {
+    public String toValue(Object object, String format) {
         return ((Character) object).toString();
-
     }
 }
