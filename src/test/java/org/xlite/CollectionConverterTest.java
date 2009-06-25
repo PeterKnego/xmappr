@@ -12,7 +12,8 @@ import java.io.StringWriter;
 import java.io.IOException;
 import java.util.List;
 import java.util.HashMap;
-import java.util.Vector;
+import java.util.Collection;
+import java.util.ArrayList;
 
 import org.xlite.Xlite;
 import org.xlite.XMLtext;
@@ -81,7 +82,7 @@ public class CollectionConverterTest {
         XMLOutputFactory of = XMLOutputFactory.newInstance();
         XMLStreamWriter xsw = of.createXMLStreamWriter(new StringWriter());
         XMLSimpleWriter sw = new XMLSimpleWriter(xsw, null, false);
-        cc.toElement(new Object(), new QName("something"), sw, new MappingContext(null, null), "");
+        cc.toElement(new Object(), new QName("something"), sw, new MappingContext(null, null), "", null);
     }
 
     @org.testng.annotations.Test
@@ -91,16 +92,33 @@ public class CollectionConverterTest {
         XMLInputFactory of = XMLInputFactory.newInstance();
         XMLStreamReader xsr = of.createXMLStreamReader(new StringReader(""));
         XMLSimpleReader sr = new XMLSimpleReader(xsr, false);
-        cc.fromElement(sr, new MappingContext(null, null), "");
+        cc.fromElement(sr, new MappingContext(null, null), "", null);
 
     }
 
     @org.testng.annotations.Test
     @ExpectedExceptions(XliteException.class)
-    public void initializeCollectionTest() throws XMLStreamException {
+    public void initializeNonCollectionTest() throws XMLStreamException {
         CollectionConverting cc = new CollectionConverter();
-        cc.initializeCollection(HashMap.class);
 
+        // HashMap is not a Collection
+        cc.initializeCollection(HashMap.class);
+    }
+
+    @org.testng.annotations.Test
+    @ExpectedExceptions(XliteException.class)
+    public void noninitializableCollectionTest() throws XMLStreamException {
+        CollectionConverting cc = new CollectionConverter();
+
+        // CustomCollection can not be instantiated via default constructor
+        cc.initializeCollection(CustomCollection.class);
+    }
+
+    // Collection that can not be initialized via default constructor
+    public static class CustomCollection extends ArrayList {
+
+        private CustomCollection() {
+        }
     }
 
     public static class One {
