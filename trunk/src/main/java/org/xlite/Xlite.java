@@ -3,8 +3,6 @@ package org.xlite;
 import javax.xml.stream.*;
 import java.io.Reader;
 import java.io.Writer;
-import java.lang.reflect.Method;
-import java.lang.reflect.InvocationTargetException;
 
 /**
  * User: peter
@@ -13,68 +11,81 @@ import java.lang.reflect.InvocationTargetException;
  */
 public class Xlite {
 
-    private Configuration annotationConfiguration;
+    private Configuration configuration;
 
-    public Xlite(Configuration annotationConfiguration) {
-        this.annotationConfiguration = annotationConfiguration;
+    private XMLInputFactory xmlInputFactory;
+    private XMLOutputFactory xmlOutputFactory;
+
+    public Xlite(Configuration configuration) {
+        this.configuration = configuration;
     }
 
     public Object fromXML(Reader reader) {
-        annotationConfiguration.initialize();
+        configuration.initialize();
 
-        XMLStreamReader xmlreader = getXmlStreamReader(reader);
-        XMLSimpleReader simpleReader = new XMLSimpleReader(xmlreader, false);
+        XMLSimpleReader simpleReader = new XMLSimpleReader(getXmlStreamReader(reader), false);
 
-        return annotationConfiguration.getRootElementMapper().getRootObject(simpleReader);
+        return configuration.getRootElementMapper().getRootObject(simpleReader);
     }
 
     public Result fromXMLwithUnknown(Reader reader) {
-        annotationConfiguration.initialize();
+        configuration.initialize();
 
-        XMLStreamReader xmlreader = getXmlStreamReader(reader);
-        XMLSimpleReader simpleReader = new XMLSimpleReader(xmlreader, true);
+        XMLSimpleReader simpleReader = new XMLSimpleReader(getXmlStreamReader(reader), true);
 
-        Object object = annotationConfiguration.getRootElementMapper().getRootObject(simpleReader);
+        Object object = configuration.getRootElementMapper().getRootObject(simpleReader);
         return new Result(object, simpleReader.getObjectStore());
     }
 
     private XMLStreamReader getXmlStreamReader(Reader reader) {
         XMLStreamReader xmlreader;
-        XMLInputFactory factory = XMLInputFactory.newInstance();
         try {
-            xmlreader = factory.createXMLStreamReader(reader);
+            xmlreader = getXmlInputFactory().createXMLStreamReader(reader);
         } catch (XMLStreamException e) {
             throw new XliteException("Error initalizing XMLStreamReader", e);
         }
         return xmlreader;
     }
 
+    private synchronized XMLInputFactory getXmlInputFactory() {
+        if (xmlInputFactory == null) {
+            xmlInputFactory = XMLInputFactory.newInstance();
+        }
+        return xmlInputFactory;
+    }
+
     public void toXML(Object source, Writer writer) {
-        annotationConfiguration.initialize();
+        configuration.initialize();
 
         XMLStreamWriter parser = getXmlStreamWriter(writer);
-        XMLSimpleWriter simpleWriter = new XMLSimpleWriter(parser, new XmlStreamSettings(), annotationConfiguration.isPrettyPrint());
+        XMLSimpleWriter simpleWriter = new XMLSimpleWriter(parser, new XmlStreamSettings(), configuration.isPrettyPrint());
 
-        annotationConfiguration.getRootElementMapper().toXML(source, simpleWriter);
+        configuration.getRootElementMapper().toXML(source, simpleWriter);
     }
 
     private XMLStreamWriter getXmlStreamWriter(Writer writer) {
-        XMLOutputFactory factory = XMLOutputFactory.newInstance();
-        factory.setProperty("javax.xml.stream.isRepairingNamespaces", true);
         try {
-            return factory.createXMLStreamWriter(writer);
+            return getXmlOutputFactory().createXMLStreamWriter(writer);
         } catch (XMLStreamException e) {
             throw new XliteException("Error initalizing XMLStreamWriter", e);
         }
     }
 
+    private synchronized XMLOutputFactory getXmlOutputFactory() {
+        if (xmlOutputFactory == null) {
+            xmlOutputFactory = XMLOutputFactory.newInstance();
+            xmlOutputFactory.setProperty("javax.xml.stream.isRepairingNamespaces", true);
+        }
+        return xmlOutputFactory;
+    }
+
     public void toXML(Object source, ObjectStore store, Writer writer) {
-        annotationConfiguration.initialize();
+        configuration.initialize();
 
         XMLStreamWriter parser = getXmlStreamWriter(writer);
-        XMLSimpleWriter simpleWriter = new XMLSimpleWriter(parser, store, new XmlStreamSettings(), annotationConfiguration.isPrettyPrint());
+        XMLSimpleWriter simpleWriter = new XMLSimpleWriter(parser, store, new XmlStreamSettings(), configuration.isPrettyPrint());
 
-        annotationConfiguration.getRootElementMapper().toXML(source, simpleWriter);
+        configuration.getRootElementMapper().toXML(source, simpleWriter);
     }
 
     public static class Result {

@@ -15,44 +15,58 @@ import java.util.*;
  */
 public class AttributeMapper {
 
-    private ValueMapper valueMapper;
+    private final FieldAccessor targetField;
+    private final ValueConverter valueConverter;
 
-    public AttributeMapper(Field targetField, ValueConverter valueConverter, String defaultValue) {
-        this.valueMapper = new ValueMapper(targetField, valueConverter, defaultValue);
+    //todo Are default values used on the attributes?
+    private final String defaultValue;
+    private Object defaultObject;
+    private final String format;
+    private final boolean isMap;
+
+    public AttributeMapper(Field targetField, ValueConverter valueConverter, String defaultValue, String format) {
+        this.targetField = new FieldAccessor(targetField);
+        this.valueConverter = valueConverter;
+        this.defaultValue = defaultValue;
+        if (defaultValue != null) {
+            this.defaultObject = valueConverter.fromValue(defaultValue, format);
+        }
+        this.format = format;
+        this.isMap = Map.class.isAssignableFrom(targetField.getType());
     }
 
     public void setValue(QName attributeName, Object object, String elementValue) {
-        FieldAccessor targetField = valueMapper.getTargetField();
+        FieldAccessor targetField = this.targetField;
         // is it a Map?
-        if (Map.class.isAssignableFrom(targetField.getType())) {
+        if (isMap) {
             Map<QName, Object> targetMap = (Map<QName, Object>) targetField.getValue(object);
             if (targetMap == null) {
                 targetMap = initializeMap(targetField.getType());
                 targetField.setValue(object, targetMap);
             }
-            targetMap.put(attributeName, valueMapper.getValueConverter().fromValue(elementValue));
+            targetMap.put(attributeName, valueConverter.fromValue(elementValue, format));
         } else {
-            valueMapper.setValue(object, elementValue);
+            setValue(object, elementValue);
         }
     }
 
-    public String getValue(QName attributeName, Object object) {
-        FieldAccessor targetField = valueMapper.getTargetField();
+    public String getValue(Object attributeName, Object object) {
+        FieldAccessor targetField = this.targetField;
         // is it a Map?
-        if (Map.class.isAssignableFrom(targetField.getType())) {
+        if (isMap) {
             Map<QName, String> target = (Map<QName, String>) targetField.getValue(object);
-            return valueMapper.getValueConverter().toValue(target.get(attributeName));
+            return valueConverter.toValue(target.get(attributeName), format);
         } else {
-            return valueMapper.getValue(object);
+            return getValue(object);
         }
     }
 
-    public boolean isTargetMap(){
-        return Map.class.isAssignableFrom(valueMapper.getTargetField().getType());
+    public boolean isTargetMap() {
+        return isMap;
     }
-    
-    public Object getTarget(Object parent){
-        return valueMapper.getTargetField().getValue(parent);
+
+    public Object getTarget(Object parent) {
+        return targetField.getValue(parent);
     }
 
     private Map<QName, Object> initializeMap(Class targetType) {
@@ -64,8 +78,44 @@ public class AttributeMapper {
         try {
             return concreteType.newInstance();
         } catch (Exception e) {
-            throw new XliteException("Could not instantiate collection " + targetType.getName() + ". ", e);
-        } 
+            throw new XliteException("Could not instantiate Map " + targetType.getName() + ". ", e);
+        }
+    }
+
+    /**
+     * Assigns a value to the Field.
+     *
+     * @param object       Instance of an Object that contains the Field.
+     * @param elementValue Value to be set.
+     */
+    private void setValue(Object object, String elementValue) {
+        // value is empty?
+        if (elementValue.length() == 0) {
+
+            // default value is used
+            if (defaultValue != null && defaultValue.length() != 0) {
+                targetField.setValue(object, defaultValue);
+            }
+        } else {
+            Object value = valueConverter.fromValue(elementValue, format);
+            targetField.setValue(object, value);
+        }
+    }
+
+    /**
+     * Reads a value from a Field.
+     *
+     * @param object Instance of an Object that contains the Field.
+     * @return
+     */
+    private String getValue(Object object) {
+        Object targetObject = targetField.getValue(object);
+        if (targetObject == null) {
+            // use default value if defined
+            return defaultObject != null ? valueConverter.toValue(defaultObject, format) : null;
+        } else {
+            return valueConverter.toValue(targetObject, format);
+        }
     }
 
     private Class<? extends Map> getConcreteMapType(Class targetType) {

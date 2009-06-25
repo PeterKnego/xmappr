@@ -11,4 +11,8 @@ public class XliteConfigurationException extends XliteException {
     public XliteConfigurationException(String message) {
         super(message);
     }
+
+    public XliteConfigurationException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

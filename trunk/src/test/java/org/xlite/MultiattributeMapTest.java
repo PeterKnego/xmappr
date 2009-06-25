@@ -36,15 +36,10 @@ public class MultiattributeMapTest {
 
         Assert.assertEquals(one.attrs.get(new QName("a")), "abc");
         Assert.assertEquals(one.attrs.get(new QName("b")), 123);
-        Assert.assertEquals(one.attrs.get(new QName("c")),"mama");
-        one.attrs.put(new QName("d2"),"daddy2");   // this one is mapped to wildcard attribute "*"
-        one.attrs2.put(new QName("h"),"hhh");
-        one.attrs2.put(new QName("x"),"xxx");  // this one is not mapped and will be ignored
-        for (Object key : one.attrs.keySet()) {
-            QName qn = (QName) key;
-            System.out.print(one.attrs.get(key).getClass());
-            System.out.println("  "+qn.getLocalPart()+"="+one.attrs.get(key));
-        }
+        Assert.assertEquals(one.attrs.get(new QName("c")), "mama");
+        one.attrs.put("d2", "daddy2");   // this one is mapped to wildcard attribute "*"
+        one.attrs2.put(new QName("h"), "hhh");
+        one.attrs2.put(new QName("x"), "xxx");  // this one is not mapped and will be ignored
 
         // writing back to XML
         StringWriter sw = new StringWriter();
