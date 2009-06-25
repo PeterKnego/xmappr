@@ -17,7 +17,7 @@ public class AnnotationConfiguration implements Configuration {
 
     private List<ValueConverter> valueConverters;
 
-    private boolean initialized = false;
+    private volatile boolean initialized = false;
 
     private Class rootClass;
 
@@ -55,11 +55,15 @@ public class AnnotationConfiguration implements Configuration {
         return isPrettyPrint;
     }
 
-    public void setPrettyPrint(boolean prettyPrint) {
+    public synchronized void setPrettyPrint(boolean prettyPrint) {
+        if(initialized){
+             throw new XliteConfigurationException("Error: Trying to add configuration parameters after first use. " +
+                     "Once Xlite is used (.fromXml() or similar is called), configuration parameters can not be altered.");
+        }
         this.isPrettyPrint = prettyPrint;
     }
 
-    public void initialize() {
+    public synchronized void initialize() {
 
         // one-time initialization
         if (!initialized) {
@@ -116,10 +120,15 @@ public class AnnotationConfiguration implements Configuration {
         valueConverters.add(new BigDecimalConverter());        
         valueConverters.add(new BigIntegerConverter());        
         valueConverters.add(new ByteArrayConverter());        
+        valueConverters.add(new DateConverter());
 
     }
 
-    public void addNamespace(String namespace) {
+    public synchronized void addNamespace(String namespace) {
+        if(initialized){
+             throw new XliteConfigurationException("Error: Trying to add configuration parameters after first use. " +
+                     "Once Xlite is used (.fromXml() or similar is called), configuration parameters can not be altered.");
+        }
         mappingContext.addNamespace(namespace);
     }
 
