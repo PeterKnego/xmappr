@@ -83,7 +83,7 @@ public class BasicConvertersTest {
         // since bool is reference type (Boolean) it will be ommited from output
         primitives.bool = null;
         primitives.boolNull = null;
-        
+
         // writing back to XML
         StringWriter sw = new StringWriter();
         xf.toXML(primitives, sw);

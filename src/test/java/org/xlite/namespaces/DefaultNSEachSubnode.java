@@ -12,22 +12,23 @@ import org.xlite.*;
 
 /**
  * Test where each subnode defines its default namespace
+ *
  * @author peter
  */
 public class DefaultNSEachSubnode {
 
-       private static String xml =
-               "<aaa >\n" +
-               "  <bbbb xmlns = \"lowercase\" >\n" +
-               "    <cccc />\n" +
-               "  </bbbb>\n" +
-               "  <BBB xmlns = \"uppercase\" >\n" +
-               "    <CCC />\n" +
-               "  </BBB>\n" +
-               "  <x111 xmlns = \"xnumber\" >\n" +
-               "    <x222 />\n" +
-               "  </x111>\n" +
-               "</aaa>";
+    private static String xml =
+            "<aaa >\n" +
+                    "  <bbbb xmlns = \"lowercase\" >\n" +
+                    "    <cccc />\n" +
+                    "  </bbbb>\n" +
+                    "  <BBB xmlns = \"uppercase\" >\n" +
+                    "    <CCC />\n" +
+                    "  </BBB>\n" +
+                    "  <x111 xmlns = \"xnumber\" >\n" +
+                    "    <x222 />\n" +
+                    "  </x111>\n" +
+                    "</aaa>";
 
     @org.testng.annotations.Test
     public void test() throws IOException, SAXException {
@@ -41,7 +42,7 @@ public class DefaultNSEachSubnode {
         Assert.assertTrue(a.node_BBB.node_CCC != null);
         Assert.assertTrue(a.node_x111.node_x222 != null);
 
-                // writing back to XML
+        // writing back to XML
         StringWriter sw = new StringWriter();
         xlite.toXML(a, sw);
         System.out.println(xml);

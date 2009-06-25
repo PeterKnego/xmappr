@@ -1,6 +1,5 @@
 package org.xlite;
 
-import org.testng.annotations.ExpectedExceptions;
 import org.testng.Assert;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.custommonkey.xmlunit.XMLAssert;
@@ -33,7 +32,7 @@ public class BigDecimalConverterTest {
 
         Test test = (Test) xlite.fromXML(reader);
 
-            // writing back to XML
+        // writing back to XML
         StringWriter sw = new StringWriter();
         xlite.toXML(test, sw);
         String ssw = sw.toString();
