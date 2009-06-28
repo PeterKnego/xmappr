@@ -8,7 +8,7 @@ import org.xlite.*;
 //todo Write javadoc
 
 /**
- * This is a default ElementConverter that tries to convert any class by inspecting it's.
+ * This is a default ElementConverter that tries to convert any class by inspecting Java it's annotations.
  * User: peter
  * Date: Feb 28, 2008
  * Time: 10:19:19 PM
@@ -82,14 +82,14 @@ public class AnnotatedClassConverter implements ElementConverter {
             // find the attribute mapper
             AttributeMapper attrMapper = attributeMappers.get(attrQName);
 
-            if (attrValue.length() != 0) {
+//            if (attrValue.length() != 0) {
                 // if mapper for this attribute is defined, use it to setValue field to attribute value
                 if (attrMapper != null) {
                     attrMapper.setValue(attrQName, currentObject, attrValue);
                 } else if (attributeCatcher != null) { // if there is a Mapper defined thet catches any attribute name
                     attributeCatcher.setValue(attrQName, currentObject, attrValue);
                 }
-            }
+//            }
 //            System.out.println("ATTR: " + attrQName);
         }
 
@@ -175,7 +175,7 @@ public class AnnotatedClassConverter implements ElementConverter {
 
 
         // write element's value
-        if (textMapper != null && object != null && !textMapper.isIntermixed()) {
+        if (textMapper != null && !textMapper.isIntermixed()) {
             writer.addText(textMapper.getValue(object));
         }
 
