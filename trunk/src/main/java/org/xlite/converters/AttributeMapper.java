@@ -18,7 +18,6 @@ public class AttributeMapper {
     private final FieldAccessor targetField;
     private final ValueConverter valueConverter;
 
-    //todo Are default values used on the attributes?
     private final String defaultValue;
     private Object defaultObject;
     private final String format;
@@ -85,20 +84,20 @@ public class AttributeMapper {
     /**
      * Assigns a value to the Field.
      *
-     * @param object       Instance of an Object that contains the Field.
+     * @param target       Instance of an Object that contains the Field.
      * @param elementValue Value to be set.
      */
-    private void setValue(Object object, String elementValue) {
+    private void setValue(Object target, String elementValue) {
         // value is empty?
         if (elementValue.length() == 0) {
 
             // default value is used
-            if (defaultValue != null && defaultValue.length() != 0) {
-                targetField.setValue(object, defaultValue);
+            if (defaultObject != null) {
+                targetField.setValue(target, defaultObject);
             }
         } else {
             Object value = valueConverter.fromValue(elementValue, format);
-            targetField.setValue(object, value);
+            targetField.setValue(target, value);
         }
     }
 
@@ -110,13 +109,19 @@ public class AttributeMapper {
      */
     private String getValue(Object object) {
         Object targetObject = targetField.getValue(object);
-        if (targetObject == null) {
-            // use default value if defined
-            return defaultObject != null ? valueConverter.toValue(defaultObject, format) : null;
+
+        // null target object results in no output
+        if (targetObject == null) return null;
+
+        // use default value if defined and equal to target object
+        if (defaultObject != null && defaultObject.equals(targetObject)) {
+            return "";
         } else {
             return valueConverter.toValue(targetObject, format);
         }
+
     }
+
 
     private Class<? extends Map> getConcreteMapType(Class targetType) {
         if (targetType == Map.class) {

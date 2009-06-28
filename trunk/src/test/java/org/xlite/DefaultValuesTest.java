@@ -1,3 +1,5 @@
+/* Copyright */
+
 package org.xlite;
 
 import org.custommonkey.xmlunit.XMLAssert;
@@ -17,43 +19,59 @@ import java.io.StringWriter;
  */
 public class DefaultValuesTest {
 
-    private static String xml = "<root>" +
+    //todo Default values for attributes?
+    private static String inXml = "<root attr='' >" +
             "<a>text1</a>" +
+            "<b/>" +
+            "</root>";
+
+    private static String outXml = "<root attr='' >" +
             "<b/>" +
             "<c></c>" +
             "</root>";
 
+
     @org.testng.annotations.Test
     public void test() throws IOException, SAXException {
 
-        StringReader reader = new StringReader(xml);
+        StringReader reader = new StringReader(inXml);
         Configuration conf = new AnnotationConfiguration(Root.class, "root");
         conf.setPrettyPrint(false);
         Xlite xlite = new Xlite(conf);
 
         Root root = (Root) xlite.fromXML(reader);
 
+        // check values
+        Assert.assertEquals(root.a.text, "text1");
+        Assert.assertEquals(root.b, 2);
+
+        // change value to null - this is going to omit the element from output
+        root.a = null;
+        // 3 is a default value so this is going to produce an empty element
+        root.c = 3;
+
         // writing back to XML
         StringWriter sw = new StringWriter();
         xlite.toXML(root, sw);
         String ssw = sw.toString();
         System.out.println("");
-        System.out.println(xml);
+        System.out.println(outXml);
         System.out.println("");
         System.out.println(ssw);
 
-        Assert.assertEquals(root.a.text, "text1");
-        Assert.assertEquals(root.b, 0);
-        Assert.assertEquals(root.c, new Integer(3));
         XMLUnit.setIgnoreWhitespace(true);
-        XMLAssert.assertXMLEqual(xml, ssw);
+        XMLAssert.assertXMLEqual(outXml, ssw);
     }
 
     public static class Root {
+
+        @XMLattribute(defaultValue = "5")
+        public int attr;
+
         @XMLelement
         public A a;
 
-        @XMLelement(defaultValue = "0")
+        @XMLelement(defaultValue = "2")
         public int b;
 
         @XMLelement(defaultValue = "3")
