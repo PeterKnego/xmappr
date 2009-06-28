@@ -18,7 +18,6 @@ public class AttributeMapper {
     private final FieldAccessor targetField;
     private final ValueConverter valueConverter;
 
-    private final String defaultValue;
     private Object defaultObject;
     private final String format;
     private final boolean isMap;
@@ -26,7 +25,6 @@ public class AttributeMapper {
     public AttributeMapper(Field targetField, ValueConverter valueConverter, String defaultValue, String format) {
         this.targetField = new FieldAccessor(targetField);
         this.valueConverter = valueConverter;
-        this.defaultValue = defaultValue;
         if (defaultValue != null) {
             this.defaultObject = valueConverter.fromValue(defaultValue, format);
         }
@@ -38,7 +36,7 @@ public class AttributeMapper {
         FieldAccessor targetField = this.targetField;
         // is it a Map?
         if (isMap) {
-            Map<QName, Object> targetMap = (Map<QName, Object>) targetField.getValue(object);
+            Map targetMap = (Map) targetField.getValue(object);
             if (targetMap == null) {
                 targetMap = initializeMap(targetField.getType());
                 targetField.setValue(object, targetMap);
@@ -49,14 +47,14 @@ public class AttributeMapper {
         }
     }
 
-    public String getValue(Object attributeName, Object object) {
+    public String getValue(Object attributeName, Object holder) {
         FieldAccessor targetField = this.targetField;
         // is it a Map?
         if (isMap) {
-            Map<QName, String> target = (Map<QName, String>) targetField.getValue(object);
+            Map target = (Map) targetField.getValue(holder);
             return valueConverter.toValue(target.get(attributeName), format);
         } else {
-            return getValue(object);
+            return getValue(holder);
         }
     }
 
@@ -68,7 +66,7 @@ public class AttributeMapper {
         return targetField.getValue(parent);
     }
 
-    private Map<QName, Object> initializeMap(Class targetType) {
+    private Map<QName, Object> initializeMap(Class<? extends Map> targetType) {
         // is target class a Collection?
         if (!Map.class.isAssignableFrom(targetType)) {
             throw new XliteException("Error: Target class " + targetType.getName() + " can not be cast to java.util.Map!");
@@ -81,23 +79,30 @@ public class AttributeMapper {
         }
     }
 
+    private Class<? extends Map> getConcreteMapType(Class<? extends Map> targetType) {
+        if (targetType == Map.class) {
+            return LinkedHashMap.class;
+        }
+        return targetType;
+    }
+
     /**
      * Assigns a value to the Field.
      *
-     * @param target       Instance of an Object that contains the Field.
+     * @param holder       Instance of an Object that contains the Field.
      * @param elementValue Value to be set.
      */
-    private void setValue(Object target, String elementValue) {
+    private void setValue(Object holder, String elementValue) {
         // value is empty?
         if (elementValue.length() == 0) {
 
             // default value is used
             if (defaultObject != null) {
-                targetField.setValue(target, defaultObject);
+                targetField.setValue(holder, defaultObject);
             }
         } else {
             Object value = valueConverter.fromValue(elementValue, format);
-            targetField.setValue(target, value);
+            targetField.setValue(holder, value);
         }
     }
 
@@ -123,10 +128,4 @@ public class AttributeMapper {
     }
 
 
-    private Class<? extends Map> getConcreteMapType(Class targetType) {
-        if (targetType == Map.class) {
-            return LinkedHashMap.class;
-        }
-        return targetType;
-    }
 }
