@@ -15,10 +15,10 @@ public class ByteArrayConverter extends ValueConverter {
     }
 
     public Object fromValue(String value, String format) {
-        return Base64new.decode(value);
+        return Base64.decode(value);
     }
 
     public String toValue(Object object, String format) {
-        return String.valueOf(Base64new.encode((byte[]) object));
+        return String.valueOf(Base64.encode((byte[]) object));
     }
 }
