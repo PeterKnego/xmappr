@@ -1,3 +1,9 @@
+/*
+ * This software is released under the BSD license. Full license available at http://www.xlite.org/license/
+ *
+ * Copyright (c) 2008, 2009, Peter Knego & Xlite contributors
+ * All rights reserved.
+ */
 package org.xlite.namespaces;
 
 import org.custommonkey.xmlunit.XMLAssert;
@@ -12,8 +18,6 @@ import java.io.StringWriter;
 
 /**
  * Test where all elements belongs to the same namespace although different prefixes are used
- *
- * @author peter
  */
 public class DifferentPrefixesSameNsTest {
 

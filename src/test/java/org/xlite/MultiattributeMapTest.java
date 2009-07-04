@@ -1,3 +1,9 @@
+/*
+ * This software is released under the BSD license. Full license available at http://www.xlite.org/license/
+ *
+ * Copyright (c) 2008, 2009, Peter Knego & Xlite contributors
+ * All rights reserved.
+ */
 package org.xlite;
 
 import org.xml.sax.SAXException;
@@ -13,13 +19,6 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
-/**
- * Created by IntelliJ IDEA.
- * User: peter
- * Date: Apr 20, 2009
- * Time: 11:31:56 PM
- * To change this template use File | Settings | File Templates.
- */
 public class MultiattributeMapTest {
     private static String in = "<root a='abc' b='123' c='mama' d='daddy' d1='daddy1' e='eee' f='555' g='ggg' />";
     private static String out = "<root a='abc' b='123' c='mama' d='daddy' d1='daddy1' d2='daddy2' e='eee' f='555' g='ggg' h='hhh' />";

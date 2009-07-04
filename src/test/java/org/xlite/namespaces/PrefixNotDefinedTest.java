@@ -1,3 +1,9 @@
+/*
+ * This software is released under the BSD license. Full license available at http://www.xlite.org/license/
+ *
+ * Copyright (c) 2008, 2009, Peter Knego & Xlite contributors
+ * All rights reserved.
+ */
 package org.xlite.namespaces;
 
 import org.testng.annotations.ExpectedExceptions;
@@ -5,13 +11,6 @@ import org.xlite.*;
 
 import java.io.StringReader;
 
-/**
- * Created by IntelliJ IDEA.
- * User: peter
- * Date: Jun 14, 2009
- * Time: 12:02:21 AM
- * To change this template use File | Settings | File Templates.
- */
 public class PrefixNotDefinedTest {
     private static String inXml = "" +
             "<test xmlns:x='someNS'>" +

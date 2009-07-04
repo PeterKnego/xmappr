@@ -1,3 +1,9 @@
+/*
+ * This software is released under the BSD license. Full license available at http://www.xlite.org/license/
+ *
+ * Copyright (c) 2008, 2009, Peter Knego & Xlite contributors
+ * All rights reserved.
+ */
 package org.xlite.namespaces;
 
 import java.io.StringReader;
@@ -10,9 +16,6 @@ import org.custommonkey.xmlunit.XMLAssert;
 import org.xml.sax.SAXException;
 import org.xlite.*;
 
-/**
- * @author peter
- */
 public class NamespaceScopeTest {
 
     private static String xml = "" +

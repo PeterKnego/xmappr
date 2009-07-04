@@ -1,3 +1,9 @@
+/*
+ * This software is released under the BSD license. Full license available at http://www.xlite.org/license/
+ *
+ * Copyright (c) 2008, 2009, Peter Knego & Xlite contributors
+ * All rights reserved.
+ */
 package org.xlite.namespaces;
 
 import org.custommonkey.xmlunit.XMLAssert;
@@ -10,9 +16,6 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 
-/**
- * @author peter
- */
 public class AttributeNsTest {
 
     private static String xml =

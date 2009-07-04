@@ -1,3 +1,9 @@
+/*
+ * This software is released under the BSD license. Full license available at http://www.xlite.org/license/
+ *
+ * Copyright (c) 2008, 2009, Peter Knego & Xlite contributors
+ * All rights reserved.
+ */
 package org.xlite.namespaces;
 
 import java.io.StringReader;
@@ -12,8 +18,6 @@ import org.xlite.*;
 
 /**
  * Test where xml elements belong to different namespaces although they have the same prefixes.
- *
- * @author peter
  */
 public class DifferentNsSamePrefixesTest {
 

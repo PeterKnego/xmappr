@@ -1,15 +1,14 @@
+/*
+ * This software is released under the BSD license. Full license available at http://www.xlite.org/license/
+ *
+ * Copyright (c) 2008, 2009, Peter Knego & Xlite contributors
+ * All rights reserved.
+ */
 package org.xlite.converters;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
 
-/**
- * Created by IntelliJ IDEA.
- * User: peter
- * Date: May 6, 2009
- * Time: 12:03:14 AM
- * To change this template use File | Settings | File Templates.
- */
 public class TextMapper {
 
     private FieldAccessor accessor;

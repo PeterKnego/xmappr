@@ -1,3 +1,9 @@
+/*
+ * This software is released under the BSD license. Full license available at http://www.xlite.org/license/
+ *
+ * Copyright (c) 2008, 2009, Peter Knego & Xlite contributors
+ * All rights reserved.
+ */
 package org.xlite;
 
 import org.testng.Assert;
@@ -6,11 +12,6 @@ import org.xlite.Xlite;
 
 import java.io.StringReader;
 
-/**
- * User: peter
- * Date: Feb 26, 2008
- * Time: 11:50:33 PM
- */
 public class XliteTest {
 
     @Test

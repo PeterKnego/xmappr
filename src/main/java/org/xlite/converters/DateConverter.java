@@ -1,3 +1,9 @@
+/*
+ * This software is released under the BSD license. Full license available at http://www.xlite.org/license/
+ *
+ * Copyright (c) 2008, 2009, Peter Knego & Xlite contributors
+ * All rights reserved.
+ */
 package org.xlite.converters;
 
 import org.xlite.XliteException;
@@ -9,14 +15,6 @@ import java.text.ParseException;
 import java.util.Map;
 import java.util.HashMap;
 
-
-/**
- * Created by IntelliJ IDEA.
- * User: peter
- * Date: Jun 14, 2009
- * Time: 12:28:54 AM
- * To change this template use File | Settings | File Templates.
- */
 public class DateConverter extends ValueConverter {
 
     ThreadLocal threadLocal = new ThreadLocal();

@@ -1,3 +1,9 @@
+/*
+ * This software is released under the BSD license. Full license available at http://www.xlite.org/license/
+ *
+ * Copyright (c) 2008, 2009, Peter Knego & Xlite contributors
+ * All rights reserved.
+ */
 package org.xlite;
 
 import org.xml.sax.SAXException;
@@ -10,13 +16,6 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.List;
 
-/**
- * Created by IntelliJ IDEA.
- * User: peter
- * Date: Jun 4, 2009
- * Time: 4:29:25 PM
- * To change this template use File | Settings | File Templates.
- */
 public class DOMelementConverterTest {
 
     private static String xml = "<root>" +

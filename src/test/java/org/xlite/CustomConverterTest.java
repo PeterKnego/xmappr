@@ -1,3 +1,9 @@
+/*
+ * This software is released under the BSD license. Full license available at http://www.xlite.org/license/
+ *
+ * Copyright (c) 2008, 2009, Peter Knego & Xlite contributors
+ * All rights reserved.
+ */
 package org.xlite;
 
 import org.xlite.converters.ElementConverter;
@@ -8,9 +14,6 @@ import org.testng.annotations.ExpectedExceptions;
 import javax.xml.namespace.QName;
 import java.io.StringReader;
 
-/**
- * @author peter
- */
 public class CustomConverterTest {
 
     private static String xml = "" +
