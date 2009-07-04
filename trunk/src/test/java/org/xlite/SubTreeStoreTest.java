@@ -1,3 +1,9 @@
+/*
+ * This software is released under the BSD license. Full license available at http://www.xlite.org/license/
+ *
+ * Copyright (c) 2008, 2009, Peter Knego & Xlite contributors
+ * All rights reserved.
+ */
 package org.xlite;
 
 import org.custommonkey.xmlunit.XMLAssert;
@@ -14,11 +20,6 @@ import org.xlite.XMLattribute;
 import org.xlite.*;
 import org.xlite.XMLtext;
 
-/**
- * User: peter
- * Date: Feb 24, 2008
- * Time: 2:35:33 PM
- */
 public class SubTreeStoreTest {
 
 //    static String xml = "<a xmlns=\"ns1\" xmlns:s=\"ns2\">\n" +

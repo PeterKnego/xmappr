@@ -1,3 +1,9 @@
+/*
+ * This software is released under the BSD license. Full license available at http://www.xlite.org/license/
+ *
+ * Copyright (c) 2008, 2009, Peter Knego & Xlite contributors
+ * All rights reserved.
+ */
 package org.xlite;
 
 import javax.xml.namespace.QName;
@@ -6,12 +12,6 @@ import java.util.List;
 import java.util.HashMap;
 import java.util.ArrayList;
 
-/**
- * Created by IntelliJ IDEA.
- * User: peter
- * Date: Apr 16, 2009
- * Time: 9:55:54 PM
- */
 public class DOMelement {
 
     private QName name;

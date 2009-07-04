@@ -1,3 +1,9 @@
+/*
+ * This software is released under the BSD license. Full license available at http://www.xlite.org/license/
+ *
+ * Copyright (c) 2008, 2009, Peter Knego & Xlite contributors
+ * All rights reserved.
+ */
 package org.xlite.converters;
 
 import org.xlite.XMLSimpleReader;
@@ -10,12 +16,6 @@ import java.util.Map;
 import java.util.Iterator;
 import java.util.HashMap;
 
-/**
- * Created by IntelliJ IDEA.
- * User: peter
- * Date: Apr 16, 2009
- * Time: 9:54:04 PM
- */
 public class DOMelementConverter implements ElementConverter {
 
     public boolean canConvert(Class type) {

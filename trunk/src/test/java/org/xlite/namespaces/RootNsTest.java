@@ -1,3 +1,9 @@
+/*
+ * This software is released under the BSD license. Full license available at http://www.xlite.org/license/
+ *
+ * Copyright (c) 2008, 2009, Peter Knego & Xlite contributors
+ * All rights reserved.
+ */
 package org.xlite.namespaces;
 
 import org.testng.Assert;
@@ -10,11 +16,6 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.IOException;
 
-/**
- * Test where all namespaces are defined in root node
- *
- * @author peter
- */
 public class RootNsTest {
 
     private static String xml = "" +

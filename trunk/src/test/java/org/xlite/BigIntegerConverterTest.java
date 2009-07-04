@@ -1,3 +1,9 @@
+/*
+ * This software is released under the BSD license. Full license available at http://www.xlite.org/license/
+ *
+ * Copyright (c) 2008, 2009, Peter Knego & Xlite contributors
+ * All rights reserved.
+ */
 package org.xlite;
 
 import org.xml.sax.SAXException;
@@ -11,13 +17,6 @@ import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-/**
- * Created by IntelliJ IDEA.
- * User: peter
- * Date: Jun 12, 2009
- * Time: 11:47:35 PM
- * To change this template use File | Settings | File Templates.
- */
 public class BigIntegerConverterTest {
 
     private static String inXml = "" +

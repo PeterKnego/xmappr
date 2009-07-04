@@ -1,3 +1,9 @@
+/*
+ * This software is released under the BSD license. Full license available at http://www.xlite.org/license/
+ *
+ * Copyright (c) 2008, 2009, Peter Knego & Xlite contributors
+ * All rights reserved.
+ */
 package org.xlite;
 
 import org.xml.sax.SAXException;
@@ -15,13 +21,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
 
-/**
- * Created by IntelliJ IDEA.
- * User: peter
- * Date: Jun 22, 2009
- * Time: 6:41:38 PM
- * To change this template use File | Settings | File Templates.
- */
 public class DateConverterTest {
 
     private static String inXml = "" +
