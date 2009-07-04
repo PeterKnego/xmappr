@@ -29,7 +29,7 @@
 
 package org.xlite;
 
-import org.xlite.converters.Base64new;
+import org.xlite.converters.Base64;
 import org.testng.annotations.Test;
 import org.testng.Assert;
 
@@ -43,16 +43,16 @@ public class Base64Test {
 //        String str = "abcdefghijklmnopqrst";
 //        for (int i = 1; i < str.length(); i++) {
 //            String data = str.substring(0, i);
-//            String enc = Base64new.encode(data.getBytes("UTF-8"));
-//            String out = new String(Base64new.decode(enc), "UTF-8");
+//            String enc = Base64.encode(data.getBytes("UTF-8"));
+//            String out = new String(Base64.decode(enc), "UTF-8");
 //
 //            Assert.assertEquals(data, out);
 //        }
 
 //        String str2 = "abcdefghijklmnopqrsabcdefghijklmnopqrsabcdefghijklmnopqrsabcdefghijklmnopqrsabcdefghijklmnopqrstuvwz";
         String str2 = "aaaaaaaaa aaaaaaaaa aaaaaaaaa bbbbb";
-        String enc = Base64new.encode(str2.getBytes("UTF-8"));
-        String out2 = new String(Base64new.decode(enc), "UTF-8");
+        String enc = Base64.encode(str2.getBytes("UTF-8"));
+        String out2 = new String(Base64.decode(enc), "UTF-8");
 
         Assert.assertEquals(out2, str2);
     }
