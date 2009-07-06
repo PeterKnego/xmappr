@@ -38,11 +38,11 @@ public class AnnotationConfiguration implements Configuration {
     }
 
     public AnnotationConfiguration(Class rootClass, String nodeName, String namespaceURI) {
-                try {
+        try {
             Class cls = Class.forName("javax.xml.stream.XMLOutputFactory", false, this.getClass().getClassLoader());
         } catch (ClassNotFoundException e) {
             throw new XliteException("Error initalizing XMLOutputFactory. If you are using Xlite on a JDK 1.5, " +
-                    "then you must have XML stream library (javax.xml.stream) on your path. ",e);
+                    "then you must have XML stream library (javax.xml.stream) on your path. ", e);
         }
 
         setupValueConverters();
@@ -62,9 +62,9 @@ public class AnnotationConfiguration implements Configuration {
     }
 
     public synchronized void setPrettyPrint(boolean prettyPrint) {
-        if(initialized){
-             throw new XliteConfigurationException("Error: Trying to add configuration parameters after first use. " +
-                     "Once Xlite is used (.fromXml() or similar is called), configuration parameters can not be altered.");
+        if (initialized) {
+            throw new XliteConfigurationException("Error: Trying to add configuration parameters after first use. " +
+                    "Once Xlite is used (.fromXml() or similar is called), configuration parameters can not be altered.");
         }
         this.isPrettyPrint = prettyPrint;
     }
@@ -123,17 +123,17 @@ public class AnnotationConfiguration implements Configuration {
         valueConverters.add(new BooleanConverter());
         valueConverters.add(new ByteConverter());
         valueConverters.add(new CharConverter());
-        valueConverters.add(new BigDecimalConverter());        
-        valueConverters.add(new BigIntegerConverter());        
-        valueConverters.add(new ByteArrayConverter());        
+        valueConverters.add(new BigDecimalConverter());
+        valueConverters.add(new BigIntegerConverter());
+        valueConverters.add(new ByteArrayConverter());
         valueConverters.add(new DateConverter());
 
     }
 
     public synchronized void addNamespace(String namespace) {
-        if(initialized){
-             throw new XliteConfigurationException("Error: Trying to add configuration parameters after first use. " +
-                     "Once Xlite is used (.fromXml() or similar is called), configuration parameters can not be altered.");
+        if (initialized) {
+            throw new XliteConfigurationException("Error: Trying to add configuration parameters after first use. " +
+                    "Once Xlite is used (.fromXml() or similar is called), configuration parameters can not be altered.");
         }
         mappingContext.addNamespace(namespace);
     }
