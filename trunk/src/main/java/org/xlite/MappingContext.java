@@ -20,8 +20,8 @@ import java.util.ArrayList;
  */
 public class MappingContext {
 
-    public List<ElementConverter> elementConverters;
-    public List<ElementConverter> elementConverterCache = new ArrayList<ElementConverter>();
+    private List<ElementConverter> elementConverters;
+    private List<ElementConverter> elementConverterCache = new ArrayList<ElementConverter>();
     private List<ValueConverter> valueConverters;
     private AnnotationProcessor annotationProcessor;
     private NsContext predefinedNamespaces = new NsContext();
@@ -70,11 +70,14 @@ public class MappingContext {
      * Finds the appropriate ElementConverter for the given Class among the registered ElementConverters. If none
      * is found, an instance of AnnotatedClassConverter is returned.
      *
+     * This method can change the internal state of MappingContext, so it needs to be synchronized.
+     *
      * @param type
      * @return
      */
-    public ElementConverter lookupElementConverter(Class type) {
+    public synchronized ElementConverter lookupElementConverter(Class type) {
 
+        // lookup in preconfigured converters
         for (ElementConverter elementConverter : elementConverters) {
             if (elementConverter.canConvert(type)) {
                 return elementConverter;

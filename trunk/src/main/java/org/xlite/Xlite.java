@@ -10,24 +10,22 @@ import javax.xml.stream.*;
 import java.io.Reader;
 import java.io.Writer;
 
-/**
- * User: peter
- * Date: Feb 25, 2008
- * Time: 11:48:02 AM
- */
 public class Xlite {
 
-    private Configuration configuration;
+    private final Configuration configuration;
 
-    private XMLInputFactory xmlInputFactory;
-    private XMLOutputFactory xmlOutputFactory;
+    private final XMLInputFactory xmlInputFactory;
+    private final XMLOutputFactory xmlOutputFactory;
 
     public Xlite(Configuration configuration) {
         this.configuration = configuration;
+        this.xmlInputFactory = XMLInputFactory.newInstance();
+        this.xmlOutputFactory = XMLOutputFactory.newInstance();
+        this.xmlOutputFactory.setProperty("javax.xml.stream.isRepairingNamespaces", true);
+        this.configuration.initialize();
     }
 
     public Object fromXML(Reader reader) {
-        configuration.initialize();
 
         XMLSimpleReader simpleReader = new XMLSimpleReader(getXmlStreamReader(reader), false);
 
@@ -35,7 +33,6 @@ public class Xlite {
     }
 
     public Result fromXMLwithUnknown(Reader reader) {
-        configuration.initialize();
 
         XMLSimpleReader simpleReader = new XMLSimpleReader(getXmlStreamReader(reader), true);
 
@@ -43,25 +40,17 @@ public class Xlite {
         return new Result(object, simpleReader.getObjectStore());
     }
 
-    private XMLStreamReader getXmlStreamReader(Reader reader) {
+    private synchronized XMLStreamReader getXmlStreamReader(Reader reader) {
         XMLStreamReader xmlreader;
         try {
-            xmlreader = getXmlInputFactory().createXMLStreamReader(reader);
+            xmlreader = xmlInputFactory.createXMLStreamReader(reader);
         } catch (XMLStreamException e) {
             throw new XliteException("Error initalizing XMLStreamReader", e);
         }
         return xmlreader;
     }
 
-    private synchronized XMLInputFactory getXmlInputFactory() {
-        if (xmlInputFactory == null) {
-            xmlInputFactory = XMLInputFactory.newInstance();
-        }
-        return xmlInputFactory;
-    }
-
     public void toXML(Object source, Writer writer) {
-        configuration.initialize();
 
         XMLStreamWriter parser = getXmlStreamWriter(writer);
         XMLSimpleWriter simpleWriter = new XMLSimpleWriter(parser, new XmlStreamSettings(), configuration.isPrettyPrint());
@@ -69,24 +58,15 @@ public class Xlite {
         configuration.getRootElementMapper().toXML(source, simpleWriter);
     }
 
-    private XMLStreamWriter getXmlStreamWriter(Writer writer) {
+    private synchronized XMLStreamWriter getXmlStreamWriter(Writer writer) {
         try {
-            return getXmlOutputFactory().createXMLStreamWriter(writer);
+            return xmlOutputFactory.createXMLStreamWriter(writer);
         } catch (XMLStreamException e) {
             throw new XliteException("Error initalizing XMLStreamWriter", e);
         }
     }
 
-    private synchronized XMLOutputFactory getXmlOutputFactory() {
-        if (xmlOutputFactory == null) {
-            xmlOutputFactory = XMLOutputFactory.newInstance();
-            xmlOutputFactory.setProperty("javax.xml.stream.isRepairingNamespaces", true);
-        }
-        return xmlOutputFactory;
-    }
-
     public void toXML(Object source, ObjectStore store, Writer writer) {
-        configuration.initialize();
 
         XMLStreamWriter parser = getXmlStreamWriter(writer);
         XMLSimpleWriter simpleWriter = new XMLSimpleWriter(parser, store, new XmlStreamSettings(), configuration.isPrettyPrint());
