@@ -19,10 +19,6 @@ public class AnnotationConfiguration implements Configuration {
 
     private MappingContext mappingContext;
 
-    private List<ElementConverter> elementConverters;
-
-    private List<ValueConverter> valueConverters;
-
     private volatile boolean initialized = false;
 
     private Class rootClass;
@@ -39,14 +35,17 @@ public class AnnotationConfiguration implements Configuration {
 
     public AnnotationConfiguration(Class rootClass, String nodeName, String namespaceURI) {
         try {
-            Class cls = Class.forName("javax.xml.stream.XMLOutputFactory", false, this.getClass().getClassLoader());
+            Class.forName("javax.xml.stream.XMLOutputFactory", false, this.getClass().getClassLoader());
         } catch (ClassNotFoundException e) {
-            throw new XliteException("Error initalizing XMLOutputFactory. If you are using Xlite on a JDK 1.5, " +
-                    "then you must have XML stream library (javax.xml.stream) on your path. ", e);
+            throw new XliteException("Error initializing XMLOutputFactory. If you are using Xlite on a JDK 1.5, " +
+                    "then you must have XML stream library (javax.xml.stream) in your path. ", e);
         }
 
-        setupValueConverters();
-        setupElementConverters();
+        // setup converters
+        List<ElementConverter> elementConverters = null;
+        List<ValueConverter> valueConverters = null;
+        setupConverters(elementConverters, valueConverters);
+
         this.rootClass = rootClass;
         this.rootElementName = nodeName;
         this.rootElementNS = namespaceURI;
@@ -100,18 +99,9 @@ public class AnnotationConfiguration implements Configuration {
         }
     }
 
-    private void setupElementConverters() {
-        elementConverters = new ArrayList<ElementConverter>();
-        elementConverters.add(new CollectionConverter());
-        elementConverters.add(new DOMelementConverter());
+    private void setupConverters(List<ElementConverter> elementConverters, List<ValueConverter> valueConverters) {
 
-        // wraps every ValueConverter so that it can be used as a ElementConverter
-        for (ValueConverter valueConverter : valueConverters) {
-            elementConverters.add(new ValueConverterWrapper(valueConverter));
-        }
-    }
-
-    private void setupValueConverters() {
+        // setup ValueConverters
         valueConverters = new ArrayList<ValueConverter>();
 
         valueConverters.add(new StringConverter());
@@ -127,6 +117,20 @@ public class AnnotationConfiguration implements Configuration {
         valueConverters.add(new BigIntegerConverter());
         valueConverters.add(new ByteArrayConverter());
         valueConverters.add(new DateConverter());
+
+        // setup ElementConverters
+        elementConverters = new ArrayList<ElementConverter>();
+        elementConverters.add(new CollectionConverter());
+        elementConverters.add(new DOMelementConverter());
+
+        // wraps every ValueConverter so that it can be used as a ElementConverter
+        for (ValueConverter valueConverter : valueConverters) {
+            elementConverters.add(new ValueConverterWrapper(valueConverter));
+        }
+    }
+
+    private void setupValueConverters(List<ValueConverter> valueConverters) {
+
 
     }
 
