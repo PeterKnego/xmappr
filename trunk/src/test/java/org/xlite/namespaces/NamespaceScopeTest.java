@@ -19,7 +19,7 @@ import org.xlite.*;
 public class NamespaceScopeTest {
 
     private static String xml = "" +
-            "<aaa xmlns:lower = \"lowercase\" >\n" +
+            "<lower:aaa xmlns:lower = \"lowercase\" >\n" +
             "  <lower:BBB xmlns:lower = \"uppercase\" >\n" +
             "    <lower:x111 />\n" +
             "    <cccc xmlns:lower = \"xnumber\" >\n" +
@@ -27,12 +27,13 @@ public class NamespaceScopeTest {
             "    </cccc>\n" +
             "  </lower:BBB>\n" +
             "  <lower:x111 />\n" +
-            "</aaa>";
+            "</lower:aaa>";
 
     @org.testng.annotations.Test
     public void test() throws IOException, SAXException {
         StringReader reader = new StringReader(xml);
-        Configuration conf = new AnnotationConfiguration(aaa.class, "aaa");
+        Configuration conf = new AnnotationConfiguration(aaa.class, "l:aaa");
+//        conf.addNamespace("l=lowercase");
 
         Xlite xlite = new Xlite(conf);
         aaa a = (aaa) xlite.fromXML(reader);
@@ -44,7 +45,7 @@ public class NamespaceScopeTest {
         // writing back to XML
         StringWriter sw = new StringWriter();
         xlite.toXML(a, sw);
-//        System.out.println(sw);
+        System.out.println(sw);
         XMLUnit.setIgnoreWhitespace(true);
         XMLAssert.assertXMLEqual(xml, sw.toString());
     }

@@ -25,15 +25,9 @@ public class AnnotationConfiguration implements Configuration {
 
     private String rootElementName;
 
-    private String rootElementNS = XMLConstants.NULL_NS_URI;
-
     private boolean isPrettyPrint = true;
 
     public AnnotationConfiguration(Class rootClass, String nodeName) {
-        this(rootClass, nodeName, null);
-    }
-
-    public AnnotationConfiguration(Class rootClass, String nodeName, String namespaceURI) {
         try {
             Class.forName("javax.xml.stream.XMLOutputFactory", false, this.getClass().getClassLoader());
         } catch (ClassNotFoundException e) {
@@ -47,7 +41,6 @@ public class AnnotationConfiguration implements Configuration {
 
         this.rootClass = rootClass;
         this.rootElementName = nodeName;
-        this.rootElementNS = namespaceURI;
         this.mappingContext = new MappingContext(elementConverters, valueConverters);
     }
 
@@ -90,9 +83,7 @@ public class AnnotationConfiguration implements Configuration {
             }
 
             // namespace  of root element is not defined
-            if (rootElementNS == null) {
-                rootElementNS = mappingContext.getPredefinedNamespaces().getNamespaceURI(rootElementPrefix);
-            }
+            String rootElementNS = mappingContext.getPredefinedNamespaces().getNamespaceURI(rootElementPrefix);
             this.rootElementMapper = new RootMapper(new QName(rootElementNS, rootElementLocalpart, rootElementPrefix), rootClass, mappingContext);
             initialized = true;
         }

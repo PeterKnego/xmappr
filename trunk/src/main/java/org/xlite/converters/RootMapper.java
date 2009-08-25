@@ -6,16 +6,13 @@
  */
 package org.xlite.converters;
 
-import org.xlite.XMLSimpleWriter;
-import org.xlite.XMLSimpleReader;
-
 import javax.xml.namespace.QName;
 
-import org.xlite.MappingContext;
-import org.xlite.XliteException;
+import org.xlite.*;
 
 /**
  * RootMapper sits at the top of the Mapper hierarchy
+ *
  * @author peter
  */
 public class RootMapper {
@@ -24,11 +21,19 @@ public class RootMapper {
     private MappingContext mappingContext;
     private ElementConverter elementConverter;
 
-
     public RootMapper(QName rootNodeName, Class rootClass, MappingContext mappingContext) {
         elementConverter = mappingContext.lookupElementConverter(rootClass);
-//        ElementMapper mapper = new ElementMapper(null, null, null, valueConverter, mappingContext);
-        this.rootNodeName = rootNodeName;
+
+       // check class namespaces of root element
+        if (rootNodeName.getNamespaceURI().length() == 0
+                && elementConverter instanceof AnnotatedClassConverter) {
+            NsContext classNS = ((AnnotatedClassConverter) elementConverter).getClassNamespaces();
+            this.rootNodeName = new QName(classNS.getNamespaceURI(rootNodeName.getPrefix()),
+                    rootNodeName.getLocalPart(),
+                    rootNodeName.getPrefix());
+        } else {
+            this.rootNodeName = rootNodeName;
+        }
         this.mappingContext = mappingContext;
     }
 
