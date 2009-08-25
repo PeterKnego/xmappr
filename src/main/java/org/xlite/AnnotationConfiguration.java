@@ -42,9 +42,8 @@ public class AnnotationConfiguration implements Configuration {
         }
 
         // setup converters
-        List<ElementConverter> elementConverters = null;
-        List<ValueConverter> valueConverters = null;
-        setupConverters(elementConverters, valueConverters);
+        List<ValueConverter> valueConverters = setupValueConverters();
+        List<ElementConverter> elementConverters = setupElementConverters(valueConverters);
 
         this.rootClass = rootClass;
         this.rootElementName = nodeName;
@@ -99,10 +98,22 @@ public class AnnotationConfiguration implements Configuration {
         }
     }
 
-    private void setupConverters(List<ElementConverter> elementConverters, List<ValueConverter> valueConverters) {
+    private List<ElementConverter> setupElementConverters(List<ValueConverter> valueConverters) {
 
-        // setup ValueConverters
-        valueConverters = new ArrayList<ValueConverter>();
+        List<ElementConverter> elementConverters = new ArrayList<ElementConverter>();
+        elementConverters.add(new CollectionConverter());
+        elementConverters.add(new DOMelementConverter());
+
+        // wraps every ValueConverter so that it can be used as a ElementConverter
+        for (ValueConverter valueConverter : valueConverters) {
+            elementConverters.add(new ValueConverterWrapper(valueConverter));
+        }
+        return elementConverters;
+    }
+
+    private List<ValueConverter> setupValueConverters() {
+
+        List<ValueConverter> valueConverters = new ArrayList<ValueConverter>();
 
         valueConverters.add(new StringConverter());
         valueConverters.add(new IntConverter());
@@ -118,20 +129,7 @@ public class AnnotationConfiguration implements Configuration {
         valueConverters.add(new ByteArrayConverter());
         valueConverters.add(new DateConverter());
 
-        // setup ElementConverters
-        elementConverters = new ArrayList<ElementConverter>();
-        elementConverters.add(new CollectionConverter());
-        elementConverters.add(new DOMelementConverter());
-
-        // wraps every ValueConverter so that it can be used as a ElementConverter
-        for (ValueConverter valueConverter : valueConverters) {
-            elementConverters.add(new ValueConverterWrapper(valueConverter));
-        }
-    }
-
-    private void setupValueConverters(List<ValueConverter> valueConverters) {
-
-
+        return valueConverters;
     }
 
     public synchronized void addNamespace(String namespace) {

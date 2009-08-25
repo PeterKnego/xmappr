@@ -7,37 +7,56 @@
 package org.xlite;
 
 import org.testng.annotations.ExpectedExceptions;
+import org.testng.Assert;
+import org.custommonkey.xmlunit.XMLUnit;
+import org.custommonkey.xmlunit.XMLAssert;
+import org.xml.sax.SAXException;
 
+import javax.xml.namespace.QName;
 import java.io.StringReader;
+import java.io.StringWriter;
+import java.io.IOException;
 
 public class LoopTest {
 
     private static String inXml = "" +
             "<test>" +
-            "<node></node>" +
-            "</test";
+            " <back>" +
+            "  <test>" +
+            "   <back>" +
+            "   </back>" +
+            "  </test>" +
+            " </back>" +
+            "</test>";
 
     @org.testng.annotations.Test
-    @ExpectedExceptions(XliteConfigurationException.class)
-    public void configurationLoopTest() {
+    public void configurationLoopTest() throws IOException, SAXException {
         StringReader reader = new StringReader(inXml);
         Configuration conf = new AnnotationConfiguration(Test.class, "test");
-        Xlite xf = new Xlite(conf);
+        conf.setPrettyPrint(true);
+        Xlite xlite = new Xlite(conf);
 
-        Test test = (Test) xf.fromXML(reader);
+        Test test = (Test) xlite.fromXML(reader);
+        Assert.assertNotNull(test.back);
 
+        // writing back to XML
+        StringWriter sw = new StringWriter();
+        xlite.toXML(test, sw);
+
+        XMLUnit.setIgnoreWhitespace(true);
+        XMLAssert.assertXMLEqual(inXml, sw.toString());
     }
 
     // classes Test and Back have a circular reference
 
-    private static class Test {
+    public static class Test {
         @XMLelement
-        public Back node;
+        public Back back;
     }
 
-    private static class Back {
+    public static class Back {
         @XMLelement
-        public Test node;
+        public Test test;
     }
 
 }

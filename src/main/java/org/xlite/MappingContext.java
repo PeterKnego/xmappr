@@ -26,7 +26,7 @@ public class MappingContext {
     private AnnotationProcessor annotationProcessor;
     private NsContext predefinedNamespaces = new NsContext();
 
-    private Stack<Class> treeWalker = new Stack<Class>();
+    private Stack<Class> classTreeWalker = new Stack<Class>();
 
     public MappingContext(List<ElementConverter> elementConverters, List<ValueConverter> valueConverters) {
         this.elementConverters = elementConverters;
@@ -69,7 +69,7 @@ public class MappingContext {
     /**
      * Finds the appropriate ElementConverter for the given Class among the registered ElementConverters. If none
      * is found, an instance of AnnotatedClassConverter is returned.
-     *
+     * <p/>
      * This method can change the internal state of MappingContext, so it needs to be synchronized.
      *
      * @param type
@@ -85,26 +85,29 @@ public class MappingContext {
         }
 
         // checking if this Class was already processed in this tree trunk = this means loop exists in annotated classes
-        if (treeWalker.contains(type)) {
-            throw new XliteConfigurationException("ERROR: Loop detected in annotated classes. Class being processed for the second time: " + type.getName());
-        }
-        treeWalker.push(type);
+//        if (classTreeWalker.contains(type)) {
+////            throw new XliteConfigurationException("ERROR: Loop detected in annotated classes. Class being processed for the second time: " + type.getName());
+//        }
+        classTreeWalker.push(type);
 
         // check cache for this EC
         ElementConverter ec = null;
         for (ElementConverter elementConverter : elementConverterCache) {
             if (elementConverter.canConvert(type)) {
                 ec = elementConverter;
+                break;
             }
         }
         // not found in cache?
         if (ec == null) {
             // process it
             ec = annotationProcessor.processClass(type);
-            // put it in cache
-            elementConverterCache.add(ec);
         }
-        treeWalker.pop();
+        classTreeWalker.pop();
         return ec;
+    }
+
+    public void addToElementConverterCache(ElementConverter elementConverter) {
+        elementConverterCache.add(elementConverter);
     }
 }
