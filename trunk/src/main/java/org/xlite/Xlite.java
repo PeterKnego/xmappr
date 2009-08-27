@@ -9,6 +9,8 @@ package org.xlite;
 import javax.xml.stream.*;
 import java.io.Reader;
 import java.io.Writer;
+import java.lang.reflect.Method;
+import java.lang.reflect.InvocationTargetException;
 
 public class Xlite {
 
@@ -18,16 +20,34 @@ public class Xlite {
     private final XMLOutputFactory xmlOutputFactory;
 
     public Xlite(Configuration configuration) {
+        XMLInputFactory xmlInputFactory1;
+        XMLOutputFactory xmlOutputFactory1;
         this.configuration = configuration;
-        this.xmlInputFactory = XMLInputFactory.newInstance();
-        this.xmlOutputFactory = XMLOutputFactory.newInstance();
+
+        try {
+            Class<?> clazz = Class.forName("com.ctc.wstx.stax.WstxInputFactory");
+            Method newInstanceMethod = clazz.getMethod("newInstance");
+            xmlInputFactory1 = (XMLInputFactory) newInstanceMethod.invoke(null);
+
+            Class<?> clazz2 = Class.forName("com.ctc.wstx.stax.WstxOutputFactory");
+            Method newInstanceMethod2 = clazz.getMethod("newInstance");
+            xmlOutputFactory1 = (XMLOutputFactory) newInstanceMethod2.invoke(null);
+
+        } catch (Exception e){
+            xmlInputFactory1 = XMLInputFactory.newInstance();
+            xmlOutputFactory1 = XMLOutputFactory.newInstance();            
+        }
+
+        this.xmlInputFactory = xmlInputFactory1;
+        this.xmlOutputFactory = xmlOutputFactory1;
         this.xmlOutputFactory.setProperty("javax.xml.stream.isRepairingNamespaces", true);
         this.configuration.initialize();
     }
 
     public Object fromXML(Reader reader) {
 
-        XMLSimpleReader simpleReader = new XMLSimpleReader(getXmlStreamReader(reader), false);
+        XMLStreamReader rdr = getXmlStreamReader(reader);
+        XMLSimpleReader simpleReader = new XMLSimpleReader(rdr, false);
 
         return configuration.getRootElementMapper().getRootObject(simpleReader);
     }

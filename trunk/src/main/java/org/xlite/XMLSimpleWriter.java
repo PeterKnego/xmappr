@@ -274,7 +274,7 @@ public class XMLSimpleWriter {
     }
 
     private void writePredefinedNamespaces() {
-        if (predefinedNamespaces.size()!=0) {
+        if (!predefinedNamespaces.isEmpty()) {
             for (Element ns : predefinedNamespaces) {
                 try {
                     writer.writeNamespace(ns.prefix, ns.nsURI);
