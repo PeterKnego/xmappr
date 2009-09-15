@@ -15,7 +15,7 @@ public class IntConverter extends ValueConverter {
         return type.equals(int.class) || Integer.class.isAssignableFrom(type);
     }
 
-    public Object fromValue(String xmlValue, String format) {
+    public Object fromValue(String xmlValue, String format, Class targetType) {
         return Integer.valueOf(xmlValue);
     }
 

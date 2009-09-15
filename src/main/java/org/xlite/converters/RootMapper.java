@@ -20,11 +20,13 @@ public class RootMapper {
     private QName rootNodeName;
     private MappingContext mappingContext;
     private ElementConverter elementConverter;
+    private Class rootClass;
 
     public RootMapper(QName rootNodeName, Class rootClass, MappingContext mappingContext) {
+        this.rootClass = rootClass;
         elementConverter = mappingContext.lookupElementConverter(rootClass);
 
-       // check class namespaces of root element
+        // check class namespaces of root element
         if (rootNodeName.getNamespaceURI().length() == 0
                 && elementConverter instanceof AnnotatedClassConverter) {
             NsContext classNS = ((AnnotatedClassConverter) elementConverter).getClassNamespaces();
@@ -38,10 +40,13 @@ public class RootMapper {
     }
 
     public Object getRootObject(XMLSimpleReader reader) {
-        if (reader.findFirstElement(rootNodeName)) {
-            return elementConverter.fromElement(reader, mappingContext, "", null);
+        QName firstElement = reader.getFirstName();
+        if (firstElement.equals(rootNodeName)) {
+            reader.moveDown();
+            return elementConverter.fromElement(reader, mappingContext, "", null, rootClass);
         } else {
-            throw new XliteException("Root node <" + rootNodeName + "> could not be found in XML data");
+            throw new XliteException("Error: wrong XML element name. Was expecting root element <" + rootNodeName +
+                    "> in input stream, but intead got <" + firstElement + ">.");
         }
     }
 
