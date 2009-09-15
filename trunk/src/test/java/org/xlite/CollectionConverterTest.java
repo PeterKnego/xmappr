@@ -18,7 +18,6 @@ import java.io.StringWriter;
 import java.io.IOException;
 import java.util.List;
 import java.util.HashMap;
-import java.util.Collection;
 import java.util.ArrayList;
 
 import org.xlite.Xlite;
@@ -95,7 +94,7 @@ public class CollectionConverterTest {
         XMLInputFactory of = XMLInputFactory.newInstance();
         XMLStreamReader xsr = of.createXMLStreamReader(new StringReader(""));
         XMLSimpleReader sr = new XMLSimpleReader(xsr, false);
-        cc.fromElement(sr, new MappingContext(null, null), "", null);
+        cc.fromElement(sr, new MappingContext(null, null), "", null, null);
 
     }
 

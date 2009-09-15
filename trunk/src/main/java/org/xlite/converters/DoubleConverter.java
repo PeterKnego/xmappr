@@ -15,7 +15,7 @@ public class DoubleConverter extends ValueConverter{
         return type.equals(double.class) || Double.class.isAssignableFrom(type);
     }
 
-    public Object fromValue(String value, String format) {
+    public Object fromValue(String value, String format, Class targetType) {
         return Double.valueOf(value);
     }
 

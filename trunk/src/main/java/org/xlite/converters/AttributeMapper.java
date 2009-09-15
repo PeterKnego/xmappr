@@ -15,17 +15,19 @@ import java.util.*;
 public class AttributeMapper {
 
     private final FieldAccessor targetField;
+    private final Class targetType;
     private final ValueConverter valueConverter;
 
     private Object defaultObject;
     private final String format;
     private final boolean isMap;
 
-    public AttributeMapper(Field targetField, ValueConverter valueConverter, String defaultValue, String format) {
+    public AttributeMapper(Field targetField, Class targetType, ValueConverter valueConverter, String defaultValue, String format) {
         this.targetField = new FieldAccessor(targetField);
+        this.targetType = targetType;
         this.valueConverter = valueConverter;
         if (defaultValue != null) {
-            this.defaultObject = valueConverter.fromValue(defaultValue, format);
+            this.defaultObject = valueConverter.fromValue(defaultValue, format, targetType);
         }
         this.format = format;
         this.isMap = Map.class.isAssignableFrom(targetField.getType());
@@ -40,17 +42,16 @@ public class AttributeMapper {
                 targetMap = initializeMap(targetField.getType());
                 targetField.setValue(object, targetMap);
             }
-            targetMap.put(attributeName, valueConverter.fromValue(elementValue, format));
+            targetMap.put(attributeName, valueConverter.fromValue(elementValue, format, targetType));
         } else {
             setValue(object, elementValue);
         }
     }
 
     public String getValue(Object attributeName, Object holder) {
-        FieldAccessor targetField = this.targetField;
         // is it a Map?
         if (isMap) {
-            Map target = (Map) targetField.getValue(holder);
+            Map target = (Map) this.targetField.getValue(holder);
             return valueConverter.toValue(target.get(attributeName), format);
         } else {
             return getValue(holder);
@@ -66,7 +67,7 @@ public class AttributeMapper {
     }
 
     private Map<QName, Object> initializeMap(Class<? extends Map> targetType) {
-        // is target class a Collection?
+        // is target class a Map?
         if (!Map.class.isAssignableFrom(targetType)) {
             throw new XliteException("Error: Target class " + targetType.getName() + " can not be cast to java.util.Map!");
         }
@@ -100,7 +101,7 @@ public class AttributeMapper {
                 targetField.setValue(holder, defaultObject);
             }
         } else {
-            Object value = valueConverter.fromValue(elementValue, format);
+            Object value = valueConverter.fromValue(elementValue, format, targetType);
             targetField.setValue(holder, value);
         }
     }

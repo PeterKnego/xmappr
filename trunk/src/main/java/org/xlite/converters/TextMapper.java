@@ -11,16 +11,26 @@ import java.util.Collection;
 
 public class TextMapper {
 
-    private FieldAccessor accessor;
+    private FieldAccessor targetField;
+    private Class targetType;
     private ValueConverter valueConverter;
     private CollectionConverting collectionConverter;
-    private Class targetType;
     private boolean isIntermixed;
     private String format;
 
-    public TextMapper(Field accessor, ValueConverter valueConverter, Class targetType,
+    //todo finish this javadoc
+    /**
+     * 
+     * @param targetField
+     * @param targetType
+     * @param valueConverter
+     * @param collectionConverter
+     * @param isIntermixed
+     * @param format
+     */
+    public TextMapper(Field targetField, Class targetType, ValueConverter valueConverter,
                       CollectionConverting collectionConverter, boolean isIntermixed, String format) {
-        this.accessor = new FieldAccessor(accessor);
+        this.targetField = new FieldAccessor(targetField);
         this.valueConverter = valueConverter;
         this.targetType = targetType;
         this.collectionConverter = collectionConverter;
@@ -30,7 +40,7 @@ public class TextMapper {
 
 
     public boolean isCollection() {
-        return Collection.class.isAssignableFrom(accessor.getType());
+        return Collection.class.isAssignableFrom(targetField.getType());
     }
 
     public boolean isIntermixed() {
@@ -50,14 +60,14 @@ public class TextMapper {
     public void setValue(Object object, String elementValue) {
         // is it a Collection?
         if (isCollection()) {
-            Collection collection = (Collection) accessor.getValue(object);
+            Collection collection = (Collection) targetField.getValue(object);
             if (collection == null) {
-                collection = collectionConverter.initializeCollection(accessor.getType());
-                accessor.setValue(object, collection);
+                collection = collectionConverter.initializeCollection(targetField.getType());
+                targetField.setValue(object, collection);
             }
-            collection.add(valueConverter.fromValue(elementValue, format));
+            collection.add(valueConverter.fromValue(elementValue, format, targetType));
         } else {
-            accessor.setValue(object, valueConverter.fromValue(elementValue, format));
+            targetField.setValue(object, valueConverter.fromValue(elementValue, format, targetType));
         }
     }
 
@@ -72,7 +82,7 @@ public class TextMapper {
         if (isCollection()) {
             return valueConverter.toValue(object, format);
         } else {
-            return valueConverter.toValue(accessor.getValue(object), format);
+            return valueConverter.toValue(targetField.getValue(object), format);
         }
     }
 

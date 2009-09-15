@@ -57,16 +57,6 @@ public class XMLSimpleReader {
         }
     }
 
-    /**
-     * Finds next START or END of a XML element.
-     * Accumulates the CHARACTER data for the current element.
-     *
-     * @return True if START, false if END.
-     */
-    private boolean nextElementBoundary() {
-        return nextElementBoundary(true);
-    }
-
     private boolean nextElementBoundary(boolean processEvents) {
 
         // checkAndReset the accumulated Text
@@ -137,7 +127,7 @@ public class XMLSimpleReader {
             }
             return false;
         }
-        nextElementBoundary();
+        nextElementBoundary(true);
         return true;
     }
 
@@ -148,18 +138,18 @@ public class XMLSimpleReader {
     public void moveUp() {
         if (reader.getEventType() == XMLStreamConstants.END_ELEMENT) {
             elementStack.pop();
-            nextElementBoundary();
+            nextElementBoundary(true);
             return;
         }
         int depth = 1;
         boolean continueLooping = true;
         while (continueLooping) {
-            if (nextElementBoundary()) {  // node START
+            if (nextElementBoundary(true)) {  // node START
                 depth++;
             } else {      // node END
                 if (depth-- == 0) {
                     continueLooping = false;
-                    nextElementBoundary();
+                    nextElementBoundary(true);
                 }
             }
         }
@@ -230,36 +220,47 @@ public class XMLSimpleReader {
         }
     }
 
-    public boolean findFirstElement() {
-        return findFirstElement((QName) null);
-    }
 
-    public boolean findFirstElement(String nodeName) {
-        return findFirstElement(new QName(nodeName));
-    }
+//    public boolean findFirstElement() {
+//        return findFirstElement((QName) null);
+//    }
+//
+//    public boolean findFirstElement(String nodeName) {
+//        return findFirstElement(new QName(nodeName));
+//    }
 
-    public boolean findFirstElement(QName qName) {
-        // handle empty argument
-        if (qName == null || qName.getLocalPart().equals("")) {
-            return nextElementBoundary(false);
+//    public boolean findFirstElement(QName qName) {
+//        // handle empty argument
+//        if (qName == null || qName.getLocalPart().equals("")) {
+//            return nextElementBoundary(false);
+//        }
+//        while (true) {
+//            if (nextElementBoundary(false)) {
+//                if (reader.getName().equals(qName)) {
+//                    moveDown();
+//                    return true;
+//                }
+//            } else {
+//                if (isEnd) {
+//                    return false;
+//                }
+//            }
+//        }
+//    }
+
+    public QName getFirstName() {
+        boolean bol = nextElementBoundary(false);
+        QName qName = reader.getName();
+        if (isEnd && qName == null) {
+            return null;
         }
-        while (true) {
-            if (nextElementBoundary(false)) {
-                if (reader.getName().equals(qName)) {
-                    moveDown();
-                    return true;
-                }
-            } else {
-                if (isEnd) {
-                    return false;
-                }
-            }
-        }
+//        moveDown();
+        return qName;
     }
 
     public void saveSubTree(Object reference) {
 
-        // restore only if objectStore is setValue
+        // save only if objectStore is set
         if (objectStore == null) return;
 
         if (eventCache == null) {

@@ -22,7 +22,7 @@ public class DOMelementConverter implements ElementConverter {
         return DOMelement.class.isAssignableFrom(type);
     }
 
-    public Object fromElement(XMLSimpleReader reader, MappingContext mappingContext, String defaultValue, String format) {
+    public Object fromElement(XMLSimpleReader reader, MappingContext mappingContext, String defaultValue, String format, Class targetType) {
         DOMelement element = new DOMelement();
         element.setName(reader.getName());
 
@@ -45,7 +45,7 @@ public class DOMelementConverter implements ElementConverter {
         while (reader.moveDown()) {
 
             // recursivelly call DOMelementConverter
-            element.appendElement((DOMelement) this.fromElement(reader, mappingContext, null, null));
+            element.appendElement((DOMelement) this.fromElement(reader, mappingContext, null, null, null));
 
             reader.moveUp();
 

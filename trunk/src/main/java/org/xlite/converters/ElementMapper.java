@@ -25,6 +25,7 @@ import java.util.Map;
 public class ElementMapper {
 
     private FieldAccessor targetField;
+    private Class targetType;
     private MappingContext mappingContext;
     private ElementConverter elementConverter;
 
@@ -43,6 +44,10 @@ public class ElementMapper {
         this.targetField = new FieldAccessor(targetField);
         this.mappingContext = mappingContext;
         this.collectionConverter = collectionConverter;
+    }
+
+    public void setTargetType(Class targetType) {
+        this.targetType = targetType;
     }
 
     public void setDefaultValue(String defaultValue) {
@@ -91,13 +96,13 @@ public class ElementMapper {
                     ". Collection contains element types that are not defined in @XMLelement annotation.");
         }
 
-        Object value = converter.fromElement(reader, mappingContext, defaultValue, format);
+        Object value = converter.fromElement(reader, mappingContext, defaultValue, format, targetType);
         collectionConverter.addItem(collection, value);
     }
 
     private void setFieldValue(Object targetObject, XMLSimpleReader reader) {
         // process XML element and create an appropriate object
-        Object value = elementConverter.fromElement(reader, mappingContext, defaultValue, format);
+        Object value = elementConverter.fromElement(reader, mappingContext, defaultValue, format, targetType);
         // refere this object to a field
         targetField.setValue(targetObject, value);
     }

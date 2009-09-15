@@ -37,7 +37,7 @@ public class SimpleReaderTest {
     public void emptyElementWithAttributeTest() throws XMLStreamException {
         XMLSimpleReader reader = getReader(xml1);
 
-        reader.findFirstElement();
+        reader.getFirstName();
         Element rootElement = processSubElements(reader).get(0);
 //        printElements(rootElement, "");
         Assert.assertEquals(rootElement.name.getLocalPart(), "a");
@@ -51,9 +51,9 @@ public class SimpleReaderTest {
     private static String xml2 = "<a><b/><c/><d></d></a>";
 
     @org.testng.annotations.Test
-    public void simpleTest2() throws XMLStreamException {
+    public void simpleTest() throws XMLStreamException {
         XMLSimpleReader reader = getReader(xml2);
-        reader.findFirstElement();
+        reader.getFirstName();
         Element rootElement = processSubElements(reader).get(0);
 //        printElements(rootElement, "");
         Assert.assertEquals(rootElement.name.getLocalPart(), "a");
@@ -67,12 +67,13 @@ public class SimpleReaderTest {
     @org.testng.annotations.Test
     public void textTest() throws XMLStreamException {
         XMLSimpleReader reader = getReader(xml3);
-        reader.findFirstElement("a");
+        QName a = reader.getFirstName();
+        reader.moveDown();
         Assert.assertEquals(reader.getName().getLocalPart(), "a");  // inside <a>
         Assert.assertEquals(reader.getText(), "1");
         reader.moveDown();
         Assert.assertEquals(reader.getName().getLocalPart(), "b"); // inside <b>
-        Assert.assertEquals(reader.getText(), "2");
+        Assert.assertEquals(reader.getText(), "2");         ;
         Assert.assertTrue(!reader.moveDown()); // there are no child nodes under <b>
         reader.moveUp();
         Assert.assertEquals(reader.getName().getLocalPart(), "a");  // back to <a>
@@ -85,7 +86,7 @@ public class SimpleReaderTest {
     @org.testng.annotations.Test
     public void skippingChildElementsTest() throws XMLStreamException {
         XMLSimpleReader reader = getReader(xml4);
-        reader.findFirstElement();
+        reader.getFirstName();
         reader.moveDown();
         Assert.assertEquals(reader.getName().getLocalPart(), "a");  // inside <a>
         reader.moveDown();  // down two times
@@ -103,7 +104,7 @@ public class SimpleReaderTest {
     @org.testng.annotations.Test
     public void ignoringOtherElementsTest() throws XMLStreamException {
         XMLSimpleReader reader = getReader(xml4);
-        reader.findFirstElement();
+        reader.getFirstName();
         reader.moveDown();
 
     }
@@ -115,7 +116,8 @@ public class SimpleReaderTest {
         XMLSimpleReader reader = getReader(xml6);
 
         // inside a
-        reader.findFirstElement("a");
+        reader.getFirstName();
+        reader.moveDown();
         Assert.assertEquals(reader.getName().getLocalPart(), "a");
 
         // inside b1

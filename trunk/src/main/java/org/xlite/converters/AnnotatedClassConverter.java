@@ -68,7 +68,7 @@ public class AnnotatedClassConverter implements ElementConverter {
         return targetClass.equals(type);
     }
 
-    public Object fromElement(XMLSimpleReader reader, MappingContext mappingContext, String defaultValue, String format) {
+    public Object fromElement(XMLSimpleReader reader, MappingContext mappingContext, String defaultValue, String format, Class targetType) {
 
         // instantiate object that maps to the current XML element
         Object currentObject;

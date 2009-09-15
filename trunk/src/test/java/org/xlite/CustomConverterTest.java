@@ -61,7 +61,7 @@ public class CustomConverterTest {
         }
 
 
-        public Object fromElement(XMLSimpleReader reader, MappingContext mappingContext, String defaultValue, String format) {
+        public Object fromElement(XMLSimpleReader reader, MappingContext mappingContext, String defaultValue, String format, Class targetType) {
             Custom custom = new Custom();
             custom.value = reader.getText();
             while (reader.moveDown()) {
@@ -85,7 +85,7 @@ public class CustomConverterTest {
             return String.class.equals(type);
         }
 
-        public Object fromValue(String value, String format) {
+        public Object fromValue(String value, String format, Class targetType) {
             return value.toUpperCase();
         }
 
@@ -100,7 +100,7 @@ public class CustomConverterTest {
             return String.class.equals(type);
         }
 
-        public Object fromValue(String value, String format) {
+        public Object fromValue(String value, String format, Class targetType) {
             return value.toLowerCase();
         }
 
