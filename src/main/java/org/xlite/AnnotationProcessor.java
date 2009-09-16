@@ -178,20 +178,37 @@ public class AnnotationProcessor {
                         // target field is a collection
                         if (isCollectionConverter) {
 
-                            if (annotatedConverter != null) {
+                            // if it's a collection, then @XMLelement must have "itemType" value defined
+                            if (annotatedConverter != null && itemType == null) {
                                 throw new XliteConfigurationException("Error: Can  not assign converter for collection " + field.getName() +
                                         " in class " + field.getDeclaringClass().getSimpleName() +
-                                        "When @XMLelement annotation is used on a collection, 'converter' value can not be used. " +
-                                        "Use 'itemType' instead.");
+                                        "When @XMLelement annotation is used on a collection, " +
+                                        "either 'converter' value or 'itemType' value must be declared.");
                             }
 
-                            // if it's a collection, then @XMLelement must have "itemType" value defined
-                            if (itemType == null) {
-                                throw new XliteConfigurationException("Error: Can not assign converter for collection " + field.getName() +
-                                        " in class " + field.getDeclaringClass().getSimpleName() +
-                                        "When @XMLelement annotation is used on a collection, 'itemType' value must be defined.");
+                            // was custom converter assigned via annotation?
+                            if (annotatedConverter != null) {
+                                try {
+                                    fieldConverter = annotatedConverter.newInstance();
+
+                                    // check if item type is set and
+                                    // that assigned converter can actually convert to this type
+                                    if (itemType!= null && !fieldConverter.canConvert(itemType)) {
+                                        throw new XliteConfigurationException("Error: assigned converter type does not match field type.\n" +
+                                                "Converter " + fieldConverter.getClass().getName() + " can not be used to convert " +
+                                                "data of type " + field.getType() + ".\n" +
+                                                "Please check XML annotations on field '" + field.getName() +
+                                                "' in class " + field.getDeclaringClass().getName() + ".");
+                                    }
+
+                                } catch (Exception e) {
+                                    throw new XliteException("Could not instantiate converter " + annotation.converter().getName() + ". ", e);
+                                }
+
+                            } else {
+                                // converter was not declared via annotation, so we just use a converter derived from field type
+                                fieldConverter = null;
                             }
-                            fieldConverter = null;
 
                         } else { // target field is a normal field (not a collection)
 
@@ -233,7 +250,7 @@ public class AnnotationProcessor {
                     }
 
                     if (isCollectionConverter) {
-                        fieldMapper.addMapping(qname, itemType);
+                        fieldMapper.addMapping(qname, fieldConverter, itemType);
                     } else {
                         fieldMapper.setConverter(fieldConverter);
                         fieldMapper.setDefaultValue(defaultValue);
@@ -324,9 +341,9 @@ public class AnnotationProcessor {
 //                        } else
                         if (annotatedConverter != null) { // 'converter' defined
                             try {
-                                
+
                                 fieldConverter = annotatedConverter.newInstance();
-                                targetType = itemType;                                
+                                targetType = itemType;
                             } catch (InstantiationException e) {
                                 throw new XliteException("Could not instantiate converter " +
                                         annotation.converter().getName() +
