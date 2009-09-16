@@ -18,8 +18,7 @@ import java.util.List;
 
 public class XMLtextTest {
 
-    static final String xml1 = "<one>1\n" +
-            "2</one>";
+    static final String xml1 = "<one>1</one>";
 
 
     @Test
