@@ -2,19 +2,23 @@ package org.xlite;
 
 import org.testng.Assert;
 import org.xlite.converters.ValueConverter;
+import org.xlite.converters.ElementConverter;
 
 import javax.xml.namespace.QName;
-import java.util.List;
 import java.util.Map;
+import java.util.List;
 import java.io.StringReader;
 
 /**
- * Tests
+ * Tests ability of ValueConverters
  */
 public class CustomConverterMultiTypeTest {
 
     private String xml = "" +
             "<root one='1' two='2' three='3'>" +
+            "<one>11</one>" +
+            "<two>22</two>" +
+            "<three>33</three>" +
             "</root>";
 
     @org.testng.annotations.Test()
@@ -25,23 +29,25 @@ public class CustomConverterMultiTypeTest {
         Root root = (Root) xlite.fromXML(reader);
 
         // check that Map contains three attributes
-        Assert.assertEquals(root.data.size(), 3);
+        Assert.assertEquals(root.attributes.size(), 3);
 
         // check that each attribute name corresponds to the right type
-        Assert.assertEquals(root.data.get(new QName("one")).getClass(), One.class);
-        Assert.assertEquals(root.data.get(new QName("two")).getClass(), Two.class);
-        Assert.assertEquals(root.data.get(new QName("three")).getClass(), Three.class);
+        Assert.assertEquals(root.attributes.get(new QName("one")).getClass(), One.class);
+        Assert.assertEquals(root.attributes.get(new QName("two")).getClass(), Two.class);
+        Assert.assertEquals(root.attributes.get(new QName("three")).getClass(), Three.class);
 
     }
 
-    public static class CustomMultiTypeConverter extends ValueConverter {
+    /**
+     * Custom ValueConverter that can convert to multiple classes
+     */
+    public static class CustomMultiTypeValueConverter extends ValueConverter {
 
         // This converter declares itself as capable
         //  of converting three classes: One, Two and Three
         public boolean canConvert(Class type) {
             return One.class.equals(type) || Two.class.equals(type) || Three.class.equals(type);
         }
-
 
         public Object fromValue(String value, String format, Class targetType) {
             if (One.class.equals(targetType)) {
@@ -60,13 +66,59 @@ public class CustomConverterMultiTypeTest {
         }
     }
 
+
+    /**
+     * Custom ElementConverter that can convert to multiple classes
+     */
+    public static class CustomMultiTypeElementConverter implements ElementConverter {
+
+        // capable of converting multiple types:
+        // One.class, Two.class, Three.class
+        public boolean canConvert(Class type) {
+            return One.class.equals(type) || Two.class.equals(type) || Three.class.equals(type);
+        }
+
+
+        public Object fromElement(XMLSimpleReader reader, MappingContext mappingContext, String defaultValue, String format, Class targetType) {
+
+            // read the text value of current XML element
+            String value = reader.getText();
+
+            // when ElementConverter finishes, the reader must be positioned at the end of the base element
+            reader.moveUp();
+
+            // convert depending on target type
+            if (One.class.equals(targetType)) {
+                return new One(Integer.valueOf(value));
+            } else if (Two.class.equals(targetType)) {
+                return new Two(Integer.valueOf(value));
+            } else if (Three.class.equals(targetType)) {
+                return new Three(Integer.valueOf(value));
+            }
+
+            return null;
+        }
+
+        // not used
+        public void toElement(Object object, QName nodeName, XMLSimpleWriter writer, MappingContext mappingContext, String defaultValue, String format) {
+
+        }
+    }
+
     public static class Root {
         @XMLattributes({
-                @XMLattribute(name = "one", converter = CustomMultiTypeConverter.class, itemType = One.class),
-                @XMLattribute(name = "two", converter = CustomMultiTypeConverter.class, itemType = Two.class),
-                @XMLattribute(name = "three", converter = CustomMultiTypeConverter.class, itemType = Three.class)
+                @XMLattribute(name = "one", converter = CustomMultiTypeValueConverter.class, itemType = One.class),
+                @XMLattribute(name = "two", converter = CustomMultiTypeValueConverter.class, itemType = Two.class),
+                @XMLattribute(name = "three", converter = CustomMultiTypeValueConverter.class, itemType = Three.class)
         })
-        public Map data;
+        public Map attributes;
+
+        @XMLelements({
+                @XMLelement(name = "one", converter = CustomMultiTypeElementConverter.class, itemType = One.class),
+                @XMLelement(name = "two", converter = CustomMultiTypeElementConverter.class, itemType = Two.class),
+                @XMLelement(name = "three", converter = CustomMultiTypeElementConverter.class, itemType = Three.class)
+        })
+        public List subelements;
     }
 
     public static class One {

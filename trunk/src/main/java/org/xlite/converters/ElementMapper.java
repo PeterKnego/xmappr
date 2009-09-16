@@ -62,10 +62,12 @@ public class ElementMapper {
         this.elementConverter = fieldConverter;
     }
 
-    public void addMapping(QName nodeName, Class itemType) {
-        ElementConverter converter = mappingContext.lookupElementConverter(itemType);
+    public void addMapping(QName nodeName, ElementConverter elementConverter, Class itemType) {
+        if (elementConverter == null) {
+            elementConverter = mappingContext.lookupElementConverter(itemType);
+        }
         this.itemTypes.put(itemType, nodeName);
-        this.converterCache.put(nodeName, converter);
+        this.converterCache.put(nodeName, elementConverter);
     }
 
     public void readElement(QName nodeName, Object targetObject, XMLSimpleReader reader) {
