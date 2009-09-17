@@ -1,23 +1,71 @@
 package org.xlite;
 
+import org.testng.Assert;
+
+import java.io.StringReader;
+
+/**
+ * Tests the EnumConverter
+ * Both for simple enums and Polymorphic enums
+ */
 public class EnumConverterTest {
+
+    String xml = "" +
+            "<root simple='NONE'>" +
+            "  <poly>TEN</poly>" +
+            "</root>";
 
     @org.testng.annotations.Test
     public void testEnum() {
 
-        EnumClass ec = new EnumClass();
+        // do the mapping
+        StringReader reader = new StringReader(xml);
+        Configuration conf = new AnnotationConfiguration(Root.class, "root");
+        Xlite xlite = new Xlite(conf);
+        Root root = (Root) xlite.fromXML(reader);
 
-        System.out.println("enum name: "+ec.one.name());
-        System.out.println("enum ordinal: "+ec.one.ordinal());
-        System.out.println("enum value: "+Enum.valueOf(SimpleEnum.class,"TWO"));
+        // check values
+        Assert.assertEquals(root.simple, SimpleEnum.ONE);
+        Assert.assertEquals(root.poly, PolyEnum.TEN);
     }
 
-    public static class EnumClass{
-        public SimpleEnum one = SimpleEnum.ONE;
+    /**
+     * Container class
+     */
+    public static class Root {
+        @XMLattribute
+        public SimpleEnum simple;
+
+        @XMLelement
+        public PolyEnum poly;
     }
 
-    public static enum SimpleEnum {
+    /**
+     * Just a simple enum
+     */
+    enum SimpleEnum {
         ONE, TWO, THREE
+    }
+
+    /**
+     * Polymorphic enum is an enum that implements an additional interface.
+     * JVM handles this in a quirky way: they appear as if they are an inner class
+     */
+    enum PolyEnum implements Iface {
+        TEN() {
+            public String exponent() {
+                return "1";
+            }
+        },
+        TWENTY() {
+            public String exponent() {
+                return "2";
+            }
+        }
+    }
+
+    public static interface Iface {
+        public String exponent();
     }
 
 }
