@@ -11,6 +11,6 @@ import java.lang.annotation.RetentionPolicy;
 
 @Target(value = {ElementType.FIELD})
 @Retention(value = RetentionPolicy.RUNTIME)
-public @interface XMLelements {
-    XMLelement[] value();
+public @interface Elements {
+    Element[] value();
 }

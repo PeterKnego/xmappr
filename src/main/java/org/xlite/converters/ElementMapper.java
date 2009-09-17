@@ -34,10 +34,10 @@ public class ElementMapper {
     private Map<Class, QName> itemTypes = new HashMap<Class, QName>();
     private Map<QName, ElementConverter> converterCache = new HashMap<QName, ElementConverter>();
 
-    // default value as set by the @XMLelement(defaultValue="..") annotation
+    // default value as set by the @Element(defaultValue="..") annotation
     private String defaultValue;
 
-    // converter formatting options as set by the @XMLelement(format="..") annotation
+    // converter formatting options as set by the @Element(format="..") annotation
     private String format;
 
     public ElementMapper(Field targetField, CollectionConverting collectionConverter, MappingContext mappingContext) {
@@ -95,7 +95,7 @@ public class ElementMapper {
             throw new XliteException("Error: could not find converter for node: " + nodeName +
                     " in collection " + collection.getClass().getName() +
                     " in class " + collection.getClass().getEnclosingClass() +
-                    ". Collection contains element types that are not defined in @XMLelement annotation.");
+                    ". Collection contains element types that are not defined in @Element annotation.");
         }
 
         Object value = converter.fromElement(reader, mappingContext, defaultValue, format, targetType);

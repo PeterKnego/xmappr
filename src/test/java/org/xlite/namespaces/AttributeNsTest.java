@@ -62,39 +62,39 @@ public class AttributeNsTest {
     }
 
     public static class aaa {
-        @XMLelement("l:bbbb")
+        @Element("l:bbbb")
         public bbbb node_bbbb;
 
-        @XMLelement("u:BBB")
+        @Element("u:BBB")
         public BBB node_BBB;
 
-        @XMLelement("xn:x111")
+        @Element("xn:x111")
         public x111 node_x111;
     }
 
     public static class bbbb {
-        @XMLelement("l:cccc")
+        @Element("l:cccc")
         public ccc node_ccc;
 
-        @XMLattribute("l:zz")
+        @Attribute("l:zz")
         public int zz;
     }
 
     public static class ccc {
-        @XMLattribute("u:WW")
+        @Attribute("u:WW")
         public int WW;
     }
 
     public static class BBB {
-        @XMLattribute("l:sss")
+        @Attribute("l:sss")
         public String sss;
 
-        @XMLattribute("xn:S111")
+        @Attribute("xn:S111")
         public String S111;
     }
 
     public static class x111 {
-        @XMLattribute("RRR")
+        @Attribute("RRR")
         // no NS defined, but this does NOT mean default ns
         public String rrr;
     }

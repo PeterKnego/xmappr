@@ -16,9 +16,8 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 
-import org.xlite.XMLattribute;
-import org.xlite.*;
-import org.xlite.XMLtext;
+import org.xlite.Attribute;
+import org.xlite.Text;
 
 public class SubTreeStoreTest {
 
@@ -79,27 +78,27 @@ public class SubTreeStoreTest {
     }
 
     public static class A {
-        //        @XMLnamespaces("s=ns2")
-        @XMLelement("s:b")
+        //        @Namespaces("s=ns2")
+        @Element("s:b")
         public B b;
     }
 
     public static class B {
-        @XMLelement("x:c")
+        @Element("x:c")
         public C c;
     }
 
     public static class C {
 
-        @XMLelement("x:d")
+        @Element("x:d")
         public D d;
 
-        @XMLtext
+        @Text
         public String text;
     }
 
     public static class D {
-        @XMLattribute
+        @Attribute
         public String attrD;
     }
 

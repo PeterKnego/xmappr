@@ -10,7 +10,6 @@ import org.testng.annotations.Test;
 import org.testng.Assert;
 
 import java.io.StringReader;
-import java.lang.reflect.Constructor;
 
 public class ParentClassTest {
 
@@ -39,19 +38,19 @@ public class ParentClassTest {
 
     public static class Parent {
 
-        @XMLtext
+        @Text
         public String val;
 
-        @XMLattribute
+        @Attribute
         public int i;
 
     }
 
     public static class Child extends Parent {
-        @XMLattribute
+        @Attribute
         public long l;
 
-        @XMLelement
+        @Element
         public byte bytv;
 
 
@@ -63,7 +62,7 @@ public class ParentClassTest {
             this.dbv = dbv;
         }
 
-        @XMLelement
+        @Element
         private Double dbv;
     }
 

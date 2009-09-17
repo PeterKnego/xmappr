@@ -17,7 +17,7 @@ import java.lang.annotation.Target;
 
 @Target(value = {ElementType.FIELD})
 @Retention(value = RetentionPolicy.RUNTIME)
-public @interface XMLelement {
+public @interface Element {
 
     /**
      * The name of the XML element that a field maps to.

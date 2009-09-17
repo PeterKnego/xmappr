@@ -15,7 +15,6 @@ import org.custommonkey.xmlunit.XMLAssert;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.math.BigDecimal;
 import java.util.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -69,7 +68,7 @@ public class DateConverterTest {
     }
 
     public static class Test {
-        @XMLelement(format = "yyyy.MM.dd HH:mm:ss")
+        @Element(format = "yyyy.MM.dd HH:mm:ss")
         public Date node;
     }
 
@@ -85,7 +84,7 @@ public class DateConverterTest {
 
     public static class TestEmpty {
         // format is empty
-        @XMLelement(format = "")
+        @Element(format = "")
         public Date node;
     }
 
@@ -101,7 +100,7 @@ public class DateConverterTest {
 
     public static class TestWrong {
         // format is plainly wrong
-        @XMLelement(format = "wow this is a wrong format")
+        @Element(format = "wow this is a wrong format")
         public Date node;
     }
 }

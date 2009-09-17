@@ -31,7 +31,7 @@ public class PrefixNotDefinedTest {
 
     public static class Test {
         // prefix 'x' is not declared 
-        @XMLelement("x:node")
+        @Element("x:node")
         public String node;
     }
 }

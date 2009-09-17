@@ -11,7 +11,7 @@ import org.custommonkey.xmlunit.XMLUnit;
 import org.testng.Assert;
 import org.testng.annotations.ExpectedExceptions;
 import org.xml.sax.SAXException;
-import org.xlite.XMLelement;
+import org.xlite.Element;
 
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.ArrayList;
 
 import org.xlite.Xlite;
-import org.xlite.XMLtext;
+import org.xlite.Text;
 import org.xlite.converters.CollectionConverting;
 import org.xlite.converters.CollectionConverter;
 import org.xlite.converters.ElementConverter;
@@ -125,25 +125,25 @@ public class CollectionConverterTest {
 
     public static class One {
 
-        @XMLtext
+        @Text
         public String text;
 
-        @XMLelement(value = "item", itemType = Item.class)
+        @Element(value = "item", itemType = Item.class)
         public List<Item> list;
     }
 
     public static class Item {
 
-        @XMLtext
+        @Text
         public String text;
 
-        @XMLelement(value = "subitem", itemType = SubItem.class)
+        @Element(value = "subitem", itemType = SubItem.class)
         public List<SubItem> subs;
     }
 
     public static class SubItem {
 
-        @XMLtext
+        @Text
         public String text;
     }
 }

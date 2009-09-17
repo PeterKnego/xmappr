@@ -104,7 +104,7 @@ public class BasicConvertersTest {
     public static class Primitives {
 
         // tests mapping element attribute to private field
-        @XMLattribute
+        @Attribute
         private int i;
 
         public int getI() {
@@ -115,26 +115,26 @@ public class BasicConvertersTest {
             this.i = i;
         }
 
-        @XMLattribute
+        @Attribute
         public long l;
 
-        @XMLattribute
+        @Attribute
         public Boolean bool;
 
-        @XMLattribute
+        @Attribute
         public byte byt;
 
-        @XMLattribute
+        @Attribute
         public float fl;
 
-        @XMLattribute
+        @Attribute
         public double db;
 
-        @XMLattribute
+        @Attribute
         public char ch;
 
         // tests mapping element value to private field
-        @XMLtext
+        @Text
         private String value;
 
         public String getValue() {
@@ -145,10 +145,10 @@ public class BasicConvertersTest {
             this.value = value;
         }
 
-        @XMLelement("node")
+        @Element("node")
         public String stringNode = "";
 
-        @XMLelement(name = "short", defaultValue = "0")
+        @Element(name = "short", defaultValue = "0")
         public short shortNode;
 
         public Integer getIv() {
@@ -160,28 +160,28 @@ public class BasicConvertersTest {
         }
 
         // tests mapping element to private field
-        @XMLelement
+        @Element
         private Integer iv;
 
-        @XMLelement
+        @Element
         public long lv;
 
-        @XMLelement(defaultValue = "true")
+        @Element(defaultValue = "true")
         public boolean boolv;
 
-        @XMLelement(defaultValue = "true")
+        @Element(defaultValue = "true")
         public Boolean boolNull;
 
-        @XMLelement
+        @Element
         public byte bytv;
 
-        @XMLelement
+        @Element
         public float flv;
 
-        @XMLelement
+        @Element
         public double dbv;
 
-        @XMLelement
+        @Element
         public char chv;
 
     }

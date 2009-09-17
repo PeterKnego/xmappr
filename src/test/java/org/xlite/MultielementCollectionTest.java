@@ -13,7 +13,6 @@ import org.xml.sax.SAXException;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.util.List;
 import java.util.ArrayList;
 
 public class MultielementCollectionTest {
@@ -56,22 +55,22 @@ public class MultielementCollectionTest {
     }
 
     public static class Root {
-        @XMLelements({
-                @XMLelement(name = "a", itemType = A.class),
-                @XMLelement(name = "b", itemType = B.class)
+        @Elements({
+                @Element(name = "a", itemType = A.class),
+                @Element(name = "b", itemType = B.class)
         })
-        @XMLtext
+        @Text
         public ArrayList letters;
 
     }
 
     public static class A {
-        @XMLtext
+        @Text
         public String text;
     }
 
     public static class B {
-        @XMLtext
+        @Text
         public String text;
     }
 

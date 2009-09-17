@@ -13,6 +13,6 @@ import java.lang.annotation.Target;
 
 @Target(value = {ElementType.FIELD})
 @Retention(value = RetentionPolicy.RUNTIME)
-public @interface XMLattributes {
-    XMLattribute[] value();
+public @interface Attributes {
+    Attribute[] value();
 }

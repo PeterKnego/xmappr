@@ -7,7 +7,6 @@
 package org.xlite;
 
 import org.testng.annotations.ExpectedExceptions;
-import org.testng.Assert;
 
 import java.io.StringReader;
 
@@ -30,7 +29,7 @@ public class EmptyElementTest {
     }
 
     public static class Test {
-        @XMLelement
+        @Element
         public Integer node;
     }
 }

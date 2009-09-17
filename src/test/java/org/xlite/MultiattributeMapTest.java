@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Map;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 public class MultiattributeMapTest {
@@ -53,19 +52,19 @@ public class MultiattributeMapTest {
     }
 
     public static class Root {
-        @XMLattributes({
-                @XMLattribute(name = "a"),
-                @XMLattribute(name = "b", itemType = Integer.class),
-                @XMLattribute(name = "c"),
-                @XMLattribute("*")
+        @Attributes({
+                @Attribute(name = "a"),
+                @Attribute(name = "b", itemType = Integer.class),
+                @Attribute(name = "c"),
+                @Attribute("*")
         })
         public LinkedHashMap attrs;
 
-        @XMLattributes({
-                @XMLattribute(name = "e"),
-                @XMLattribute(name = "f", itemType = Integer.class),
-                @XMLattribute(name = "g"),
-                @XMLattribute(name = "h")
+        @Attributes({
+                @Attribute(name = "e"),
+                @Attribute(name = "f", itemType = Integer.class),
+                @Attribute(name = "g"),
+                @Attribute(name = "h")
         })
         public Map attrs2;
     }

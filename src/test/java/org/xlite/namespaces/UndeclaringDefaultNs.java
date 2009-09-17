@@ -49,19 +49,19 @@ public class UndeclaringDefaultNs {
     }
 
     public static class aaa {
-        @XMLelement("bbbb")
+        @Element("bbbb")
         public bbb node_bbb;
     }
 
     public static class bbb {
-        @XMLnamespaces("")
-        @XMLelement("cccc")
+        @Namespaces("")
+        @Element("cccc")
         public ccc node_ccc;
     }
 
-    @XMLnamespaces("")
+    @Namespaces("")
     public static class ccc {
-        @XMLelement("ddd")
+        @Element("ddd")
         public ddd node_ddd;
     }
 

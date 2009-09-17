@@ -57,22 +57,22 @@ public class DifferentNsSamePrefixesTest {
 
     // node aaa is in default namespace
     public static class aaa {
-        @XMLnamespaces("lower=lowercase")
-        @XMLelement("lower:bbbb")
+        @Namespaces("lower=lowercase")
+        @Element("lower:bbbb")
         public bbbb node_bbbb;
 
-        @XMLnamespaces("lower=uppercase")
-        @XMLelement("lower:BBB")
+        @Namespaces("lower=uppercase")
+        @Element("lower:BBB")
         public BBB node_BBB;
 
-        @XMLnamespaces("lower=xnumber")
-        @XMLelement("lower:x111")
+        @Namespaces("lower=xnumber")
+        @Element("lower:x111")
         public x111 node_x111;
     }
 
     public static class bbbb {
-        @XMLnamespaces("lower=lowercase")
-        @XMLelement("lower:cccc")
+        @Namespaces("lower=lowercase")
+        @Element("lower:cccc")
         public cccc node_cccc;
     }
 
@@ -80,17 +80,17 @@ public class DifferentNsSamePrefixesTest {
     }
 
     public static class BBB {
-        @XMLnamespaces("lower=uppercase")
-        @XMLelement("lower:CCC")
+        @Namespaces("lower=uppercase")
+        @Element("lower:CCC")
         public CCC node_CCC;
     }
 
     public static class CCC {
     }
 
-    @XMLnamespaces("lower=xnumber")
+    @Namespaces("lower=xnumber")
     public static class x111 {
-        @XMLelement("lower:x222")
+        @Element("lower:x222")
         public x222 node_x222;
     }
 

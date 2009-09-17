@@ -61,19 +61,19 @@ public class DifferentPrefixesSameNsTest {
     }
 
     public static class aaa {
-        @XMLelement("l:bbbb")
+        @Element("l:bbbb")
         public bbbb node_bbbb;
 
-        @XMLelement("u:BBB")
+        @Element("u:BBB")
         public BBB node_BBB;
 
-        @XMLnamespaces("xn=lowercase")
-        @XMLelement("xn:x111")
+        @Namespaces("xn=lowercase")
+        @Element("xn:x111")
         public x111 node_x111;
     }
 
     public static class bbbb {
-        @XMLelement("l:cccc")
+        @Element("l:cccc")
         public cccc node_cccc;
     }
 
@@ -81,20 +81,20 @@ public class DifferentPrefixesSameNsTest {
     }
 
     public static class BBB {
-        @XMLelement("u:CCC")
+        @Element("u:CCC")
         public CCC node_CCC;
     }
 
     public static class CCC {
     }
 
-    @XMLnamespaces("xn=lowercase")
+    @Namespaces("xn=lowercase")
     public static class x111 {
-        @XMLelement("xn:x222")
+        @Element("xn:x222")
         public x222 node_x222;
     }
 
-    @XMLnamespaces("xn=lowercase")
+    @Namespaces("xn=lowercase")
     public static class x222 {
     }
 }
