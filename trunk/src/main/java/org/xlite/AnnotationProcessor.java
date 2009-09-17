@@ -11,10 +11,10 @@ import org.xlite.converters.*;
 import javax.xml.XMLConstants;
 import javax.xml.namespace.QName;
 import java.lang.reflect.Field;
-import java.util.Map;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * User: peter
@@ -193,7 +193,7 @@ public class AnnotationProcessor {
 
                                     // check if item type is set and
                                     // that assigned converter can actually convert to this type
-                                    if (itemType!= null && !fieldConverter.canConvert(itemType)) {
+                                    if (itemType != null && !fieldConverter.canConvert(itemType)) {
                                         throw new XliteConfigurationException("Error: assigned converter type does not match field type.\n" +
                                                 "Converter " + fieldConverter.getClass().getName() + " can not be used to convert " +
                                                 "data of type " + field.getType() + ".\n" +
@@ -556,8 +556,9 @@ public class AnnotationProcessor {
                 if (Collection.class.isAssignableFrom(targetField.getType())) {
 
                     collectionConverter = (CollectionConverting) mappingContext.lookupElementConverter(targetField.getType());
-                    // choose converter according to 'itemType' value in @XMLtext annotation
-                    targetType = targetAnnotation.itemType();
+                    targetType = String.class;
+//                    throw new XliteConfigurationException("Error: @XMLtext annotation on a collection field of "
+//                            + currentClass.getName() + ". No converter parameter provided.");
                 } else {
                     // choose converter according to field type
                     targetType = targetField.getType();

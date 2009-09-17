@@ -20,7 +20,6 @@ public class TextMapper {
 
     //todo finish this javadoc
     /**
-     * 
      * @param targetField
      * @param targetType
      * @param valueConverter
@@ -59,15 +58,20 @@ public class TextMapper {
      */
     public void setValue(Object object, String elementValue) {
         // is it a Collection?
+        Object value = valueConverter.fromValue(elementValue, format, targetType);
         if (isCollection()) {
             Collection collection = (Collection) targetField.getValue(object);
             if (collection == null) {
                 collection = collectionConverter.initializeCollection(targetField.getType());
                 targetField.setValue(object, collection);
             }
-            collection.add(valueConverter.fromValue(elementValue, format, targetType));
+            if (value instanceof Collection) {
+                collection.addAll((Collection) value);
+            } else {
+                collection.add(value);
+            }
         } else {
-            targetField.setValue(object, valueConverter.fromValue(elementValue, format, targetType));
+            targetField.setValue(object, value);
         }
     }
 
@@ -78,9 +82,14 @@ public class TextMapper {
      * @return
      */
     public String getValue(Object object) {
+//        return valueConverter.toValue(targetField.getValue(object), format);
         // is it a Collection?
         if (isCollection()) {
-            return valueConverter.toValue(object, format);
+            if (valueConverter.canConvert(Collection.class)) {
+                return valueConverter.toValue(targetField.getValue(object), format);
+            } else {
+                return valueConverter.toValue(object, format);
+            }
         } else {
             return valueConverter.toValue(targetField.getValue(object), format);
         }
