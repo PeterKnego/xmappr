@@ -40,7 +40,7 @@ public class RootMapper {
     }
 
     public Object getRootObject(XMLSimpleReader reader) {
-        QName firstElement = reader.getFirstName();
+        QName firstElement = reader.getRootName();
         if (firstElement.equals(rootNodeName)) {
             reader.moveDown();
             return elementConverter.fromElement(reader, mappingContext, "", null, rootClass, null);

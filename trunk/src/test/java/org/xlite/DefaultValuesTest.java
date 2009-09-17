@@ -37,7 +37,7 @@ public class DefaultValuesTest {
     public void test() throws IOException, SAXException {
 
         StringReader reader = new StringReader(inXml);
-        Configuration conf = new AnnotationConfiguration(Root.class, "root");
+        Configuration conf = new AnnotationConfiguration(Root.class);
         conf.setPrettyPrint(false);
         Xlite xlite = new Xlite(conf);
 
@@ -65,6 +65,7 @@ public class DefaultValuesTest {
         XMLAssert.assertXMLEqual(outXml, ssw);
     }
 
+    @RootElement("root")
     public static class Root {
 
         @Attribute(defaultValue = "5")

@@ -32,7 +32,7 @@ public class CustomConverterTest {
     public void customConverterTest() {
 
         StringReader reader = new StringReader(xml);
-        Configuration conf = new AnnotationConfiguration(One.class, "one");
+        Configuration conf = new AnnotationConfiguration(One.class);
         Xlite xlite = new Xlite(conf);
         One one = (One) xlite.fromXML(reader);
 
@@ -49,7 +49,7 @@ public class CustomConverterTest {
     public void wrongConverterTypeTest() {
 
         StringReader reader = new StringReader(xml);
-        Configuration conf = new AnnotationConfiguration(Wrong.class, "one");
+        Configuration conf = new AnnotationConfiguration(Wrong.class);
         Xlite xlite = new Xlite(conf);
         xlite.fromXML(reader);
     }
@@ -116,6 +116,7 @@ public class CustomConverterTest {
         public Three three;
     }
 
+    @RootElement("one")
     public static class One {
 
         @Text(converter = UpperCaseConverter.class)
@@ -136,6 +137,7 @@ public class CustomConverterTest {
     }
 
 
+    @RootElement("one")
     public static class Wrong {
         // should throw an exception
         @Attribute(converter = LowerCaseConverter.class)

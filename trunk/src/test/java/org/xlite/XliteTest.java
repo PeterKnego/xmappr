@@ -18,7 +18,7 @@ public class XliteTest {
     public void basicTest() {
 
         StringReader reader = new StringReader(SampleXml.xml);
-        Configuration conf = new AnnotationConfiguration(SampleXml.One.class, "one");
+        Configuration conf = new AnnotationConfiguration(SampleXml.One.class);
         Xlite xlite = new Xlite(conf);
 
         SampleXml.One one = (SampleXml.One) xlite.fromXML(reader);

@@ -35,7 +35,7 @@ public class RootNsTest {
     public void test() throws IOException, SAXException {
         StringReader reader = new StringReader(xml);
         StringWriter writer = new StringWriter();
-        Configuration conf = new AnnotationConfiguration(aaa.class, "l:aaa");
+        Configuration conf = new AnnotationConfiguration(aaa.class);
 
         // predefined namespaces
         conf.addNamespace("l=lowercase");
@@ -59,6 +59,7 @@ public class RootNsTest {
         XMLAssert.assertXMLEqual(xml, sw.toString());
     }
 
+    @RootElement("l:aaa")
     public static class aaa {
         @Element("l:bbbb")
         public bbbb node_bbbb;

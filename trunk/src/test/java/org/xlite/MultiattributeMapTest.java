@@ -26,7 +26,7 @@ public class MultiattributeMapTest {
     public void test() throws IOException, SAXException {
 
         StringReader reader = new StringReader(in);
-        Configuration conf = new AnnotationConfiguration(Root.class, "root");
+        Configuration conf = new AnnotationConfiguration(Root.class);
         conf.setPrettyPrint(false);
 
         Xlite xlite = new Xlite(conf);
@@ -51,6 +51,7 @@ public class MultiattributeMapTest {
         XMLAssert.assertXMLEqual(out, sw.toString());
     }
 
+    @RootElement("root")
     public static class Root {
         @Attributes({
                 @Attribute(name = "a"),

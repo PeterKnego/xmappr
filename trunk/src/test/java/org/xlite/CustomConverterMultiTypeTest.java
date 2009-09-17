@@ -24,7 +24,7 @@ public class CustomConverterMultiTypeTest {
     @org.testng.annotations.Test()
     public void customConverterMultiTypeTest() {
         StringReader reader = new StringReader(xml);
-        Configuration conf = new AnnotationConfiguration(Root.class, "root");
+        Configuration conf = new AnnotationConfiguration(Root.class);
         Xlite xlite = new Xlite(conf);
         Root root = (Root) xlite.fromXML(reader);
 
@@ -105,6 +105,7 @@ public class CustomConverterMultiTypeTest {
         }
     }
 
+    @RootElement("root")
     public static class Root {
         @Attributes({
                 @Attribute(name = "one", converter = CustomMultiTypeValueConverter.class, itemType = One.class),

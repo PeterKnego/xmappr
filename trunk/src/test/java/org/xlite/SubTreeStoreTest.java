@@ -55,7 +55,7 @@ public class SubTreeStoreTest {
     public void testStoringNodes() throws IOException, SAXException, XpathException {
         StringReader reader = new StringReader(xml);
 
-        Configuration conf = new AnnotationConfiguration(A.class, "x:a");
+        Configuration conf = new AnnotationConfiguration(A.class);
         conf.addNamespace("x=ns1");
         conf.addNamespace("s=ns2");
         conf.addNamespace("w=ns3");
@@ -77,6 +77,7 @@ public class SubTreeStoreTest {
         XMLAssert.assertXMLEqual(xml, ssw);
     }
 
+    @RootElement("x:a")
     public static class A {
         //        @Namespaces("s=ns2")
         @Element("s:b")

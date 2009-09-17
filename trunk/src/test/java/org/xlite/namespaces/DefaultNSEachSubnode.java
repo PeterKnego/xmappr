@@ -38,7 +38,7 @@ public class DefaultNSEachSubnode {
     public void test() throws IOException, SAXException {
         StringReader reader = new StringReader(xml);
 
-        Configuration conf = new AnnotationConfiguration(aaa.class, "aaa");
+        Configuration conf = new AnnotationConfiguration(aaa.class);
         Xlite xlite = new Xlite(conf);
         aaa a = (aaa) xlite.fromXML(reader);
 
@@ -55,6 +55,7 @@ public class DefaultNSEachSubnode {
         XMLAssert.assertXMLEqual(xml, sw.toString());
     }
 
+    @RootElement("aaa")
     public static class aaa {
         @Namespaces("lowercase")
         @Element("bbbb")

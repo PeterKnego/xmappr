@@ -30,7 +30,7 @@ public class LoopTest {
     @org.testng.annotations.Test
     public void configurationLoopTest() throws IOException, SAXException {
         StringReader reader = new StringReader(inXml);
-        Configuration conf = new AnnotationConfiguration(Test.class, "test");
+        Configuration conf = new AnnotationConfiguration(Test.class);
         conf.setPrettyPrint(true);
         Xlite xlite = new Xlite(conf);
 
@@ -47,6 +47,7 @@ public class LoopTest {
 
     // classes Test and Back have a circular reference
 
+    @RootElement("test")
     public static class Test {
         @Element
         public Back back;

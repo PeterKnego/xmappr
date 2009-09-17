@@ -32,6 +32,7 @@ public class SampleXml {
                     "</one>";
 
 
+    @RootElement("one")
     public static class One {
 
         @Attribute("attr1")

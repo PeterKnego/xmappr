@@ -8,8 +8,13 @@ package org.xlite;
 
 import org.xlite.converters.RootMapper;
 
+import javax.xml.namespace.QName;
+
 public interface Configuration {
-    RootMapper getRootElementMapper();
+
+    RootMapper getRootElementMapper(QName name);
+
+    RootMapper getRootElementMapper(Class sourceClass);
 
     public void initialize();
 
@@ -18,5 +23,7 @@ public interface Configuration {
     void setPrettyPrint(boolean prettyPrint);
 
     void addNamespace(String namespace);
+
+    void addMapping(Class rootClass);
 
 }

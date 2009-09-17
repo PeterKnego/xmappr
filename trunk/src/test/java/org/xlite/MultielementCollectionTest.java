@@ -32,7 +32,7 @@ public class MultielementCollectionTest {
     public void test() throws IOException, SAXException {
 
         StringReader reader = new StringReader(xml);
-        Configuration conf = new AnnotationConfiguration(Root.class, "root");
+        Configuration conf = new AnnotationConfiguration(Root.class);
         conf.setPrettyPrint(true);
 
         Xlite xlite = new Xlite(conf);
@@ -54,6 +54,7 @@ public class MultielementCollectionTest {
         XMLAssert.assertXMLEqual(xml, ssw);
     }
 
+    @RootElement("root")
     public static class Root {
         @Elements({
                 @Element(name = "a", itemType = A.class),

@@ -37,7 +37,7 @@ public class SimpleReaderTest {
     public void emptyElementWithAttributeTest() throws XMLStreamException {
         XMLSimpleReader reader = getReader(xml1);
 
-        reader.getFirstName();
+        reader.getRootName();
         Element rootElement = processSubElements(reader).get(0);
 //        printElements(rootElement, "");
         Assert.assertEquals(rootElement.name.getLocalPart(), "a");
@@ -53,7 +53,7 @@ public class SimpleReaderTest {
     @org.testng.annotations.Test
     public void simpleTest() throws XMLStreamException {
         XMLSimpleReader reader = getReader(xml2);
-        reader.getFirstName();
+        reader.getRootName();
         Element rootElement = processSubElements(reader).get(0);
 //        printElements(rootElement, "");
         Assert.assertEquals(rootElement.name.getLocalPart(), "a");
@@ -67,7 +67,7 @@ public class SimpleReaderTest {
     @org.testng.annotations.Test
     public void textTest() throws XMLStreamException {
         XMLSimpleReader reader = getReader(xml3);
-        QName a = reader.getFirstName();
+        QName a = reader.getRootName();
         reader.moveDown();
         Assert.assertEquals(reader.getName().getLocalPart(), "a");  // inside <a>
         Assert.assertEquals(reader.getText(), "1");
@@ -86,7 +86,7 @@ public class SimpleReaderTest {
     @org.testng.annotations.Test
     public void skippingChildElementsTest() throws XMLStreamException {
         XMLSimpleReader reader = getReader(xml4);
-        reader.getFirstName();
+        reader.getRootName();
         reader.moveDown();
         Assert.assertEquals(reader.getName().getLocalPart(), "a");  // inside <a>
         reader.moveDown();  // down two times
@@ -104,7 +104,7 @@ public class SimpleReaderTest {
     @org.testng.annotations.Test
     public void ignoringOtherElementsTest() throws XMLStreamException {
         XMLSimpleReader reader = getReader(xml4);
-        reader.getFirstName();
+        reader.getRootName();
         reader.moveDown();
 
     }
@@ -116,7 +116,7 @@ public class SimpleReaderTest {
         XMLSimpleReader reader = getReader(xml6);
 
         // inside a
-        reader.getFirstName();
+        reader.getRootName();
         reader.moveDown();
         Assert.assertEquals(reader.getName().getLocalPart(), "a");
 
