@@ -38,7 +38,7 @@ public class ValueConverterWrapper implements ElementConverter {
                         "Either element must not be empty or a default value must be supplied via @XMLelement(defaultValue = \"val\")");
             }
         }
-        return valueConverter.fromValue(text, format, null);
+        return valueConverter.fromValue(text, format, targetType);
     }
 
     public void toElement(Object object, QName nodeName, XMLSimpleWriter writer, MappingContext mappingContext, String defaultValue, String format) {

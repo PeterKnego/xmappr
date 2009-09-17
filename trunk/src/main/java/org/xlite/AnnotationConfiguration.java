@@ -119,6 +119,7 @@ public class AnnotationConfiguration implements Configuration {
         valueConverters.add(new BigIntegerConverter());
         valueConverters.add(new ByteArrayConverter());
         valueConverters.add(new DateConverter());
+        valueConverters.add(new EnumConverter());
 
         return valueConverters;
     }
