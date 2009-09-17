@@ -51,7 +51,7 @@ public class BasicConvertersTest {
     @Test
     public void mainTest() throws IllegalAccessException, IOException, SAXException {
         StringReader reader = new StringReader(inXml);
-        Configuration conf = new AnnotationConfiguration(Primitives.class, "primitives");
+        Configuration conf = new AnnotationConfiguration(Primitives.class);
         Xlite xf = new Xlite(conf);
 
         Primitives primitives = (Primitives) xf.fromXML(reader);
@@ -101,6 +101,7 @@ public class BasicConvertersTest {
 
     }
 
+    @RootElement("primitives")
     public static class Primitives {
 
         // tests mapping element attribute to private field

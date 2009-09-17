@@ -51,7 +51,7 @@ public class CollectionConverterTest {
     public void collectionConverterTest() throws IOException, SAXException {
 
         StringReader reader = new StringReader(xml);
-        Configuration conf = new AnnotationConfiguration(One.class, "one");
+        Configuration conf = new AnnotationConfiguration(One.class);
 
         Xlite xlite = new Xlite(conf);
         One one = (One) xlite.fromXML(reader);
@@ -123,6 +123,7 @@ public class CollectionConverterTest {
         }
     }
 
+    @RootElement("one")
     public static class One {
 
         @Text

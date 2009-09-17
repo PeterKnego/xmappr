@@ -34,7 +34,7 @@ public class ByteArrayConverterTest {
     @org.testng.annotations.Test
     public void test() throws IOException, SAXException {
         StringReader reader = new StringReader(inXml);
-        Configuration conf = new AnnotationConfiguration(Test.class, "test");
+        Configuration conf = new AnnotationConfiguration(Test.class);
         Xlite xlite = new Xlite(conf);
 
         Test test = (Test) xlite.fromXML(reader);
@@ -54,6 +54,7 @@ public class ByteArrayConverterTest {
 
     }
 
+    @RootElement("test")
     public static class Test {
         @Element
         public byte[] node;

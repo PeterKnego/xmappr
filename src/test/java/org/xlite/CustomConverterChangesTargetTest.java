@@ -32,11 +32,11 @@ public class CustomConverterChangesTargetTest {
     public void basicTest() {
 
         StringReader reader = new StringReader(xml1);
-        Configuration conf = new AnnotationConfiguration(XMLTextTest.class, "one");
+        Configuration conf = new AnnotationConfiguration(One.class);
         conf.setPrettyPrint(false);
         Xlite xlite = new Xlite(conf);
 
-        XMLTextTest one = (XMLTextTest) xlite.fromXML(reader);
+        One one = (One) xlite.fromXML(reader);
         Assert.assertEquals((int) one.getValues().size(), 4);
         Assert.assertEquals((int) one.getValues().get(0), 0);
         Assert.assertEquals((int) one.getValues().get(1), 1);
@@ -49,13 +49,14 @@ public class CustomConverterChangesTargetTest {
         XMLAssert.assertEquals(xml2, w.toString());
     }
 
-    public static class XMLTextTest {
+    @RootElement("one")
+    public static class One {
 
         @Text(converter = IntegerCollectionConverter.class)
         private List<Integer> values = new ArrayList<Integer>();
 
 
-        public XMLTextTest() {
+        public One() {
             values.add(0);
         }
 

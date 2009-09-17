@@ -36,7 +36,7 @@ public class DateConverterTest {
     @org.testng.annotations.Test
     public void test() throws IOException, SAXException, ParseException {
         StringReader reader = new StringReader(inXml);
-        Configuration conf = new AnnotationConfiguration(Test.class, "test");
+        Configuration conf = new AnnotationConfiguration(Test.class);
         Xlite xlite = new Xlite(conf);
 
         Test test = (Test) xlite.fromXML(reader);
@@ -61,12 +61,13 @@ public class DateConverterTest {
     @ExpectedExceptions(XliteException.class)
     public void wrongFormatterTest() {
         StringReader reader = new StringReader(inXml2);
-        Configuration conf = new AnnotationConfiguration(Test.class, "test");
+        Configuration conf = new AnnotationConfiguration(Test.class);
         Xlite xlite = new Xlite(conf);
 
         Test test = (Test) xlite.fromXML(reader);
     }
 
+    @RootElement("test")
     public static class Test {
         @Element(format = "yyyy.MM.dd HH:mm:ss")
         public Date node;
@@ -76,12 +77,13 @@ public class DateConverterTest {
     @ExpectedExceptions(XliteConfigurationException.class)
     public void testEmptyFormat() {
         StringReader reader = new StringReader(inXml);
-        Configuration conf = new AnnotationConfiguration(TestEmpty.class, "test");
+        Configuration conf = new AnnotationConfiguration(TestEmpty.class);
         Xlite xlite = new Xlite(conf);
 
         TestEmpty test = (TestEmpty) xlite.fromXML(reader);
     }
 
+    @RootElement("test")
     public static class TestEmpty {
         // format is empty
         @Element(format = "")
@@ -92,12 +94,13 @@ public class DateConverterTest {
     @ExpectedExceptions(XliteConfigurationException.class)
     public void testWrongFormat() {
         StringReader reader = new StringReader(inXml);
-        Configuration conf = new AnnotationConfiguration(TestWrong.class, "test");
+        Configuration conf = new AnnotationConfiguration(TestWrong.class);
         Xlite xlite = new Xlite(conf);
 
         TestWrong test = (TestWrong) xlite.fromXML(reader);
     }
 
+    @RootElement("test")
     public static class TestWrong {
         // format is plainly wrong
         @Element(format = "wow this is a wrong format")

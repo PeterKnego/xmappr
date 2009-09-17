@@ -43,7 +43,7 @@ public class DefaultNsOverridingTest {
     @org.testng.annotations.Test
     public void test() throws IOException, SAXException {
         StringReader reader = new StringReader(xml);
-        Configuration conf = new AnnotationConfiguration(aaa.class, "aaa");
+        Configuration conf = new AnnotationConfiguration(aaa.class);
 
         // predefined namespaces
         conf.addNamespace("u=uppercase");
@@ -71,6 +71,7 @@ public class DefaultNsOverridingTest {
         XMLAssert.assertXMLEqual(xml, sw.toString());
     }
 
+    @RootElement("aaa")
     public static class aaa {
         @Namespaces("lowercase")
         @Element("bbbb")

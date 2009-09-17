@@ -8,26 +8,26 @@ package org.xlite;
 
 import org.xlite.converters.*;
 
-import javax.xml.namespace.QName;
 import javax.xml.XMLConstants;
-import java.util.List;
+import javax.xml.namespace.QName;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class AnnotationConfiguration implements Configuration {
-
-    private RootMapper rootElementMapper;
 
     private MappingContext mappingContext;
 
     private volatile boolean initialized = false;
 
-    private Class rootClass;
+    private Map<Class, QName> rootMappings = new HashMap<Class, QName>();
 
-    private String rootElementName;
+    private Map<QName, RootMapper> mappers = new HashMap<QName, RootMapper>();
 
     private boolean isPrettyPrint = true;
 
-    public AnnotationConfiguration(Class rootClass, String nodeName) {
+    public AnnotationConfiguration(Class rootClass) {
         try {
             Class.forName("javax.xml.stream.XMLOutputFactory", false, this.getClass().getClassLoader());
         } catch (ClassNotFoundException e) {
@@ -39,13 +39,22 @@ public class AnnotationConfiguration implements Configuration {
         List<ValueConverter> valueConverters = setupValueConverters();
         List<ElementConverter> elementConverters = setupElementConverters(valueConverters);
 
-        this.rootClass = rootClass;
-        this.rootElementName = nodeName;
+        // add a mapping
+        rootMappings.put(rootClass, null);
+
         this.mappingContext = new MappingContext(elementConverters, valueConverters);
     }
 
-    public RootMapper getRootElementMapper() {
-        return rootElementMapper;
+    public RootMapper getRootElementMapper(QName name) {
+        return mappers.get(name);
+    }
+
+    public RootMapper getRootElementMapper(Class sourceClass) {
+        QName rootName = rootMappings.get(sourceClass);
+        if (rootName == null) {
+            return null;
+        }
+        return mappers.get(rootName);
     }
 
     public boolean isPrettyPrint() {
@@ -54,8 +63,9 @@ public class AnnotationConfiguration implements Configuration {
 
     public synchronized void setPrettyPrint(boolean prettyPrint) {
         if (initialized) {
-            throw new XliteConfigurationException("Error: Trying to add configuration parameters after first use. " +
-                    "Once Xlite is used (.fromXml() or similar is called), configuration parameters can not be altered.");
+            throw new XliteConfigurationException("Error: Trying to add configuration parameters " +
+                    "after first use. Once Xlite is used (.fromXml() or similar is called)," +
+                    " configuration parameters can not be altered.");
         }
         this.isPrettyPrint = prettyPrint;
     }
@@ -65,26 +75,11 @@ public class AnnotationConfiguration implements Configuration {
         // one-time initialization
         if (!initialized) {
 
-            // split xml node name into prefix and local part
-            int index = rootElementName.indexOf(':');
-            String rootElementLocalpart;
-            String rootElementPrefix;
-            if (index > 0) {  // with prefix ("prefix:localpart")
-                rootElementPrefix = rootElementName.substring(0, index);
-                rootElementLocalpart = rootElementName.substring(index + 1, rootElementName.length());
-
-            } else if (index == 0) { // empty prefix (no prefix defined - e.g ":nodeName")
-                rootElementPrefix = XMLConstants.DEFAULT_NS_PREFIX;
-                rootElementLocalpart = rootElementName.substring(1, rootElementName.length());
-
-            } else { // no prefix given
-                rootElementPrefix = XMLConstants.DEFAULT_NS_PREFIX;
-                rootElementLocalpart = rootElementName;
+            for (Class mappedClass : rootMappings.keySet()) {
+                QName elementName = processRootElementName(mappedClass);
+                rootMappings.put(mappedClass, elementName);
+                mappers.put(elementName, new RootMapper(elementName, mappedClass, mappingContext));
             }
-
-            // namespace  of root element is not defined
-            String rootElementNS = mappingContext.getPredefinedNamespaces().getNamespaceURI(rootElementPrefix);
-            this.rootElementMapper = new RootMapper(new QName(rootElementNS, rootElementLocalpart, rootElementPrefix), rootClass, mappingContext);
             initialized = true;
         }
     }
@@ -130,6 +125,71 @@ public class AnnotationConfiguration implements Configuration {
                     "Once Xlite is used (.fromXml() or similar is called), configuration parameters can not be altered.");
         }
         mappingContext.addNamespace(namespace);
+    }
+
+    public void addMapping(Class rootClass) {
+        // check for duplicate mappings
+        if (rootMappings.containsKey(rootClass)) {
+            throw new XliteConfigurationException("Error: Duplicate mapping of root class. Class " +
+                    rootClass.getName() + " is already mapped.");
+        }
+        rootMappings.put(rootClass, null);
+    }
+
+    /**
+     * Inspects a class for the @RootElement annotations
+     *
+     * @param currentClass Class to be processed.
+     * @return QName that the class maps to.
+     */
+    private QName processRootElementName(Class currentClass) {
+
+        RootElement rootElement = (RootElement) currentClass.getAnnotation(RootElement.class);
+
+        // read the name value from @RootElement annotation
+        String elementName = rootElement.name().length() != 0 ? rootElement.name() : rootElement.value();
+
+        // Root class must have an element name defined
+        if (elementName.length() == 0) {
+            throw new XliteConfigurationException("Error: Mapped class " + currentClass.getName() +
+                    "has empty @RootElement annotation: value or 'name' field must not be empty.");
+        }
+
+        // split xml node name into prefix and local part
+        int index = elementName.indexOf(':');
+        String rootElementLocalpart;
+        String rootElementPrefix;
+        if (index > 0) {  // with prefix ("prefix:localpart")
+            rootElementPrefix = elementName.substring(0, index);
+            rootElementLocalpart = elementName.substring(index + 1, elementName.length());
+
+        } else if (index == 0) { // empty prefix (no prefix defined - e.g ":nodeName")
+            rootElementPrefix = XMLConstants.DEFAULT_NS_PREFIX;
+            rootElementLocalpart = elementName.substring(1, elementName.length());
+
+        } else { // no prefix given
+            rootElementPrefix = XMLConstants.DEFAULT_NS_PREFIX;
+            rootElementLocalpart = elementName;
+        }
+
+        // search for namespaces defined on root class
+        NsContext classNS = new NsContext();
+        Namespaces nsAnnotation = (Namespaces) currentClass.getAnnotation(Namespaces.class);
+        if (nsAnnotation != null && nsAnnotation.value().length != 0) {
+            for (int i = 0; i < nsAnnotation.value().length; i++) {
+                classNS.addNamespace(nsAnnotation.value()[i]);
+            }
+        }
+
+        // look for namespace with given prefix
+        String rootElementNS = classNS.getNamespaceURI(rootElementPrefix);
+
+        // if namespace not defined on class, look within predefined namespaces
+        if (rootElementNS == null) {
+            rootElementNS = mappingContext.getPredefinedNamespaces().getNamespaceURI(rootElementPrefix);
+        }
+
+        return new QName(rootElementNS, rootElementLocalpart, rootElementPrefix);
     }
 
 }

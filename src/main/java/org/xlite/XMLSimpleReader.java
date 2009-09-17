@@ -31,6 +31,7 @@ public class XMLSimpleReader {
     private boolean isStoringUnknownElements;
     private ObjectStore eventCache;
     private ObjectStore objectStore;
+    private QName rootName;
 
     public XMLSimpleReader(XMLStreamReader reader) {
         this(reader, false);
@@ -248,14 +249,16 @@ public class XMLSimpleReader {
 //        }
 //    }
 
-    public QName getFirstName() {
-        boolean bol = nextElementBoundary(false);
-        QName qName = reader.getName();
-        if (isEnd && qName == null) {
-            return null;
+    public QName getRootName() {
+        // if root element name is not known yet
+        if (rootName == null) {
+            boolean bol = nextElementBoundary(false);
+            rootName = reader.getName();
+            if (isEnd && rootName == null) {
+                return null;
+            }
         }
-//        moveDown();
-        return qName;
+        return rootName;
     }
 
     public void saveSubTree(Object reference) {

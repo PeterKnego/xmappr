@@ -29,7 +29,7 @@ public class UndeclaringDefaultNs {
     @org.testng.annotations.Test
     public void test() throws IOException, SAXException {
         StringReader reader = new StringReader(xml);
-        Configuration conf = new AnnotationConfiguration(aaa.class, "aaa");
+        Configuration conf = new AnnotationConfiguration(aaa.class);
 
         // predefined default namespace
         conf.addNamespace("lowercase");
@@ -48,6 +48,7 @@ public class UndeclaringDefaultNs {
 
     }
 
+    @RootElement("aaa")
     public static class aaa {
         @Element("bbbb")
         public bbb node_bbb;

@@ -21,7 +21,7 @@ public class PrefixNotDefinedTest {
     @ExpectedExceptions(XliteConfigurationException.class)
     public void test() {
         StringReader reader = new StringReader(inXml);
-        Configuration conf = new AnnotationConfiguration(Test.class, "test");
+        Configuration conf = new AnnotationConfiguration(Test.class);
         Xlite xf = new Xlite(conf);
 
         Test test = (Test) xf.fromXML(reader);
@@ -29,6 +29,7 @@ public class PrefixNotDefinedTest {
     }
 
 
+    @RootElement("test")
     public static class Test {
         // prefix 'x' is not declared 
         @Element("x:node")

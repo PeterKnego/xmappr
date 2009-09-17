@@ -37,7 +37,7 @@ public class DifferentNsSamePrefixesTest {
     @org.testng.annotations.Test
     public void test() throws IOException, SAXException {
         StringReader reader = new StringReader(xml);
-        Configuration conf = new AnnotationConfiguration(aaa.class, "aaa");
+        Configuration conf = new AnnotationConfiguration(aaa.class);
 
         Xlite xlite = new Xlite(conf);
         aaa a = (aaa) xlite.fromXML(reader);
@@ -56,6 +56,7 @@ public class DifferentNsSamePrefixesTest {
     }
 
     // node aaa is in default namespace
+    @RootElement("aaa")
     public static class aaa {
         @Namespaces("lower=lowercase")
         @Element("lower:bbbb")

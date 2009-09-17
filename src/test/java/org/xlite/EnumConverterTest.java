@@ -20,7 +20,7 @@ public class EnumConverterTest {
 
         // do the mapping
         StringReader reader = new StringReader(xml);
-        Configuration conf = new AnnotationConfiguration(Root.class, "root");
+        Configuration conf = new AnnotationConfiguration(Root.class);
         Xlite xlite = new Xlite(conf);
         Root root = (Root) xlite.fromXML(reader);
 
@@ -32,6 +32,7 @@ public class EnumConverterTest {
     /**
      * Container class
      */
+    @RootElement("root")
     public static class Root {
         @Attribute
         public SimpleEnum simple;

@@ -32,7 +32,7 @@ public class NamespaceScopeTest {
     @org.testng.annotations.Test
     public void test() throws IOException, SAXException {
         StringReader reader = new StringReader(xml);
-        Configuration conf = new AnnotationConfiguration(aaa.class, "l:aaa");
+        Configuration conf = new AnnotationConfiguration(aaa.class);
 //        conf.addNamespace("l=lowercase");
 
         Xlite xlite = new Xlite(conf);
@@ -51,6 +51,7 @@ public class NamespaceScopeTest {
     }
 
     @Namespaces("l=lowercase")
+    @RootElement("l:aaa")
     public static class aaa {
 
         @Namespaces("l=uppercase")

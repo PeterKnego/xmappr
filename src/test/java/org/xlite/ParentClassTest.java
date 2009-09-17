@@ -25,7 +25,7 @@ public class ParentClassTest {
     public void mainTest() {
 
         StringReader reader = new StringReader(ParentClassTest.xml);
-        Configuration conf = new AnnotationConfiguration(Child.class, "base");
+        Configuration conf = new AnnotationConfiguration(Child.class);
         Xlite xlite = new Xlite(conf);
 
         Child child = (Child) xlite.fromXML(reader);
@@ -46,6 +46,7 @@ public class ParentClassTest {
 
     }
 
+    @RootElement("base")
     public static class Child extends Parent {
         @Attribute
         public long l;

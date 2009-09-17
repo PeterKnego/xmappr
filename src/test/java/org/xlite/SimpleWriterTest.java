@@ -34,7 +34,7 @@ public class SimpleWriterTest {
     public void testEquality() throws XMLStreamException, IOException, SAXException {
         StringReader reader = new StringReader(xml1);
 
-        Configuration conf = new AnnotationConfiguration(A.class, "a");
+        Configuration conf = new AnnotationConfiguration(A.class);
         conf.addNamespace("ns1");
 
         Xlite xlite = new Xlite(conf);
@@ -49,6 +49,7 @@ public class SimpleWriterTest {
         XMLAssert.assertXMLEqual(xml1, sw.toString());
     }
 
+    @RootElement("a")
     public static class A {
         @Namespaces("s=ns2")
         @Element("s:b")
