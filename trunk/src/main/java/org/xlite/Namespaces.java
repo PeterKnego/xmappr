@@ -13,6 +13,6 @@ import java.lang.annotation.RetentionPolicy;
 
 @Target(value = {ElementType.TYPE, ElementType.FIELD})
 @Retention(value = RetentionPolicy.RUNTIME)
-public @interface XMLnamespaces {
+public @interface Namespaces {
     String[] value() default {};
 }

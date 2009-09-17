@@ -11,8 +11,8 @@ import org.custommonkey.xmlunit.XMLAssert;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.xml.sax.SAXException;
 import org.xlite.Xlite;
-import org.xlite.XMLelement;
-import org.xlite.XMLtext;
+import org.xlite.Element;
+import org.xlite.Text;
 import org.testng.Assert;
 
 import java.io.IOException;
@@ -67,21 +67,21 @@ public class DefaultValuesTest {
 
     public static class Root {
 
-        @XMLattribute(defaultValue = "5")
+        @Attribute(defaultValue = "5")
         public int attr;
 
-        @XMLelement
+        @Element
         public A a;
 
-        @XMLelement(defaultValue = "2")
+        @Element(defaultValue = "2")
         public int b;
 
-        @XMLelement(defaultValue = "3")
+        @Element(defaultValue = "3")
         public Integer c;
     }
 
     public static class A {
-        @XMLtext
+        @Text
         public String text;
     }
 

@@ -14,7 +14,6 @@ import org.custommonkey.xmlunit.XMLAssert;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.math.BigDecimal;
 
 public class ByteArrayConverterTest {
 
@@ -56,7 +55,7 @@ public class ByteArrayConverterTest {
     }
 
     public static class Test {
-        @XMLelement
+        @Element
         public byte[] node;
     }
 }

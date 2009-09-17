@@ -6,13 +6,11 @@
  */
 package org.xlite;
 
-import org.testng.annotations.ExpectedExceptions;
 import org.testng.Assert;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.custommonkey.xmlunit.XMLAssert;
 import org.xml.sax.SAXException;
 
-import javax.xml.namespace.QName;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.IOException;
@@ -50,12 +48,12 @@ public class LoopTest {
     // classes Test and Back have a circular reference
 
     public static class Test {
-        @XMLelement
+        @Element
         public Back back;
     }
 
     public static class Back {
-        @XMLelement
+        @Element
         public Test test;
     }
 

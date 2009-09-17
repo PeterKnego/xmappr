@@ -47,7 +47,7 @@ public class BigDecimalConverterTest {
     }
 
     public static class Test {
-        @XMLelement
+        @Element
         public BigDecimal node;
     }
 }

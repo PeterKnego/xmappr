@@ -72,58 +72,58 @@ public class DefaultNsOverridingTest {
     }
 
     public static class aaa {
-        @XMLnamespaces("lowercase")
-        @XMLelement("bbbb")
+        @Namespaces("lowercase")
+        @Element("bbbb")
         public bbbb node_bbbb;
 
-        @XMLnamespaces("uppercase")
-        @XMLelement("BBB")
+        @Namespaces("uppercase")
+        @Element("BBB")
         public BBB node_BBB;
 
-        @XMLnamespaces("xnumber")
-        @XMLelement("x111")
+        @Namespaces("xnumber")
+        @Element("x111")
         public x111 node_x111;
     }
 
-    @XMLnamespaces("lowercase")
+    @Namespaces("lowercase")
     public static class bbbb {
-        @XMLelement("cccc")
+        @Element("cccc")
         public cccc node_cccc;
 
-        @XMLelement("u:WWW")
+        @Element("u:WWW")
         public WWW node_WWW;
 
-        @XMLelement("xn:x666")
+        @Element("xn:x666")
         public x666 node_x666;
     }
 
     public static class cccc {
     }
 
-    @XMLnamespaces("uppercase")
+    @Namespaces("uppercase")
     public static class BBB {
-        @XMLelement("CCC")
+        @Element("CCC")
         public CCC node_CCC;
 
-        @XMLelement("u:WWW")
+        @Element("u:WWW")
         public WWW node_WWW;
 
-        @XMLelement("xn:x666")
+        @Element("xn:x666")
         public x666 node_x666;
     }
 
     public static class CCC {
     }
 
-    @XMLnamespaces("xnumber")
+    @Namespaces("xnumber")
     public static class x111 {
-        @XMLelement("x222")
+        @Element("x222")
         public x222 node_x222;
 
-        @XMLelement("u:WWW")
+        @Element("u:WWW")
         public WWW node_WWW;
 
-        @XMLelement("xn:x666")
+        @Element("xn:x666")
         public x666 node_x666;
     }
 

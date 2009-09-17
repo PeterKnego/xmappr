@@ -50,31 +50,31 @@ public class NamespaceScopeTest {
         XMLAssert.assertXMLEqual(xml, sw.toString());
     }
 
-    @XMLnamespaces("l=lowercase")
+    @Namespaces("l=lowercase")
     public static class aaa {
 
-        @XMLnamespaces("l=uppercase")
-        @XMLelement("l:BBB")
+        @Namespaces("l=uppercase")
+        @Element("l:BBB")
         public BBB node_BBB;
 
-        @XMLelement("l:x111")
+        @Element("l:x111")
         public x111 node_x111;
     }
 
-    @XMLnamespaces("l=uppercase")
+    @Namespaces("l=uppercase")
     public static class BBB {
 
-        @XMLnamespaces("l=xnumber")
-        @XMLelement("cccc")
+        @Namespaces("l=xnumber")
+        @Element("cccc")
         public ccc node_ccc;
 
-        @XMLelement("l:x111")
+        @Element("l:x111")
         public x111 node_x111;
     }
 
-    @XMLnamespaces("l=xnumber")
+    @Namespaces("l=xnumber")
     public static class ccc {
-        @XMLelement("l:x111")
+        @Element("l:x111")
         public x111 node_x111;
     }
 

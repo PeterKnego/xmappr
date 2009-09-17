@@ -33,10 +33,10 @@ public class EnumConverterTest {
      * Container class
      */
     public static class Root {
-        @XMLattribute
+        @Attribute
         public SimpleEnum simple;
 
-        @XMLelement
+        @Element
         public PolyEnum poly;
     }
 

@@ -6,9 +6,9 @@
  */
 package org.xlite;
 
-import org.xlite.XMLattribute;
-import org.xlite.XMLelement;
-import org.xlite.XMLtext;
+import org.xlite.Attribute;
+import org.xlite.Element;
+import org.xlite.Text;
 
 public class SampleXml {
 
@@ -34,71 +34,71 @@ public class SampleXml {
 
     public static class One {
 
-        @XMLattribute("attr1")
+        @Attribute("attr1")
         public String attr;
 
-        @XMLattribute
+        @Attribute
         public int attr2;
 
-        @XMLattribute
+        @Attribute
         public float attr3;
 
-        @XMLtext
+        @Text
         public String text;
 
-        @XMLelement
+        @Element
         public Empty emptyNode;
 
-        @XMLelement
+        @Element
         public Two two;
 
     }
 
     public static class Two {
 
-        @XMLattribute
+        @Attribute
         public boolean attr4;
 
-        @XMLattribute("attr5")
+        @Attribute("attr5")
         public char character;
 
-        @XMLtext
+        @Text
         public String text;
 
-        @XMLelement
+        @Element
         public Three three1;
 
-        @XMLelement("nodeWithSubnodes")
+        @Element("nodeWithSubnodes")
         public Four four;
     }
 
     public static class Three {
 
-        @XMLattribute("val")
+        @Attribute("val")
         public int attr;
 
-        @XMLtext
+        @Text
         public String textField;
     }
 
     public static class Four {
 
-        @XMLelement("integer")
+        @Element("integer")
         public int i;
 
-        @XMLelement("bool")
+        @Element("bool")
         public boolean b;
 
-        @XMLelement("char")
+        @Element("char")
         public char c;
 
-        @XMLelement("float")
+        @Element("float")
         public float f;
 
     }
 
     public static class Empty {
-        @XMLattribute
+        @Attribute
         public double attrEmpty;
     }
 }

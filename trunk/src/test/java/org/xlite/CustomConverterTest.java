@@ -117,27 +117,27 @@ public class CustomConverterTest {
 
     public static class One {
 
-        @XMLtext(converter = UpperCaseConverter.class)
+        @Text(converter = UpperCaseConverter.class)
         public String text;
 
-        @XMLelement(converter = CustomElementConverter.class)
+        @Element(converter = CustomElementConverter.class)
         public CustomConverterTest.Custom custom;
 
     }
 
     public static class Three {
 
-        @XMLattribute(name = "val", converter = LowerCaseConverter.class)
+        @Attribute(name = "val", converter = LowerCaseConverter.class)
         public String attr;
 
-        @XMLtext
+        @Text
         public String textField;
     }
 
 
     public static class Wrong {
         // should throw an exception
-        @XMLattribute(converter = LowerCaseConverter.class)
+        @Attribute(converter = LowerCaseConverter.class)
         public int attr;
     }
 }

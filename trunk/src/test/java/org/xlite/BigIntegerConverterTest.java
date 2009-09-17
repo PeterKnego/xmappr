@@ -14,7 +14,6 @@ import org.custommonkey.xmlunit.XMLAssert;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.math.BigDecimal;
 import java.math.BigInteger;
 
 public class BigIntegerConverterTest {
@@ -48,7 +47,7 @@ public class BigIntegerConverterTest {
     }
 
     public static class Test {
-        @XMLelement
+        @Element
         public BigInteger node;
     }
 }

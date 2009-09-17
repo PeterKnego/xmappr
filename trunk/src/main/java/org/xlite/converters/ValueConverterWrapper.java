@@ -35,7 +35,7 @@ public class ValueConverterWrapper implements ElementConverter {
                 return valueConverter.fromValue(defaultValue, format, targetType);
             } else if (!valueConverter.convertsEmpty()) {
                 throw new XliteException("Converter of type "+valueConverter.getClass()+" can not convert empty elements. " +
-                        "Either element must not be empty or a default value must be supplied via @XMLelement(defaultValue = \"val\")");
+                        "Either element must not be empty or a default value must be supplied via @Element(defaultValue = \"val\")");
             }
         }
         return valueConverter.fromValue(text, format, targetType);

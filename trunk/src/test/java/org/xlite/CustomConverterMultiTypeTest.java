@@ -106,17 +106,17 @@ public class CustomConverterMultiTypeTest {
     }
 
     public static class Root {
-        @XMLattributes({
-                @XMLattribute(name = "one", converter = CustomMultiTypeValueConverter.class, itemType = One.class),
-                @XMLattribute(name = "two", converter = CustomMultiTypeValueConverter.class, itemType = Two.class),
-                @XMLattribute(name = "three", converter = CustomMultiTypeValueConverter.class, itemType = Three.class)
+        @Attributes({
+                @Attribute(name = "one", converter = CustomMultiTypeValueConverter.class, itemType = One.class),
+                @Attribute(name = "two", converter = CustomMultiTypeValueConverter.class, itemType = Two.class),
+                @Attribute(name = "three", converter = CustomMultiTypeValueConverter.class, itemType = Three.class)
         })
         public Map attributes;
 
-        @XMLelements({
-                @XMLelement(name = "one", converter = CustomMultiTypeElementConverter.class, itemType = One.class),
-                @XMLelement(name = "two", converter = CustomMultiTypeElementConverter.class, itemType = Two.class),
-                @XMLelement(name = "three", converter = CustomMultiTypeElementConverter.class, itemType = Three.class)
+        @Elements({
+                @Element(name = "one", converter = CustomMultiTypeElementConverter.class, itemType = One.class),
+                @Element(name = "two", converter = CustomMultiTypeElementConverter.class, itemType = Two.class),
+                @Element(name = "three", converter = CustomMultiTypeElementConverter.class, itemType = Three.class)
         })
         public List subelements;
     }

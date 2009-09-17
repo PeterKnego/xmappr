@@ -56,22 +56,22 @@ public class DefaultNSEachSubnode {
     }
 
     public static class aaa {
-        @XMLnamespaces("lowercase")
-        @XMLelement("bbbb")
+        @Namespaces("lowercase")
+        @Element("bbbb")
         public bbbb node_bbb;
 
-        @XMLnamespaces("uppercase")
-        @XMLelement("BBB")
+        @Namespaces("uppercase")
+        @Element("BBB")
         public BBB node_BBB;
 
-        @XMLnamespaces("xnumber")
-        @XMLelement("x111")
+        @Namespaces("xnumber")
+        @Element("x111")
         public x111 node_x111;
     }
 
     public static class bbbb {
-        @XMLnamespaces("lowercase")
-        @XMLelement("cccc")
+        @Namespaces("lowercase")
+        @Element("cccc")
         public cccc node_cccc;
     }
 
@@ -79,8 +79,8 @@ public class DefaultNSEachSubnode {
     }
 
     public static class BBB {
-        @XMLnamespaces("uppercase")
-        @XMLelement("CCC")
+        @Namespaces("uppercase")
+        @Element("CCC")
         public CCC node_CCC;
     }
 
@@ -88,8 +88,8 @@ public class DefaultNSEachSubnode {
     }
 
     public static class x111 {
-        @XMLnamespaces("xnumber")
-        @XMLelement("x222")
+        @Namespaces("xnumber")
+        @Element("x222")
         public x222 node_x222;
     }
 

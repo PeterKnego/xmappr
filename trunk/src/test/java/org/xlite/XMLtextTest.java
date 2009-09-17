@@ -48,7 +48,7 @@ public class XMLtextTest {
 
     public static class XMLTextTest {
 
-        @XMLtext(converter = IntegerCollectionConverter.class)
+        @Text(converter = IntegerCollectionConverter.class)
         private List<Integer> values = new ArrayList<Integer>();
 
 

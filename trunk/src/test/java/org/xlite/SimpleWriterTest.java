@@ -16,9 +16,9 @@ import java.io.StringReader;
 import java.io.StringWriter;
 
 import org.xlite.Xlite;
-import org.xlite.XMLattribute;
-import org.xlite.XMLnamespaces;
-import org.xlite.XMLelement;
+import org.xlite.Attribute;
+import org.xlite.Namespaces;
+import org.xlite.Element;
 
 public class SimpleWriterTest {
 
@@ -50,27 +50,27 @@ public class SimpleWriterTest {
     }
 
     public static class A {
-        @XMLnamespaces("s=ns2")
-        @XMLelement("s:b")
+        @Namespaces("s=ns2")
+        @Element("s:b")
         public B b;
     }
 
-    //    @XMLnamespaces("ns2")
+    //    @Namespaces("ns2")
     public static class B {
-        @XMLelement
+        @Element
         public C c;
 
-        @XMLelement
+        @Element
         public C c2;
     }
 
     public static class C {
-        @XMLelement
+        @Element
         public D d;
     }
 
     public static class D {
-        @XMLattribute
+        @Attribute
         public String attr;
     }
 

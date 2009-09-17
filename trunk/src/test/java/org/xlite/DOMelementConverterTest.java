@@ -9,7 +9,6 @@ package org.xlite;
 import org.xml.sax.SAXException;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.custommonkey.xmlunit.XMLAssert;
-import org.xlite.converters.DOMelementConverter;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -55,17 +54,17 @@ public class DOMelementConverterTest {
     }
 
     public static class Root {
-        @XMLelements({
-                @XMLelement(name = "b", itemType = B.class),
-                @XMLelement("*")
+        @Elements({
+                @Element(name = "b", itemType = B.class),
+                @Element("*")
         })
-        @XMLtext
+        @Text
         public List subelements;
 
     }
 
     public static class B {
-        @XMLtext
+        @Text
         public String text;
     }
 }
