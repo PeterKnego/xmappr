@@ -23,7 +23,7 @@ public class DateConverter extends ValueConverter {
         return java.util.Date.class.isAssignableFrom(type);
     }
 
-    public Object fromValue(String value, String format, Class targetType) {
+    public Object fromValue(String value, String format, Class targetType, Object targetObject) {
         try {
             return getDateFormatter(format).parse(value);
         } catch (ParseException e) {

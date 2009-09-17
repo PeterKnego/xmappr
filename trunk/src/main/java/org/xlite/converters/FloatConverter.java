@@ -15,7 +15,7 @@ public class FloatConverter extends ValueConverter {
         return type.equals(float.class) || Float.class.isAssignableFrom(type);
     }
 
-    public Object fromValue(String value, String format, Class targetType) {
+    public Object fromValue(String value, String format, Class targetType, Object targetObject) {
         return Float.valueOf(value);
     }
 

@@ -18,7 +18,7 @@ public class StringConverter extends ValueConverter {
         return String.class.isAssignableFrom(type);
     }
 
-    public Object fromValue(String value, String format, Class targetType) {
+    public Object fromValue(String value, String format, Class targetType, Object targetObject) {
         return value.intern();
     }
 

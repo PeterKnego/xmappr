@@ -36,7 +36,7 @@ public class BigIntegerConverter extends ValueConverter {
         return BigInteger.class.isAssignableFrom(type);
     }
 
-    public Object fromValue(String value, String format, Class targetType) {
+    public Object fromValue(String value, String format, Class targetType, Object targetObject) {
         return new BigInteger(value);
     }
 

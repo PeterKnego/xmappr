@@ -6,10 +6,10 @@
  */
 package org.xlite;
 
-import org.xlite.converters.ElementConverter;
-import org.xlite.converters.ValueConverter;
 import org.testng.Assert;
 import org.testng.annotations.ExpectedExceptions;
+import org.xlite.converters.ElementConverter;
+import org.xlite.converters.ValueConverter;
 
 import javax.xml.namespace.QName;
 import java.io.StringReader;
@@ -61,12 +61,13 @@ public class CustomConverterTest {
         }
 
 
-        public Object fromElement(XMLSimpleReader reader, MappingContext mappingContext, String defaultValue, String format, Class targetType) {
+        public Object fromElement(XMLSimpleReader reader, MappingContext mappingContext, String defaultValue, String format, Class targetType, Object targetObject) {
             Custom custom = new Custom();
             custom.value = reader.getText();
             while (reader.moveDown()) {
                 if (reader.getName().getLocalPart().equals("three")) {
-                    custom.three = (Three) mappingContext.processNextElement(Three.class, reader, null, null);
+                    Three tmp = (Three) mappingContext.processNextElement(Three.class, custom.three, reader, null, null);
+                    if (tmp != null) custom.three = tmp;
                 }
                 reader.moveUp();
             }
@@ -85,7 +86,7 @@ public class CustomConverterTest {
             return String.class.equals(type);
         }
 
-        public Object fromValue(String value, String format, Class targetType) {
+        public Object fromValue(String value, String format, Class targetType, Object targetObject) {
             return value.toUpperCase();
         }
 
@@ -100,7 +101,7 @@ public class CustomConverterTest {
             return String.class.equals(type);
         }
 
-        public Object fromValue(String value, String format, Class targetType) {
+        public Object fromValue(String value, String format, Class targetType, Object targetObject) {
             return value.toLowerCase();
         }
 

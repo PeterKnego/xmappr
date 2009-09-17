@@ -51,10 +51,10 @@ public class MappingContext {
      * @param reader
      * @return
      */
-    public Object processNextElement(Class targetType, XMLSimpleReader reader, String defaultValue, String format) {
+    public Object processNextElement(Class targetType, Object targetObject, XMLSimpleReader reader, String defaultValue, String format) {
         // find the converter for given Class
         ElementConverter converter = lookupElementConverter(targetType);
-        return converter.fromElement(reader, this, defaultValue, format, targetType);
+        return converter.fromElement(reader, this, defaultValue, format, targetType, targetObject);
     }
 
     public ValueConverter lookupValueConverter(Class type) {

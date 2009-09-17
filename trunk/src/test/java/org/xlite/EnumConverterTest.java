@@ -11,7 +11,7 @@ import java.io.StringReader;
 public class EnumConverterTest {
 
     String xml = "" +
-            "<root simple='NONE'>" +
+            "<root simple='ONE'>" +
             "  <poly>TEN</poly>" +
             "</root>";
 

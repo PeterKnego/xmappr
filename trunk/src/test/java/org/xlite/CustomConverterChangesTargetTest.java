@@ -19,7 +19,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class XMLtextTest {
+/**
+ *  Testing a custom ValueConverter that changes directly targetObject passed to it.
+ */
+public class CustomConverterChangesTargetTest {
 
     static final String xml1 = "<one>1,2,3</one>";
     static final String xml2 = "<one>0,1,2,3</one>";
@@ -65,20 +68,32 @@ public class XMLtextTest {
         }
     }
 
+    /**
+     * Custom ValueConverter that changes the targetObject passed to it.
+     */
     public static class IntegerCollectionConverter extends ValueConverter {
         public boolean canConvert(Class type) {
             return Collection.class.isAssignableFrom(type);
         }
 
-        public Object fromValue(String value, String format, Class targetType) {
-            Collection<Integer> integers = new ArrayList<Integer>();
-            if (value != null) {
+        public Object fromValue(String value, String format, Class targetType, Object targetObject) {
+
+            // targetObject must be a Collection
+            if (!Collection.class.isAssignableFrom(targetObject.getClass())) {
+                return null;
+            }
+
+            // cast to collection
+            Collection collection = (Collection) targetObject;
+
+            // perform 
+            if (value != null && value.length() > 0) {
                 String[] values = value.split(",");
                 for (String v : values) {
-                    integers.add(Integer.valueOf(v));
+                    collection.add(Integer.valueOf(v));
                 }
             }
-            return integers;
+            return null;
         }
 
         public String toValue(Object object, String format) {

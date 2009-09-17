@@ -6,7 +6,7 @@ public class EnumConverter extends ValueConverter {
         return type.isEnum() || Enum.class.isAssignableFrom(type);
     }
 
-    public Object fromValue(String value, String format, Class targetType) {
+    public Object fromValue(String value, String format, Class targetType, Object targetObject) {
 
         // Workaround for a JVM quirk:
         // Classes that extend Enum and also implement some interface appear as if they are an inner class.

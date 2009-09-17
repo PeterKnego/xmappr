@@ -98,15 +98,23 @@ public class ElementMapper {
                     ". Collection contains element types that are not defined in @Element annotation.");
         }
 
-        Object value = converter.fromElement(reader, mappingContext, defaultValue, format, targetType);
-        collectionConverter.addItem(collection, value);
+        Object obj = converter.fromElement(reader, mappingContext, defaultValue, format, targetType, collection);
+
+        // do nothing if ElementConverter returns null
+        if (obj != null) {
+            collectionConverter.addItem(collection, obj);
+        }
     }
 
     private void setFieldValue(Object targetObject, XMLSimpleReader reader) {
         // process XML element and create an appropriate object
-        Object value = elementConverter.fromElement(reader, mappingContext, defaultValue, format, targetType);
-        // refere this object to a field
-        targetField.setValue(targetObject, value);
+        Object obj = elementConverter.fromElement(reader, mappingContext, defaultValue, format, targetType, targetField.getValue(targetObject));
+
+        // do nothing if ElementConverter returns null
+        if (obj != null) {
+            // link this object to a field
+            targetField.setValue(targetObject, obj);
+        }
     }
 
     public void writeElement(Object object, QName nodeName, XMLSimpleWriter writer, TextMapper textMapper) {

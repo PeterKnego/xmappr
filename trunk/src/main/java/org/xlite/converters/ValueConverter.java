@@ -13,7 +13,7 @@ public abstract class ValueConverter {
 
     public abstract boolean canConvert(Class type);
 
-    public abstract Object fromValue(String value, String format, Class targetType);
+    public abstract Object fromValue(String value, String format, Class targetType, Object targetObject);
 
     public abstract String toValue(Object object, String format);
 
