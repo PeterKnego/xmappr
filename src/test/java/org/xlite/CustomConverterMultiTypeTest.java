@@ -49,7 +49,7 @@ public class CustomConverterMultiTypeTest {
             return One.class.equals(type) || Two.class.equals(type) || Three.class.equals(type);
         }
 
-        public Object fromValue(String value, String format, Class targetType) {
+        public Object fromValue(String value, String format, Class targetType, Object targetObject) {
             if (One.class.equals(targetType)) {
                 return new One(Integer.valueOf(value));
             } else if (Two.class.equals(targetType)) {
@@ -79,7 +79,7 @@ public class CustomConverterMultiTypeTest {
         }
 
 
-        public Object fromElement(XMLSimpleReader reader, MappingContext mappingContext, String defaultValue, String format, Class targetType) {
+        public Object fromElement(XMLSimpleReader reader, MappingContext mappingContext, String defaultValue, String format, Class targetType, Object targetObject) {
 
             // read the text value of current XML element
             String value = reader.getText();

@@ -15,7 +15,7 @@ public class ByteConverter extends ValueConverter {
         return type.equals(byte.class) || Byte.class.isAssignableFrom(type);
     }
 
-    public Object fromValue(String value, String format, Class targetType) {
+    public Object fromValue(String value, String format, Class targetType, Object targetObject) {
         return Byte.valueOf(value);
     }
 

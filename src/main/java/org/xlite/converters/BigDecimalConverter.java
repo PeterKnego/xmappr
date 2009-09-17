@@ -15,7 +15,7 @@ public class BigDecimalConverter  extends ValueConverter {
         return BigDecimal.class.isAssignableFrom(type);
     }
 
-    public Object fromValue(String value, String format, Class targetType) {
+    public Object fromValue(String value, String format, Class targetType, Object targetObject) {
         return new BigDecimal(value);
     }
 

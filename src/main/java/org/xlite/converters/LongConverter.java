@@ -15,7 +15,7 @@ public class LongConverter extends ValueConverter {
         return type.equals(long.class) || Long.class.isAssignableFrom(type);
     }
 
-    public Object fromValue(String value, String format, Class targetType) {
+    public Object fromValue(String value, String format, Class targetType, Object targetObject) {
         return Long.valueOf(value);
     }
 

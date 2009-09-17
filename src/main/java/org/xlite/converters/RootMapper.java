@@ -43,7 +43,7 @@ public class RootMapper {
         QName firstElement = reader.getFirstName();
         if (firstElement.equals(rootNodeName)) {
             reader.moveDown();
-            return elementConverter.fromElement(reader, mappingContext, "", null, rootClass);
+            return elementConverter.fromElement(reader, mappingContext, "", null, rootClass, null);
         } else {
             throw new XliteException("Error: wrong XML element name. Was expecting root element <" + rootNodeName +
                     "> in input stream, but intead got <" + firstElement + ">.");

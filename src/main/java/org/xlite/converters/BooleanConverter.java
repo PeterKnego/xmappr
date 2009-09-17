@@ -27,7 +27,7 @@ public class BooleanConverter extends ValueConverter {
         return type.equals(boolean.class) || Boolean.class.isAssignableFrom(type);
     }
 
-    public Object fromValue(String value, String format, Class targetType) {
+    public Object fromValue(String value, String format, Class targetType, Object targetObject) {
         return value.length() == 0 || positive.equalsIgnoreCase(value) ? Boolean.TRUE : Boolean.FALSE;
     }
 

@@ -53,25 +53,28 @@ public class TextMapper {
     /**
      * Assigns a value to the Field.
      *
-     * @param object       Instance of an Object that contains the Field.
+     * @param container    Instance of an Object that contains the Field.
      * @param elementValue Value to be set.
      */
-    public void setValue(Object object, String elementValue) {
+    public void setValue(Object container, String elementValue) {
+
+        Object obj = valueConverter.fromValue(elementValue, format, targetType, targetField.getValue(container));
+
+        // do nothing if ValueConverter returns null 
+        if (obj == null) {
+            return;
+        }
+
         // is it a Collection?
-        Object value = valueConverter.fromValue(elementValue, format, targetType);
         if (isCollection()) {
-            Collection collection = (Collection) targetField.getValue(object);
+            Collection collection = (Collection) targetField.getValue(container);
             if (collection == null) {
                 collection = collectionConverter.initializeCollection(targetField.getType());
-                targetField.setValue(object, collection);
+                targetField.setValue(container, collection);
             }
-            if (value instanceof Collection) {
-                collection.addAll((Collection) value);
-            } else {
-                collection.add(value);
-            }
+            collection.add(obj);
         } else {
-            targetField.setValue(object, value);
+            targetField.setValue(container, obj);
         }
     }
 

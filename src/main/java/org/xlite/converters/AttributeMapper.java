@@ -10,7 +10,8 @@ import org.xlite.XliteException;
 
 import javax.xml.namespace.QName;
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class AttributeMapper {
 
@@ -27,7 +28,7 @@ public class AttributeMapper {
         this.targetType = targetType;
         this.valueConverter = valueConverter;
         if (defaultValue != null) {
-            this.defaultObject = valueConverter.fromValue(defaultValue, format, targetType);
+            this.defaultObject = valueConverter.fromValue(defaultValue, format, targetType, null);
         }
         this.format = format;
         this.isMap = Map.class.isAssignableFrom(targetField.getType());
@@ -42,7 +43,12 @@ public class AttributeMapper {
                 targetMap = initializeMap(targetField.getType());
                 targetField.setValue(object, targetMap);
             }
-            targetMap.put(attributeName, valueConverter.fromValue(elementValue, format, targetType));
+            Object obj = valueConverter.fromValue(elementValue, format, targetType, targetMap);
+
+            // do nothing if ValueConverter returns null
+            if (obj != null) {
+                targetMap.put(attributeName, obj);
+            }
         } else {
             setValue(object, elementValue);
         }
@@ -89,20 +95,24 @@ public class AttributeMapper {
     /**
      * Assigns a value to the Field.
      *
-     * @param holder       Instance of an Object that contains the Field.
+     * @param container    Instance of an Object that contains the Field.
      * @param elementValue Value to be set.
      */
-    private void setValue(Object holder, String elementValue) {
+    private void setValue(Object container, String elementValue) {
         // value is empty?
         if (elementValue.length() == 0) {
 
             // default value is used
             if (defaultObject != null) {
-                targetField.setValue(holder, defaultObject);
+                targetField.setValue(container, defaultObject);
             }
         } else {
-            Object value = valueConverter.fromValue(elementValue, format, targetType);
-            targetField.setValue(holder, value);
+            Object tmp = valueConverter.fromValue(elementValue, format, targetType, targetField.getValue(container));
+
+            // do nothing if ValueConverter returns null
+            if (tmp != null) {
+                targetField.setValue(container, tmp);
+            }
         }
     }
 

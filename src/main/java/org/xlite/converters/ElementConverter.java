@@ -39,9 +39,10 @@ public interface ElementConverter {
      * @param defaultValue Default value to use if xml element is empty.
      * @param format Format string passed in from @XMLelement(format="..."). Used to set conversion options.
      * @param targetType
+     * @param targetObject
      * @return
      */
-    public Object fromElement(XMLSimpleReader reader, MappingContext mappingContext, String defaultValue, String format, Class targetType);
+    public Object fromElement(XMLSimpleReader reader, MappingContext mappingContext, String defaultValue, String format, Class targetType, Object targetObject);
 
     /**
      * Takes an Object and serializes it to a XML element and writes it out to XmlSimpleWriter.

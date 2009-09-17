@@ -15,7 +15,7 @@ public class CharConverter extends ValueConverter{
         return type.equals(char.class) || Character.class.isAssignableFrom(type);
     }
 
-    public Object fromValue(String value, String format, Class targetType) {
+    public Object fromValue(String value, String format, Class targetType, Object targetObject) {
             return value.charAt(0);
     }
 

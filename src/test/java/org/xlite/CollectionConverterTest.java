@@ -94,7 +94,7 @@ public class CollectionConverterTest {
         XMLInputFactory of = XMLInputFactory.newInstance();
         XMLStreamReader xsr = of.createXMLStreamReader(new StringReader(""));
         XMLSimpleReader sr = new XMLSimpleReader(xsr, false);
-        cc.fromElement(sr, new MappingContext(null, null), "", null, null);
+        cc.fromElement(sr, new MappingContext(null, null), "", null, null, null);
 
     }
 

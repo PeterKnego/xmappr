@@ -15,7 +15,7 @@ public class ShortConverter extends ValueConverter {
         return type.equals(short.class) || Short.class.isAssignableFrom(type);
     }
 
-    public Object fromValue(String value, String format, Class targetType) {
+    public Object fromValue(String value, String format, Class targetType, Object targetObject) {
         return Short.valueOf(value);
     }
 
