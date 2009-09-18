@@ -211,11 +211,18 @@ public class AnnotationConfiguration implements Configuration {
         // read the name value from @RootElement annotation
         String elementName = rootElement.name().length() != 0 ? rootElement.name() : rootElement.value();
 
-        // Root class must have an element name defined
+        // if element name is not defined via annotations then construct it from class name
+        // e,g, Root.class yields 'root' element name
         if (elementName.length() == 0) {
-            throw new XliteConfigurationException("Error: Mapped class " + currentClass.getName() +
-                    "has empty @RootElement annotation: value or 'name' field must not be empty.");
+            elementName = currentClass.getSimpleName().toLowerCase();
         }
+
+        Namespaces nsAnnotation = (Namespaces) currentClass.getAnnotation(Namespaces.class);
+
+        return getRootQName(nsAnnotation, elementName);
+    }
+
+    private QName getRootQName(Namespaces namespaceAnnotations, String elementName) {
 
         // split xml node name into prefix and local part
         int index = elementName.indexOf(':');
@@ -236,10 +243,9 @@ public class AnnotationConfiguration implements Configuration {
 
         // search for namespaces defined on root class
         NsContext classNS = new NsContext();
-        Namespaces nsAnnotation = (Namespaces) currentClass.getAnnotation(Namespaces.class);
-        if (nsAnnotation != null && nsAnnotation.value().length != 0) {
-            for (int i = 0; i < nsAnnotation.value().length; i++) {
-                classNS.addNamespace(nsAnnotation.value()[i]);
+        if (namespaceAnnotations != null && namespaceAnnotations.value().length != 0) {
+            for (int i = 0; i < namespaceAnnotations.value().length; i++) {
+                classNS.addNamespace(namespaceAnnotations.value()[i]);
             }
         }
 
@@ -251,7 +257,8 @@ public class AnnotationConfiguration implements Configuration {
             rootElementNS = mappingContext.getPredefinedNamespaces().getNamespaceURI(rootElementPrefix);
         }
 
-        return new QName(rootElementNS, rootElementLocalpart, rootElementPrefix);
+        QName rootName = new QName(rootElementNS, rootElementLocalpart, rootElementPrefix);
+        return rootName;
     }
 
 }

@@ -21,7 +21,7 @@ public class MultiMappingConfigurationTest {
     private static String xml2 = "<two>2</two>";
 
     @org.testng.annotations.Test
-    public void configurationLoopTest() throws IOException, SAXException {
+    public void test() throws IOException, SAXException {
         StringReader reader1 = new StringReader(xml1);
         StringReader reader2 = new StringReader(xml2);
 
@@ -59,7 +59,7 @@ public class MultiMappingConfigurationTest {
         XMLAssert.assertXMLEqual(xml2, sw.toString());
     }
 
-    @RootElement("one")
+    @RootElement
     public static class One {
         @Text
         public String text;
