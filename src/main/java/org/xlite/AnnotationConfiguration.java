@@ -16,11 +16,13 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * Main configuration interface to Xlite.
  * Configures mappings between Classes and XML via a set of annotations that map XML elements to class fields.
  * <p/>
- * <b>Example</b><blockquote>
+ * <b>Example usage:</b>
  * <pre>
- * Con
+ * Configuration conf = new AnnotationConfiguration(One.class);  // intialize and define first class mapping
+ * conf.addMapping(Two.class);                                   // add second class mapping
  * </pre>
  * Please look at Xlite documentation for more detailed explanation of mapping configuration via annotations.
  */
@@ -36,10 +38,18 @@ public class AnnotationConfiguration implements Configuration {
 
     private boolean isPrettyPrint = true;
 
+    /**
+     * Initializes an empty AnnotationConfiguration
+     */
     public AnnotationConfiguration() {
         this(null);
     }
 
+    /**
+     * Initializes AnnotationConfiguration and adds a class mapping.
+     *
+     * @param rootClass
+     */
     public AnnotationConfiguration(Class rootClass) {
         try {
             Class.forName("javax.xml.stream.XMLOutputFactory", false, this.getClass().getClassLoader());
@@ -60,22 +70,44 @@ public class AnnotationConfiguration implements Configuration {
         this.mappingContext = new MappingContext(elementConverters, valueConverters);
     }
 
-    public RootMapper getRootElementMapper(QName name) {
-        return mappers.get(name);
+    /**
+     * Returns a RootMapper mapped to given root XML element.
+     *
+     * @param rootElementName
+     * @return
+     */
+    public RootMapper getRootElementMapper(QName rootElementName) {
+        return mappers.get(rootElementName);
     }
 
-    public RootMapper getRootElementMapper(Class sourceClass) {
-        QName rootName = rootMappings.get(sourceClass);
+    /**
+     * Returns a RootMapper mapped to given root class.
+     *
+     * @param rootClass
+     * @return
+     */
+    public RootMapper getRootElementMapper(Class rootClass) {
+        QName rootName = rootMappings.get(rootClass);
         if (rootName == null) {
             return null;
         }
         return mappers.get(rootName);
     }
 
+    /**
+     * Is output XML formatted in a human-readable form?
+     *
+     * @return
+     */
     public boolean isPrettyPrint() {
         return isPrettyPrint;
     }
 
+    /**
+     * Sets output XML to be formatted in a human-readable form.
+     *
+     * @param prettyPrint
+     */
     public synchronized void setPrettyPrint(boolean prettyPrint) {
         if (initialized) {
             throw new XliteConfigurationException("Error: Trying to add configuration parameters " +
@@ -85,6 +117,10 @@ public class AnnotationConfiguration implements Configuration {
         this.isPrettyPrint = prettyPrint;
     }
 
+    /**
+     * Called internally on first use of Xlite class.
+     * No configuration changes are allowed after initialization.
+     */
     public synchronized void initialize() {
 
         // one-time initialization
@@ -134,6 +170,12 @@ public class AnnotationConfiguration implements Configuration {
         return valueConverters;
     }
 
+    /**
+     * Adds a XML namespace to the list of predefined namespaces.
+     * Predefined namespaces apply to all classes/fields in the mapping configuration.
+     *
+     * @param namespace
+     */
     public synchronized void addNamespace(String namespace) {
         if (initialized) {
             throw new XliteConfigurationException("Error: Trying to add configuration parameters after first use. " +
@@ -142,6 +184,11 @@ public class AnnotationConfiguration implements Configuration {
         mappingContext.addNamespace(namespace);
     }
 
+    /**
+     * Adds a class to the mapping confuguration.
+     *
+     * @param rootClass
+     */
     public void addMapping(Class rootClass) {
         // check for duplicate mappings
         if (rootMappings.containsKey(rootClass)) {
