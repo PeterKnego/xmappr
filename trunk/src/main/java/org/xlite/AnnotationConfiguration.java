@@ -15,6 +15,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Configures mappings between Classes and XML via a set of annotations that map XML elements to class fields.
+ * <p/>
+ * <b>Example</b><blockquote>
+ * <pre>
+ * Con
+ * </pre>
+ * Please look at Xlite documentation for more detailed explanation of mapping configuration via annotations.
+ */
 public class AnnotationConfiguration implements Configuration {
 
     private MappingContext mappingContext;
@@ -26,6 +35,10 @@ public class AnnotationConfiguration implements Configuration {
     private Map<QName, RootMapper> mappers = new HashMap<QName, RootMapper>();
 
     private boolean isPrettyPrint = true;
+
+    public AnnotationConfiguration() {
+        this(null);
+    }
 
     public AnnotationConfiguration(Class rootClass) {
         try {
@@ -40,7 +53,9 @@ public class AnnotationConfiguration implements Configuration {
         List<ElementConverter> elementConverters = setupElementConverters(valueConverters);
 
         // add a mapping
-        rootMappings.put(rootClass, null);
+        if (rootClass != null) {
+            rootMappings.put(rootClass, null);
+        }
 
         this.mappingContext = new MappingContext(elementConverters, valueConverters);
     }
