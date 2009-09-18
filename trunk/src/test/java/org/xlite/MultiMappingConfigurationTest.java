@@ -59,8 +59,6 @@ public class MultiMappingConfigurationTest {
         XMLAssert.assertXMLEqual(xml2, sw.toString());
     }
 
-    // classes Test and Back have a circular reference
-
     @RootElement("one")
     public static class One {
         @Text
