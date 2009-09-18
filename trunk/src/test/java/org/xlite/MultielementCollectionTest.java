@@ -36,7 +36,7 @@ public class MultielementCollectionTest {
         conf.setPrettyPrint(true);
 
         Xlite xlite = new Xlite(conf);
-//        Xlite.Result result = xlite.fromXMLwithUnknown(reader);
+//        Xlite.Result result = xlite.fromXMLwithUnmapped(reader);
 //        Root one = (Root) result.getObject();
         Root one = (Root) xlite.fromXML(reader);
 

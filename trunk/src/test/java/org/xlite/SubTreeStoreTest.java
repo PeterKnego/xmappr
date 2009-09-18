@@ -61,7 +61,7 @@ public class SubTreeStoreTest {
         conf.addNamespace("w=ns3");
 
         Xlite xlite = new Xlite(conf);
-        Xlite.Result result = xlite.fromXMLwithUnknown(reader);
+        Xlite.Result result = xlite.fromXMLwithUnmapped(reader);
         A a = (A) result.getObject();
 
         // writing back to XML

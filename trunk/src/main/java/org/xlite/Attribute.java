@@ -13,6 +13,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+/**
+ * Annotation used to map a field to XML attribute.
+ */
 @Target(value = {ElementType.FIELD})
 @Retention(value = RetentionPolicy.RUNTIME)
 public @interface Attribute {
@@ -41,14 +44,16 @@ public @interface Attribute {
     String defaultValue() default "";
 
     /**
-     * ItemType must be used when a target field is a Collection. It determines what converter will be used.
+     * ItemType is used to determine which converter will be used.
+     * Either itemType or converter element must be defined when a target field is a Collection.
      *
      * @return
      */
     Class itemType() default String.class;
 
     /**
-     * Custom converter assigned to convert this field.
+     * Custom converter assigned to convert this XML attribute.
+     * Either itemType or converter element must be defined when a target field is a Collection.
      *
      * @return
      */
