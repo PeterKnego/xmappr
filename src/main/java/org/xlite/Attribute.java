@@ -49,7 +49,7 @@ public @interface Attribute {
      *
      * @return
      */
-    Class itemType() default String.class;
+    Class itemType() default Object.class;
 
     /**
      * Custom converter assigned to convert this XML attribute.

@@ -9,7 +9,7 @@ package org.xlite.converters;
 
 import java.math.BigDecimal;
 
-public class BigDecimalConverter  extends ValueConverter {
+public class BigDecimalConverter extends ValueConverter {
 
     public boolean canConvert(Class type) {
         return BigDecimal.class.isAssignableFrom(type);

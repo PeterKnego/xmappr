@@ -34,14 +34,14 @@ public class AttributeMapper {
         this.isMap = Map.class.isAssignableFrom(targetField.getType());
     }
 
-    public void setValue(QName attributeName, Object object, String elementValue) {
+    public void setValue(QName attributeName, Object container, String elementValue) {
         FieldAccessor targetField = this.targetField;
         // is it a Map?
         if (isMap) {
-            Map targetMap = (Map) targetField.getValue(object);
+            Map targetMap = (Map) targetField.getValue(container);
             if (targetMap == null) {
                 targetMap = initializeMap(targetField.getType());
-                targetField.setValue(object, targetMap);
+                targetField.setValue(container, targetMap);
             }
             Object obj = valueConverter.fromValue(elementValue, format, targetType, targetMap);
 
@@ -50,17 +50,17 @@ public class AttributeMapper {
                 targetMap.put(attributeName, obj);
             }
         } else {
-            setValue(object, elementValue);
+            setValue(container, elementValue);
         }
     }
 
-    public String getValue(Object attributeName, Object holder) {
+    public String getValue(Object attributeName, Object container) {
         // is it a Map?
         if (isMap) {
-            Map target = (Map) this.targetField.getValue(holder);
+            Map target = (Map) this.targetField.getValue(container);
             return valueConverter.toValue(target.get(attributeName), format);
         } else {
-            return getValue(holder);
+            return getValue(container);
         }
     }
 
