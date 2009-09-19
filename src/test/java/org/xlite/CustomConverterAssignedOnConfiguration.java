@@ -7,7 +7,7 @@ import org.xlite.converters.ValueConverter;
 import java.io.StringReader;
 
 
-public class CustomConverterAssignedGlobally {
+public class CustomConverterAssignedOnConfiguration {
 
     private String xml = "" +
             "<root>" +
