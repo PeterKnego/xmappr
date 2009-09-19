@@ -87,7 +87,7 @@ public class CustomConverterChangesTargetTest {
             // cast to collection
             Collection collection = (Collection) targetObject;
 
-            // perform 
+            // perform direct manupulation of target object
             if (value != null && value.length() > 0) {
                 String[] values = value.split(",");
                 for (String v : values) {

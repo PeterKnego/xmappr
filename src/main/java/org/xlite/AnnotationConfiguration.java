@@ -204,17 +204,12 @@ public class AnnotationConfiguration implements Configuration {
     }
 
     public void addConverter(ValueConverter converter) {
-        if (customElementConverters == null) {
-            customValueConverters = new ArrayList<ValueConverter>();
-        }
-        customValueConverters.add(converter);
+        mappingContext.addConverter(converter);
+        mappingContext.addConverter(new ValueConverterWrapper(converter));
     }
 
     public void addConverter(ElementConverter converter) {
-        if (customElementConverters == null) {
-            customElementConverters = new ArrayList<ElementConverter>();
-        }
-        customElementConverters.add(converter);
+        mappingContext.addConverter(converter);
     }
 
     /**

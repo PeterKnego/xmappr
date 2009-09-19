@@ -42,6 +42,14 @@ public class MappingContext {
         predefinedNamespaces.addNamespace(namespace);
     }
 
+    public void addConverter(ValueConverter converter) {
+       valueConverters.add(converter);
+    }
+
+    public void addConverter(ElementConverter converter) {
+        elementConverters.add(converter);
+    }
+
     /**
      * Delegates processing of the next XML element in the reader to the appropriate converter. It finds the right
      * ElementConverter for the given Class and uses it to process current XML element.<br><br>
