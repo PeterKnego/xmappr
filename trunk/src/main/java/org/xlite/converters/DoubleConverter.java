@@ -22,5 +22,4 @@ public class DoubleConverter extends ValueConverter{
     public String toValue(Object object, String format) {
         return ((Double) object).toString();
     }
-
 }

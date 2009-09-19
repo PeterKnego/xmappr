@@ -6,12 +6,6 @@
  */
 package org.xlite.converters;
 
-/**
- *
- * User: peter
- * Date: Mar 2, 2008
- * Time: 10:02:25 PM
- */
 public class StringConverter extends ValueConverter {
 
     public boolean canConvert(Class type) {

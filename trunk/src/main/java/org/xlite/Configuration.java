@@ -7,6 +7,8 @@
 package org.xlite;
 
 import org.xlite.converters.RootMapper;
+import org.xlite.converters.ElementConverter;
+import org.xlite.converters.ValueConverter;
 
 import javax.xml.namespace.QName;
 
@@ -25,5 +27,9 @@ public interface Configuration {
     void addNamespace(String namespace);
 
     void addMapping(Class rootClass);
+
+    void addConverter(ValueConverter converter);
+
+    void addConverter(ElementConverter converter);
 
 }

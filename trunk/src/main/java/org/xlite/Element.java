@@ -7,6 +7,7 @@
 package org.xlite;
 
 import org.xlite.converters.ElementConverter;
+import org.xlite.converters.Converter;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.RetentionPolicy;
@@ -57,7 +58,7 @@ public @interface Element {
      *
      * @return
      */
-    Class<? extends ElementConverter> converter() default ElementConverter.class;
+    Class<? extends Converter> converter() default ElementConverter.class;
 
     /**
      * Optional formatting string. Used by converter.

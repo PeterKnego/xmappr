@@ -38,6 +38,11 @@ public class AnnotationConfiguration implements Configuration {
 
     private boolean isPrettyPrint = true;
 
+    private List<ValueConverter> customValueConverters;
+
+    private List<ElementConverter> customElementConverters;
+
+
     /**
      * Initializes an empty AnnotationConfiguration
      */
@@ -196,6 +201,20 @@ public class AnnotationConfiguration implements Configuration {
                     rootClass.getName() + " is already mapped.");
         }
         rootMappings.put(rootClass, null);
+    }
+
+    public void addConverter(ValueConverter converter) {
+        if (customElementConverters == null) {
+            customValueConverters = new ArrayList<ValueConverter>();
+        }
+        customValueConverters.add(converter);
+    }
+
+    public void addConverter(ElementConverter converter) {
+        if (customElementConverters == null) {
+            customElementConverters = new ArrayList<ElementConverter>();
+        }
+        customElementConverters.add(converter);
     }
 
     /**
