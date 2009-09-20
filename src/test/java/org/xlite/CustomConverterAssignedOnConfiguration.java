@@ -21,7 +21,7 @@ public class CustomConverterAssignedOnConfiguration {
         Configuration conf = new AnnotationConfiguration(Root.class);
 
         //
-        conf.addConverter(new RoundedIntConverter());
+        conf.addConverter(new RoundedIntValueConverter());
 
         Xlite xlite = new Xlite(conf);
 
@@ -49,7 +49,7 @@ public class CustomConverterAssignedOnConfiguration {
     /**
      * Coustom conveter that takes float as input and rounds it to int
      */
-    public static class RoundedIntConverter extends ValueConverter {
+    public static class RoundedIntValueConverter extends ValueConverter {
 
         public boolean canConvert(Class type) {
             return RoundedInt.class.isAssignableFrom(type);

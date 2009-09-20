@@ -5,7 +5,6 @@ import org.testng.Assert;
 import org.xlite.converters.ValueConverter;
 
 import java.io.StringReader;
-import java.util.ArrayList;
 
 /**
  * Tests using ValuConverter on a @Element annotation. XLT-52
@@ -32,7 +31,7 @@ public class ValueConverterTest {
     @RootElement
     public static class Root {
 
-        @Element(converter = RoundingIntConverter.class)
+        @Element(converter = RoundingIntValueConverter.class)
         public int one;
 
     }
@@ -40,7 +39,7 @@ public class ValueConverterTest {
     /**
      * Coustom conveter that takes float as inlut and rounds it to int
      */
-    public static class RoundingIntConverter extends ValueConverter {
+    public static class RoundingIntValueConverter extends ValueConverter {
 
         public boolean canConvert(Class type) {
             return type.equals(int.class) || Integer.class.isAssignableFrom(type);
