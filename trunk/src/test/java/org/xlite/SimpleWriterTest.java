@@ -35,7 +35,7 @@ public class SimpleWriterTest {
         StringReader reader = new StringReader(xml1);
 
         Configuration conf = new AnnotationConfiguration(A.class);
-        conf.addNamespace("ns1");
+        conf.addNamespace("", "ns1");
 
         Xlite xlite = new Xlite(conf);
         A a = (A) xlite.fromXML(reader);

@@ -24,7 +24,7 @@ public interface Configuration {
 
     void setPrettyPrint(boolean prettyPrint);
 
-    void addNamespace(String namespace);
+    void addNamespace(String prefix, String namespace);
 
     void addMapping(Class rootClass);
 

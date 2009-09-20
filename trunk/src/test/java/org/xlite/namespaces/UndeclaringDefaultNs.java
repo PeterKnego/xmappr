@@ -32,7 +32,7 @@ public class UndeclaringDefaultNs {
         Configuration conf = new AnnotationConfiguration(aaa.class);
 
         // predefined default namespace
-        conf.addNamespace("lowercase");
+        conf.addNamespace("","lowercase");
 
         Xlite xlite = new Xlite(conf);
         aaa a = (aaa) xlite.fromXML(reader);

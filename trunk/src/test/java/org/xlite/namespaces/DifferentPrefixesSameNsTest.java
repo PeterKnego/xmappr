@@ -41,8 +41,8 @@ public class DifferentPrefixesSameNsTest {
         Configuration conf = new AnnotationConfiguration(aaa.class);
 
         // predefined namespaces
-        conf.addNamespace("l=lowercase");
-        conf.addNamespace("u=lowercase");
+        conf.addNamespace("l","lowercase");
+        conf.addNamespace("u","lowercase");
 
         Xlite xlite = new Xlite(conf);
         aaa a = (aaa) xlite.fromXML(reader);

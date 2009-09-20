@@ -56,9 +56,9 @@ public class SubTreeStoreTest {
         StringReader reader = new StringReader(xml);
 
         Configuration conf = new AnnotationConfiguration(A.class);
-        conf.addNamespace("x=ns1");
-        conf.addNamespace("s=ns2");
-        conf.addNamespace("w=ns3");
+        conf.addNamespace("x","ns1");
+        conf.addNamespace("s","ns2");
+        conf.addNamespace("w","ns3");
 
         Xlite xlite = new Xlite(conf);
         Xlite.Result result = xlite.fromXMLwithUnmapped(reader);
