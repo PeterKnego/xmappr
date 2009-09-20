@@ -43,11 +43,11 @@ public class MappingContext {
     }
 
     public void addConverter(ValueConverter converter) {
-       valueConverters.add(converter);
+       valueConverters.add(0,converter);
     }
 
     public void addConverter(ElementConverter converter) {
-        elementConverters.add(converter);
+        elementConverters.add(0, converter);
     }
 
     /**
