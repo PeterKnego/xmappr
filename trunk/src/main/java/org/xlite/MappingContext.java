@@ -38,8 +38,8 @@ public class MappingContext {
         return predefinedNamespaces;
     }
 
-    public void addNamespace(String namespace) {
-        predefinedNamespaces.addNamespace(namespace);
+    public void addNamespace(String prefix, String namespace) {
+        predefinedNamespaces.addNamespace(prefix, namespace);
     }
 
     public void addConverter(ValueConverter converter) {
