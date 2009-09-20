@@ -41,7 +41,7 @@ public class DifferentPrefixesSameNsTest {
         Configuration conf = new AnnotationConfiguration(aaa.class);
 
         // predefined namespaces
-        conf.addNamespace("l","lowercase");
+//        conf.addNamespace("l","lowercase");
         conf.addNamespace("u","lowercase");
 
         Xlite xlite = new Xlite(conf);
@@ -60,6 +60,7 @@ public class DifferentPrefixesSameNsTest {
         XMLAssert.assertXMLEqual(xml, sw.toString());
     }
 
+    @Namespaces("l=lowercase")
     @RootElement("l:aaa")
     public static class aaa {
         @Element("l:bbbb")
@@ -73,6 +74,7 @@ public class DifferentPrefixesSameNsTest {
         public x111 node_x111;
     }
 
+    @Namespaces("l=lowercase")
     public static class bbbb {
         @Element("l:cccc")
         public cccc node_cccc;
