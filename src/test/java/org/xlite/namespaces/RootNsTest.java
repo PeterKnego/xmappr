@@ -38,8 +38,8 @@ public class RootNsTest {
         Configuration conf = new AnnotationConfiguration(aaa.class);
 
         // predefined namespaces
-        conf.addNamespace("l=lowercase");
-        conf.addNamespace("u=uppercase");
+        conf.addNamespace("l","lowercase");
+        conf.addNamespace("u","uppercase");
 
         Xlite xlite = new Xlite(conf);
         aaa a = (aaa) xlite.fromXML(reader);

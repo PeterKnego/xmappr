@@ -181,12 +181,12 @@ public class AnnotationConfiguration implements Configuration {
      *
      * @param namespace
      */
-    public synchronized void addNamespace(String namespace) {
+    public synchronized void addNamespace(String prefix, String namespace) {
         if (initialized) {
             throw new XliteConfigurationException("Error: Trying to add configuration parameters after first use. " +
                     "Once Xlite is used (.fromXml() or similar is called), configuration parameters can not be altered.");
         }
-        mappingContext.addNamespace(namespace);
+        mappingContext.addNamespace(prefix, namespace);
     }
 
     /**

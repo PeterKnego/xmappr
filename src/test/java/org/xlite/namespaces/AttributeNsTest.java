@@ -36,10 +36,10 @@ public class AttributeNsTest {
         Configuration conf = new AnnotationConfiguration(aaa.class);
 
         // predefined namespaces
-        conf.addNamespace("l=lowercase");
-        conf.addNamespace("u=uppercase");
-        conf.addNamespace("xn=xnumber");
-        conf.addNamespace("defaultNS");
+        conf.addNamespace("l","lowercase");
+        conf.addNamespace("u","uppercase");
+        conf.addNamespace("xn","xnumber");
+        conf.addNamespace("","defaultNS");
 
         Xlite xlite = new Xlite(conf);
         aaa a = (aaa) xlite.fromXML(reader);

@@ -46,8 +46,8 @@ public class DefaultNsOverridingTest {
         Configuration conf = new AnnotationConfiguration(aaa.class);
 
         // predefined namespaces
-        conf.addNamespace("u=uppercase");
-        conf.addNamespace("xn=xnumber");
+        conf.addNamespace("u","uppercase");
+        conf.addNamespace("xn","xnumber");
 
         Xlite xlite = new Xlite(conf);
         aaa a = (aaa) xlite.fromXML(reader);

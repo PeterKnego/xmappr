@@ -484,7 +484,7 @@ public class AnnotationProcessor {
 
         // used prefix must be defined in at least one namespace
         if (prefix.length() != 0 && (fieldNsURI == null && classNsURI == null && predefinedNsURI == null)) {
-            throw new XliteConfigurationException("ERROR: used name prefix is not defined in any namespace.\n" +
+            throw new XliteConfigurationException("ERROR: used namespace prefix is not defined in any namespace.\n" +
                     "Name prefix '" + prefix + "' used on field '" + fieldName +
                     "' in class " + className + " is not defined in any declared XML namespace.\n");
         }
