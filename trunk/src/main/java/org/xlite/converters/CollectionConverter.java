@@ -47,7 +47,7 @@ public class CollectionConverter implements ElementConverter, CollectionConverti
             return concreteType.newInstance();
         } catch (Exception e) {
             throw new XliteException("Could not instantiate collection " + targetType.getName() + ". ", e);
-        } 
+        }
     }
 
     private static Class<? extends Collection> getConcreteCollectionType(Class<? extends Collection> targetType) {

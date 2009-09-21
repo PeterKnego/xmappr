@@ -6,15 +6,15 @@
  */
 package org.xlite.converters;
 
+import org.xlite.DOMelement;
+import org.xlite.MappingContext;
 import org.xlite.XMLSimpleReader;
 import org.xlite.XMLSimpleWriter;
-import org.xlite.MappingContext;
-import org.xlite.DOMelement;
 
 import javax.xml.namespace.QName;
-import java.util.Map;
-import java.util.Iterator;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public class DOMelementConverter implements ElementConverter {
 
@@ -70,12 +70,12 @@ public class DOMelementConverter implements ElementConverter {
 
         // write subelements
         for (Object o : element.getElements()) {
-             if(DOMelement.isElement(o)){
-                 DOMelement subElement = (DOMelement) o;
-                 this.toElement(subElement, null, writer, mappingContext, null, null);
-             } else if(DOMelement.isText(o)){
-                 writer.addText((String) o);
-             }
+            if (DOMelement.isElement(o)) {
+                DOMelement subElement = (DOMelement) o;
+                this.toElement(subElement, null, writer, mappingContext, null, null);
+            } else if (DOMelement.isText(o)) {
+                writer.addText((String) o);
+            }
         }
 
         // write end tag
