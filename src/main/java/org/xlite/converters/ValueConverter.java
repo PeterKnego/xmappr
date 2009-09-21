@@ -15,7 +15,7 @@ public abstract class ValueConverter implements Converter {
 
     public abstract String toValue(Object object, String format);
 
-    public boolean convertsEmpty(){
+    public boolean convertsEmpty() {
         return false;
     }
 }

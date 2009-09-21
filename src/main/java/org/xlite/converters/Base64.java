@@ -7,8 +7,6 @@
 
 package org.xlite.converters;
 
-import java.io.UnsupportedEncodingException;
-
 public class Base64 {
     public static char[] base64code = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".toCharArray();
 

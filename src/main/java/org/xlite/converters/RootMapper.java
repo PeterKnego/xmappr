@@ -6,9 +6,9 @@
  */
 package org.xlite.converters;
 
-import javax.xml.namespace.QName;
-
 import org.xlite.*;
+
+import javax.xml.namespace.QName;
 
 /**
  * RootMapper sits at the top of the Mapper hierarchy

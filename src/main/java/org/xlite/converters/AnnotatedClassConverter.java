@@ -6,10 +6,13 @@
  */
 package org.xlite.converters;
 
-import javax.xml.namespace.QName;
-import java.util.*;
-
 import org.xlite.*;
+
+import javax.xml.namespace.QName;
+import java.util.IdentityHashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 //todo Write javadoc
 
@@ -89,12 +92,12 @@ public class AnnotatedClassConverter implements ElementConverter {
             AttributeMapper attrMapper = attributeMappers.get(attrQName);
 
 //            if (attrValue.length() != 0) {
-                // if mapper for this attribute is defined, use it to setValue field to attribute value
-                if (attrMapper != null) {
-                    attrMapper.setValue(attrQName, currentObject, attrValue);
-                } else if (attributeCatcher != null) { // if there is a Mapper defined thet catches any attribute name
-                    attributeCatcher.setValue(attrQName, currentObject, attrValue);
-                }
+            // if mapper for this attribute is defined, use it to setValue field to attribute value
+            if (attrMapper != null) {
+                attrMapper.setValue(attrQName, currentObject, attrValue);
+            } else if (attributeCatcher != null) { // if there is a Mapper defined thet catches any attribute name
+                attributeCatcher.setValue(attrQName, currentObject, attrValue);
+            }
 //            }
 //            System.out.println("ATTR: " + attrQName);
         }
