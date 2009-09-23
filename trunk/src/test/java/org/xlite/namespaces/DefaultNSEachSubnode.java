@@ -22,7 +22,7 @@ import org.xlite.*;
 public class DefaultNSEachSubnode {
 
     private static String xml =
-            "<aaa >\n" +
+            "<aaa xmlns=\"defaultRoot\">\n" +
                     "  <bbbb xmlns = \"lowercase\" >\n" +
                     "    <cccc />\n" +
                     "  </bbbb>\n" +
@@ -39,6 +39,10 @@ public class DefaultNSEachSubnode {
         StringReader reader = new StringReader(xml);
 
         Configuration conf = new AnnotationConfiguration(aaa.class);
+
+        // this is set for testing purposes - making sure that class defined namespace overrides this
+        conf.addNamespace("","defaultRoot2");
+
         Xlite xlite = new Xlite(conf);
         aaa a = (aaa) xlite.fromXML(reader);
 
@@ -55,6 +59,8 @@ public class DefaultNSEachSubnode {
         XMLAssert.assertXMLEqual(xml, sw.toString());
     }
 
+    // overrides the above defined namespace
+    @Namespaces("defaultRoot")
     @RootElement("aaa")
     public static class aaa {
         @Namespaces("lowercase")

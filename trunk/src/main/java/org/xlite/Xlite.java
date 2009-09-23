@@ -153,8 +153,9 @@ public class Xlite {
 
         // was the the right RootMapper found?
         if (rootMapper == null) {
-            throw new XliteConfigurationException("Error: No class mapping found for the " +
-                    "root XML element <" + rootName + ">");
+            throw new XliteConfigurationException("Error: No class mapping found for " +
+                    "root XML element <" + (rootName.getPrefix().length() == 0 ? "" : rootName.getPrefix() + ":")
+                    + rootName.getLocalPart() + ">");
         }
         return rootMapper;
     }
