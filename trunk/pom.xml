@@ -6,13 +6,24 @@
     <packaging>jar</packaging>
     <version>1.0-beta3</version>
     <name>xlite</name>
-    <url>http://maven.apache.org</url>
+    <description>Xlite is a simple library for mapping XML to your Java classes.</description>
+    <url>http://www.xlite.org</url>
+    <licenses>
+        <license>
+            <name>Simplified BSD license</name>
+            <url>http://www.xlite.org/licenses</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <scm>
+        <url>http://www.xlite.org/svn/xlite/</url>
+    </scm>
 
     <repositories>
         <repository>
             <id>codehaus</id>
             <name>Codehaus Release Repo</name>
-            <url>http://dist.codehaus.org/</url>
+            <url>http://dist.codehaus.org</url>
         </repository>
         <repository>
             <id>codehaus-snapshot</id>
@@ -23,57 +34,42 @@
             </releases>
         </repository>
     </repositories>
+    <distributionManagement>
+        <repository>
+            <id>xlite-repo</id>
+            <name>Xlite repository</name>
+            <url>scp://www.xlite.org:/var/www/maven/release/</url>
+        </repository>
+    </distributionManagement>
 
     <dependencies>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>3.8.1</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
-            <version>4.7</version>
+            <version>5.9</version>
             <scope>test</scope>
             <classifier>jdk15</classifier>
         </dependency>
         <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.7</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>xmlunit</groupId>
             <artifactId>xmlunit</artifactId>
-            <version>1.1</version>
+            <version>1.2</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.codehaus.woodstox</groupId>
-            <artifactId>woodstox-core-lgpl</artifactId>
-            <version>4.0.0</version>
+            <artifactId>woodstox-core-asl</artifactId>
+            <version>4.0.5</version>
         </dependency>
     </dependencies>
     <build>
         <plugins>
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <configuration>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                    <archive>
-                        <manifest>
-                            <mainClass>si.ptb.litechat.server.Server</mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>make-assembly</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>attached</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -83,7 +79,47 @@
                     <target>1.5</target>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <configuration>
+                    <!--<outputDirectory>/absolute/path/to/the/output/directory</outputDirectory>-->
+                    <!--<finalName>filename-of-generated-jar-file</finalName>-->
+                    <attach>true</attach>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                    <attach>true</attach>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
+    <reporting>
+        <plugins>
+
+
+        </plugins>
+    </reporting>
 
 </project>
