@@ -7,13 +7,14 @@
 package org.xlite;
 
 import org.testng.Assert;
-import org.xlite.converters.ValueConverter;
+import org.testng.annotations.Test;
 import org.xlite.converters.ElementConverter;
+import org.xlite.converters.ValueConverter;
 
 import javax.xml.namespace.QName;
-import java.util.Map;
-import java.util.List;
 import java.io.StringReader;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Tests ability of ValueConverters
@@ -27,10 +28,10 @@ public class CustomConverterMultiTypeTest {
             "<three>33</three>" +
             "</root>";
 
-    @org.testng.annotations.Test()
+    @Test
     public void customConverterMultiTypeTest() {
         StringReader reader = new StringReader(xml);
-        Configuration conf = new AnnotationConfiguration(Root.class);
+        Configuration conf = new Configuration(Root.class);
         Xlite xlite = new Xlite(conf);
         Root root = (Root) xlite.fromXML(reader);
 

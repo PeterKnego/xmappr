@@ -6,10 +6,10 @@
  */
 package org.xlite;
 
-import org.xml.sax.SAXException;
-import org.testng.Assert;
-import org.custommonkey.xmlunit.XMLUnit;
 import org.custommonkey.xmlunit.XMLAssert;
+import org.custommonkey.xmlunit.XMLUnit;
+import org.testng.Assert;
+import org.xml.sax.SAXException;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -26,7 +26,7 @@ public class BigIntegerConverterTest {
     @org.testng.annotations.Test
     public void test() throws IOException, SAXException {
         StringReader reader = new StringReader(inXml);
-        Configuration conf = new AnnotationConfiguration(Test.class);
+        Configuration conf = new Configuration(Test.class);
         Xlite xlite = new Xlite(conf);
 
         Test test = (Test) xlite.fromXML(reader);

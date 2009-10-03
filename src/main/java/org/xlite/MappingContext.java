@@ -23,7 +23,7 @@ public class MappingContext {
     private List<ElementConverter> elementConverters;
     private List<ElementConverter> elementConverterCache = new ArrayList<ElementConverter>();
     private List<ValueConverter> valueConverters;
-    private AnnotationProcessor annotationProcessor;
+    private MappingBuilder mappingBuilder;
     private NsContext predefinedNamespaces = new NsContext();
 
     private Stack<Class> classTreeWalker = new Stack<Class>();
@@ -31,7 +31,7 @@ public class MappingContext {
     public MappingContext(List<ElementConverter> elementConverters, List<ValueConverter> valueConverters) {
         this.elementConverters = elementConverters;
         this.valueConverters = valueConverters;
-        annotationProcessor = new AnnotationProcessor(this);
+        mappingBuilder = new MappingBuilder(this);
     }
 
     public NsContext getPredefinedNamespaces() {
@@ -76,7 +76,8 @@ public class MappingContext {
 
     /**
      * Finds the appropriate ElementConverter for the given Class among the registered ElementConverters. If none
-     * is found, an instance of AnnotatedClassConverter is returned.
+     * is found, an instance of ClassConverter is returned. ClassConverter will be returned only if XML mappings exist
+     * for given class.
      * <p/>
      * This method can change the internal state of MappingContext, so it needs to be synchronized.
      *
@@ -84,6 +85,21 @@ public class MappingContext {
      * @return
      */
     public synchronized ElementConverter lookupElementConverter(Class type) {
+        return lookupElementConverter(type, true);
+    }
+
+    /**
+     * Finds the appropriate ElementConverter for the given Class among the registered ElementConverters. If none
+     * is found, an instance of ClassConverter is returned. ClassConverter will be returned only if XML mappings exist
+     * for given class.
+     * <p/>
+     * This method can change the internal state of MappingContext, so it needs to be synchronized.
+     *
+     * @param type
+     * @param lookupClassConverter Whether to try to use ClassConverter for given class.
+     * @return
+     */
+    public synchronized ElementConverter lookupElementConverter(Class type, boolean lookupClassConverter) {
 
         // lookup in preconfigured converters
         for (ElementConverter elementConverter : elementConverters) {
@@ -106,11 +122,11 @@ public class MappingContext {
                 break;
             }
         }
-        // not found in cache?
-        if (ec == null) {
-            // process it
-            ec = annotationProcessor.processClass(type);
-        }
+//        // not found in cache?
+//        if (ec == null && lookupClassConverter) {
+//            // process it
+//            ec = mappingBuilder.processClass(type);
+//        }
         classTreeWalker.pop();
         return ec;
     }

@@ -6,10 +6,6 @@
  */
 package org.xlite;
 
-import org.xlite.Attribute;
-import org.xlite.Element;
-import org.xlite.Text;
-
 public class SampleXml {
 
     static String xml =

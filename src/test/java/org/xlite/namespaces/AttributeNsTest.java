@@ -9,8 +9,9 @@ package org.xlite.namespaces;
 import org.custommonkey.xmlunit.XMLAssert;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.testng.Assert;
-import org.xml.sax.SAXException;
+import org.testng.annotations.Test;
 import org.xlite.*;
+import org.xml.sax.SAXException;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -28,12 +29,12 @@ public class AttributeNsTest {
                     "  <xnumber:x111 RRR=\"rrrdata\" />\n" +
                     "</lower:aaa>";
 
-    @org.testng.annotations.Test
+    @Test
     public void test() throws IOException, SAXException {
         StringReader reader = new StringReader(xml);
 
         //default namespace
-        Configuration conf = new AnnotationConfiguration(aaa.class);
+        Configuration conf = new Configuration(aaa.class);
 
         // predefined namespaces
         conf.addNamespace("l","lowercase");

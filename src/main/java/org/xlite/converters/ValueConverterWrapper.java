@@ -14,7 +14,7 @@ import org.xlite.XliteException;
 import javax.xml.namespace.QName;
 
 /**
- * @author peter
+ * Wraps ValueConverter so that it behaves like ElementConverter.
  */
 public class ValueConverterWrapper implements ElementConverter {
 

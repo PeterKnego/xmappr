@@ -19,7 +19,7 @@ import java.lang.reflect.Method;
  * <p/>
  * <b>Example usage:</b>
  * <pre>
- * Configuration conf = new AnnotationConfiguration(One.class);  // mapping configuration for class One
+ * Configuration conf = new Configuration(One.class);            // mapping configuration for class One
  * Xlite xlite = new Xlite(conf);                                // initialize Xlite
  * One one = (One) xlite.fromXml(inputXml);                      // deserialize XML to object
  * </pre>
@@ -38,7 +38,7 @@ import java.lang.reflect.Method;
  * <p/>
  * <b>Example of storing unamapped elements:</b>
  * <pre>
- * Configuration conf = new AnnotationConfiguration(One.class);  // mapping configuration for class One
+ * Configuration conf = new Configuration(One.class);            // mapping configuration for class One
  * Xlite xlite = new Xlite(conf);                                // initialize Xlite
  * Xlite.Result result = xlite.fromXMLwithUnmapped(inputXml);    // deserialize XML to object while storing unmapped XML
  * <p/>

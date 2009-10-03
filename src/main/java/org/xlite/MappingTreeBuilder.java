@@ -21,47 +21,44 @@ import java.util.Map;
  * Date: Feb 17, 2008
  * Time: 4:47:34 PM
  */
-public class AnnotationProcessor {
+public class MappingTreeBuilder {
 
     private final MappingContext mappingContext;
 
-    public AnnotationProcessor(final MappingContext mappingContext) {
+    public MappingTreeBuilder(final MappingContext mappingContext) {
         this.mappingContext = mappingContext;
     }
 
     /**
-     * Processes @XMLelement, @XMLattribute and @XMLtext annotations in a given class.
-     * If subelements are found (@XMLelement), they are processed recursivelly.
+     * Processes given mapping configuration and builds in-memory tree of mappers and converters.
      *
      * @param currentClass
      * @return
      */
     public ElementConverter processClass(final Class<?> currentClass) {
 
-        AnnotatedClassConverter annotatedClassConverter = new AnnotatedClassConverter(currentClass);
-        mappingContext.addToElementConverterCache(annotatedClassConverter);
+        ClassConverter classConverter = new ClassConverter(currentClass);
+        mappingContext.addToElementConverterCache(classConverter);
 
         // find and process @Namespaces annotation
-        processClassNamespaces(currentClass, annotatedClassConverter);
+        processClassNamespaces(currentClass, classConverter);
         // find and process @Attribute annotations
-        processAttributes(currentClass, annotatedClassConverter);
-        // find and process @XMLvalue annotation
-        processValue(currentClass, annotatedClassConverter);
+        processAttributes(currentClass, classConverter);
+        // find and process @Text annotation
+        processText(currentClass, classConverter);
         // find and process @Element annotations
-        processElements(currentClass, annotatedClassConverter);
+        processElements(currentClass, classConverter);
 
-//        mappingContext.elementConverters.add(annotatedClassConverter);
-
-        return annotatedClassConverter;
+        return classConverter;
     }
 
     /**
      * Processes @XMLnamespaces annotations defined on a Class.
      *
      * @param currentClass
-     * @param annotatedClassConverter
+     * @param classConverter
      */
-    private void processClassNamespaces(Class<?> currentClass, AnnotatedClassConverter annotatedClassConverter) {
+    private void processClassNamespaces(Class<?> currentClass, ClassConverter classConverter) {
         NsContext classNS = new NsContext();
         Namespaces nsAnnotation = (Namespaces) currentClass.getAnnotation(Namespaces.class);
         if (nsAnnotation != null && nsAnnotation.value().length != 0) {
@@ -69,7 +66,7 @@ public class AnnotationProcessor {
                 classNS.addNamespace(nsAnnotation.value()[i]);
             }
         }
-        annotatedClassConverter.setClassNamespaces(classNS);
+        classConverter.setClassNamespaces(classNS);
     }
 
 //    private ElementConverter lookupElementConverter(Class type) {
@@ -87,7 +84,7 @@ public class AnnotationProcessor {
      * @param currentClass A class to be inspected for @XMLelement annotations.
      * @param converter    AnnotatedClassMapper that coresponds in
      */
-    private void processElements(Class<?> currentClass, AnnotatedClassConverter converter) {
+    private void processElements(Class<?> currentClass, ClassConverter converter) {
         boolean isElementCatcher = false;
 
         for (Field field : getAllFields(currentClass)) {
@@ -271,7 +268,7 @@ public class AnnotationProcessor {
     }
 
     private ElementConverter initializeConverter(Class<? extends Converter> annotatedConverter) {
-        ElementConverter fieldConverter = null;
+        ElementConverter fieldConverter;
         try {
             //check type of custom converter
             if (ElementConverter.class.isAssignableFrom(annotatedConverter)) {
@@ -298,7 +295,7 @@ public class AnnotationProcessor {
      * @param currentClass Class being inspected for @XMLattribute annotations
      */
 
-    private void processAttributes(Class<?> currentClass, AnnotatedClassConverter converter) {
+    private void processAttributes(Class<?> currentClass, ClassConverter converter) {
 
         for (Field field : getAllFields(currentClass)) {
 
@@ -309,7 +306,7 @@ public class AnnotationProcessor {
                 annotations = multiAnno.value();
             }
             Attribute singleAnno = field.getAnnotation(Attribute.class);
-            if (singleAnno != null) {                                       
+            if (singleAnno != null) {
 //                annotations = Arrays.copyOf(annotations, annotations.length + 1);
                 Attribute[] copy = new Attribute[annotations.length + 1];
                 System.arraycopy(annotations, 0, copy, 0, annotations.length);
@@ -410,6 +407,15 @@ public class AnnotationProcessor {
                                     ". @Attribute wildcard name \"*\" can only be used on " +
                                     "field types that implement Map.");
                         }
+                    }
+
+                    // ValueConverter is needed - converting can't be done without it.
+                    if (fieldConverter == null) {
+                        throw new XliteConfigurationException("Error: No converter can be found for class " +
+                                field.getType().getName()+
+                                " on field " + field.getName() + " in class " + field.getDeclaringClass().getName() +
+                                ". Either there must be a custom converter assigned via @Attribute annotation or " +
+                                "target class must contain further XML mapping annotations.");
                     }
 
 
@@ -516,7 +522,7 @@ public class AnnotationProcessor {
      * @param currentClass
      * @param converter
      */
-    private void processValue(Class currentClass, AnnotatedClassConverter converter) {
+    private void processText(Class currentClass, ClassConverter converter) {
         Field targetField = null;
         int found = 0;
         Text annotation, targetAnnotation = null;

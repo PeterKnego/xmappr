@@ -7,6 +7,7 @@
 package org.xlite;
 
 import org.testng.Assert;
+import org.testng.annotations.Test;
 
 import java.io.StringReader;
 
@@ -21,12 +22,12 @@ public class EnumConverterTest {
             "  <poly>TEN</poly>" +
             "</root>";
 
-    @org.testng.annotations.Test
+    @Test
     public void testEnum() {
 
         // do the mapping
         StringReader reader = new StringReader(xml);
-        Configuration conf = new AnnotationConfiguration(Root.class);
+        Configuration conf = new Configuration(Root.class);
         Xlite xlite = new Xlite(conf);
         Root root = (Root) xlite.fromXML(reader);
 

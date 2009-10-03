@@ -6,15 +6,16 @@
  */
 package org.xlite.namespaces;
 
+import org.custommonkey.xmlunit.XMLAssert;
+import org.custommonkey.xmlunit.XMLUnit;
+import org.testng.Assert;
+import org.testng.annotations.Test;
+import org.xlite.*;
+import org.xml.sax.SAXException;
+
+import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.io.IOException;
-
-import org.testng.Assert;
-import org.custommonkey.xmlunit.XMLUnit;
-import org.custommonkey.xmlunit.XMLAssert;
-import org.xml.sax.SAXException;
-import org.xlite.*;
 
 public class NamespaceScopeTest {
 
@@ -29,10 +30,10 @@ public class NamespaceScopeTest {
             "  <lower:x111 />\n" +
             "</lower:aaa>";
 
-    @org.testng.annotations.Test
+    @Test
     public void test() throws IOException, SAXException {
         StringReader reader = new StringReader(xml);
-        Configuration conf = new AnnotationConfiguration(aaa.class);
+        Configuration conf = new Configuration(aaa.class);
 //        conf.addNamespace("l=lowercase");
 
         Xlite xlite = new Xlite(conf);

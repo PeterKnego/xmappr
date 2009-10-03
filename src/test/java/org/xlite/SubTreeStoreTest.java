@@ -16,9 +16,6 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 
-import org.xlite.Attribute;
-import org.xlite.Text;
-
 public class SubTreeStoreTest {
 
 //    static String xml = "<a xmlns=\"ns1\" xmlns:s=\"ns2\">\n" +
@@ -55,7 +52,7 @@ public class SubTreeStoreTest {
     public void testStoringNodes() throws IOException, SAXException, XpathException {
         StringReader reader = new StringReader(xml);
 
-        Configuration conf = new AnnotationConfiguration(A.class);
+        Configuration conf = new Configuration(A.class);
         conf.addNamespace("x","ns1");
         conf.addNamespace("s","ns2");
         conf.addNamespace("w","ns3");

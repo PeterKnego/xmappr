@@ -9,12 +9,13 @@ package org.xlite.namespaces;
 import org.custommonkey.xmlunit.XMLAssert;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.testng.Assert;
-import org.xml.sax.SAXException;
+import org.testng.annotations.Test;
 import org.xlite.*;
+import org.xml.sax.SAXException;
 
+import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.io.IOException;
 
 /**
  * Test where default namespaces are used, but namespaces for chosen elements can still be explicitly stated.
@@ -40,10 +41,10 @@ public class DefaultNsOverridingTest {
             "  </x111>\n" +
             "</aaa>";
 
-    @org.testng.annotations.Test
+    @Test
     public void test() throws IOException, SAXException {
         StringReader reader = new StringReader(xml);
-        Configuration conf = new AnnotationConfiguration(aaa.class);
+        Configuration conf = new Configuration(aaa.class);
 
         // predefined namespaces
         conf.addNamespace("u","uppercase");

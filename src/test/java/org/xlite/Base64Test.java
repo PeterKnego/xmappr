@@ -7,9 +7,9 @@
 
 package org.xlite;
 
-import org.xlite.converters.Base64;
-import org.testng.annotations.Test;
 import org.testng.Assert;
+import org.testng.annotations.Test;
+import org.xlite.converters.Base64;
 
 import java.io.UnsupportedEncodingException;
 

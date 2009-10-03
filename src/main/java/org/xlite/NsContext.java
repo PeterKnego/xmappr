@@ -39,11 +39,11 @@ public class NsContext implements Iterable<Map.Entry<String, String>> {
         prefixToNS.put(prefix, nsURI);
     }
 
-    public void addNamespace(String prefix, String namespace) {
+    public void addNamespace(String prefix, String namespaceURI) {
         if (prefix == null || prefix.length() == 0) {
             prefix = XMLConstants.DEFAULT_NS_PREFIX;
         }
-        prefixToNS.put(prefix, namespace);
+        prefixToNS.put(prefix, namespaceURI);
     }
 
 

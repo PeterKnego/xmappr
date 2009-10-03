@@ -32,7 +32,7 @@ public class CustomConverterChangesTargetTest {
     public void basicTest() {
 
         StringReader reader = new StringReader(xml1);
-        Configuration conf = new AnnotationConfiguration(One.class);
+        Configuration conf = new Configuration(One.class);
         conf.setPrettyPrint(false);
         Xlite xlite = new Xlite(conf);
 
