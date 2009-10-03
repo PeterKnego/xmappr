@@ -6,15 +6,16 @@
  */
 package org.xlite.namespaces;
 
+import org.custommonkey.xmlunit.XMLAssert;
+import org.custommonkey.xmlunit.XMLUnit;
+import org.testng.Assert;
+import org.testng.annotations.Test;
+import org.xlite.*;
+import org.xml.sax.SAXException;
+
+import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.io.IOException;
-
-import org.testng.Assert;
-import org.custommonkey.xmlunit.XMLUnit;
-import org.custommonkey.xmlunit.XMLAssert;
-import org.xml.sax.SAXException;
-import org.xlite.*;
 
 /**
  * Test where xml elements belong to different namespaces although they have the same prefixes.
@@ -34,10 +35,10 @@ public class DifferentNsSamePrefixesTest {
             "  </lower:x111>\n" +
             "</aaa>";
 
-    @org.testng.annotations.Test
+    @Test
     public void test() throws IOException, SAXException {
         StringReader reader = new StringReader(xml);
-        Configuration conf = new AnnotationConfiguration(aaa.class);
+        Configuration conf = new Configuration(aaa.class);
 
         Xlite xlite = new Xlite(conf);
         aaa a = (aaa) xlite.fromXML(reader);

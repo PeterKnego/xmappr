@@ -9,11 +9,9 @@ package org.xlite;
 
 import org.custommonkey.xmlunit.XMLAssert;
 import org.custommonkey.xmlunit.XMLUnit;
-import org.xml.sax.SAXException;
-import org.xlite.Xlite;
-import org.xlite.Element;
-import org.xlite.Text;
 import org.testng.Assert;
+import org.testng.annotations.Test;
+import org.xml.sax.SAXException;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -33,11 +31,11 @@ public class DefaultValuesTest {
             "</root>";
 
 
-    @org.testng.annotations.Test
+    @Test
     public void test() throws IOException, SAXException {
 
         StringReader reader = new StringReader(inXml);
-        Configuration conf = new AnnotationConfiguration(Root.class);
+        Configuration conf = new Configuration(Root.class);
         conf.setPrettyPrint(false);
         Xlite xlite = new Xlite(conf);
 

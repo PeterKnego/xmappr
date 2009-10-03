@@ -6,8 +6,8 @@
  */
 package org.xlite;
 
-import org.testng.annotations.Test;
 import org.testng.Assert;
+import org.testng.annotations.Test;
 
 import java.io.StringReader;
 
@@ -25,7 +25,7 @@ public class ParentClassTest {
     public void mainTest() {
 
         StringReader reader = new StringReader(ParentClassTest.xml);
-        Configuration conf = new AnnotationConfiguration(Child.class);
+        Configuration conf = new Configuration(Child.class);
         Xlite xlite = new Xlite(conf);
 
         Child child = (Child) xlite.fromXML(reader);

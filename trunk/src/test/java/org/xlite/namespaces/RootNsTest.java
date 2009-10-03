@@ -6,15 +6,16 @@
  */
 package org.xlite.namespaces;
 
-import org.testng.Assert;
-import org.custommonkey.xmlunit.XMLUnit;
 import org.custommonkey.xmlunit.XMLAssert;
-import org.xml.sax.SAXException;
+import org.custommonkey.xmlunit.XMLUnit;
+import org.testng.Assert;
+import org.testng.annotations.Test;
 import org.xlite.*;
+import org.xml.sax.SAXException;
 
+import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.io.IOException;
 
 public class RootNsTest {
 
@@ -31,11 +32,11 @@ public class RootNsTest {
             "  </xnumber:x111>\n" +
             "</lower:aaa>";
 
-    @org.testng.annotations.Test
+    @Test
     public void test() throws IOException, SAXException {
         StringReader reader = new StringReader(xml);
         StringWriter writer = new StringWriter();
-        Configuration conf = new AnnotationConfiguration(aaa.class);
+        Configuration conf = new Configuration(aaa.class);
 
         // predefined namespaces
         conf.addNamespace("l","lowercase");

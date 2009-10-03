@@ -6,8 +6,8 @@
  */
 package org.xlite;
 
-import org.testng.annotations.Test;
 import org.testng.Assert;
+import org.testng.annotations.Test;
 import org.xlite.converters.ValueConverter;
 
 import java.io.StringReader;
@@ -26,7 +26,7 @@ public class ValueConverterTest {
     public void basicTest() {
 
         StringReader reader = new StringReader(xml);
-        Configuration conf = new AnnotationConfiguration(Root.class);
+        Configuration conf = new Configuration(Root.class);
         Xlite xlite = new Xlite(conf);
 
         Root root = (Root) xlite.fromXML(reader);
@@ -56,7 +56,7 @@ public class ValueConverterTest {
          * @param xmlValue
          * @param format
          * @param targetType
-         * @param targetObject
+         * @param targetField
          * @return
          */
         public Object fromValue(String xmlValue, String format, Class targetType, Object targetObject) {

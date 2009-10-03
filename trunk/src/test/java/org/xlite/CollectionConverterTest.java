@@ -9,25 +9,20 @@ package org.xlite;
 import org.custommonkey.xmlunit.XMLAssert;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.testng.Assert;
-import org.testng.annotations.ExpectedExceptions;
-import org.xml.sax.SAXException;
-import org.xlite.Element;
-
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.io.IOException;
-import java.util.List;
-import java.util.HashMap;
-import java.util.ArrayList;
-
-import org.xlite.Xlite;
-import org.xlite.Text;
-import org.xlite.converters.CollectionConverting;
+import org.testng.annotations.Test;
 import org.xlite.converters.CollectionConverter;
+import org.xlite.converters.CollectionConverting;
 import org.xlite.converters.ElementConverter;
+import org.xml.sax.SAXException;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.*;
+import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class CollectionConverterTest {
 
@@ -47,11 +42,11 @@ public class CollectionConverterTest {
             "</item>\n" +
             "</one>\n";
 
-    @org.testng.annotations.Test
+    @Test
     public void collectionConverterTest() throws IOException, SAXException {
 
         StringReader reader = new StringReader(xml);
-        Configuration conf = new AnnotationConfiguration(One.class);
+        Configuration conf = new Configuration(One.class);
 
         Xlite xlite = new Xlite(conf);
         One one = (One) xlite.fromXML(reader);
@@ -77,8 +72,7 @@ public class CollectionConverterTest {
         XMLAssert.assertXMLEqual(xml, writer.toString());
     }
 
-    @org.testng.annotations.Test
-    @ExpectedExceptions(XliteException.class)
+    @Test(expectedExceptions = XliteException.class)
     public void toElementTest() throws XMLStreamException {
         ElementConverter cc = new CollectionConverter();
         XMLOutputFactory of = XMLOutputFactory.newInstance();
@@ -87,8 +81,7 @@ public class CollectionConverterTest {
         cc.toElement(new Object(), new QName("something"), sw, new MappingContext(null, null), "", null);
     }
 
-    @org.testng.annotations.Test
-    @ExpectedExceptions(XliteException.class)
+    @Test(expectedExceptions = XliteException.class)
     public void fromElementTest() throws XMLStreamException {
         ElementConverter cc = new CollectionConverter();
         XMLInputFactory of = XMLInputFactory.newInstance();
@@ -98,8 +91,7 @@ public class CollectionConverterTest {
 
     }
 
-    @org.testng.annotations.Test
-    @ExpectedExceptions(XliteException.class)
+    @Test(expectedExceptions = XliteException.class)
     public void initializeNonCollectionTest() throws XMLStreamException {
         CollectionConverting cc = new CollectionConverter();
 
@@ -107,8 +99,7 @@ public class CollectionConverterTest {
         cc.initializeCollection(HashMap.class);
     }
 
-    @org.testng.annotations.Test
-    @ExpectedExceptions(XliteException.class)
+    @Test(expectedExceptions = XliteException.class)
     public void noninitializableCollectionTest() throws XMLStreamException {
         CollectionConverting cc = new CollectionConverter();
 

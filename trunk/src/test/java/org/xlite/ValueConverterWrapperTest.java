@@ -7,8 +7,6 @@
 package org.xlite;
 
 import java.io.StringReader;
-import java.io.StringWriter;
-import java.util.Date;
 
 public class ValueConverterWrapperTest {
 
@@ -24,7 +22,7 @@ public class ValueConverterWrapperTest {
 
         StringReader reader = new StringReader(xml);
 
-        Configuration conf = new AnnotationConfiguration(Root.class);
+        Configuration conf = new Configuration(Root.class);
         Xlite xf = new Xlite(conf);
         Root root = (Root) xf.fromXML(reader);
     }

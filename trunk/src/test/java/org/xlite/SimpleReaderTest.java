@@ -7,15 +7,13 @@
 package org.xlite;
 
 import org.testng.Assert;
-import org.xlite.XMLSimpleReader;
-import org.xlite.XMLSimpleWriter;
-import org.xlite.XmlStreamSettings;
+import org.testng.annotations.Test;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.*;
 import java.io.StringReader;
-import java.io.Writer;
 import java.io.StringWriter;
+import java.io.Writer;
 import java.util.*;
 
 public class SimpleReaderTest {
@@ -36,7 +34,7 @@ public class SimpleReaderTest {
 
     private static String xml1 = "<a><b><c><d attr=\"DDD\" /></c></b></a>";
 
-    @org.testng.annotations.Test
+    @Test
     public void emptyElementWithAttributeTest() throws XMLStreamException {
         XMLSimpleReader reader = getReader(xml1);
 
@@ -53,7 +51,7 @@ public class SimpleReaderTest {
 
     private static String xml2 = "<a><b/><c/><d></d></a>";
 
-    @org.testng.annotations.Test
+    @Test
     public void simpleTest() throws XMLStreamException {
         XMLSimpleReader reader = getReader(xml2);
         reader.getRootName();
@@ -67,7 +65,7 @@ public class SimpleReaderTest {
 
     private static String xml3 = "<a>1<b>2</b>3</a>";
 
-    @org.testng.annotations.Test
+    @Test
     public void textTest() throws XMLStreamException {
         XMLSimpleReader reader = getReader(xml3);
         QName a = reader.getRootName();
@@ -86,7 +84,7 @@ public class SimpleReaderTest {
 
     private static String xml4 = "<a><b><c></c><d></d></b></a>";
 
-    @org.testng.annotations.Test
+    @Test
     public void skippingChildElementsTest() throws XMLStreamException {
         XMLSimpleReader reader = getReader(xml4);
         reader.getRootName();
@@ -104,7 +102,7 @@ public class SimpleReaderTest {
     //todo FINISH this test!!!   This test should ignore "other" nodes - CDATA, comments, DTD, Entity Reference, Processing Instruction
     static String xml5 = "";
 
-    @org.testng.annotations.Test
+    @Test
     public void ignoringOtherElementsTest() throws XMLStreamException {
         XMLSimpleReader reader = getReader(xml4);
         reader.getRootName();
@@ -114,7 +112,7 @@ public class SimpleReaderTest {
 
     private static String xml6 = "<a><b1>B1</b1><c><d><e/></d></c><b2>B2</b2></a>";
 
-    @org.testng.annotations.Test
+    @Test
     public void skippedElementsTest() throws XMLStreamException {
         XMLSimpleReader reader = getReader(xml6);
 
@@ -148,7 +146,7 @@ public class SimpleReaderTest {
 
     }
 
-    @org.testng.annotations.Test
+    @Test
     public void writerTest() throws XMLStreamException {
         StringWriter sw = new StringWriter();
         XMLSimpleWriter writer = getWriter(sw);
@@ -163,7 +161,7 @@ public class SimpleReaderTest {
         System.out.println("writerTest: " + sw.toString());
     }
 
-    @org.testng.annotations.Test
+    @Test
     public void writer() throws XMLStreamException {
         StringWriter sw = new StringWriter();
         XMLOutputFactory factory = XMLOutputFactory.newInstance();

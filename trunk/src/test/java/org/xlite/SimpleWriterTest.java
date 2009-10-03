@@ -8,17 +8,13 @@ package org.xlite;
 
 import org.custommonkey.xmlunit.XMLAssert;
 import org.custommonkey.xmlunit.XMLUnit;
+import org.testng.annotations.Test;
 import org.xml.sax.SAXException;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
-
-import org.xlite.Xlite;
-import org.xlite.Attribute;
-import org.xlite.Namespaces;
-import org.xlite.Element;
 
 public class SimpleWriterTest {
 
@@ -30,11 +26,11 @@ public class SimpleWriterTest {
             "</sec:b>\n" +
             "</a>";
 
-    @org.testng.annotations.Test
+    @Test
     public void testEquality() throws XMLStreamException, IOException, SAXException {
         StringReader reader = new StringReader(xml1);
 
-        Configuration conf = new AnnotationConfiguration(A.class);
+        Configuration conf = new Configuration(A.class);
         conf.addNamespace("", "ns1");
 
         Xlite xlite = new Xlite(conf);

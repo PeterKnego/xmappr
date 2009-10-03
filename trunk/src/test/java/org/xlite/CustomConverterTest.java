@@ -7,7 +7,7 @@
 package org.xlite;
 
 import org.testng.Assert;
-import org.testng.annotations.ExpectedExceptions;
+import org.testng.annotations.Test;
 import org.xlite.converters.ElementConverter;
 import org.xlite.converters.ValueConverter;
 
@@ -28,11 +28,11 @@ public class CustomConverterTest {
             "</custom>" +
             "</one>";
 
-    @org.testng.annotations.Test()
+    @Test
     public void customConverterTest() {
 
         StringReader reader = new StringReader(xml);
-        Configuration conf = new AnnotationConfiguration(One.class);
+        Configuration conf = new Configuration(One.class);
         Xlite xlite = new Xlite(conf);
         One one = (One) xlite.fromXML(reader);
 
@@ -44,12 +44,11 @@ public class CustomConverterTest {
 
     }
 
-    @org.testng.annotations.Test()
-    @ExpectedExceptions(XliteException.class)
+    @Test(expectedExceptions = XliteException.class)
     public void wrongConverterTypeTest() {
 
         StringReader reader = new StringReader(xml);
-        Configuration conf = new AnnotationConfiguration(Wrong.class);
+        Configuration conf = new Configuration(Wrong.class);
         Xlite xlite = new Xlite(conf);
         xlite.fromXML(reader);
     }

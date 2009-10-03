@@ -25,17 +25,7 @@ public class RootMapper {
     public RootMapper(QName rootNodeName, Class rootClass, MappingContext mappingContext) {
         this.rootClass = rootClass;
         elementConverter = mappingContext.lookupElementConverter(rootClass);
-
-        // check class namespaces of root element
-        if (rootNodeName.getNamespaceURI().length() == 0
-                && elementConverter instanceof AnnotatedClassConverter) {
-            NsContext classNS = ((AnnotatedClassConverter) elementConverter).getClassNamespaces();
-            this.rootNodeName = new QName(classNS.getNamespaceURI(rootNodeName.getPrefix()),
-                    rootNodeName.getLocalPart(),
-                    rootNodeName.getPrefix());
-        } else {
-            this.rootNodeName = rootNodeName;
-        }
+        this.rootNodeName = rootNodeName;
         this.mappingContext = mappingContext;
     }
 
@@ -46,7 +36,7 @@ public class RootMapper {
             return elementConverter.fromElement(reader, mappingContext, "", null, rootClass, null);
         } else {
             throw new XliteException("Error: wrong XML element name. Was expecting root element <" + rootNodeName +
-                    "> in input stream, but intead got <" + firstElement + ">.");
+                    "> in input stream, but instead got <" + firstElement + ">.");
         }
     }
 

@@ -8,7 +8,6 @@ package org.xlite;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import org.xlite.Xlite;
 
 import java.io.StringReader;
 
@@ -18,7 +17,7 @@ public class XliteTest {
     public void basicTest() {
 
         StringReader reader = new StringReader(SampleXml.xml);
-        Configuration conf = new AnnotationConfiguration(SampleXml.One.class);
+        Configuration conf = new Configuration(SampleXml.One.class);
         Xlite xlite = new Xlite(conf);
 
         SampleXml.One one = (SampleXml.One) xlite.fromXML(reader);

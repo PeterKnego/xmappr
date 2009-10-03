@@ -6,7 +6,6 @@
  */
 package org.xlite;
 
-import org.testng.annotations.ExpectedExceptions;
 
 import java.io.StringReader;
 
@@ -17,11 +16,10 @@ public class EmptyElementTest {
             "<node></node>" +
             "</test";
 
-    @org.testng.annotations.Test
-    @ExpectedExceptions(XliteException.class)
+    @org.testng.annotations.Test(expectedExceptions = XliteException.class)
     public void test() {
         StringReader reader = new StringReader(inXml);
-        Configuration conf = new AnnotationConfiguration(Test.class);
+        Configuration conf = new Configuration(Test.class);
         Xlite xf = new Xlite(conf);
 
         Test test = (Test) xf.fromXML(reader);

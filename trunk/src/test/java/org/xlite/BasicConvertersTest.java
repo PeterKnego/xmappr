@@ -51,7 +51,7 @@ public class BasicConvertersTest {
     @Test
     public void mainTest() throws IllegalAccessException, IOException, SAXException {
         StringReader reader = new StringReader(inXml);
-        Configuration conf = new AnnotationConfiguration(Primitives.class);
+        Configuration conf = new Configuration(Primitives.class);
         Xlite xf = new Xlite(conf);
 
         Primitives primitives = (Primitives) xf.fromXML(reader);

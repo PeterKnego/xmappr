@@ -6,19 +6,18 @@
  */
 package org.xlite;
 
-import org.xml.sax.SAXException;
-import org.testng.Assert;
-import org.testng.annotations.ExpectedExceptions;
-import org.custommonkey.xmlunit.XMLUnit;
 import org.custommonkey.xmlunit.XMLAssert;
+import org.custommonkey.xmlunit.XMLUnit;
+import org.testng.Assert;
+import org.xml.sax.SAXException;
 
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.util.Date;
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class DateConverterTest {
 
@@ -36,7 +35,7 @@ public class DateConverterTest {
     @org.testng.annotations.Test
     public void test() throws IOException, SAXException, ParseException {
         StringReader reader = new StringReader(inXml);
-        Configuration conf = new AnnotationConfiguration(Test.class);
+        Configuration conf = new Configuration(Test.class);
         Xlite xlite = new Xlite(conf);
 
         Test test = (Test) xlite.fromXML(reader);
@@ -57,11 +56,10 @@ public class DateConverterTest {
 
     }
 
-    @org.testng.annotations.Test
-    @ExpectedExceptions(XliteException.class)
+    @org.testng.annotations.Test(expectedExceptions = XliteException.class)
     public void wrongFormatterTest() {
         StringReader reader = new StringReader(inXml2);
-        Configuration conf = new AnnotationConfiguration(Test.class);
+        Configuration conf = new Configuration(Test.class);
         Xlite xlite = new Xlite(conf);
 
         Test test = (Test) xlite.fromXML(reader);
@@ -73,11 +71,10 @@ public class DateConverterTest {
         public Date node;
     }
 
-    @org.testng.annotations.Test
-    @ExpectedExceptions(XliteConfigurationException.class)
+    @org.testng.annotations.Test(expectedExceptions = XliteException.class)
     public void testEmptyFormat() {
         StringReader reader = new StringReader(inXml);
-        Configuration conf = new AnnotationConfiguration(TestEmpty.class);
+        Configuration conf = new Configuration(TestEmpty.class);
         Xlite xlite = new Xlite(conf);
 
         TestEmpty test = (TestEmpty) xlite.fromXML(reader);
@@ -90,11 +87,10 @@ public class DateConverterTest {
         public Date node;
     }
 
-    @org.testng.annotations.Test
-    @ExpectedExceptions(XliteConfigurationException.class)
+    @org.testng.annotations.Test(expectedExceptions = XliteException.class)
     public void testWrongFormat() {
         StringReader reader = new StringReader(inXml);
-        Configuration conf = new AnnotationConfiguration(TestWrong.class);
+        Configuration conf = new Configuration(TestWrong.class);
         Xlite xlite = new Xlite(conf);
 
         TestWrong test = (TestWrong) xlite.fromXML(reader);

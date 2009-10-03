@@ -23,7 +23,7 @@ public class FieldAccessor {
 
     public FieldAccessor(Field targetField) {
         this.targetField = targetField;
-        // field is not public - need to access it thru accessor methods
+        // field is not public - need to access it through accessor methods
         if (!Modifier.isPublic(targetField.getModifiers())) {
             this.getter = findAccessorMethod("get");
             this.setter = findAccessorMethod("set", targetField.getType());

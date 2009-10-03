@@ -17,25 +17,34 @@ import java.util.Map;
 //todo Write javadoc
 
 /**
- * This is a default ElementConverter that tries to convert any class by inspecting Java it's annotations.
+ * This is a default ElementConverter that tries to convert any Class based on injected mappers.
  * User: peter
  * Date: Feb 28, 2008
  * Time: 10:19:19 PM
  */
-public class AnnotatedClassConverter implements ElementConverter {
+public class ClassConverter implements ElementConverter {
 
 
     private Class<?> targetClass;
+
     private TextMapper textMapper;
+
     private ElementMapper elementCatcher;
+
     private AttributeMapper attributeCatcher;
-    //    private Map<ElementMapper, QName> elementMappers = new HashSet<ElementMapper>();
+
     private Map<QName, ElementMapper> elementMappersByName = new LinkedHashMap<QName, ElementMapper>();
+
     private Map<QName, AttributeMapper> attributeMappers = new LinkedHashMap<QName, AttributeMapper>();
+
     private NsContext classNamespaces;
 
-    public AnnotatedClassConverter(Class<?> targetClass) {
+    public ClassConverter(Class<?> targetClass) {
         this.targetClass = targetClass;
+    }
+
+    public Class<?> getTargetClass() {
+        return targetClass;
     }
 
     public NsContext getClassNamespaces() {

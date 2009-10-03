@@ -6,27 +6,28 @@
  */
 package org.xlite;
 
-import org.xml.sax.SAXException;
-import org.custommonkey.xmlunit.XMLUnit;
 import org.custommonkey.xmlunit.XMLAssert;
+import org.custommonkey.xmlunit.XMLUnit;
 import org.testng.Assert;
+import org.testng.annotations.Test;
+import org.xml.sax.SAXException;
 
 import javax.xml.namespace.QName;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.util.Map;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class MultiattributeMapTest {
     private static String in = "<root a='abc' b='123' c='mama' d='daddy' d1='daddy1' e='eee' f='555' g='ggg' />";
     private static String out = "<root a='abc' b='123' c='mama' d='daddy' d1='daddy1' d2='daddy2' e='eee' f='555' g='ggg' h='hhh' />";
 
-    @org.testng.annotations.Test
+    @Test
     public void test() throws IOException, SAXException {
 
         StringReader reader = new StringReader(in);
-        Configuration conf = new AnnotationConfiguration(Root.class);
+        Configuration conf = new Configuration(Root.class);
         conf.setPrettyPrint(false);
 
         Xlite xlite = new Xlite(conf);

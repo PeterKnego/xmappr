@@ -7,6 +7,7 @@
 
 package org.xlite.converters;
 
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 
 public class BigDecimalConverter extends ValueConverter {

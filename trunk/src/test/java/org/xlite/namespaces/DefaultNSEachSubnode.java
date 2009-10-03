@@ -6,15 +6,16 @@
  */
 package org.xlite.namespaces;
 
+import org.custommonkey.xmlunit.XMLAssert;
+import org.custommonkey.xmlunit.XMLUnit;
+import org.testng.Assert;
+import org.testng.annotations.Test;
+import org.xlite.*;
+import org.xml.sax.SAXException;
+
+import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.io.IOException;
-
-import org.testng.Assert;
-import org.custommonkey.xmlunit.XMLUnit;
-import org.custommonkey.xmlunit.XMLAssert;
-import org.xml.sax.SAXException;
-import org.xlite.*;
 
 /**
  * Test where each subnode defines its default namespace
@@ -34,11 +35,11 @@ public class DefaultNSEachSubnode {
                     "  </x111>\n" +
                     "</aaa>";
 
-    @org.testng.annotations.Test
+    @Test
     public void test() throws IOException, SAXException {
         StringReader reader = new StringReader(xml);
 
-        Configuration conf = new AnnotationConfiguration(aaa.class);
+        Configuration conf = new Configuration(aaa.class);
 
         // this is set for testing purposes - making sure that class defined namespace overrides this
         conf.addNamespace("","defaultRoot2");

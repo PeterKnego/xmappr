@@ -6,14 +6,14 @@
  */
 package org.xlite;
 
-import org.testng.annotations.Test;
 import org.testng.Assert;
+import org.testng.annotations.Test;
 import org.xlite.converters.ValueConverter;
 
 import java.io.StringReader;
 
 
-public class CustomConverterAssignedOnConfiguration {
+public class CustomConverterAssignedOnConfigurationTest {
 
     private String xml = "" +
             "<root>" +
@@ -21,10 +21,10 @@ public class CustomConverterAssignedOnConfiguration {
             "</root>";
 
     @Test
-    public void basicTest() {
+    public void test() {
 
         StringReader reader = new StringReader(xml);
-        Configuration conf = new AnnotationConfiguration(Root.class);
+        Configuration conf = new Configuration(Root.class);
 
         //
         conf.addConverter(new RoundedIntValueConverter());
@@ -53,7 +53,7 @@ public class CustomConverterAssignedOnConfiguration {
     }
 
     /**
-     * Coustom conveter that takes float as input and rounds it to int
+     * Custom converter that takes float as input and rounds it to int
      */
     public static class RoundedIntValueConverter extends ValueConverter {
 

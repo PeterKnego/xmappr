@@ -6,6 +6,8 @@
  */
 package org.xlite.converters;
 
+import java.lang.reflect.Field;
+
 /**
  * todo fill this
  */

@@ -9,6 +9,7 @@ package org.xlite;
 import org.custommonkey.xmlunit.XMLAssert;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.testng.Assert;
+import org.testng.annotations.Test;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
@@ -26,13 +27,13 @@ public class MultiMappingConfigurationTest {
     private static String xml1 = "<one>1</one>";
     private static String xml2 = "<two>2</two>";
 
-    @org.testng.annotations.Test
+    @Test
     public void test() throws IOException, SAXException {
         StringReader reader1 = new StringReader(xml1);
         StringReader reader2 = new StringReader(xml2);
 
         // configure the first mapping
-        Configuration conf = new AnnotationConfiguration(One.class);
+        Configuration conf = new Configuration(One.class);
 
         // add the second mapping
         conf.addMapping(Two.class);
