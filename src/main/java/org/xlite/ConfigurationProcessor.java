@@ -7,12 +7,11 @@ import java.util.List;
 
 public class ConfigurationProcessor {
 
-    private static Configuration rootXmlConf = new Configuration(ConfigRootElement.class);
+    private static Xlite xmlConfigurationParser = new Xlite(ConfigRootElement.class);
 
     public static ConfigRootElement processConfiguration(Reader xmlReader) {
-        Xlite xlite = new Xlite(rootXmlConf);
         try {
-            return (ConfigRootElement) xlite.fromXML(xmlReader);
+            return (ConfigRootElement) xmlConfigurationParser.fromXML(xmlReader);
         } catch (XliteException xe) {
             throw new XliteConfigurationException("Error: XML configuration could not be processed: " + xe);
         }

@@ -25,8 +25,7 @@ public class ParentClassTest {
     public void mainTest() {
 
         StringReader reader = new StringReader(ParentClassTest.xml);
-        Configuration conf = new Configuration(Child.class);
-        Xlite xlite = new Xlite(conf);
+        Xlite xlite = new Xlite(Child.class);
 
         Child child = (Child) xlite.fromXML(reader);
         Assert.assertEquals(child.val, "A text value");

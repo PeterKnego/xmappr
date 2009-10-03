@@ -33,10 +33,9 @@ public class NamespaceScopeTest {
     @Test
     public void test() throws IOException, SAXException {
         StringReader reader = new StringReader(xml);
-        Configuration conf = new Configuration(aaa.class);
+        Xlite xlite = new Xlite(aaa.class);
 //        conf.addNamespace("l=lowercase");
 
-        Xlite xlite = new Xlite(conf);
         aaa a = (aaa) xlite.fromXML(reader);
 
         Assert.assertNotNull(a.node_BBB.node_ccc.node_x111);

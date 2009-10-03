@@ -39,12 +39,11 @@ public class DefaultNSEachSubnode {
     public void test() throws IOException, SAXException {
         StringReader reader = new StringReader(xml);
 
-        Configuration conf = new Configuration(aaa.class);
+        Xlite xlite = new Xlite(aaa.class);
 
         // this is set for testing purposes - making sure that class defined namespace overrides this
-        conf.addNamespace("","defaultRoot2");
+        xlite.addNamespace("","defaultRoot2");
 
-        Xlite xlite = new Xlite(conf);
         aaa a = (aaa) xlite.fromXML(reader);
 
         Assert.assertTrue(a.node_bbb.node_cccc != null);

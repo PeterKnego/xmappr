@@ -35,8 +35,7 @@ public class DateConverterTest {
     @org.testng.annotations.Test
     public void test() throws IOException, SAXException, ParseException {
         StringReader reader = new StringReader(inXml);
-        Configuration conf = new Configuration(Test.class);
-        Xlite xlite = new Xlite(conf);
+        Xlite xlite = new Xlite(Test.class);
 
         Test test = (Test) xlite.fromXML(reader);
 
@@ -59,8 +58,7 @@ public class DateConverterTest {
     @org.testng.annotations.Test(expectedExceptions = XliteException.class)
     public void wrongFormatterTest() {
         StringReader reader = new StringReader(inXml2);
-        Configuration conf = new Configuration(Test.class);
-        Xlite xlite = new Xlite(conf);
+        Xlite xlite = new Xlite(Test.class);
 
         Test test = (Test) xlite.fromXML(reader);
     }
@@ -74,8 +72,7 @@ public class DateConverterTest {
     @org.testng.annotations.Test(expectedExceptions = XliteException.class)
     public void testEmptyFormat() {
         StringReader reader = new StringReader(inXml);
-        Configuration conf = new Configuration(TestEmpty.class);
-        Xlite xlite = new Xlite(conf);
+        Xlite xlite = new Xlite(TestEmpty.class);
 
         TestEmpty test = (TestEmpty) xlite.fromXML(reader);
     }
@@ -90,8 +87,7 @@ public class DateConverterTest {
     @org.testng.annotations.Test(expectedExceptions = XliteException.class)
     public void testWrongFormat() {
         StringReader reader = new StringReader(inXml);
-        Configuration conf = new Configuration(TestWrong.class);
-        Xlite xlite = new Xlite(conf);
+        Xlite xlite = new Xlite(TestWrong.class);
 
         TestWrong test = (TestWrong) xlite.fromXML(reader);
     }

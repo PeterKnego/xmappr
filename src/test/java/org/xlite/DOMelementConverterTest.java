@@ -35,10 +35,9 @@ public class DOMelementConverterTest {
     public void test() throws IOException, SAXException {
 
         StringReader reader = new StringReader(xml);
-        Configuration conf = new Configuration(Root.class);
-        conf.setPrettyPrint(false);
+        Xlite xlite = new Xlite(Root.class);
+        xlite.setPrettyPrint(false);
 
-        Xlite xlite = new Xlite(conf);
         Root root = (Root) xlite.fromXML(reader);
 
         // writing back to XML

@@ -32,9 +32,8 @@ public class CustomConverterChangesTargetTest {
     public void basicTest() {
 
         StringReader reader = new StringReader(xml1);
-        Configuration conf = new Configuration(One.class);
-        conf.setPrettyPrint(false);
-        Xlite xlite = new Xlite(conf);
+        Xlite xlite = new Xlite(One.class);
+        xlite.setPrettyPrint(false);
 
         One one = (One) xlite.fromXML(reader);
         Assert.assertEquals((int) one.getValues().size(), 4);

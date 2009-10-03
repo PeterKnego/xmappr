@@ -30,10 +30,9 @@ public class SimpleWriterTest {
     public void testEquality() throws XMLStreamException, IOException, SAXException {
         StringReader reader = new StringReader(xml1);
 
-        Configuration conf = new Configuration(A.class);
-        conf.addNamespace("", "ns1");
+        Xlite xlite = new Xlite(A.class);
+        xlite.addNamespace("", "ns1");
 
-        Xlite xlite = new Xlite(conf);
         A a = (A) xlite.fromXML(reader);
 //        System.out.println(xml1);
 

@@ -52,12 +52,11 @@ public class SubTreeStoreTest {
     public void testStoringNodes() throws IOException, SAXException, XpathException {
         StringReader reader = new StringReader(xml);
 
-        Configuration conf = new Configuration(A.class);
-        conf.addNamespace("x","ns1");
-        conf.addNamespace("s","ns2");
-        conf.addNamespace("w","ns3");
+        Xlite xlite = new Xlite(A.class);
+        xlite.addNamespace("x","ns1");
+        xlite.addNamespace("s","ns2");
+        xlite.addNamespace("w","ns3");
 
-        Xlite xlite = new Xlite(conf);
         Xlite.Result result = xlite.fromXMLwithUnmapped(reader);
         A a = (A) result.getObject();
 

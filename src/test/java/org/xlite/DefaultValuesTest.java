@@ -35,9 +35,8 @@ public class DefaultValuesTest {
     public void test() throws IOException, SAXException {
 
         StringReader reader = new StringReader(inXml);
-        Configuration conf = new Configuration(Root.class);
-        conf.setPrettyPrint(false);
-        Xlite xlite = new Xlite(conf);
+        Xlite xlite = new Xlite(Root.class);
+        xlite.setPrettyPrint(false);
 
         Root root = (Root) xlite.fromXML(reader);
 

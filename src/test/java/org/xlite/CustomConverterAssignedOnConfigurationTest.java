@@ -24,12 +24,8 @@ public class CustomConverterAssignedOnConfigurationTest {
     public void test() {
 
         StringReader reader = new StringReader(xml);
-        Configuration conf = new Configuration(Root.class);
-
-        //
-        conf.addConverter(new RoundedIntValueConverter());
-
-        Xlite xlite = new Xlite(conf);
+        Xlite xlite = new Xlite(Root.class);
+        xlite.addConverter(new RoundedIntValueConverter());
 
         Root root = (Root) xlite.fromXML(reader);
 

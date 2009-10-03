@@ -30,9 +30,8 @@ public class LoopTest {
     @org.testng.annotations.Test
     public void configurationLoopTest() throws IOException, SAXException {
         StringReader reader = new StringReader(inXml);
-        Configuration conf = new Configuration(Test.class);
-        conf.setPrettyPrint(true);
-        Xlite xlite = new Xlite(conf);
+        Xlite xlite = new Xlite(Test.class);
+        xlite.setPrettyPrint(true);
 
         Test test = (Test) xlite.fromXML(reader);
         Assert.assertNotNull(test.back);
