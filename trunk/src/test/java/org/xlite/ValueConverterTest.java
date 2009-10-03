@@ -26,8 +26,7 @@ public class ValueConverterTest {
     public void basicTest() {
 
         StringReader reader = new StringReader(xml);
-        Configuration conf = new Configuration(Root.class);
-        Xlite xlite = new Xlite(conf);
+        Xlite xlite = new Xlite(Root.class);
 
         Root root = (Root) xlite.fromXML(reader);
 
@@ -56,7 +55,7 @@ public class ValueConverterTest {
          * @param xmlValue
          * @param format
          * @param targetType
-         * @param targetField
+         * @param targetObject
          * @return
          */
         public Object fromValue(String xmlValue, String format, Class targetType, Object targetObject) {

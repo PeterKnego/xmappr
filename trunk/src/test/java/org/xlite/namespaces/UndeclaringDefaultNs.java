@@ -30,12 +30,11 @@ public class UndeclaringDefaultNs {
     @Test
     public void test() throws IOException, SAXException {
         StringReader reader = new StringReader(xml);
-        Configuration conf = new Configuration(aaa.class);
+        Xlite xlite = new Xlite(aaa.class);
 
         // predefined default namespace
-        conf.addNamespace("","lowercase");
+        xlite.addNamespace("","lowercase");
 
-        Xlite xlite = new Xlite(conf);
         aaa a = (aaa) xlite.fromXML(reader);
 
         Assert.assertTrue(a.node_bbb.node_ccc.node_ddd != null);

@@ -33,13 +33,11 @@ public class MultiMappingConfigurationTest {
         StringReader reader2 = new StringReader(xml2);
 
         // configure the first mapping
-        Configuration conf = new Configuration(One.class);
+        Xlite xlite = new Xlite(One.class);
 
         // add the second mapping
-        conf.addMapping(Two.class);
-
-        conf.setPrettyPrint(true);
-        Xlite xlite = new Xlite(conf);
+        xlite.addMapping(Two.class);
+        xlite.setPrettyPrint(true);
 
         // deserialize first XML
         One one = (One) xlite.fromXML(reader1);

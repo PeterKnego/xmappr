@@ -27,8 +27,7 @@ public class EnumConverterTest {
 
         // do the mapping
         StringReader reader = new StringReader(xml);
-        Configuration conf = new Configuration(Root.class);
-        Xlite xlite = new Xlite(conf);
+        Xlite xlite = new Xlite(Root.class);
         Root root = (Root) xlite.fromXML(reader);
 
         // check values

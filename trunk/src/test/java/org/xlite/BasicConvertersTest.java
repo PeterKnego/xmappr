@@ -51,10 +51,9 @@ public class BasicConvertersTest {
     @Test
     public void mainTest() throws IllegalAccessException, IOException, SAXException {
         StringReader reader = new StringReader(inXml);
-        Configuration conf = new Configuration(Primitives.class);
-        Xlite xf = new Xlite(conf);
+        Xlite xlite = new Xlite(Primitives.class);
 
-        Primitives primitives = (Primitives) xf.fromXML(reader);
+        Primitives primitives = (Primitives) xlite.fromXML(reader);
 
         // attributes
         Assert.assertEquals(primitives.i, 1000);
@@ -89,7 +88,7 @@ public class BasicConvertersTest {
 
         // writing back to XML
         StringWriter sw = new StringWriter();
-        xf.toXML(primitives, sw);
+        xlite.toXML(primitives, sw);
         String ssw = sw.toString();
         System.out.println("");
         System.out.println(inXml);

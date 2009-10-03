@@ -19,10 +19,9 @@ public class EmptyElementTest {
     @org.testng.annotations.Test(expectedExceptions = XliteException.class)
     public void test() {
         StringReader reader = new StringReader(inXml);
-        Configuration conf = new Configuration(Test.class);
-        Xlite xf = new Xlite(conf);
+        Xlite xlite = new Xlite(Test.class);
 
-        Test test = (Test) xf.fromXML(reader);
+        Test test = (Test) xlite.fromXML(reader);
 
     }
 

@@ -33,10 +33,9 @@ public class MultielementCollectionTest {
     public void test() throws IOException, SAXException {
 
         StringReader reader = new StringReader(xml);
-        Configuration conf = new Configuration(Root.class);
-        conf.setPrettyPrint(true);
+        Xlite xlite = new Xlite(Root.class);
+        xlite.setPrettyPrint(true);
 
-        Xlite xlite = new Xlite(conf);
 //        Xlite.Result result = xlite.fromXMLwithUnmapped(reader);
 //        Root one = (Root) result.getObject();
         Root one = (Root) xlite.fromXML(reader);

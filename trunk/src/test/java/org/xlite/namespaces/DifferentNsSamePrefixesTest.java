@@ -38,9 +38,8 @@ public class DifferentNsSamePrefixesTest {
     @Test
     public void test() throws IOException, SAXException {
         StringReader reader = new StringReader(xml);
-        Configuration conf = new Configuration(aaa.class);
+        Xlite xlite = new Xlite(aaa.class);
 
-        Xlite xlite = new Xlite(conf);
         aaa a = (aaa) xlite.fromXML(reader);
 
         Assert.assertTrue(a.node_bbbb.node_cccc != null);

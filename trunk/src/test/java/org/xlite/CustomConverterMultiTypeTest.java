@@ -31,8 +31,7 @@ public class CustomConverterMultiTypeTest {
     @Test
     public void customConverterMultiTypeTest() {
         StringReader reader = new StringReader(xml);
-        Configuration conf = new Configuration(Root.class);
-        Xlite xlite = new Xlite(conf);
+        Xlite xlite = new Xlite(Root.class);
         Root root = (Root) xlite.fromXML(reader);
 
         // check that Map contains three attributes

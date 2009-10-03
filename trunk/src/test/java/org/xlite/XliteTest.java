@@ -17,8 +17,7 @@ public class XliteTest {
     public void basicTest() {
 
         StringReader reader = new StringReader(SampleXml.xml);
-        Configuration conf = new Configuration(SampleXml.One.class);
-        Xlite xlite = new Xlite(conf);
+        Xlite xlite = new Xlite(SampleXml.One.class);
 
         SampleXml.One one = (SampleXml.One) xlite.fromXML(reader);
         Assert.assertEquals(one.attr, "text1");

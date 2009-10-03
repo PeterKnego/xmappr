@@ -22,9 +22,8 @@ public class ValueConverterWrapperTest {
 
         StringReader reader = new StringReader(xml);
 
-        Configuration conf = new Configuration(Root.class);
-        Xlite xf = new Xlite(conf);
-        Root root = (Root) xf.fromXML(reader);
+        Xlite xlite = new Xlite(Root.class);
+        Root root = (Root) xlite.fromXML(reader);
     }
 
     @RootElement

@@ -27,10 +27,9 @@ public class MultiattributeMapTest {
     public void test() throws IOException, SAXException {
 
         StringReader reader = new StringReader(in);
-        Configuration conf = new Configuration(Root.class);
-        conf.setPrettyPrint(false);
+        Xlite xlite = new Xlite(Root.class);
+        xlite.setPrettyPrint(false);
 
-        Xlite xlite = new Xlite(conf);
         Root one = (Root) xlite.fromXML(reader);
 
         Assert.assertEquals(one.attrs.get(new QName("a")), "abc");

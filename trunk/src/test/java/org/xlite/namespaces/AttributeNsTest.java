@@ -34,15 +34,14 @@ public class AttributeNsTest {
         StringReader reader = new StringReader(xml);
 
         //default namespace
-        Configuration conf = new Configuration(aaa.class);
+        Xlite xlite = new Xlite(aaa.class);
 
         // predefined namespaces
-        conf.addNamespace("l","lowercase");
-        conf.addNamespace("u","uppercase");
-        conf.addNamespace("xn","xnumber");
-        conf.addNamespace("","defaultNS");
+        xlite.addNamespace("l","lowercase");
+        xlite.addNamespace("u","uppercase");
+        xlite.addNamespace("xn","xnumber");
+        xlite.addNamespace("","defaultNS");
 
-        Xlite xlite = new Xlite(conf);
         aaa a = (aaa) xlite.fromXML(reader);
 
         Assert.assertEquals(a.node_bbbb.zz, 11);
