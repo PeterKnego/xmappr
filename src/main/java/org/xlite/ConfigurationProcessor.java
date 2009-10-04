@@ -1,5 +1,7 @@
 package org.xlite;
 
+import org.xlite.converters.ElementConverter;
+
 import java.io.Reader;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -34,6 +36,18 @@ public class ConfigurationProcessor {
         rootConfElement.namespace = processNamespaces((Namespaces) rootClass.getAnnotation(Namespaces.class));
 
         return rootConfElement;
+    }
+
+    public static ConfigElement processClass(Class targetClass) {
+        ConfigElement configElement = new ConfigElement();
+
+        configElement.targetType = targetClass;
+        configElement.attribute = processAttributes(targetClass);
+        configElement.text = processText(targetClass);
+        configElement.element = processElements(targetClass);
+        configElement.namespace = processNamespaces((Namespaces) targetClass.getAnnotation(Namespaces.class));
+
+        return configElement;
     }
 
     private static List<ConfigElement> processElements(Class elementClass) {
@@ -74,11 +88,20 @@ public class ConfigurationProcessor {
                     // If itemType is not defined (==Object.class) then derive type from field.
                     Class nextClass = annotation.itemType().equals(Object.class) ? field.getType() : annotation.itemType();
 
-                    element.attribute = processAttributes(nextClass);
-                    element.text = processText(nextClass);
-                    element.namespace = processNamespaces((Namespaces) nextClass.getAnnotation(Namespaces.class));
-                    //recursive call to process next class
-                    element.element = processElements(nextClass);
+                    /*
+                   * Process configuration further down if:
+                   * 1. custom converter is not assigned
+                   * 2. target class contains more XML mapping annotations
+                   * */
+                    if (annotation.converter() != ElementConverter.class) {
+
+                        element.attribute = processAttributes(nextClass);
+                        element.text = processText(nextClass);
+                        element.namespace = processNamespaces((Namespaces) nextClass.getAnnotation(Namespaces.class));
+
+                        //recursive call to process next class
+                        element.element = processElements(nextClass);
+                    }
 
                     if (elements == null) {
                         elements = new ArrayList<ConfigElement>();

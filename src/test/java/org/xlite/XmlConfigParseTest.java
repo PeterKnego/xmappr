@@ -19,7 +19,7 @@ public class XmlConfigParseTest {
             "</top>";
 
     private static String xmlConfig = "" +
-            "<rootelement class='org.xlite.XmlConfigParseTest$Top'>" +
+            "<root-element class='org.xlite.XmlConfigParseTest$Top'>" +
             "<attribute name='attr1' field='a1'/>" +
             "<attribute name='attr2' field='a2'/>" +
             "<element name='one' field='one' itemType = 'Integer'/>" +
@@ -27,7 +27,7 @@ public class XmlConfigParseTest {
             "  <attribute name='tt' field='ttAttrib'/>" +
             "  <element name='two' field='two'/>" +
             "</element>" +
-            "</rootelement>";
+            "</root-element>";
 
     @Test
     public void basicTest() {
