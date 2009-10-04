@@ -514,13 +514,21 @@ public class MappingBuilder {
     }
 
     private Field getFieldFromName(String fieldName, Class targetClass) {
-        Field targetField;
-        List<Field> allFields = getAllFields(targetClass);
-        for (Field field : allFields) {
-            if (field.getName().equals(fieldName)) {
-                return field;
+
+        // traverse the class hierarchy from given class up to Object.class
+        Class cl = targetClass;
+        do {
+            for (Field field : cl.getDeclaredFields()) {
+
+                // search for given field name
+                if (field.getName().equals(fieldName)) {
+                    return field;
+                }
             }
-        }
+            cl = cl.getSuperclass();
+        } while (cl != Object.class);
+
+        // no field with given name was found
         throw new XliteConfigurationException("Error: Could not find field '" + fieldName + "'" +
                 " in class " + targetClass.getCanonicalName());
     }
