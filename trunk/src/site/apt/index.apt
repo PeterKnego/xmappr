@@ -2,23 +2,23 @@ About
 
     Xlite is a simple library for mapping XML to your Java classes.
 
-    Features
+Features
 
-    * Simple configuration. Object-to-XML mappings are configured via Java annotations.
+    * <<Simple configuration.>> Object-to-XML mappings are configured via Java annotations.
 
-    * Partial mapping. Map only a part of XML document that you are interested in. Unmapped XML will be preserved on output.
+    * <<Partial mapping.>> Map only a part of XML document that you are interested in. Unmapped XML will be preserved on output.
 
-    * XML namespaces are fully supported.
+    * <<XML namespaces>> are fully supported.
 
-    * Preserves order of XML elements from input to output.
+    * <<Preserves order>> of XML elements from input to output.
 
-    * Extensible. Custom converters can be written to support custom type conversions.
+    * <<Extensible.>> Custom converters can be written to support custom type conversions.
 
-    * Lightweight. Only 64 kb in size.
+    * <<Lightweight.>> Only 64 kb in size.
 
-    * Thread-safe. Designed for multi-thread use.
+    * <<Thread-safe.>> Designed for multi-thread use.
 
-    * Permissive license: Xlite is released under BSD license.
+    * <<Permissive license:>> Xlite is released under BSD license.
 
 Quick example
 
