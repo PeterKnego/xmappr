@@ -5,9 +5,7 @@ import org.xlite.converters.*;
 import javax.xml.XMLConstants;
 import javax.xml.namespace.QName;
 import java.lang.reflect.Field;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class MappingBuilder {
 
@@ -114,6 +112,7 @@ public class MappingBuilder {
         if (configElements == null) return;
 
         boolean isElementCatcher = false;
+        Map<String, ElementMapper> fieldMapperCache = new HashMap<String, ElementMapper>();
 
         for (ConfigElement configElement : configElements) {
 
@@ -134,8 +133,15 @@ public class MappingBuilder {
                 isCollectionConverter = true;
             }
 
-            // init a mapper
-            ElementMapper fieldMapper = new ElementMapper(field, collectionConverter, mappingContext);
+            // Is ElementMapper for this field already initialized?
+            ElementMapper fieldMapper = fieldMapperCache.get(configElement.field);
+
+            // If not then initialize it
+            if (fieldMapper == null) {
+                fieldMapper = new ElementMapper(field, collectionConverter, mappingContext);
+                // then save it
+                fieldMapperCache.put(configElement.field, fieldMapper);
+            }
 
             Class<?> targetType = configElement.targetType;
             Class<? extends Converter> annotatedConverter = configElement.converter;
@@ -509,13 +515,33 @@ public class MappingBuilder {
 
     private Field getFieldFromName(String fieldName, Class targetClass) {
         Field targetField;
-        try {
-            targetField = targetClass.getDeclaredField(fieldName);
-        } catch (NoSuchFieldException e) {
-            throw new XliteConfigurationException("Error: Could not find field '" + fieldName + "'" +
-                    " in class " + targetClass.getCanonicalName(), e);
+        List<Field> allFields = getAllFields(targetClass);
+        for (Field field : allFields) {
+            if (field.getName().equals(fieldName)) {
+                return field;
+            }
         }
-        return targetField;
+        throw new XliteConfigurationException("Error: Could not find field '" + fieldName + "'" +
+                " in class " + targetClass.getCanonicalName());
     }
 
+    /**
+     * Collects all fields (public and private) in a given class and its superclasses.
+     *
+     * @param clazz Child class
+     * @return List of fields
+     */
+    private List<Field> getAllFields(Class clazz) {
+        List<Field> fields = new ArrayList<Field>();
+        Class cl = clazz;
+        do {
+            for (Field field : cl.getDeclaredFields()) {
+                if (!field.isSynthetic()) {
+                    fields.add(field);
+                }
+            }
+            cl = cl.getSuperclass();
+        } while (cl != Object.class);
+        return fields;
+    }
 }
