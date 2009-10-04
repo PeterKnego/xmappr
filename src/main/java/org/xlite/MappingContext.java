@@ -9,6 +9,8 @@ package org.xlite;
 import org.xlite.converters.ElementConverter;
 import org.xlite.converters.ValueConverter;
 
+import javax.xml.XMLConstants;
+import javax.xml.namespace.QName;
 import java.util.List;
 import java.util.Stack;
 import java.util.ArrayList;
@@ -133,5 +135,54 @@ public class MappingContext {
 
     public void addToElementConverterCache(ElementConverter elementConverter) {
         elementConverterCache.add(elementConverter);
+    }
+
+    /**
+     * Creates a QName from compound XML element name. Compound element name is of form "prefix:name".
+     * Method searches all defined namespaces and calculates QName.
+     *
+     * @param elementName Compound name of XML element in "prefix:name" format.
+     * @param fieldNS
+     * @param classNS
+     * @param className
+     * @param fieldName
+     * @return
+     */
+    public QName getQName(String elementName, NsContext fieldNS, NsContext classNS, String className, String fieldName) {
+
+        // split xml element name into prefix and local part
+        int index = elementName.indexOf(':');
+        String prefix, localPart;
+        if (index > 0) {  // with prefix ("prefix:localpart")
+            prefix = elementName.substring(0, index);
+            localPart = elementName.substring(index + 1, elementName.length());
+
+        } else if (index == 0) { // empty prefix (no prefix defined - e.g ":elementName")
+            prefix = XMLConstants.DEFAULT_NS_PREFIX;
+            localPart = elementName.substring(1, elementName.length());
+
+        } else { // no prefix given
+            prefix = XMLConstants.DEFAULT_NS_PREFIX;
+            localPart = elementName;
+        }
+
+        String fieldNsURI = fieldNS == null ? null : fieldNS.getNamespaceURI(prefix);
+        String classNsURI = classNS == null ? null : classNS.getNamespaceURI(prefix);
+        String predefinedNsURI = getPredefinedNamespaces().getNamespaceURI(prefix);
+
+        // used prefix must be defined in at least one namespace
+        if (prefix.length() != 0 && (fieldNsURI == null && classNsURI == null && predefinedNsURI == null)) {
+            throw new XliteConfigurationException("ERROR: used namespace prefix is not defined in any namespace.\n" +
+                    "Name prefix '" + prefix + "' used on field '" + fieldName +
+                    "' in class " + className + " is not defined in any declared XML namespace.\n");
+        }
+
+        // choose the namespaceURI that is not null from field, class, predefined or
+        // finally DEFAULT_NS_PREFIX (in that order)
+        String theURI = fieldNsURI != null ? fieldNsURI :
+                (classNsURI != null ? classNsURI :
+                        (predefinedNsURI != null ? predefinedNsURI : XMLConstants.DEFAULT_NS_PREFIX));
+//        System.out.println("namespace URI=" + theURI + " local=" + localPart + " prefix=" + prefix);
+        return new QName(theURI, localPart, prefix);
     }
 }

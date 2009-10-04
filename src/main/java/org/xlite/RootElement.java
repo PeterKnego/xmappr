@@ -6,6 +6,9 @@
  */
 package org.xlite;
 
+import org.xlite.converters.Converter;
+import org.xlite.converters.ElementConverter;
+
 import java.lang.annotation.Target;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -31,4 +34,12 @@ public @interface RootElement {
      * @return
      */
     String name() default "";
+
+    /**
+     * Custom converter assigned to convert this XML element.
+     * Either itemType or converter element must be defined when a target field is a Collection.
+     *
+     * @return
+     */
+    Class<? extends Converter> converter() default ElementConverter.class;
 }
