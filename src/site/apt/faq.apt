@@ -1,0 +1,17 @@
+FAQ
+
+    Contents:
+
+    * FAQ
+
+        * 1. Which JDK is required to use Xlite?
+
+        * 2. What are Xlite’s dependencies?
+
+        1. Which JDK is required to use Xlite?
+
+            Xlite uses Java annotations for configuration, so the minimum supported JDK version is 1.5.
+
+        2. What are Xlite’s dependencies?
+
+            Xlite only needs StAX compliant XML parser (javax.xml.stream). While Java 1.6 already includes it, you have to supply your own when using Java 5. Xlite has been tested with Woodstox on JDK 1.5.

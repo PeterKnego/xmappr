@@ -1,0 +1,52 @@
+About
+
+    Xlite is a simple library for mapping XML to your Java classes.
+
+    Features
+
+    * Simple configuration. Object-to-XML mappings are configured via Java annotations.
+
+    * Partial mapping. Map only a part of XML document that you are interested in. Unmapped XML will be preserved on output.
+
+    * XML namespaces are fully supported.
+
+    * Preserves order of XML elements from input to output.
+
+    * Extensible. Custom converters can be written to support custom type conversions.
+
+    * Lightweight. Only 64 kb in size.
+
+    * Thread-safe. Designed for multi-thread use.
+
+    * Permissive license: Xlite is released under BSD license.
+
+Quick example
+
+    Let’s map this:
+    1.<root a="2.2">
+    2.    some text
+    3.    <node>123</node>
+    4.</root>
+
+    to this class:
+    01.@RootElement
+    02.public static class Root {
+    03.
+    04.    @Attribute
+    05.    public float a;
+    06.
+    07.    @Element
+    08.    public Integer node;
+    09.
+    10.    @Text
+    11.    public String text;
+    12.}
+
+    All you have to do is add @Elemet, @Attribute and @Text annotations to your classes and configuration is done.
+
+    Mapping is than done in just three lines of code:
+    1.Configuration conf = new AnnotationConfiguration(Root.class);
+    2.Xlite xf = new Xlite(conf);
+    3.Root root = (Root) xf.fromXML(reader);
+
+    Now head on to documentation section and start hacking. You won’t regret it!
