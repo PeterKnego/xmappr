@@ -29,7 +29,7 @@
         #end
         <img src="$src" alt="$alt" />
     #else
-        $banner.name
+        <h1>$banner.name</h1>
     #end
 
     #if( $banner.href )
@@ -37,6 +37,8 @@
     #else
         </div>
     #end
+
+    <p>the simplest way to handle XML in Java</p>
   #end
 #end
 
