@@ -8,6 +8,10 @@
   #end
 #end
 
+#macro ( xliteLink $href $name $class )
+  <a href="$href" class="$class"><span>$name</span></a>
+#end
+
 #macro ( banner $banner $id )
   #if ( $banner )
     #if( $banner.href )
@@ -39,6 +43,43 @@
     #end
 
     <p>the simplest way to handle XML in Java</p>
+  #end
+#end
+
+#macro ( xliteBanner $banner $id )
+    <div id="headertitle">
+    <h1>
+  #if ( $banner )
+    #if( $banner.href )
+      <a href="$banner.href" id="$id" #if( $banner.alt ) title="$banner.alt" #end >
+    #else
+        <div id="$id">
+    #end
+
+    #if( $banner.src )
+        #set ( $src = $banner.src )
+        #if ( ! ( $src.toLowerCase().startsWith("http") || $src.toLowerCase().startsWith("https") ) )
+            #set ( $src = $PathTool.calculateLink( $src, $relativePath ) )
+            #set ( $src = $src.replaceAll( "\\", "/" ) )
+        #end
+        #if ( $banner.alt )
+            #set ( $alt = $banner.alt )
+        #else
+            #set ( $alt = $banner.name )
+        #end
+        <img src="$src" alt="$alt" />
+    #else
+        $banner.name
+    #end
+
+    #if( $banner.href )
+        </a>
+    #else
+        </div>
+    #end
+    </h1>
+    <p>the simplest way to handle XML in Java</p>
+    </div>
   #end
 #end
 
@@ -135,6 +176,30 @@
   </li>
 #end
 
+#macro ( hMenuItem $item )
+  #set ( $currentItemHref = $PathTool.calculateLink( $item.href, $relativePath ) )
+  #set ( $currentItemHref = $currentItemHref.replaceAll( "\\", "/" ) )
+
+    #if ( $alignedFileName == $currentItemHref )
+      #set ( $class = "page_item current_page_item" )
+    #else
+      #set ( $class = "page_item" )
+    #end
+
+  <li class="$class">
+    #if ( $item.img )
+      #if ( ! ( $item.img.toLowerCase().startsWith("http") || $item.img.toLowerCase().startsWith("https") ) )
+        #set ( $src = $PathTool.calculateLink( $item.img, $relativePath ) )
+        #set ( $src = $src.replaceAll( "\\", "/" ) )
+        <img src="$src"/>
+      #else
+        <img src="$item.img" align="absbottom" style="border-width: 0"/>
+      #end
+    #end
+    #xliteLink( $currentItemHref $item.name "depth_0" )
+  </li>
+#end
+
 #macro ( mainMenu $menus )
   #foreach( $menu in $menus )
     #if ( $menu.name )
@@ -147,6 +212,18 @@
       #end
     </ul>
     #end
+  #end
+#end
+
+#macro ( hMainMenu $menus )
+  #foreach( $menu in $menus )
+    <ul class="sf">
+    #if ( $menu.items && $menu.items.size() > 0 )
+      #foreach( $item in $menu.items )
+        #hMenuItem( $item )
+      #end
+    #end
+    </ul>
   #end
 #end
 
@@ -336,13 +413,20 @@
       #end
     #end
   </head>
-  <body class="composite">
-    <div id="banner">
-      #banner( $decoration.bannerLeft "bannerLeft" )
-      #banner( $decoration.bannerRight "bannerRight" )
-      <div class="clear">
-        <hr/>
+  <body>
+    <div id="page">
+      <div id="header">
+      #xliteBanner( $decoration.bannerLeft "bannerLeft" )
       </div>
+      <div id="navbar">
+        <ul id="nav">
+            <div id="suckerfishnav">
+            <div id="SimpleSideNav">
+       #hMainMenu( $decoration.body.menus )
+            </div>
+            </div>
+        </ul>
+       </div>
     </div>
     <div id="breadcrumbs">
       #publishDate( "left" $decoration.publishDate $decoration.version )
@@ -354,7 +438,6 @@
     <div id="leftColumn">
       <div id="navcolumn">
        #publishDate( "navigation-top" $decoration.publishDate $decoration.version )
-       #mainMenu( $decoration.body.menus )
        #poweredByLogo( $decoration.poweredBy )
        #publishDate( "navigation-bottom" $decoration.publishDate $decoration.version )
       </div>
