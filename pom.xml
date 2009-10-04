@@ -119,6 +119,15 @@
                     <templateDirectory>src/site</templateDirectory>
                     <template>site.vm</template>
                 </configuration>
+                <!--
+                                <dependencies>
+                                    <dependency>
+                                        <groupId>sk.dvsk.maven</groupId>
+                                        <artifactId>doxia-module-highlight</artifactId>
+                                        <version>1.0-alpha-11</version>
+                                    </dependency>
+                                </dependencies>
+                -->
             </plugin>
         </plugins>
     </build>
