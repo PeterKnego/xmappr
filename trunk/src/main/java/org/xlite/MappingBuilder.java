@@ -24,37 +24,50 @@ public class MappingBuilder {
      * @param config
      * @return
      */
-    public ElementConverter processConfiguration(ConfigRootElement config) {
+    public RootMapper processConfiguration(ConfigRootElement config) {
 
-        ClassConverter classConverter = new ClassConverter(config.classType);
-        mappingContext.addToElementConverterCache(classConverter);
+        // Try to find an ElementConverter that can convert target Class
+        ElementConverter rootConverter = mappingContext.lookupElementConverter(config.classType);
 
-        // find and process @Namespaces annotation
-        processClassNamespaces(config.namespace, classConverter);
-        // find and process @Attribute annotations
-        processAttributes(config.attribute, classConverter);
-        // find and process @Text annotation
-        processText(config.text, config.element, classConverter);
-        // find and process @Element annotations
-        processElements(config.element, classConverter);
+        // find and process class namespace context
+        NsContext rootNs = processClassNamespaces(config.namespace);
 
-        return classConverter;
+        // ElementConverter was not found - use ClassConverter
+        if (rootConverter == null) {
+            ClassConverter classConverter = new ClassConverter(config.classType);
+
+            // Set class namespace context - needed for resolving all names of elements and attributes.
+            // Must be set before processing XML attributes or elements.
+            classConverter.setClassNamespaces(rootNs);
+
+            // find and process @Attribute annotations
+            processAttributes(config.attribute, classConverter);
+            // find and process @Text annotation
+            processText(config.text, config.element, classConverter);
+            // find and process @Element annotations
+            processElements(config.element, classConverter);
+
+            rootConverter = classConverter;
+        }
+
+        QName rootQName = mappingContext.getQName(config.name, null, rootNs, config.classType.getName(), "");
+
+        return new RootMapper(rootQName, config.classType, rootConverter, mappingContext);
     }
 
     /**
      * Processes @XMLnamespaces annotations defined on a Class.
      *
      * @param namespaces
-     * @param classConverter
      */
-    private void processClassNamespaces(List<ConfigNamespace> namespaces, ClassConverter classConverter) {
+    private NsContext processClassNamespaces(List<ConfigNamespace> namespaces) {
         NsContext classNS = new NsContext();
         if (namespaces != null && namespaces.size() != 0) {
             for (ConfigNamespace namespace : namespaces) {
                 classNS.addNamespace(namespace.prefix, namespace.uri);
             }
         }
-        classConverter.setClassNamespaces(classNS);
+        return classNS;
     }
 
 //    private ElementConverter lookupElementConverter(Class type) {
@@ -110,7 +123,7 @@ public class MappingBuilder {
 
             // getValue QName that field maps to
             String elementName = configElement.name;
-            QName qname = getQName(elementName, getFieldNamespaces(field), classConverter.getClassNamespaces(),
+            QName qname = mappingContext.getQName(elementName, getFieldNamespaces(field), classConverter.getClassNamespaces(),
                     classConverter.getTargetClass().getName(), field.getName());
 
             // element catcher for wildcard names
@@ -135,7 +148,7 @@ public class MappingBuilder {
                 // default converter for element catcher
                 fieldConverter = mappingContext.lookupElementConverter(DOMelement.class);
 
-                // default targetType for element catcher (in case that target field is a Colleciton)
+                // default targetType for element catcher (in case that target field is a Collection)
                 targetType = DOMelement.class;
 
             } else { // normal name-to-field mapping
@@ -283,7 +296,7 @@ public class MappingBuilder {
                 annotatedConverter = null;
             }
 
-            QName qname = getQName(fieldName, null, classConverter.getClassNamespaces(),
+            QName qname = mappingContext.getQName(fieldName, null, classConverter.getClassNamespaces(),
                     classConverter.getTargetClass().getCanonicalName(), configAttribute.field);
 
             // Is target field a Map?
@@ -383,52 +396,6 @@ public class MappingBuilder {
     }
 
 
-    //todo write javadoc
-    /**
-     * @param elementName
-     * @param fieldNS
-     * @param classNS
-     * @return
-     */
-    private QName getQName(String elementName, NsContext fieldNS, NsContext classNS, String className, String fieldName) {
-
-        // split xml element name into prefix and local part
-        int index = elementName.indexOf(':');
-        String prefix, localPart;
-        if (index > 0) {  // with prefix ("prefix:localpart")
-            prefix = elementName.substring(0, index);
-            localPart = elementName.substring(index + 1, elementName.length());
-
-        } else if (index == 0) { // empty prefix (no prefix defined - e.g ":elementName")
-            prefix = XMLConstants.DEFAULT_NS_PREFIX;
-            localPart = elementName.substring(1, elementName.length());
-
-        } else { // no prefix given
-            prefix = XMLConstants.DEFAULT_NS_PREFIX;
-            localPart = elementName;
-        }
-
-
-        String fieldNsURI = fieldNS == null ? null : fieldNS.getNamespaceURI(prefix);
-        String classNsURI = classNS == null ? null : classNS.getNamespaceURI(prefix);
-        String predefinedNsURI = mappingContext.getPredefinedNamespaces().getNamespaceURI(prefix);
-
-        // used prefix must be defined in at least one namespace
-        if (prefix.length() != 0 && (fieldNsURI == null && classNsURI == null && predefinedNsURI == null)) {
-            throw new XliteConfigurationException("ERROR: used namespace prefix is not defined in any namespace.\n" +
-                    "Name prefix '" + prefix + "' used on field '" + fieldName +
-                    "' in class " + className + " is not defined in any declared XML namespace.\n");
-        }
-
-        // choose the namespaceURI that is not null from field, class, predefined or
-        // finally DEFAULT_NS_PREFIX (in that order)
-        String theURI = fieldNsURI != null ? fieldNsURI :
-                (classNsURI != null ? classNsURI :
-                        (predefinedNsURI != null ? predefinedNsURI : XMLConstants.DEFAULT_NS_PREFIX));
-//        System.out.println("namespace URI=" + theURI + " local=" + localPart + " prefix=" + prefix);
-        return new QName(theURI, localPart, prefix);
-    }
-
     private NsContext getFieldNamespaces(Field field) {
 
         NsContext fieldNS = new NsContext();
@@ -459,7 +426,7 @@ public class MappingBuilder {
         Class targetType = null;
 
         // custom converter assigned via annotation?
-        if (configText.converter != null) {
+        if (configText.converter != null && !configText.converter.equals(ValueConverter.class)) {
             try {
                 valueConverter = configText.converter.newInstance();
             } catch (Exception e) {
@@ -512,35 +479,12 @@ public class MappingBuilder {
     private Field getFieldFromName(String fieldName, Class targetClass) {
         Field targetField;
         try {
-            targetField = targetClass.getField(fieldName);
+            targetField = targetClass.getDeclaredField(fieldName);
         } catch (NoSuchFieldException e) {
             throw new XliteConfigurationException("Error: Could not find field '" + fieldName + "'" +
                     " in class " + targetClass.getCanonicalName(), e);
         }
         return targetField;
     }
-
-    // todo Check if this method returns duplicate field if a field is overriden.
-
-    /**
-     * Collects all fields (public and private) in a given class and its superclasses.
-     *
-     * @param clazz Child class
-     * @return List of fields
-     */
-    private List<Field> getAllFields(Class clazz) {
-        List<Field> fields = new ArrayList<Field>();
-        Class cl = clazz;
-        do {
-            for (Field field : cl.getDeclaredFields()) {
-                if (!field.isSynthetic()) {
-                    fields.add(field);
-                }
-            }
-            cl = cl.getSuperclass();
-        } while (cl != Object.class);
-        return fields;
-    }
-
 
 }

@@ -1,11 +1,12 @@
 package org.xlite;
 
 import org.xlite.converters.ClassNameConverter;
+import org.xlite.converters.Converter;
 
 import java.util.List;
 
 
-@RootElement("rootelement")
+@RootElement("root-element")
 public class ConfigRootElement {
 
     @Attribute
@@ -13,6 +14,9 @@ public class ConfigRootElement {
 
     @Attribute(name = "class", converter = ClassNameConverter.class)
     public Class classType;
+
+    @Attribute(converter = ClassNameConverter.class)
+    public Class<? extends Converter> converter;
 
     @Element(itemType = ConfigNamespace.class)
     public List<ConfigNamespace> namespace;

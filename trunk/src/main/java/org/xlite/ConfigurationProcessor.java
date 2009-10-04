@@ -20,6 +20,13 @@ public class ConfigurationProcessor {
     public static ConfigRootElement processConfiguration(Class rootClass) {
         ConfigRootElement rootConfElement = new ConfigRootElement();
 
+        RootElement rootAnnotation = (RootElement) rootClass.getAnnotation(RootElement.class);
+
+        String rootName = rootAnnotation.value().length() != 0 ? rootAnnotation.value()
+                : (rootAnnotation.name().length() != 0 ?
+                rootAnnotation.name() : rootClass.getSimpleName().toLowerCase());
+
+        rootConfElement.name = rootName;
         rootConfElement.classType = rootClass;
         rootConfElement.attribute = processAttributes(rootClass);
         rootConfElement.text = processText(rootClass);
@@ -136,9 +143,9 @@ public class ConfigurationProcessor {
         Text annotation = null;
         Field targetField = null;
         for (Field field : getAllFields(elementClass)) {
-            annotation = field.getAnnotation(Text.class);
-            if (annotation != null) {
+            if (field.getAnnotation(Text.class) != null) {
                 found++;
+                annotation = field.getAnnotation(Text.class);
                 targetField = field;
             }
         }

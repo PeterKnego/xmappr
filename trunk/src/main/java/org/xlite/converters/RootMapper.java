@@ -6,7 +6,10 @@
  */
 package org.xlite.converters;
 
-import org.xlite.*;
+import org.xlite.MappingContext;
+import org.xlite.XMLSimpleReader;
+import org.xlite.XMLSimpleWriter;
+import org.xlite.XliteException;
 
 import javax.xml.namespace.QName;
 
@@ -22,11 +25,19 @@ public class RootMapper {
     private ElementConverter elementConverter;
     private Class rootClass;
 
-    public RootMapper(QName rootNodeName, Class rootClass, MappingContext mappingContext) {
+    public RootMapper(QName rootNodeName, Class rootClass, ElementConverter elementConverter, MappingContext mappingContext) {
         this.rootClass = rootClass;
-        elementConverter = mappingContext.lookupElementConverter(rootClass);
+        this.elementConverter = elementConverter;
         this.rootNodeName = rootNodeName;
         this.mappingContext = mappingContext;
+    }
+
+    public QName getRootNodeName() {
+        return rootNodeName;
+    }
+
+    public Class getRootClass() {
+        return rootClass;
     }
 
     public Object getRootObject(XMLSimpleReader reader) {

@@ -19,7 +19,7 @@ import java.io.StringWriter;
 public class BasicConvertersTest {
 
     private static String inXml = "" +
-            "<primitives i=\"1000\" l=\"9999\" bool=\"false\" byt=\"127\" db=\"-1.6\" fl=\"1.1\" ch=\"f\" >" +
+            "<primitives in=\"1000\" l=\"9999\" bool=\"false\" byt=\"127\" db=\"-1.6\" fl=\"1.1\" ch=\"f\" >" +
             "A text value" +
             "<iv>999</iv>" +
             "<lv>999999</lv>" +
@@ -34,7 +34,7 @@ public class BasicConvertersTest {
             "</primitives> ";
 
     private static String outXml = "" +
-            "<primitives i=\"1000\" l=\"9999\" byt=\"127\" db=\"-1.6\" fl=\"1.1\" ch=\"f\" >" +
+            "<primitives in=\"1000\" l=\"9999\" byt=\"127\" db=\"-1.6\" fl=\"1.1\" ch=\"f\" >" +
             "A text value" +
             "<iv>999</iv>" +
             "<lv>999999</lv>" +
@@ -50,13 +50,20 @@ public class BasicConvertersTest {
 
     @Test
     public void mainTest() throws IllegalAccessException, IOException, SAXException {
+
+        try {
+            Assert.assertNotNull(Primitives.class.getField("in"));
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+
         StringReader reader = new StringReader(inXml);
         Xlite xlite = new Xlite(Primitives.class);
 
         Primitives primitives = (Primitives) xlite.fromXML(reader);
 
         // attributes
-        Assert.assertEquals(primitives.i, 1000);
+        Assert.assertEquals(primitives.in, 1000);
         Assert.assertEquals(primitives.l, 9999);
         Assert.assertFalse(primitives.bool);
         Assert.assertEquals(primitives.byt, 127);
@@ -105,14 +112,14 @@ public class BasicConvertersTest {
 
         // tests mapping element attribute to private field
         @Attribute
-        private int i;
+        private int in;
 
-        public int getI() {
-            return i;
+        public int getIn() {
+            return in;
         }
 
-        public void setI(int i) {
-            this.i = i;
+        public void setIn(int in) {
+            this.in = in;
         }
 
         @Attribute
