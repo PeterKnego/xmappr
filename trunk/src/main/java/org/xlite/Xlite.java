@@ -23,9 +23,8 @@ import java.util.Map;
  * <p/>
  * <b>Example usage:</b>
  * <pre>
- * Configuration conf = new Configuration(One.class);            // mapping configuration for class One
- * Xlite xlite = new Xlite(conf);                                // initialize Xlite
- * One one = (One) xlite.fromXml(inputXml);                      // deserialize XML to object
+ * Xlite xlite = new Xlite(One.class);                 // initialize Xlite & define mapping for class One
+ * One one = (One) xlite.fromXml(inputXml);            // deserialize XML to object
  * </pre>
  * Deserialization (XML-to-object) is done via fromXML() and fromXMLwithUnknown() methods.
  * <p/>
@@ -42,21 +41,19 @@ import java.util.Map;
  * <p/>
  * <b>Example of storing unamapped elements:</b>
  * <pre>
- * Configuration conf = new Configuration(One.class);            // mapping configuration for class One
- * Xlite xlite = new Xlite(conf);                                // initialize Xlite
- * Xlite.Result result = xlite.fromXMLwithUnmapped(inputXml);    // deserialize XML to object while storing unmapped XML
- * <p/>
- * One one = result.getObject();                                 // get deserialized object from Result object
- * ObjectStore store = result.getObjectStore()                   // unmapped XML is stored in binary form to ObjectStore
- * <p/>
- * xlite.toXML(one, store, outputXmlWriter)                      // on serialization, stored objects must be provided
+ * Xlite xlite = new Xlite(One.class);                         // initialize Xlite & define mapping for class One
+ * Xlite.Result result = xlite.fromXMLwithUnmapped(inputXml);  // deserialize XML to object while storing unmapped XML
+ *
+ * One one = result.getObject();                               // get deserialized object from Result object
+ * ObjectStore store = result.getObjectStore()                 // unmapped XML is stored in binary form to ObjectStore
+ *
+ * xlite.toXML(one, store, outputXmlWriter)                    // on serialization, stored objects must be provided
  * </pre>
  * <em>Note: only whole XML subelements are stored and not XML attributes or text elements.
  * XML attributes and text elements must be mapped explicitly via configuration to be preserved from input to output.</em>
  * </pre>
  */
 public class Xlite {
-
 
     private final XMLInputFactory xmlInputFactory;
     private final XMLOutputFactory xmlOutputFactory;
@@ -117,7 +114,7 @@ public class Xlite {
 
     public Xlite(Reader xmlConfiguration) {
         this();
-
+        addMapping(xmlConfiguration);
     }
 
     public Xlite(Class rootClass) {

@@ -124,11 +124,11 @@ public class MappingContext {
                 break;
             }
         }
-//        // not found in cache?
-//        if (ec == null && lookupClassConverter) {
-//            // process it
-//            ec = mappingBuilder.processClass(type);
-//        }
+        // not found in cache?
+        if (ec == null && lookupClassConverter) {
+            // process it
+            ec = mappingBuilder.processClass(type);
+        }
         classTreeWalker.pop();
         return ec;
     }

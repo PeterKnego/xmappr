@@ -5,7 +5,6 @@ import org.xlite.converters.*;
 import javax.xml.XMLConstants;
 import javax.xml.namespace.QName;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -55,6 +54,31 @@ public class MappingBuilder {
         return new RootMapper(rootQName, config.classType, rootConverter, mappingContext);
     }
 
+    public ClassConverter processClass(Class targetClass) {
+
+        ConfigElement config = ConfigurationProcessor.processClass(targetClass);
+
+        ClassConverter classConverter = new ClassConverter(targetClass);
+        mappingContext.addToElementConverterCache(classConverter);
+
+        NsContext namespaces = processClassNamespaces(config.namespace);
+
+        /*
+        * Set class namespace context - needed for resolving all names of elements and attributes.
+        * Must be set before processing XML attributes or elements.
+        */
+        classConverter.setClassNamespaces(namespaces);
+
+        // find and process @Attribute annotations
+        processAttributes(config.attribute, classConverter);
+        // find and process @Text annotation
+        processText(config.text, config.element, classConverter);
+        // find and process @Element annotations
+        processElements(config.element, classConverter);
+
+        return classConverter;
+    }
+
     /**
      * Processes @XMLnamespaces annotations defined on a Class.
      *
@@ -62,7 +86,7 @@ public class MappingBuilder {
      */
     private NsContext processClassNamespaces(List<ConfigNamespace> namespaces) {
         NsContext classNS = new NsContext();
-        if (namespaces != null && namespaces.size() != 0) {
+        if (namespaces != null) {
             for (ConfigNamespace namespace : namespaces) {
                 classNS.addNamespace(namespace.prefix, namespace.uri);
             }
@@ -86,6 +110,9 @@ public class MappingBuilder {
      * @param classConverter AnnotatedClassMapper that coresponds in
      */
     private void processElements(List<ConfigElement> configElements, ClassConverter classConverter) {
+
+        if (configElements == null) return;
+
         boolean isElementCatcher = false;
 
         for (ConfigElement configElement : configElements) {
@@ -273,6 +300,8 @@ public class MappingBuilder {
 
     private void processAttributes(List<ConfigAttribute> configAttributes, ClassConverter classConverter) {
 
+        if (configAttributes == null) return;
+
         for (ConfigAttribute configAttribute : configAttributes) {
 
             Field field = getFieldFromName(configAttribute.field, classConverter.getTargetClass());
@@ -348,7 +377,7 @@ public class MappingBuilder {
                                 "Converter " + fieldConverter.getClass().getName() + " can not be used " +
                                 "to convert data of type " + fieldType + ".\n" +
                                 "Please check XML annotations on field '" + fieldName +
-                                "' in class " + fieldType.getDeclaringClass().getName() + ".");
+                                "' in class " + field.getDeclaringClass().getName() + ".");
                     }
 
                 } else {
@@ -463,9 +492,11 @@ public class MappingBuilder {
 
         // check if this field is mapped both to XML text and XML elements
         boolean isIntermixed = false;
-        for (ConfigElement configElement : configElements) {
-            if (configElement.field.equals(configText.field)) {
-                isIntermixed = true;
+        if (configElements != null) {
+            for (ConfigElement configElement : configElements) {
+                if (configElement.field.equals(configText.field)) {
+                    isIntermixed = true;
+                }
             }
         }
 
