@@ -13,4 +13,9 @@
             <item name="Download" href="download.html"/>
         </menu>
     </body>
+    <skin>
+        <groupId>com.anasoft.os</groupId>
+        <artifactId>m2st-stylus-ext-skin</artifactId>
+        <version>${m2st.version}</version>
+    </skin>
 </project>
