@@ -33,7 +33,10 @@ public class MultiMappingConfigurationTest {
         StringReader reader2 = new StringReader(xml2);
 
         // configure the first mapping
-        Xlite xlite = new Xlite(One.class);
+        // Double step to make Xlite work harder (not necessary normally - do not copy)
+        // Reads Class configuration, produces XML configuration from it and then feeds it to Xlite
+        StringReader configuration = XmlConfigTester.reader(One.class);
+        Xlite xlite = new Xlite(configuration);
 
         // add the second mapping
         xlite.addMapping(Two.class);

@@ -16,13 +16,13 @@ public class ConfigElement {
     @Attribute
     public String defaultvalue;
 
-    @Attribute(converter = ClassNameConverter.class)
+    @Attribute(converter = ClassNameConverter.class, defaultValue = "java.lang.Object")
     public Class targetType;
 
     @Attribute
     public String format;
 
-    @Attribute(converter = ClassNameConverter.class)
+    @Attribute(converter = ClassNameConverter.class, defaultValue = "org.xlite.converters.ElementConverter")
     public Class<? extends Converter> converter;
 
     @Element(itemType = ConfigNamespace.class)

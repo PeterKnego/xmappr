@@ -19,7 +19,11 @@ public class PrefixNotDefinedTest {
     @org.testng.annotations.Test(expectedExceptions = XliteException.class)
     public void test() {
         StringReader reader = new StringReader(inXml);
-        Xlite xlite = new Xlite(Test.class);
+
+        // Double step to make Xlite work harder (not necessary normally - do not copy)
+        // Reads Class configuration, produces XML configuration from it and then feeds it to Xlite
+        StringReader configuration = XmlConfigTester.reader(Test.class);
+        Xlite xlite = new Xlite(configuration);
 
         Test test = (Test) xlite.fromXML(reader);
 

@@ -20,7 +20,7 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- *  Testing a custom ValueConverter that changes directly targetObject passed to it.
+ * Testing a custom ValueConverter that changes directly targetObject passed to it.
  */
 public class CustomConverterChangesTargetTest {
 
@@ -32,7 +32,11 @@ public class CustomConverterChangesTargetTest {
     public void basicTest() {
 
         StringReader reader = new StringReader(xml1);
-        Xlite xlite = new Xlite(One.class);
+
+        // Double step to make Xlite work harder (not necessary normally - do not copy)
+        // Reads Class configuration, produces XML configuration from it and then feeds it to Xlite
+        StringReader configuration = XmlConfigTester.reader(One.class);
+        Xlite xlite = new Xlite(configuration);
         xlite.setPrettyPrint(false);
 
         One one = (One) xlite.fromXML(reader);

@@ -38,7 +38,11 @@ public class DifferentNsSamePrefixesTest {
     @Test
     public void test() throws IOException, SAXException {
         StringReader reader = new StringReader(xml);
-        Xlite xlite = new Xlite(aaa.class);
+
+        // Double step to make Xlite work harder (not necessary normally - do not copy)
+        // Reads Class configuration, produces XML configuration from it and then feeds it to Xlite
+        StringReader configuration = XmlConfigTester.reader(aaa.class);
+        Xlite xlite = new Xlite(configuration);
 
         aaa a = (aaa) xlite.fromXML(reader);
 

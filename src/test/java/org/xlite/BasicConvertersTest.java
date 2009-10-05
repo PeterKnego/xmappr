@@ -51,14 +51,9 @@ public class BasicConvertersTest {
     @Test
     public void mainTest() throws IllegalAccessException, IOException, SAXException {
 
-        try {
-            Assert.assertNotNull(Primitives.class.getField("in"));
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-
         StringReader reader = new StringReader(inXml);
-        Xlite xlite = new Xlite(Primitives.class);
+        StringReader configuration = XmlConfigTester.reader(Primitives.class);
+        Xlite xlite = new Xlite(configuration);
 
         Primitives primitives = (Primitives) xlite.fromXML(reader);
 

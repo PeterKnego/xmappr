@@ -25,7 +25,11 @@ public class ParentClassTest {
     public void mainTest() {
 
         StringReader reader = new StringReader(ParentClassTest.xml);
-        Xlite xlite = new Xlite(Child.class);
+
+        // Double step to make Xlite work harder (not necessary normally - do not copy)
+        // Reads Class configuration, produces XML configuration from it and then feeds it to Xlite
+        StringReader configuration = XmlConfigTester.reader(Child.class);
+        Xlite xlite = new Xlite(configuration);
 
         Child child = (Child) xlite.fromXML(reader);
         Assert.assertEquals(child.val, "A text value");

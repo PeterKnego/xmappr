@@ -14,13 +14,13 @@ public class ConfigAttribute {
     @Attribute
     public String defaultvalue;
 
-    @Attribute(converter = ClassNameConverter.class)
+    @Attribute(converter = ClassNameConverter.class, defaultValue = "java.lang.Object")
     public Class targetType;
 
     @Attribute
     public String format;
 
-    @Attribute(converter = ClassNameConverter.class)
+    @Attribute(converter = ClassNameConverter.class, defaultValue = "org.xlite.converters.ValueConverter")
     public Class<? extends ValueConverter> converter;
 
     public ConfigAttribute() {

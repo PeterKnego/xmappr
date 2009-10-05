@@ -15,7 +15,7 @@ public class ConfigRootElement {
     @Attribute(name = "class", converter = ClassNameConverter.class)
     public Class classType;
 
-    @Attribute(converter = ClassNameConverter.class)
+    @Attribute(converter = ClassNameConverter.class, defaultValue = "org.xlite.converters.ElementConverter")
     public Class<? extends Converter> converter;
 
     @Element(itemType = ConfigNamespace.class)

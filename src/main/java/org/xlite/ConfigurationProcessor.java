@@ -1,6 +1,7 @@
 package org.xlite;
 
 import org.xlite.converters.ElementConverter;
+import org.xlite.converters.EmptyStringConverter;
 
 import java.io.Reader;
 import java.lang.reflect.Field;
@@ -9,7 +10,12 @@ import java.util.List;
 
 public class ConfigurationProcessor {
 
-    private static Xlite xmlConfigurationParser = new Xlite(ConfigRootElement.class);
+    private static Xlite xmlConfigurationParser;
+
+    static{
+       xmlConfigurationParser = new Xlite(ConfigRootElement.class);
+       xmlConfigurationParser.addConverter(new EmptyStringConverter());
+    }
 
     public static ConfigRootElement processConfiguration(Reader xmlReader) {
         try {
@@ -30,6 +36,7 @@ public class ConfigurationProcessor {
 
         rootConfElement.name = rootName;
         rootConfElement.classType = rootClass;
+        rootConfElement.converter = rootAnnotation.converter();
         rootConfElement.attribute = processAttributes(rootClass);
         rootConfElement.text = processText(rootClass);
         rootConfElement.element = processElements(rootClass);
@@ -206,10 +213,13 @@ public class ConfigurationProcessor {
     }
 
     private static List<ConfigNamespace> processNamespaces(Namespaces nsAnnotation) {
-        List<ConfigNamespace> namespaces = new ArrayList<ConfigNamespace>();
+        List<ConfigNamespace> namespaces = null;
         if (nsAnnotation != null && nsAnnotation.value().length != 0) {
             String[] valueArray = nsAnnotation.value();
             for (String value : valueArray) {
+                if(namespaces==null){
+                    namespaces = new ArrayList<ConfigNamespace>();
+                }
                 namespaces.add(new ConfigNamespace(value));
             }
         }

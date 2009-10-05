@@ -185,7 +185,9 @@ public class ClassConverter implements ElementConverter {
                     // check that this attribute name is not already handled by direct mappers
                     if (!attributeMappers.containsKey(aName)) {
                         String value = attributeCatcher.getValue(key, object);
-                        if (value != null) writer.addAttribute(aName, value);
+                        if (value != null) {
+                            writer.addAttribute(aName, value);
+                        }
                     }
                 }
             }

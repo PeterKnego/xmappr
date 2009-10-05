@@ -332,7 +332,7 @@ public class MappingBuilder {
             }
 
             QName qname = mappingContext.getQName(fieldName, null, classConverter.getClassNamespaces(),
-                    classConverter.getTargetClass().getCanonicalName(), configAttribute.field);
+                    classConverter.getTargetClass().getName(), configAttribute.field);
 
             // Is target field a Map?
             if (Map.class.isAssignableFrom(fieldType)) {
@@ -530,7 +530,7 @@ public class MappingBuilder {
 
         // no field with given name was found
         throw new XliteConfigurationException("Error: Could not find field '" + fieldName + "'" +
-                " in class " + targetClass.getCanonicalName());
+                " in class " + targetClass.getName());
     }
 
     /**

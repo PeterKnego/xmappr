@@ -26,7 +26,11 @@ public class BigIntegerConverterTest {
     @org.testng.annotations.Test
     public void test() throws IOException, SAXException {
         StringReader reader = new StringReader(inXml);
-        Xlite xlite = new Xlite(Test.class);
+
+         // Double step to make Xlite work harder (not necessary normally - do not copy)
+        // Reads Class configuration, produces XML configuration from it and then feeds it to Xlite
+        StringReader configuration = XmlConfigTester.reader(Test.class);
+        Xlite xlite = new Xlite(configuration);
 
         Test test = (Test) xlite.fromXML(reader);
 
