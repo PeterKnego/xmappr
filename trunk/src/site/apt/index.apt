@@ -24,18 +24,18 @@ Quick example
 
     Let’s map this:
 
-    %{code-snippet|file=src/site/snippet/sample1.xml}
+%{code-snippet|file=src/site/snippet/sample1.xml}
 
     to this class:
 
-    %{code-snippet|brush=java|file=src/site/snippet/sample1.txt}
+%{code-snippet|brush=java|file=src/site/snippet/sample1.txt}
 
 
     All you have to do is add @Elemet, @Attribute and @Text annotations to your classes and configuration is done.
 
     Mapping is than done in just three lines of code:
 
-    %{code-snippet|brush=java|file=src/site/snippet/conf-sample1.txt}
+%{code-snippet|brush=java|file=src/site/snippet/conf-sample1.txt}
 
 
     Now head on to documentation section and start hacking. You won’t regret it!
