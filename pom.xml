@@ -131,8 +131,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
                 <configuration>
-                    <templateDirectory>src/site</templateDirectory>
-                    <template>site.vm</template>
+                    <templateFile>src/site/site.vm</templateFile>
                 </configuration>
                 <dependencies>
                     <dependency>

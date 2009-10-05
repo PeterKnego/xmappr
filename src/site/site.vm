@@ -395,6 +395,15 @@
     #foreach( $author in $authors )
       <meta name="author" content="$author" />
     #end
+    <link type="text/css" rel="stylesheet" href="syntaxhighlighter/styles/shCore.css" />
+    <link type="text/css" rel="stylesheet" href="syntaxhighlighter/styles/shThemeDefault.css" />
+    <script type="text/javascript" src="syntaxhighlighter/scripts/shCore.js"></script>
+    <script type="text/javascript" src="syntaxhighlighter/scripts/shBrushPlain.js"></script>
+    <script type="text/javascript" src="syntaxhighlighter/scripts/shBrushXml.js"></script>
+    <script type="text/javascript" src="syntaxhighlighter/scripts/shBrushJava.js"></script>
+    <script type="text/javascript">
+    SyntaxHighlighter.all();
+    </script>
     <meta http-equiv="Content-Type" content="text/html; charset=${outputEncoding}" />
     #if ( $decoration.body.head )
       #foreach( $item in $decoration.body.head.getChildren() )
