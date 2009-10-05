@@ -35,7 +35,11 @@ public class DateConverterTest {
     @org.testng.annotations.Test
     public void test() throws IOException, SAXException, ParseException {
         StringReader reader = new StringReader(inXml);
-        Xlite xlite = new Xlite(Test.class);
+
+        // Double step to make Xlite work harder (not necessary normally - do not copy)
+        // Reads Class configuration, produces XML configuration from it and then feeds it to Xlite
+        StringReader configuration = XmlConfigTester.reader(Test.class);
+        Xlite xlite = new Xlite(configuration);
 
         Test test = (Test) xlite.fromXML(reader);
 
@@ -58,7 +62,11 @@ public class DateConverterTest {
     @org.testng.annotations.Test(expectedExceptions = XliteException.class)
     public void wrongFormatterTest() {
         StringReader reader = new StringReader(inXml2);
-        Xlite xlite = new Xlite(Test.class);
+
+        // Double step to make Xlite work harder (not necessary normally - do not copy)
+        // Reads Class configuration, produces XML configuration from it and then feeds it to Xlite
+        StringReader configuration = XmlConfigTester.reader(Test.class);
+        Xlite xlite = new Xlite(configuration);
 
         Test test = (Test) xlite.fromXML(reader);
     }
@@ -72,7 +80,11 @@ public class DateConverterTest {
     @org.testng.annotations.Test(expectedExceptions = XliteException.class)
     public void testEmptyFormat() {
         StringReader reader = new StringReader(inXml);
-        Xlite xlite = new Xlite(TestEmpty.class);
+
+        // Double step to make Xlite work harder (not necessary normally - do not copy)
+        // Reads Class configuration, produces XML configuration from it and then feeds it to Xlite
+        StringReader configuration = XmlConfigTester.reader(TestEmpty.class);
+        Xlite xlite = new Xlite(configuration);
 
         TestEmpty test = (TestEmpty) xlite.fromXML(reader);
     }
@@ -87,7 +99,11 @@ public class DateConverterTest {
     @org.testng.annotations.Test(expectedExceptions = XliteException.class)
     public void testWrongFormat() {
         StringReader reader = new StringReader(inXml);
-        Xlite xlite = new Xlite(TestWrong.class);
+
+        // Double step to make Xlite work harder (not necessary normally - do not copy)
+        // Reads Class configuration, produces XML configuration from it and then feeds it to Xlite
+        StringReader configuration = XmlConfigTester.reader(TestWrong.class);
+        Xlite xlite = new Xlite(configuration);
 
         TestWrong test = (TestWrong) xlite.fromXML(reader);
     }

@@ -27,7 +27,11 @@ public class EnumConverterTest {
 
         // do the mapping
         StringReader reader = new StringReader(xml);
-        Xlite xlite = new Xlite(Root.class);
+
+        // Double step to make Xlite work harder (not necessary normally - do not copy)
+        // Reads Class configuration, produces XML configuration from it and then feeds it to Xlite
+        StringReader configuration = XmlConfigTester.reader(Root.class);
+        Xlite xlite = new Xlite(configuration);
         Root root = (Root) xlite.fromXML(reader);
 
         // check values

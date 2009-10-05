@@ -46,7 +46,11 @@ public class CollectionConverterTest {
     public void collectionConverterTest() throws IOException, SAXException {
 
         StringReader reader = new StringReader(xml);
-        Xlite xlite = new Xlite(One.class);
+
+        // Double step to make Xlite work harder (not necessary normally - do not copy)
+        // Reads Class configuration, produces XML configuration from it and then feeds it to Xlite
+        StringReader configuration = XmlConfigTester.reader(One.class);
+        Xlite xlite = new Xlite(configuration);
 
         One one = (One) xlite.fromXML(reader);
 

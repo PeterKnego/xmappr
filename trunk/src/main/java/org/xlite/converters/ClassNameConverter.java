@@ -37,10 +37,9 @@ public class ClassNameConverter extends ValueConverter {
         // now try to get Class from various class names
         Class clazz = null;
         for (String name : tryNames) {
-            System.out.println("try: " + name);
             try {
                 clazz = Class.forName(name);
-                continue;
+                break;
             } catch (ClassNotFoundException e) {
                 // this is normal, class was not found - will try next class name
             }
@@ -64,11 +63,11 @@ public class ClassNameConverter extends ValueConverter {
      */
     @Override
     public String toValue(Object object, String format) {
-        String canonicalName = object.getClass().getCanonicalName();
+        String className = ((Class)object).getName();
         if ("nopackage".equals(format)) {
-            return canonicalName.substring(canonicalName.lastIndexOf(".") + 1, canonicalName.length());
+            return className.substring(className.lastIndexOf(".") + 1, className.length());
         } else {
-            return canonicalName;
+            return className;
         }
     }
 

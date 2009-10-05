@@ -1,9 +1,15 @@
 package org.xlite;
 
+import org.custommonkey.xmlunit.XMLAssert;
+import org.custommonkey.xmlunit.XMLUnit;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import org.xlite.converters.EmptyStringConverter;
+import org.xml.sax.SAXException;
 
+import java.io.IOException;
 import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.List;
 
 public class XmlConfigParseTest {
@@ -30,15 +36,27 @@ public class XmlConfigParseTest {
             "</root-element>";
 
     @Test
-    public void basicTest() {
+    public void basicTest() throws IOException, SAXException {
 
         StringReader reader = new StringReader(xml);
         StringReader confReader = new StringReader(xmlConfig);
         ConfigRootElement xmlConf = ConfigurationProcessor.processConfiguration(confReader);
         ConfigRootElement classConf = ConfigurationProcessor.processConfiguration(Top.class);
 
-        System.out.println("");
-        Assert.assertTrue(xmlConf.equals(classConf));
+        StringWriter swClass = new StringWriter();
+        StringWriter swXml = new StringWriter();
+
+        Xlite xlite = new Xlite(ConfigRootElement.class);
+        xlite.addConverter(new EmptyStringConverter());
+        xlite.toXML(classConf, swClass);
+        xlite.toXML(classConf, swXml);
+
+        XMLUnit.setIgnoreWhitespace(true);
+        XMLAssert.assertXMLEqual(swClass.toString(),swXml.toString() );
+
+        System.out.println(swClass);
+        System.out.println(swXml);
+
     }
 
     @RootElement

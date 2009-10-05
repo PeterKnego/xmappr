@@ -126,13 +126,16 @@ public class AttributeMapper {
         Object targetObject = targetField.getValue(object);
 
         // null target object results in no output
-        if (targetObject == null) return null;
+        if (targetObject == null) {
+            return null;
+        }
 
         // use default value if defined and equal to target object
         if (defaultObject != null && defaultObject.equals(targetObject)) {
-            return "";
+            return null;
         } else {
-            return valueConverter.toValue(targetObject, format);
+            String val = valueConverter.toValue(targetObject, format);
+            return val;
         }
 
     }
