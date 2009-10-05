@@ -21,6 +21,17 @@
 
     <repositories>
         <repository>
+            <id>com.anasoft.os.repository.releases</id>
+            <name>ANASOFT OpenSource releases</name>
+            <url>http://anasoft-os-repo.googlecode.com/svn/repository/releases/</url>
+        </repository>
+        <!--<repository>-->
+            <!--<id>com.anasoft.os.repository.snapshots</id>-->
+            <!--<name>ANASOFT OpenSource snapshots</name>-->
+            <!--<url>http://anasoft-os-repo.googlecode.com/svn/repository/snapshots</url>-->
+        <!--</repository>-->
+
+        <repository>
             <id>codehaus</id>
             <name>Codehaus Release Repo</name>
             <url>http://dist.codehaus.org</url>
@@ -114,20 +125,19 @@
                 </executions>
             </plugin>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
                 <configuration>
                     <templateDirectory>src/site</templateDirectory>
                     <template>site.vm</template>
                 </configuration>
-                <!--
-                                <dependencies>
-                                    <dependency>
-                                        <groupId>sk.dvsk.maven</groupId>
-                                        <artifactId>doxia-module-highlight</artifactId>
-                                        <version>1.0-alpha-11</version>
-                                    </dependency>
-                                </dependencies>
-                -->
+                <dependencies>
+                    <dependency>
+                        <groupId>com.anasoft.os</groupId>
+                        <artifactId>m2st-doxia-macros</artifactId>
+                        <version>${m2st.version}</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>
