@@ -1,0 +1,11 @@
+@RootElement
+public static class Root {
+    @Attribute
+    public float a;
+
+    @Element
+    public Integer node;
+
+    @Text
+    public String text;
+}
