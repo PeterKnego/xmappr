@@ -24,7 +24,7 @@ Quick example
 
     Let’s map this:
 
-%{code-snippet|file=src/site/snippet/sample1.xml}
+%{code-snippet|brush=xml|file=src/site/snippet/sample1.xml}
 
     to this class:
 
