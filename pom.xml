@@ -15,6 +15,9 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
+    <properties>
+        <m2st.version>2.0</m2st.version>
+    </properties>
     <scm>
         <url>http://www.xlite.org/svn/xlite/</url>
     </scm>
@@ -26,9 +29,9 @@
             <url>http://anasoft-os-repo.googlecode.com/svn/repository/releases/</url>
         </repository>
         <!--<repository>-->
-            <!--<id>com.anasoft.os.repository.snapshots</id>-->
-            <!--<name>ANASOFT OpenSource snapshots</name>-->
-            <!--<url>http://anasoft-os-repo.googlecode.com/svn/repository/snapshots</url>-->
+        <!--<id>com.anasoft.os.repository.snapshots</id>-->
+        <!--<name>ANASOFT OpenSource snapshots</name>-->
+        <!--<url>http://anasoft-os-repo.googlecode.com/svn/repository/snapshots</url>-->
         <!--</repository>-->
 
         <repository>
