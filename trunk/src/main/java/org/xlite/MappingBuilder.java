@@ -24,7 +24,7 @@ public class MappingBuilder {
     public RootMapper processConfiguration(ConfigRootElement config) {
 
         // Try to find an ElementConverter that can convert target Class
-        ElementConverter rootConverter = mappingContext.lookupElementConverter(config.classType);
+        ElementConverter rootConverter = mappingContext.lookupElementConverter(config.classType, null);
 
         // find and process class namespace context
         NsContext rootNs = processClassNamespaces(config.namespace);
@@ -52,12 +52,10 @@ public class MappingBuilder {
         return new RootMapper(rootQName, config.classType, rootConverter, mappingContext);
     }
 
-    public ClassConverter processClass(Class targetClass) {
-
-        ConfigElement config = ConfigurationProcessor.processClass(targetClass);
+    public ClassConverter processClass(Class targetClass, ConfigElement config) {
 
         ClassConverter classConverter = new ClassConverter(targetClass);
-        mappingContext.addToElementConverterCache(classConverter);
+//        mappingContext.addConverter(classConverter);
 
         NsContext namespaces = processClassNamespaces(config.namespace);
 
@@ -77,6 +75,13 @@ public class MappingBuilder {
         return classConverter;
     }
 
+    public ClassConverter processClass(Class targetClass) {
+
+        ConfigElement config = ConfigurationProcessor.processClass(targetClass, mappingContext);
+
+        return processClass(targetClass, config);
+    }
+
     /**
      * Processes @XMLnamespaces annotations defined on a Class.
      *
@@ -91,15 +96,6 @@ public class MappingBuilder {
         }
         return classNS;
     }
-
-//    private ElementConverter lookupElementConverter(Class type) {
-//        for (ElementConverter valueConverter : mappingContext.elementConverters) {
-//            if (valueConverter.canConvert(type)) {
-//                return valueConverter;
-//            }
-//        }
-//        return null;
-//    }
 
     /**
      * Searches given class for fields that have @XMLelement annotation.
@@ -119,11 +115,10 @@ public class MappingBuilder {
             Field field = getFieldFromName(configElement.field, classConverter.getTargetClass());
 
             // find the converter by the field type
-            ElementConverter converterByType = mappingContext.lookupElementConverter(field.getType());
+            ElementConverter converterByType = mappingContext.lookupElementConverter(field.getType(), configElement);
 
             // getValue converter for the class that the field references
             ElementConverter fieldConverter = null;
-
 
             // if target field is a collection, then a collection converter must be defined
             boolean isCollectionConverter = false;
@@ -216,7 +211,8 @@ public class MappingBuilder {
 
                     } else {
                         // converter was not declared via annotation, so we just use a converter derived from field type
-                        fieldConverter = null;
+                        fieldConverter = mappingContext.lookupElementConverter(targetType, configElement);
+//                        fieldConverter = null;
                     }
 
                 } else { // target field is a normal field (not a collection)

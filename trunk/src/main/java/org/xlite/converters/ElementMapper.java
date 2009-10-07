@@ -63,9 +63,9 @@ public class ElementMapper {
     }
 
     public void addMapping(QName nodeName, ElementConverter elementConverter, Class itemType) {
-        if (elementConverter == null) {
-            elementConverter = mappingContext.lookupElementConverter(itemType);
-        }
+//        if (elementConverter == null) {
+//            elementConverter = mappingContext.lookupElementConverter(itemType);
+//        }
         this.itemTypes.put(itemType, nodeName);
         this.converterCache.put(nodeName, elementConverter);
     }

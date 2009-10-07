@@ -38,7 +38,7 @@ public class MappingTreeBuilder {
     public ElementConverter processClass(final Class<?> currentClass) {
 
         ClassConverter classConverter = new ClassConverter(currentClass);
-        mappingContext.addToElementConverterCache(classConverter);
+//        mappingContext.addToElementConverterCache(classConverter);
 
         // find and process @Namespaces annotation
         processClassNamespaces(currentClass, classConverter);

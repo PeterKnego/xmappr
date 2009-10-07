@@ -9,13 +9,10 @@ public class XmlConfigTester {
 
     public static StringReader reader(Class rootClass) {
 
-        ConfigRootElement xmlConf = ConfigurationProcessor.processConfiguration(rootClass);
-
-        StringWriter swClass = new StringWriter();
-        Xlite xlite = new Xlite(ConfigRootElement.class);
+        Xlite xlite = new Xlite(rootClass);
         xlite.addConverter(new EmptyStringConverter());
-        xlite.toXML(xmlConf, swClass);
+        String classConf = xlite.getXmlConfigurations().get(0);
 
-        return new StringReader(swClass.toString());
+        return new StringReader(classConf);
     }
 }

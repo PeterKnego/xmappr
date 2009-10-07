@@ -6,14 +6,16 @@
  */
 package org.xlite;
 
+import com.sun.corba.se.impl.orb.ParserTable;
 import org.xlite.converters.ElementConverter;
 import org.xlite.converters.ValueConverter;
 
 import javax.xml.XMLConstants;
 import javax.xml.namespace.QName;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
-import java.util.ArrayList;
 
 //todo write javadoc - IMPORTANT, as this is one of the core classes
 
@@ -23,12 +25,13 @@ import java.util.ArrayList;
 public class MappingContext {
 
     private List<ElementConverter> elementConverters;
-    private List<ElementConverter> elementConverterCache = new ArrayList<ElementConverter>();
+    //    private List<ElementConverter> elementConverterCache = new ArrayList<ElementConverter>();
     private List<ValueConverter> valueConverters;
     private MappingBuilder mappingBuilder;
     private NsContext predefinedNamespaces = new NsContext();
 
     private Stack<Class> classTreeWalker = new Stack<Class>();
+    private Map<String, ConfigElement> configElementCache = new HashMap<String, ConfigElement>();
 
     public MappingContext(List<ElementConverter> elementConverters, List<ValueConverter> valueConverters) {
         this.elementConverters = elementConverters;
@@ -45,7 +48,7 @@ public class MappingContext {
     }
 
     public void addConverter(ValueConverter converter) {
-       valueConverters.add(0,converter);
+        valueConverters.add(0, converter);
     }
 
     public void addConverter(ElementConverter converter) {
@@ -63,7 +66,7 @@ public class MappingContext {
      */
     public Object processNextElement(Class targetType, Object targetObject, XMLSimpleReader reader, String defaultValue, String format) {
         // find the converter for given Class
-        ElementConverter converter = lookupElementConverter(targetType);
+        ElementConverter converter = lookupElementConverter(targetType, null);
         return converter.fromElement(reader, this, defaultValue, format, targetType, targetObject);
     }
 
@@ -76,18 +79,8 @@ public class MappingContext {
         return null;
     }
 
-    /**
-     * Finds the appropriate ElementConverter for the given Class among the registered ElementConverters. If none
-     * is found, an instance of ClassConverter is returned. ClassConverter will be returned only if XML mappings exist
-     * for given class.
-     * <p/>
-     * This method can change the internal state of MappingContext, so it needs to be synchronized.
-     *
-     * @param type
-     * @return
-     */
-    public synchronized ElementConverter lookupElementConverter(Class type) {
-        return lookupElementConverter(type, true);
+    public  ElementConverter lookupElementConverter(Class type) {
+         return lookupElementConverter(type, null);
     }
 
     /**
@@ -98,10 +91,10 @@ public class MappingContext {
      * This method can change the internal state of MappingContext, so it needs to be synchronized.
      *
      * @param type
-     * @param lookupClassConverter Whether to try to use ClassConverter for given class.
+     * @param configElement
      * @return
      */
-    public synchronized ElementConverter lookupElementConverter(Class type, boolean lookupClassConverter) {
+    public synchronized ElementConverter lookupElementConverter(Class type, ConfigElement configElement) {
 
         // lookup in preconfigured converters
         for (ElementConverter elementConverter : elementConverters) {
@@ -110,32 +103,44 @@ public class MappingContext {
             }
         }
 
+        if(configElement != null){
+            ElementConverter ec = mappingBuilder.processClass(type, configElement);
+            addConverter(ec);
+            return ec;
+        }
+
+        return null;
+
+//        throw new XliteConfigurationException("Error: converter could not be found for class "+type.getName());
+
         // checking if this Class was already processed in this tree trunk = this means loop exists in annotated classes
 //        if (classTreeWalker.contains(type)) {
 ////            throw new XliteConfigurationException("ERROR: Loop detected in annotated classes. Class being processed for the second time: " + type.getName());
 //        }
-        classTreeWalker.push(type);
 
-        // check cache for this EC
-        ElementConverter ec = null;
-        for (ElementConverter elementConverter : elementConverterCache) {
-            if (elementConverter.canConvert(type)) {
-                ec = elementConverter;
-                break;
-            }
-        }
+//        classTreeWalker.push(type);
+
+//        // check cache for this EC
+//        ElementConverter ec = null;
+//        for (ElementConverter elementConverter : elementConverterCache) {
+//            if (elementConverter.canConvert(type)) {
+//                ec = elementConverter;
+//                break;
+//            }
+//        }
         // not found in cache?
-        if (ec == null && lookupClassConverter) {
-            // process it
-            ec = mappingBuilder.processClass(type);
-        }
-        classTreeWalker.pop();
-        return ec;
+//        if (ec == null && lookupClassConverter) {
+//            // process it
+//            ec = mappingBuilder.processClass(type);
+//        }
+
+//        classTreeWalker.pop();
+//        return ec;
     }
 
-    public void addToElementConverterCache(ElementConverter elementConverter) {
-        elementConverterCache.add(elementConverter);
-    }
+//    public void addToElementConverterCache(ElementConverter elementConverter) {
+//        elementConverterCache.add(elementConverter);
+//    }
 
     /**
      * Creates a QName from compound XML element name. Compound element name is of form "prefix:name".
@@ -184,5 +189,13 @@ public class MappingContext {
                         (predefinedNsURI != null ? predefinedNsURI : XMLConstants.DEFAULT_NS_PREFIX));
 //        System.out.println("namespace URI=" + theURI + " local=" + localPart + " prefix=" + prefix);
         return new QName(theURI, localPart, prefix);
+    }
+
+    public ConfigElement lookupConfigElement(String elementName) {
+        return configElementCache.get(elementName);
+    }
+
+    public void addConfigElement(ConfigElement element) {
+        configElementCache.put(element.name,  element);
     }
 }
