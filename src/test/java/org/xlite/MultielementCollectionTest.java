@@ -36,8 +36,8 @@ public class MultielementCollectionTest {
 
         // Double step to make Xlite work harder (not necessary normally - do not copy)
         // Reads Class configuration, produces XML configuration from it and then feeds it to Xlite
-        StringReader configuration = XmlConfigTester.reader(Root.class);
-        Xlite xlite = new Xlite(configuration);
+//        StringReader configuration = XmlConfigTester.reader(Root.class);
+        Xlite xlite = new Xlite(Root.class);
         xlite.setPrettyPrint(true);
 
 //        Xlite.Result result = xlite.fromXMLwithUnmapped(reader);

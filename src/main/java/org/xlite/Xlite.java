@@ -11,6 +11,8 @@ import org.xlite.converters.*;
 import javax.xml.namespace.QName;
 import javax.xml.stream.*;
 import java.io.Reader;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.io.Writer;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -43,10 +45,10 @@ import java.util.Map;
  * <pre>
  * Xlite xlite = new Xlite(One.class);                         // initialize Xlite & define mapping for class One
  * Xlite.Result result = xlite.fromXMLwithUnmapped(inputXml);  // deserialize XML to object while storing unmapped XML
- *
+ * <p/>
  * One one = result.getObject();                               // get deserialized object from Result object
  * ObjectStore store = result.getObjectStore()                 // unmapped XML is stored in binary form to ObjectStore
- *
+ * <p/>
  * xlite.toXML(one, store, outputXmlWriter)                    // on serialization, stored objects must be provided
  * </pre>
  * <em>Note: only whole XML subelements are stored and not XML attributes or text elements.
@@ -63,8 +65,10 @@ public class Xlite {
 
     private volatile boolean initialized = false;
 
-    private List<Reader> xmlConfigurations = new ArrayList<Reader>();
-    private List<Class> classConfigurations = new ArrayList<Class>();
+    private List<ConfigRootElement> configurations = new ArrayList<ConfigRootElement>();
+
+//    private List<Reader> xmlConfigurations = new ArrayList<Reader>();
+//    private List<Class> classConfigurations = new ArrayList<Class>();
 
     private Map<Class, RootMapper> classMappings = new HashMap<Class, RootMapper>();
     private Map<QName, RootMapper> nameMappings = new HashMap<QName, RootMapper>();
@@ -265,24 +269,40 @@ public class Xlite {
         // one-time initialization
         if (!initialized) {
 
-            // process XML configurations
-            for (Reader xmlConfiguration : xmlConfigurations) {
-                ConfigRootElement rootConf = ConfigurationProcessor.processConfiguration(xmlConfiguration);
-                RootMapper rootMapper = mappingBuilder.processConfiguration(rootConf);
-                nameMappings.put(rootMapper.getRootNodeName(), rootMapper);
-                classMappings.put(rootMapper.getRootClass(), rootMapper);
-            }
-
-            // process annotated Class configurations 
-            for (Class classConfiguration : classConfigurations) {
-                ConfigRootElement rootConf = ConfigurationProcessor.processConfiguration(classConfiguration);
-                RootMapper rootMapper = mappingBuilder.processConfiguration(rootConf);
-                nameMappings.put(rootMapper.getRootNodeName(), rootMapper);
-                classMappings.put(rootMapper.getRootClass(), rootMapper);
-            }
+//            // process XML configurations
+//            for (Reader xmlConfiguration : xmlConfigurations) {
+//                ConfigRootElement rootConf = ConfigurationProcessor.processConfiguration(xmlConfiguration);
+//                RootMapper rootMapper = mappingBuilder.processConfiguration(rootConf);
+//                nameMappings.put(rootMapper.getRootNodeName(), rootMapper);
+//                classMappings.put(rootMapper.getRootClass(), rootMapper);
+//            }
+//
+//            // process annotated Class configurations
+//            for (Class classConfiguration : classConfigurations) {
+//                ConfigRootElement rootConf = ConfigurationProcessor.processConfiguration(classConfiguration, mappingContext);
+//                RootMapper rootMapper = mappingBuilder.processConfiguration(rootConf);
+//                nameMappings.put(rootMapper.getRootNodeName(), rootMapper);
+//                classMappings.put(rootMapper.getRootClass(), rootMapper);
+//            }
 
             initialized = true;
         }
+    }
+
+    private void processXmlConfiguration(Reader xmlConfiguration) {
+        ConfigRootElement rootConf = ConfigurationProcessor.processConfiguration(xmlConfiguration);
+        configurations.add(rootConf);
+        RootMapper rootMapper = mappingBuilder.processConfiguration(rootConf);
+        nameMappings.put(rootMapper.getRootNodeName(), rootMapper);
+        classMappings.put(rootMapper.getRootClass(), rootMapper);
+    }
+
+    private void processClassConfiguration(Class classConfiguration) {
+        ConfigRootElement rootConf = ConfigurationProcessor.processConfiguration(classConfiguration, mappingContext);
+        configurations.add(rootConf);
+        RootMapper rootMapper = mappingBuilder.processConfiguration(rootConf);
+        nameMappings.put(rootMapper.getRootNodeName(), rootMapper);
+        classMappings.put(rootMapper.getRootClass(), rootMapper);
     }
 
     private List<ElementConverter> setupElementConverters(List<ValueConverter> valueConverters) {
@@ -345,7 +365,8 @@ public class Xlite {
      */
     public void addMapping(Class rootClass) {
         checkConfigFinished();
-        classConfigurations.add(rootClass);
+//        classConfigurations.add(rootClass);
+        processClassConfiguration(rootClass);
     }
 
     /**
@@ -355,7 +376,8 @@ public class Xlite {
      */
     public void addMapping(Reader xmlConfiguration) {
         checkConfigFinished();
-        xmlConfigurations.add(xmlConfiguration);
+//        xmlConfigurations.add(xmlConfiguration);
+        processXmlConfiguration(xmlConfiguration);
     }
 
     public void addConverter(ValueConverter converter) {
@@ -367,6 +389,22 @@ public class Xlite {
     public void addConverter(ElementConverter converter) {
         checkConfigFinished();
         mappingContext.addConverter(converter);
+    }
+
+    public Map<Class, String> getXmlConfigurations() {
+
+        initialize();
+
+        Xlite xlite = new Xlite(ConfigRootElement.class);
+        Map<Class, String> readers = new HashMap<Class, String>();
+
+        for (ConfigRootElement configuration : configurations) {
+            StringWriter wr = new StringWriter();
+            xlite.toXML(configuration, wr);
+            readers.put(configuration.classType, wr.toString());
+        }
+
+        return readers;
     }
 
 //    /**

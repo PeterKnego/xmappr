@@ -38,24 +38,25 @@ public class XmlConfigParseTest {
     @Test
     public void basicTest() throws IOException, SAXException {
 
-        StringReader reader = new StringReader(xml);
-        StringReader confReader = new StringReader(xmlConfig);
-        ConfigRootElement xmlConf = ConfigurationProcessor.processConfiguration(confReader);
-        ConfigRootElement classConf = ConfigurationProcessor.processConfiguration(Top.class);
+        StringReader inputData = new StringReader(xml);
+
+        ConfigRootElement xmlConf = ConfigurationProcessor.processConfiguration(new StringReader(xmlConfig));
+
 
         StringWriter swClass = new StringWriter();
         StringWriter swXml = new StringWriter();
 
         Xlite xlite = new Xlite(ConfigRootElement.class);
         xlite.addConverter(new EmptyStringConverter());
-        xlite.toXML(classConf, swClass);
-        xlite.toXML(classConf, swXml);
+//        xlite.toXML(classConf, swClass);
+        xlite.toXML(xmlConf, swXml);
 
+        System.out.println(swClass.toString());
+        System.out.println(swXml.toString());
+        
         XMLUnit.setIgnoreWhitespace(true);
         XMLAssert.assertXMLEqual(swClass.toString(),swXml.toString() );
 
-        System.out.println(swClass);
-        System.out.println(swXml);
 
     }
 
