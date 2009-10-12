@@ -25,7 +25,7 @@ public class DefaultValuesTest {
             "<b/>" +
             "</root>";
 
-    private static String outXml = "<root attr='' >" +
+    private static String outXml = "<root>" +
             "<b/>" +
             "<c></c>" +
             "</root>";

@@ -52,10 +52,7 @@ public class SubTreeStoreTest {
     public void testStoringNodes() throws IOException, SAXException, XpathException {
         StringReader reader = new StringReader(xml);
 
-        // Double step to make Xlite work harder (not necessary normally - do not copy)
-        // Reads Class configuration, produces XML configuration from it and then feeds it to Xlite
-        StringReader configuration = XmlConfigTester.reader(A.class);
-        Xlite xlite = new Xlite(configuration);
+        Xlite xlite = new Xlite(A.class);
         xlite.addNamespace("x","ns1");
         xlite.addNamespace("s","ns2");
         xlite.addNamespace("w","ns3");

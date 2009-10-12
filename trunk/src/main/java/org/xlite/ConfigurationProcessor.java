@@ -1,5 +1,6 @@
 package org.xlite;
 
+import org.xlite.converters.ElementConverter;
 import org.xlite.converters.EmptyStringConverter;
 
 import java.io.Reader;
@@ -11,20 +12,55 @@ public class ConfigurationProcessor {
 
     private static Xlite xmlConfigurationParser;
 
-    static {
-        xmlConfigurationParser = new Xlite(ConfigRootElement.class);
-        xmlConfigurationParser.addConverter(new EmptyStringConverter());
-    }
-
-    public static ConfigRootElement processConfiguration(Reader xmlReader) {
+    public static ConfigRootElement processConfiguration(Reader xmlReader, MappingContext mappingContext) {
         try {
-            return (ConfigRootElement) xmlConfigurationParser.fromXML(xmlReader);
+            if (xmlConfigurationParser == null) {
+                xmlConfigurationParser = new Xlite(ConfigRootElement.class);
+                xmlConfigurationParser.addConverter(new EmptyStringConverter());
+            }
+            ConfigRootElement configRootElement = (ConfigRootElement) xmlConfigurationParser.fromXML(xmlReader);
+            processRootElement(configRootElement, mappingContext);
+            return configRootElement;
         } catch (XliteException xe) {
             throw new XliteConfigurationException("Error: XML configuration could not be processed: " + xe);
         }
     }
 
-    public static ConfigRootElement processConfiguration(Class rootClass, MappingContext mappingContest) {
+    private static void processRootElement(ConfigRootElement configRootElement, MappingContext mappingContext) {
+
+        // Save processed configuration
+        mappingContext.addConfigElement(configRootElement.classType, configRootElement);
+
+        if (configRootElement.element != null) {
+            for (ConfigElement nextElement : configRootElement.element) {
+                processElement(configRootElement.classType, nextElement, mappingContext);
+            }
+        }
+    }
+
+    private static void processElement(Class elementClass, ConfigElement configElement, MappingContext mappingContext) {
+
+        if (configElement.element != null) {
+            // find the field
+            Field field = findField(elementClass, configElement.field);
+
+            // next class - derive it from targetType or field type
+            Class nextClass = (configElement.targetType == null || configElement.targetType.equals(Object.class))
+                    ? field.getType() : configElement.targetType;
+
+            // save processed configuration
+            mappingContext.addConfigElement(nextClass, configElement);
+
+            for (ConfigElement nextElement : configElement.element) {
+                // process further
+                processElement(nextClass, nextElement, mappingContext);
+            }
+        }
+    }
+
+
+    public static ConfigRootElement processConfiguration(Class rootClass, MappingContext mappingContext) {
+
         ConfigRootElement rootConfElement = new ConfigRootElement();
 
         RootElement rootAnnotation = (RootElement) rootClass.getAnnotation(RootElement.class);
@@ -33,32 +69,40 @@ public class ConfigurationProcessor {
                 : (rootAnnotation.name().length() != 0 ?
                 rootAnnotation.name() : rootClass.getSimpleName().toLowerCase());
 
+        rootConfElement.namespace = processNamespaces((Namespaces) rootClass.getAnnotation(Namespaces.class));
         rootConfElement.name = rootName;
         rootConfElement.classType = rootClass;
         rootConfElement.converter = rootAnnotation.converter();
         rootConfElement.attribute = processAttributes(rootClass);
         rootConfElement.text = processText(rootClass);
-        rootConfElement.element = processElements(rootClass, mappingContest);
-        rootConfElement.namespace = processNamespaces((Namespaces) rootClass.getAnnotation(Namespaces.class));
+        rootConfElement.element = processElements(rootClass, mappingContext);
+
+        // passes the element configuration
+        processRootElement(rootConfElement, mappingContext);
 
         return rootConfElement;
+//        ConfigMappings cm = new ConfigMappings();
+//        cm.mappings.add(rootConfElement);
+//        return cm;
     }
 
-    public static ConfigElement processClass(Class targetClass, MappingContext mappingContest) {
+    public static ConfigElement processClass(Class elementClass, MappingContext mappingContext) {
         ConfigElement configElement = new ConfigElement();
 
-        configElement.targetType = targetClass;
-        configElement.attribute = processAttributes(targetClass);
-        configElement.text = processText(targetClass);
-        configElement.element = processElements(targetClass, mappingContest);
-        configElement.namespace = processNamespaces((Namespaces) targetClass.getAnnotation(Namespaces.class));
+        configElement.targetType = elementClass;
+        configElement.attribute = processAttributes(elementClass);
+        configElement.text = processText(elementClass);
+        configElement.element = processElements(elementClass, mappingContext);
+        configElement.namespace = processNamespaces((Namespaces) elementClass.getAnnotation(Namespaces.class));
+
+        // process elements
+        processElement(elementClass, configElement, mappingContext);
 
         return configElement;
     }
 
-    private static List<ConfigElement> processElements(Class elementClass, MappingContext mappingContest) {
+    private static List<ConfigElement> processElements(Class elementClass, MappingContext mappingContext) {
         List<ConfigElement> elements = null;
-        System.out.print("called:" + elementClass.getName());
 
         List<Field> allfields = getAllFields(elementClass);
         for (Field field : allfields) {
@@ -82,39 +126,31 @@ public class ConfigurationProcessor {
                 String elementName = annotation.value().length() != 0 ? annotation.value()
                         : (annotation.name().length() != 0 ? annotation.name() : field.getName());
 
-                ConfigElement element = mappingContest.lookupConfigElement(elementName);
-                
-                if (element == null) {
-                    element = new ConfigElement(
-                            elementName,
-                            field.getName(),
-                            annotation.defaultValue(),
-                            annotation.itemType(),
-                            annotation.format(),
-                            annotation.converter()
-                    );
-                    mappingContest.addConfigElement(element);
+                ConfigElement element = new ConfigElement(
+                        elementName,
+                        field.getName(),
+                        annotation.defaultValue(),
+                        annotation.itemType(),
+                        annotation.format(),
+                        annotation.converter()
+                );
 
-                    // Which class to process next? Defined by itemType or type of field?
-                    // If itemType is not defined (==Object.class) then derive type from field.
-                    Class nextClass = annotation.itemType().equals(Object.class) ? field.getType() : annotation.itemType();
+                // Which class to process next? Defined by itemType or type of field?
+                // If itemType is not defined (==Object.class) then derive type from field.
+                Class nextClass = annotation.itemType().equals(Object.class) ? field.getType() : annotation.itemType();
 
-                    /*
-                   * Process configuration further down if:
-                   * 1. custom converter is not assigned and
-                   * 2. target class contains more XML mapping annotations
-                   * */
-//                if (annotation.converter() != ElementConverter.class) {
-
-
-                    System.out.println("  " + elementClass.getName() + "." + field.getName() + "  nextClass:" + nextClass);
-                    element.attribute = processAttributes(nextClass);
-                    element.text = processText(nextClass);
-                    element.namespace = processNamespaces((Namespaces) nextClass.getAnnotation(Namespaces.class));
+                // Process next class if custom converter is not defined 
+                if (annotation.converter() != null && !annotation.converter().equals(ElementConverter.class)) {
 
                     //recursive call to process next class
-                    element.element = processElements(nextClass, mappingContest);
-//                }
+                    processClass(nextClass, mappingContext);
+
+//                    element.attribute = processAttributes(nextClass);
+//                    element.text = processText(nextClass);
+//                    element.namespace = processNamespaces((Namespaces) nextClass.getAnnotation(Namespaces.class));
+//
+//                    //recursive call to process next class
+//                    element.element = processElement(nextClass, mappingContext);
                 }
 
                 if (elements == null) {
@@ -123,7 +159,6 @@ public class ConfigurationProcessor {
                 elements.add(element);
             }
         }
-
         return elements;
     }
 
@@ -198,7 +233,7 @@ public class ConfigurationProcessor {
         }
     }
 
-    private static List<Field> getAllFields(Class clazz) {
+    public static List<Field> getAllFields(Class clazz) {
         List<Field> fields = new ArrayList<Field>();
 
         // only process real classes
@@ -216,6 +251,25 @@ public class ConfigurationProcessor {
             cl = cl.getSuperclass();
         } while (cl != Object.class);
         return fields;
+    }
+
+    public static Field findField(Class clazz, String fieldName) {
+
+        // only process real classes
+        if (clazz.isPrimitive()) {
+            return null;
+        }
+
+        Class cl = clazz;
+        do {
+            for (Field field : cl.getDeclaredFields()) {
+                if (!field.isSynthetic() && field.getName().equals(fieldName)) {
+                    return field;
+                }
+            }
+            cl = cl.getSuperclass();
+        } while (cl != Object.class);
+        return null;
     }
 
     private static List<ConfigNamespace> processNamespaces(Namespaces nsAnnotation) {

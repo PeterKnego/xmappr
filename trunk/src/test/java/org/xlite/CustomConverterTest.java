@@ -35,8 +35,8 @@ public class CustomConverterTest {
 
         // Double step to make Xlite work harder (not necessary normally - do not copy)
         // Reads Class configuration, produces XML configuration from it and then feeds it to Xlite
-        StringReader configuration = XmlConfigTester.reader(One.class);
-        Xlite xlite = new Xlite(configuration);
+//        StringReader configuration = XmlConfigTester.reader(One.class);
+        Xlite xlite = new Xlite(One.class);
         One one = (One) xlite.fromXML(reader);
 
         Assert.assertEquals(one.text, "SHOULD BE UPPER CASE"); // should be converted to upper case

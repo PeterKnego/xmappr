@@ -11,7 +11,7 @@ public class XmlConfigTester {
 
         Xlite xlite = new Xlite(rootClass);
         xlite.addConverter(new EmptyStringConverter());
-        String classConf = xlite.getXmlConfigurations().get(0);
+        String classConf = xlite.getXmlConfiguration(rootClass);
 
         return new StringReader(classConf);
     }

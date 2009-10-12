@@ -2,9 +2,7 @@ package org.xlite;
 
 import org.custommonkey.xmlunit.XMLAssert;
 import org.custommonkey.xmlunit.XMLUnit;
-import org.testng.Assert;
 import org.testng.annotations.Test;
-import org.xlite.converters.EmptyStringConverter;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
@@ -25,13 +23,14 @@ public class XmlConfigParseTest {
             "</top>";
 
     private static String xmlConfig = "" +
-            "<root-element class='org.xlite.XmlConfigParseTest$Top'>" +
+            "<root-element name='top' class='org.xlite.XmlConfigParseTest$Top'>" +
             "<attribute name='attr1' field='a1'/>" +
             "<attribute name='attr2' field='a2'/>" +
             "<element name='one' field='one' itemType = 'Integer'/>" +
             "<element name='sub' field='subelement'>" +
+            "  <element name='two' field='two'>" +
             "  <attribute name='tt' field='ttAttrib'/>" +
-            "  <element name='two' field='two'/>" +
+            "</element>" +
             "</element>" +
             "</root-element>";
 
@@ -39,24 +38,26 @@ public class XmlConfigParseTest {
     public void basicTest() throws IOException, SAXException {
 
         StringReader inputData = new StringReader(xml);
+        StringReader configData = new StringReader(xmlConfig);
 
-        ConfigRootElement xmlConf = ConfigurationProcessor.processConfiguration(new StringReader(xmlConfig));
-
+        Xlite xmlXlite = new Xlite(configData);
+        Xlite classXlite = new Xlite(Top.class);
 
         StringWriter swClass = new StringWriter();
         StringWriter swXml = new StringWriter();
 
-        Xlite xlite = new Xlite(ConfigRootElement.class);
-        xlite.addConverter(new EmptyStringConverter());
-//        xlite.toXML(classConf, swClass);
-        xlite.toXML(xmlConf, swXml);
+        Top cx = (Top) classXlite.fromXML(inputData);
+        inputData.reset();
+        Top xx = (Top) xmlXlite.fromXML(inputData);
+
+        classXlite.toXML(cx, swClass);
+        xmlXlite.toXML(xx, swXml);
 
         System.out.println(swClass.toString());
         System.out.println(swXml.toString());
-        
-        XMLUnit.setIgnoreWhitespace(true);
-        XMLAssert.assertXMLEqual(swClass.toString(),swXml.toString() );
 
+        XMLUnit.setIgnoreWhitespace(true);
+        XMLAssert.assertXMLEqual(swClass.toString(), swXml.toString());
 
     }
 
@@ -82,7 +83,7 @@ public class XmlConfigParseTest {
         @Attribute("tt")
         public double ttAttrib;
 
-        @Element
+        @Text
         public float two;
 
     }

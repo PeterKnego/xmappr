@@ -24,6 +24,7 @@ public class RootMapper {
     private MappingContext mappingContext;
     private ElementConverter elementConverter;
     private Class rootClass;
+    private ElementConverter converter;
 
     public RootMapper(QName rootNodeName, Class rootClass, ElementConverter elementConverter, MappingContext mappingContext) {
         this.rootClass = rootClass;
@@ -57,4 +58,7 @@ public class RootMapper {
         writer.endDocument();
     }
 
+    public ElementConverter getConverter() {
+        return converter;
+    }
 }
