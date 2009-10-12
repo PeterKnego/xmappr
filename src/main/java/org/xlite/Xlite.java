@@ -11,14 +11,11 @@ import org.xlite.converters.*;
 import javax.xml.namespace.QName;
 import javax.xml.stream.*;
 import java.io.Reader;
-import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * A facade to Xlite library, through which all serialization/deserialization calls are made.
@@ -60,18 +57,13 @@ public class Xlite {
     private final XMLInputFactory xmlInputFactory;
     private final XMLOutputFactory xmlOutputFactory;
 
+    private List<Reader> xmlConfigurations = new ArrayList<Reader>();
+    private List<Class> classConfigurations = new ArrayList<Class>();
+
     private MappingContext mappingContext;
     private MappingBuilder mappingBuilder;
 
     private volatile boolean initialized = false;
-
-    private List<ConfigRootElement> configurations = new ArrayList<ConfigRootElement>();
-
-//    private List<Reader> xmlConfigurations = new ArrayList<Reader>();
-//    private List<Class> classConfigurations = new ArrayList<Class>();
-
-    private Map<Class, RootMapper> classMappings = new HashMap<Class, RootMapper>();
-    private Map<QName, RootMapper> nameMappings = new HashMap<QName, RootMapper>();
 
     private boolean isPrettyPrint = true;
 
@@ -172,7 +164,7 @@ public class Xlite {
         XMLSimpleWriter simpleWriter = new XMLSimpleWriter(parser, new XmlStreamSettings(), isPrettyPrint());
 
         Class sourceClass = source.getClass();
-        RootMapper rootMapper = classMappings.get(sourceClass);
+        RootMapper rootMapper = mappingContext.getRootMapper(sourceClass);
 
         // was the the right RootMapper found?
         if (rootMapper == null) {
@@ -198,7 +190,7 @@ public class Xlite {
         XMLSimpleWriter simpleWriter = new XMLSimpleWriter(parser, store, new XmlStreamSettings(), isPrettyPrint());
 
         Class sourceClass = source.getClass();
-        RootMapper rootMapper = classMappings.get(sourceClass);
+        RootMapper rootMapper = mappingContext.getRootMapper(sourceClass);
 
         // was the the right RootMapper found?
         if (rootMapper == null) {
@@ -211,7 +203,7 @@ public class Xlite {
     private RootMapper getRootMapper(XMLSimpleReader simpleReader) {
         // read the root XML element name and lookup the right RootMapper
         QName rootName = simpleReader.getRootName();
-        RootMapper rootMapper = nameMappings.get(rootName);
+        RootMapper rootMapper = mappingContext.getRootMapper(rootName);
 
         // was the the right RootMapper found?
         if (rootMapper == null) {
@@ -269,40 +261,20 @@ public class Xlite {
         // one-time initialization
         if (!initialized) {
 
-//            // process XML configurations
-//            for (Reader xmlConfiguration : xmlConfigurations) {
-//                ConfigRootElement rootConf = ConfigurationProcessor.processConfiguration(xmlConfiguration);
-//                RootMapper rootMapper = mappingBuilder.processConfiguration(rootConf);
-//                nameMappings.put(rootMapper.getRootNodeName(), rootMapper);
-//                classMappings.put(rootMapper.getRootClass(), rootMapper);
-//            }
-//
-//            // process annotated Class configurations
-//            for (Class classConfiguration : classConfigurations) {
-//                ConfigRootElement rootConf = ConfigurationProcessor.processConfiguration(classConfiguration, mappingContext);
-//                RootMapper rootMapper = mappingBuilder.processConfiguration(rootConf);
-//                nameMappings.put(rootMapper.getRootNodeName(), rootMapper);
-//                classMappings.put(rootMapper.getRootClass(), rootMapper);
-//            }
+            // process XML configurations
+            for (Reader xmlConfiguration : xmlConfigurations) {
+                ConfigRootElement rootConf = ConfigurationProcessor.processConfiguration(xmlConfiguration,mappingContext);
+                mappingContext.addRootMapper(rootConf);
+            }
+
+            // process annotated Class configurations
+            for (Class classConfiguration : classConfigurations) {
+                ConfigRootElement rootConf = ConfigurationProcessor.processConfiguration(classConfiguration, mappingContext);
+                mappingContext.addRootMapper(rootConf);
+            }
 
             initialized = true;
         }
-    }
-
-    private void processXmlConfiguration(Reader xmlConfiguration) {
-        ConfigRootElement rootConf = ConfigurationProcessor.processConfiguration(xmlConfiguration);
-        configurations.add(rootConf);
-        RootMapper rootMapper = mappingBuilder.processConfiguration(rootConf);
-        nameMappings.put(rootMapper.getRootNodeName(), rootMapper);
-        classMappings.put(rootMapper.getRootClass(), rootMapper);
-    }
-
-    private void processClassConfiguration(Class classConfiguration) {
-        ConfigRootElement rootConf = ConfigurationProcessor.processConfiguration(classConfiguration, mappingContext);
-        configurations.add(rootConf);
-        RootMapper rootMapper = mappingBuilder.processConfiguration(rootConf);
-        nameMappings.put(rootMapper.getRootNodeName(), rootMapper);
-        classMappings.put(rootMapper.getRootClass(), rootMapper);
     }
 
     private List<ElementConverter> setupElementConverters(List<ValueConverter> valueConverters) {
@@ -365,8 +337,7 @@ public class Xlite {
      */
     public void addMapping(Class rootClass) {
         checkConfigFinished();
-//        classConfigurations.add(rootClass);
-        processClassConfiguration(rootClass);
+        classConfigurations.add(rootClass);
     }
 
     /**
@@ -376,8 +347,7 @@ public class Xlite {
      */
     public void addMapping(Reader xmlConfiguration) {
         checkConfigFinished();
-//        xmlConfigurations.add(xmlConfiguration);
-        processXmlConfiguration(xmlConfiguration);
+        xmlConfigurations.add(xmlConfiguration);
     }
 
     public void addConverter(ValueConverter converter) {
@@ -391,21 +361,23 @@ public class Xlite {
         mappingContext.addConverter(converter);
     }
 
-    public Map<Class, String> getXmlConfigurations() {
+    public String getXmlConfiguration(Class rootClass) {
 
         initialize();
 
-        Xlite xlite = new Xlite(ConfigRootElement.class);
-        Map<Class, String> readers = new HashMap<Class, String>();
+        ConfigRootElement confElement = mappingContext.lookupConfigRootElement(rootClass);
 
-        for (ConfigRootElement configuration : configurations) {
-            StringWriter wr = new StringWriter();
-            xlite.toXML(configuration, wr);
-            readers.put(configuration.classType, wr.toString());
+        if (confElement == null) {
+            throw new XliteConfigurationException("Error: No XML mappings found for class " + rootClass.getName());
         }
 
-        return readers;
+        Xlite xlite = new Xlite(ConfigRootElement.class);
+        StringWriter sw = new StringWriter();
+        xlite.toXML(confElement, sw);
+
+        return sw.toString();
     }
+
 
 //    /**
 //     * Inspects a class for the @RootElement annotations

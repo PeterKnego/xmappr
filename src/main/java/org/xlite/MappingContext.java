@@ -6,8 +6,8 @@
  */
 package org.xlite;
 
-import com.sun.corba.se.impl.orb.ParserTable;
 import org.xlite.converters.ElementConverter;
+import org.xlite.converters.RootMapper;
 import org.xlite.converters.ValueConverter;
 
 import javax.xml.XMLConstants;
@@ -15,7 +15,6 @@ import javax.xml.namespace.QName;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Stack;
 
 //todo write javadoc - IMPORTANT, as this is one of the core classes
 
@@ -30,8 +29,11 @@ public class MappingContext {
     private MappingBuilder mappingBuilder;
     private NsContext predefinedNamespaces = new NsContext();
 
-    private Stack<Class> classTreeWalker = new Stack<Class>();
-    private Map<String, ConfigElement> configElementCache = new HashMap<String, ConfigElement>();
+    private Map<Class, RootMapper> classMappings = new HashMap<Class, RootMapper>();
+    private Map<QName, RootMapper> nameMappings = new HashMap<QName, RootMapper>();
+
+    private Map<Class, ConfigElement> configElements = new HashMap<Class, ConfigElement>();
+    private Map<Class, ConfigRootElement> configRootElements = new HashMap<Class, ConfigRootElement>();
 
     public MappingContext(List<ElementConverter> elementConverters, List<ValueConverter> valueConverters) {
         this.elementConverters = elementConverters;
@@ -66,8 +68,24 @@ public class MappingContext {
      */
     public Object processNextElement(Class targetType, Object targetObject, XMLSimpleReader reader, String defaultValue, String format) {
         // find the converter for given Class
-        ElementConverter converter = lookupElementConverter(targetType, null);
+        ElementConverter converter = lookupElementConverter(targetType);
         return converter.fromElement(reader, this, defaultValue, format, targetType, targetObject);
+    }
+
+    public void addRootMapper(ConfigRootElement rootConfigElement) {
+        RootMapper rootMapper = mappingBuilder.processConfiguration(rootConfigElement);
+        nameMappings.put(rootMapper.getRootNodeName(), rootMapper);
+        classMappings.put(rootMapper.getRootClass(), rootMapper);
+    }
+
+    public RootMapper getRootMapper(Class targetClass) {
+        RootMapper mapper = classMappings.get(targetClass);
+        return mapper;
+    }
+
+    public RootMapper getRootMapper(QName name) {
+        RootMapper mapper = nameMappings.get(name);
+        return mapper;
     }
 
     public ValueConverter lookupValueConverter(Class type) {
@@ -79,10 +97,6 @@ public class MappingContext {
         return null;
     }
 
-    public  ElementConverter lookupElementConverter(Class type) {
-         return lookupElementConverter(type, null);
-    }
-
     /**
      * Finds the appropriate ElementConverter for the given Class among the registered ElementConverters. If none
      * is found, an instance of ClassConverter is returned. ClassConverter will be returned only if XML mappings exist
@@ -91,22 +105,27 @@ public class MappingContext {
      * This method can change the internal state of MappingContext, so it needs to be synchronized.
      *
      * @param type
-     * @param configElement
      * @return
      */
-    public synchronized ElementConverter lookupElementConverter(Class type, ConfigElement configElement) {
+    public synchronized ElementConverter lookupElementConverter(Class type) {
 
-        // lookup in preconfigured converters
+
+
+        // look in preconfigured converters
         for (ElementConverter elementConverter : elementConverters) {
             if (elementConverter.canConvert(type)) {
                 return elementConverter;
             }
         }
 
-        if(configElement != null){
-            ElementConverter ec = mappingBuilder.processClass(type, configElement);
-            addConverter(ec);
-            return ec;
+        if (configElements.containsKey(type)) {
+            return mappingBuilder.processClass(type, configElements.get(type));
+        }
+
+        // Check if Class has any XML mapping annotations - use ClassConverter then.
+        ConfigElement newConfElement = ConfigurationProcessor.processClass(type, this);
+        if (newConfElement.element != null || newConfElement.attribute != null || newConfElement.text != null) {
+            return mappingBuilder.processClass(type, newConfElement);
         }
 
         return null;
@@ -137,6 +156,7 @@ public class MappingContext {
 //        classTreeWalker.pop();
 //        return ec;
     }
+
 
 //    public void addToElementConverterCache(ElementConverter elementConverter) {
 //        elementConverterCache.add(elementConverter);
@@ -191,11 +211,29 @@ public class MappingContext {
         return new QName(theURI, localPart, prefix);
     }
 
-    public ConfigElement lookupConfigElement(String elementName) {
-        return configElementCache.get(elementName);
+    public ConfigElement lookupConfigElement(Class targetClass) {
+        return configElements.get(targetClass);
     }
 
-    public void addConfigElement(ConfigElement element) {
-        configElementCache.put(element.name,  element);
+    public ConfigRootElement lookupConfigRootElement(Class rootClass) {
+        return configRootElements.get(rootClass);
+    }
+
+    public void addConfigElement(Class targetClass, ConfigElement element) {
+        if (!configElements.containsKey(targetClass)) {
+            configElements.put(targetClass, element);
+        } else {
+            throw new XliteConfigurationException("Error: Mapping for class " +
+                    targetClass.getName() + " is defined more than one time!");
+        }
+    }
+
+    public void addConfigElement(Class rootClass, ConfigRootElement element) {
+        if (!configRootElements.containsKey(rootClass)) {
+            configRootElements.put(rootClass, element);
+        } else {
+            throw new XliteConfigurationException("Error: Mapping for class " +
+                    rootClass.getName() + " is defined more than one time!");
+        }
     }
 }

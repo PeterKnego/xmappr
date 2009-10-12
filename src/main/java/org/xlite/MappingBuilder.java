@@ -24,7 +24,7 @@ public class MappingBuilder {
     public RootMapper processConfiguration(ConfigRootElement config) {
 
         // Try to find an ElementConverter that can convert target Class
-        ElementConverter rootConverter = mappingContext.lookupElementConverter(config.classType, null);
+        ElementConverter rootConverter = mappingContext.lookupElementConverter(config.classType);
 
         // find and process class namespace context
         NsContext rootNs = processClassNamespaces(config.namespace);
@@ -55,7 +55,7 @@ public class MappingBuilder {
     public ClassConverter processClass(Class targetClass, ConfigElement config) {
 
         ClassConverter classConverter = new ClassConverter(targetClass);
-//        mappingContext.addConverter(classConverter);
+        mappingContext.addConverter(classConverter);
 
         NsContext namespaces = processClassNamespaces(config.namespace);
 
@@ -73,13 +73,6 @@ public class MappingBuilder {
         processElements(config.element, classConverter);
 
         return classConverter;
-    }
-
-    public ClassConverter processClass(Class targetClass) {
-
-        ConfigElement config = ConfigurationProcessor.processClass(targetClass, mappingContext);
-
-        return processClass(targetClass, config);
     }
 
     /**
@@ -115,7 +108,7 @@ public class MappingBuilder {
             Field field = getFieldFromName(configElement.field, classConverter.getTargetClass());
 
             // find the converter by the field type
-            ElementConverter converterByType = mappingContext.lookupElementConverter(field.getType(), configElement);
+            ElementConverter converterByType = mappingContext.lookupElementConverter(field.getType());
 
             // getValue converter for the class that the field references
             ElementConverter fieldConverter = null;
@@ -123,7 +116,7 @@ public class MappingBuilder {
             // if target field is a collection, then a collection converter must be defined
             boolean isCollectionConverter = false;
             CollectionConverting collectionConverter = null;
-            if (CollectionConverting.class.isAssignableFrom(converterByType.getClass())) {
+            if (converterByType != null && CollectionConverting.class.isAssignableFrom(converterByType.getClass())) {
                 collectionConverter = (CollectionConverting) converterByType;
                 isCollectionConverter = true;
             }
@@ -142,7 +135,7 @@ public class MappingBuilder {
             Class<? extends Converter> annotatedConverter = configElement.converter;
 
             // setValue to default values according to annotations
-            if (targetType.equals(Object.class)) {
+            if (Object.class.equals(targetType)) {
                 targetType = null;
             }
             if (annotatedConverter == null || annotatedConverter.equals(ElementConverter.class)) {
@@ -208,10 +201,9 @@ public class MappingBuilder {
                                     "' in class " + field.getDeclaringClass().getName() + ".");
                         }
 
-
                     } else {
                         // converter was not declared via annotation, so we just use a converter derived from field type
-                        fieldConverter = mappingContext.lookupElementConverter(targetType, configElement);
+                        fieldConverter = mappingContext.lookupElementConverter(targetType);
 //                        fieldConverter = null;
                     }
 
@@ -247,7 +239,7 @@ public class MappingBuilder {
 
             // getValue default value of this element
             String defaultValue = configElement.defaultvalue;
-            if (defaultValue.length() == 0) {
+            if ("".equals(defaultValue)) {
                 defaultValue = null;
             }
 
@@ -317,13 +309,14 @@ public class MappingBuilder {
             ValueConverter fieldConverter;
 
             // the type of the target object
-            Class targetType = configAttribute.targetType;
+            Class targetType = (configAttribute.targetType == null || configAttribute.targetType.equals(Object.class))
+                    ? null : configAttribute.targetType;
 
             Class<? extends ValueConverter> annotatedConverter = configAttribute.converter;
             boolean isAttributeCatcher = false;
 
             // set to default values according to annotations
-            if (annotatedConverter.equals(ValueConverter.class)) {
+            if (annotatedConverter == null || annotatedConverter.equals(ValueConverter.class)) {
                 annotatedConverter = null;
             }
 
@@ -345,7 +338,7 @@ public class MappingBuilder {
                     }
                 } else {
                     // if targetType is not defined we assign it a default type: String.class
-                    if (targetType.equals(Object.class)) {
+                    if (targetType == null) {
                         targetType = String.class;
                     }
                     fieldConverter = mappingContext.lookupValueConverter(targetType);
@@ -359,7 +352,7 @@ public class MappingBuilder {
             } else { // target field is a normal field (not a collection)
 
                 // if targetType is not defined we assign it based on field type
-                if (targetType.equals(Object.class)) {
+                if (targetType == null) {
                     targetType = fieldType;
                 }
 
@@ -413,10 +406,8 @@ public class MappingBuilder {
                 }
 
                 // getValue default value of this element
-                String defaultValue = configAttribute.defaultvalue;
-                if (defaultValue.length() == 0) {
-                    defaultValue = null;
-                }
+                String defaultValue = (configAttribute.defaultvalue == null || configAttribute.defaultvalue.length() == 0)
+                        ? null : configAttribute.defaultvalue;
 
                 classConverter.addAttributeMapper(
                         qname,
