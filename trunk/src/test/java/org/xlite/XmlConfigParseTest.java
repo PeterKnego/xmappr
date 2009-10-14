@@ -12,6 +12,20 @@ import java.util.List;
 
 public class XmlConfigParseTest {
 
+    private static String xmlConfig = "" +
+            "<root-element name='top' class='org.xlite.XmlConfigParseTest$Top'>" +
+            "<text field='sometext'/>" +
+            "<attribute name='attr1' field='a1'/>" +
+            "<attribute name='attr2' field='a2'/>" +
+            "<element name='one' field='one' targetType = 'Integer'/>" +
+            "<element name='sub' field='subelement'>" +
+            "  <element name='two' field='two'>" +
+            "    <attribute name='tt' field='ttAttrib'/>" +
+            "    <text field='text'/>" +
+            "  </element>" +
+            "</element>" +
+            "</root-element>";
+
     private static String xml = "" +
             "<top attr1=\"11\" attr2=\"twenty\">" +
             "some text" +
@@ -21,18 +35,6 @@ public class XmlConfigParseTest {
             "<two tt='5'>1.123</two>" +
             "</sub>" +
             "</top>";
-
-    private static String xmlConfig = "" +
-            "<root-element name='top' class='org.xlite.XmlConfigParseTest$Top'>" +
-            "<attribute name='attr1' field='a1'/>" +
-            "<attribute name='attr2' field='a2'/>" +
-            "<element name='one' field='one' itemType = 'Integer'/>" +
-            "<element name='sub' field='subelement'>" +
-            "  <element name='two' field='two'>" +
-            "  <attribute name='tt' field='ttAttrib'/>" +
-            "</element>" +
-            "</element>" +
-            "</root-element>";
 
     @Test
     public void basicTest() throws IOException, SAXException {
@@ -64,6 +66,9 @@ public class XmlConfigParseTest {
     @RootElement
     public static class Top {
 
+        @Text
+        public String sometext;
+
         @Attribute("attr1")
         public int a1;
 
@@ -80,11 +85,17 @@ public class XmlConfigParseTest {
 
     public static class Sub {
 
+        @Element
+        public Two two;
+    }
+
+    public static class Two {
+
         @Attribute("tt")
-        public double ttAttrib;
+        public int ttAttrib;
 
         @Text
-        public float two;
-
+        public String text;
     }
+
 }

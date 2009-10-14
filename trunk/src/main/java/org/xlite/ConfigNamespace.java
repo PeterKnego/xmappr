@@ -27,7 +27,11 @@ public class ConfigNamespace {
         }
     }
 
-    public ConfigNamespace(){
-        
+    public ConfigNamespace() {
+
+    }
+
+    public String toString(String space) {
+        return space + uri + ":" + prefix;
     }
 }

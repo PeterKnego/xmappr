@@ -97,6 +97,15 @@ public class MappingContext {
         return null;
     }
 
+    public boolean isElementConverterDefined(Class type) {
+        for (ElementConverter elementConverter : elementConverters) {
+            if (elementConverter.canConvert(type)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * Finds the appropriate ElementConverter for the given Class among the registered ElementConverters. If none
      * is found, an instance of ClassConverter is returned. ClassConverter will be returned only if XML mappings exist
@@ -108,8 +117,6 @@ public class MappingContext {
      * @return
      */
     public synchronized ElementConverter lookupElementConverter(Class type) {
-
-
 
         // look in preconfigured converters
         for (ElementConverter elementConverter : elementConverters) {
@@ -211,12 +218,12 @@ public class MappingContext {
         return new QName(theURI, localPart, prefix);
     }
 
-    public ConfigElement lookupConfigElement(Class targetClass) {
-        return configElements.get(targetClass);
-    }
-
     public ConfigRootElement lookupConfigRootElement(Class rootClass) {
         return configRootElements.get(rootClass);
+    }
+
+    public boolean configElementExists(Class elementClass) {
+        return configElements.containsKey(elementClass);
     }
 
     public void addConfigElement(Class targetClass, ConfigElement element) {
