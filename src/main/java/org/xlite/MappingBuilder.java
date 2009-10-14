@@ -182,7 +182,7 @@ public class MappingBuilder {
                         throw new XliteConfigurationException("Error: Can  not assign converter " +
                                 "for collection " + field.getName() +
                                 " in class " + field.getDeclaringClass().getSimpleName() +
-                                "When @Element annotation is used on a collection, " +
+                                ". When @Element annotation is used on a collection, " +
                                 "either 'converter' value or 'targetType' value must be declared.");
                     }
 
