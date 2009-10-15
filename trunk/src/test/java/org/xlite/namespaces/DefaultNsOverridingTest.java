@@ -47,7 +47,7 @@ public class DefaultNsOverridingTest {
 
         // Double step to make Xlite work harder (not necessary normally - do not copy)
         // Reads Class configuration, produces XML configuration from it and then feeds it to Xlite
-        StringReader configuration = XmlConfigTester.reader(aaa.class);
+        StringReader configuration = XmlConfigTester.reader(aaa.class, new String[]{"u=uppercase", "xn=xnumber"});
         Xlite xlite = new Xlite(configuration);
 
         // predefined namespaces

@@ -42,7 +42,7 @@ public class DifferentPrefixesSameNsTest {
 
         // Double step to make Xlite work harder (not necessary normally - do not copy)
         // Reads Class configuration, produces XML configuration from it and then feeds it to Xlite
-        StringReader configuration = XmlConfigTester.reader(aaa.class);
+        StringReader configuration = XmlConfigTester.reader(aaa.class, new String[]{"u=lowercase"});
         Xlite xlite = new Xlite(configuration);
 
         // predefined namespaces
