@@ -5,7 +5,9 @@ import org.xlite.converters.EmptyStringConverter;
 import java.io.Reader;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ConfigurationProcessor {
 
@@ -27,8 +29,6 @@ public class ConfigurationProcessor {
 
     public static ConfigRootElement processConfiguration(Class rootClass, MappingContext mappingContext) {
 
-        System.out.println("processConfiguration:" + rootClass.getName());
-
         ConfigRootElement rootConfElement = new ConfigRootElement();
 
         RootElement rootAnnotation = (RootElement) rootClass.getAnnotation(RootElement.class);
@@ -44,8 +44,8 @@ public class ConfigurationProcessor {
         rootConfElement.attribute = processAttributeAnnotations(rootClass);
         rootConfElement.text = processTextAnnotations(rootClass);
 
-        ArrayList<Class> classCache = new ArrayList<Class>();
-        classCache.add(rootClass);
+        Map<Class, ConfigElement> classCache = new HashMap<Class, ConfigElement>();
+//        classCache.put(rootClass, );
         rootConfElement.element = processElementAnnotations(rootClass, mappingContext, classCache);
 
         // passes the element configuration
@@ -58,11 +58,10 @@ public class ConfigurationProcessor {
     }
 
     public static ConfigElement processClass(Class elementClass, MappingContext mappingContext) {
-        ArrayList<Class> classCache = new ArrayList<Class>();
+        Map<Class, ConfigElement> classCache = new HashMap<Class, ConfigElement>();
 
         // ConfigElement at the top of the hierarchy of CongihElements
         ConfigElement topConfigElement = new ConfigElement();
-        System.out.println("processNextClass:" + elementClass.getName());
         processNextClass(elementClass, topConfigElement, mappingContext, classCache);
 
         // process elements
@@ -72,9 +71,9 @@ public class ConfigurationProcessor {
     }
 
     private static void processNextClass(Class elementClass, ConfigElement configElement,
-                                         MappingContext mappingContext, ArrayList<Class> classCache) {
+                                         MappingContext mappingContext, Map<Class, ConfigElement> classCache) {
 
-        classCache.add(elementClass);
+        classCache.put(elementClass, configElement);
 
         configElement.targetType = elementClass;
         configElement.attribute = processAttributeAnnotations(elementClass);
@@ -100,14 +99,12 @@ public class ConfigurationProcessor {
 
     private static void processConfigElement(Class elementClass, ConfigElement configElement, MappingContext mappingContext) {
 
+        // find the field
+        Field field = findField(elementClass, configElement.field);
 
-
-            // find the field
-            Field field = findField(elementClass, configElement.field);
-
-            // next class - derive it from targetType or field type
-            Class nextClass = (configElement.targetType == null || configElement.targetType.equals(Object.class))
-                    ? field.getType() : configElement.targetType;
+        // next class - derive it from targetType or field type
+        Class nextClass = (configElement.targetType == null || configElement.targetType.equals(Object.class))
+                ? field.getType() : configElement.targetType;
 
         if (!mappingContext.configElementExists(nextClass)) {
 
@@ -124,7 +121,7 @@ public class ConfigurationProcessor {
     }
 
     private static List<ConfigElement> processElementAnnotations(Class elementClass, MappingContext mappingContext,
-                                                                 ArrayList<Class> classCache) {
+                                                                 Map<Class, ConfigElement> classCache) {
         List<ConfigElement> elements = null;
 
         List<Field> allfields = getAllFields(elementClass);
@@ -161,16 +158,21 @@ public class ConfigurationProcessor {
                 // Which class to process next? Defined by itemType or type of field?
                 // If itemType is not defined (==Object.class) then derive type from field.
                 Class nextClass = annotation.itemType().equals(Object.class) ? field.getType() : annotation.itemType();
-//                System.out.println("elementClass=" + elementClass.getName() + " field=" + field.getName() +
-//                        " nextClass=" + nextClass);
 
-                // Process next class if it's converter is not yet defined and class was not yet processed
-                if (!mappingContext.isElementConverterDefined(nextClass) && !classCache.contains(nextClass)) {
+                // Process next class if it's converter is not yet defined 
+                if (!mappingContext.isElementConverterDefined(nextClass)) {
 
-                    System.out.println("--->>> processNextClass:" + nextClass.getName());
-                    //recursive call to process next class
-                    processNextClass(nextClass, element, mappingContext, classCache);
+                    // Was this class already processed?
+                    // This eliminates loops.
+                    if (classCache.containsKey(nextClass)) {
 
+                        // use an existing
+                        element = classCache.get(nextClass);
+                    } else {
+
+                        // recursive call to process next class
+                        processNextClass(nextClass, element, mappingContext, classCache);
+                    }
                 }
 
                 if (elements == null) {

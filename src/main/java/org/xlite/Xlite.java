@@ -60,7 +60,7 @@ public class Xlite {
     private List<Reader> xmlConfigurations = new ArrayList<Reader>();
     private List<Class> classConfigurations = new ArrayList<Class>();
 
-    private MappingContext mappingContext;
+    public MappingContext mappingContext;
     private MappingBuilder mappingBuilder;
 
     private volatile boolean initialized = false;
