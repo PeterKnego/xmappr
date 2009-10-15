@@ -243,4 +243,11 @@ public class MappingContext {
                     rootClass.getName() + " is defined more than one time!");
         }
     }
+
+    public void printConfig() {
+        for (Map.Entry<Class, ConfigRootElement> entry : configRootElements.entrySet()) {
+            System.out.println("Class: "+entry.getKey());
+            System.out.println(entry.getValue());
+        }
+    }
 }

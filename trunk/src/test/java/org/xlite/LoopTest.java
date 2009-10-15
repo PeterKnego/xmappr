@@ -31,18 +31,21 @@ public class LoopTest {
     public void configurationLoopTest() throws IOException, SAXException {
         StringReader reader = new StringReader(inXml);
 
-        // Double step to make Xlite work harder (not necessary normally - do not copy)
-        // Reads Class configuration, produces XML configuration from it and then feeds it to Xlite
-        StringReader configuration = XmlConfigTester.reader(Test.class);
-        Xlite xlite = new Xlite(configuration);
+        Xlite xlite = new Xlite(Test.class);
         xlite.setPrettyPrint(true);
 
         Test test = (Test) xlite.fromXML(reader);
-        Assert.assertNotNull(test.back);
+//        xlite.mappingContext.printConfig();
+
+//        Assert.assertNotNull(test.back);
 
         // writing back to XML
         StringWriter sw = new StringWriter();
         xlite.toXML(test, sw);
+
+        System.out.println(inXml);
+        System.out.println("");
+        System.out.println(sw);
 
         XMLUnit.setIgnoreWhitespace(true);
         XMLAssert.assertXMLEqual(inXml, sw.toString());
