@@ -39,7 +39,7 @@ public class RootNsTest {
 
         // Double step to make Xlite work harder (not necessary normally - do not copy)
         // Reads Class configuration, produces XML configuration from it and then feeds it to Xlite
-        StringReader configuration = XmlConfigTester.reader(aaa.class);
+        StringReader configuration = XmlConfigTester.reader(aaa.class, new String[]{"l=lowercase","u=uppercase"});
         Xlite xlite = new Xlite(configuration);
 
         // predefined namespaces

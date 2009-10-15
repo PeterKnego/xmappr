@@ -263,7 +263,7 @@ public class Xlite {
 
             // process XML configurations
             for (Reader xmlConfiguration : xmlConfigurations) {
-                ConfigRootElement rootConf = ConfigurationProcessor.processConfiguration(xmlConfiguration,mappingContext);
+                ConfigRootElement rootConf = ConfigurationProcessor.processConfiguration(xmlConfiguration, mappingContext);
                 mappingContext.addRootMapper(rootConf);
             }
 
@@ -316,11 +316,23 @@ public class Xlite {
      * Adds a XML namespace to the list of predefined namespaces.
      * Predefined namespaces apply to all classes/fields in the mapping configuration.
      *
+     * @param prefix
      * @param namespace
      */
     public synchronized void addNamespace(String prefix, String namespace) {
         checkConfigFinished();
         mappingContext.addNamespace(prefix, namespace);
+    }
+
+    /**
+     * Adds a XML namespace to the list of predefined namespaces.
+     * Predefined namespaces apply to all classes/fields in the mapping configuration.
+     *
+     * @param compoundNamespace Namespace definition must be form "prefix=namespaceURI"
+     */
+    public synchronized void addNamespace(String compoundNamespace) {
+        checkConfigFinished();
+        mappingContext.addNamespace(compoundNamespace);
     }
 
     private void checkConfigFinished() {
@@ -377,70 +389,6 @@ public class Xlite {
 
         return sw.toString();
     }
-
-
-//    /**
-//     * Inspects a class for the @RootElement annotations
-//     *
-//     * @param currentClass Class to be processed.
-//     * @return QName that the class maps to.
-//     */
-//    private QName processRootElementName(Class currentClass) {
-//
-//        RootElement rootElement = (RootElement) currentClass.getAnnotation(RootElement.class);
-//
-//        // read the name value from @RootElement annotation
-//        String elementName = rootElement.name().length() != 0 ? rootElement.name() : rootElement.value();
-//
-//        // if element name is not defined via annotations then construct it from class name
-//        // e,g, Root.class yields 'root' element name
-//        if (elementName.length() == 0) {
-//            elementName = currentClass.getSimpleName().toLowerCase();
-//        }
-//
-//        Namespaces nsAnnotation = (Namespaces) currentClass.getAnnotation(Namespaces.class);
-//
-//        return getRootQName(nsAnnotation, elementName);
-//    }
-//
-//    private QName getRootQName(Namespaces namespaceAnnotations, String elementName) {
-//
-//        // split xml node name into prefix and local part
-//        int index = elementName.indexOf(':');
-//        String rootElementLocalpart;
-//        String rootElementPrefix;
-//        if (index > 0) {  // with prefix ("prefix:localpart")
-//            rootElementPrefix = elementName.substring(0, index);
-//            rootElementLocalpart = elementName.substring(index + 1, elementName.length());
-//
-//        } else if (index == 0) { // empty prefix (no prefix defined - e.g ":nodeName")
-//            rootElementPrefix = XMLConstants.DEFAULT_NS_PREFIX;
-//            rootElementLocalpart = elementName.substring(1, elementName.length());
-//
-//        } else { // no prefix given
-//            rootElementPrefix = XMLConstants.DEFAULT_NS_PREFIX;
-//            rootElementLocalpart = elementName;
-//        }
-//
-//        // search for namespaces defined on root class
-//        NsContext classNS = new NsContext();
-//        if (namespaceAnnotations != null && namespaceAnnotations.value().length != 0) {
-//            for (int i = 0; i < namespaceAnnotations.value().length; i++) {
-//                classNS.addNamespace(namespaceAnnotations.value()[i]);
-//            }
-//        }
-//
-//        // look for namespace with given prefix
-//        String rootElementNS = classNS.getNamespaceURI(rootElementPrefix);
-//
-//        // if namespace not defined on class, look within predefined namespaces
-//        if (rootElementNS == null) {
-//            rootElementNS = mappingContext.getPredefinedNamespaces().getNamespaceURI(rootElementPrefix);
-//        }
-//
-//        QName rootName = new QName(rootElementNS, rootElementLocalpart, rootElementPrefix);
-//        return rootName;
-//    }
 
     /**
      * Container class to hold deserialized Object and unmapped XML elements.

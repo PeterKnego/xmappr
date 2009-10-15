@@ -4,7 +4,7 @@
     <groupId>org.xlite</groupId>
     <artifactId>xlite</artifactId>
     <packaging>jar</packaging>
-    <version>1.0-beta3</version>
+    <version>1.0-beta4</version>
     <name>xlite</name>
     <description>Xlite is a simple library for mapping XML to your Java classes.</description>
     <url>http://www.xlite.org</url>

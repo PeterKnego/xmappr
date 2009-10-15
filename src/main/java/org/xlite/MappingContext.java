@@ -49,6 +49,25 @@ public class MappingContext {
         predefinedNamespaces.addNamespace(prefix, namespace);
     }
 
+    public void addNamespace(String compoundNamespace) {
+
+        int index = compoundNamespace.indexOf('=');
+        String prefix, nsURI;
+        if (index > 0) {  // with prefix ("prefix:localpart")
+            prefix = compoundNamespace.substring(0, index);
+            nsURI = compoundNamespace.substring(index + 1, compoundNamespace.length());
+
+        } else if (index == 0) { // empty prefix (no prefix defined - e.g ":elementName")
+            prefix = XMLConstants.DEFAULT_NS_PREFIX;
+            nsURI = compoundNamespace.substring(1, compoundNamespace.length());
+
+        } else { // no prefix given
+            prefix = XMLConstants.DEFAULT_NS_PREFIX;
+            nsURI = compoundNamespace;
+        }
+        predefinedNamespaces.addNamespace(prefix, nsURI);
+    }
+
     public void addConverter(ValueConverter converter) {
         valueConverters.add(0, converter);
     }
@@ -246,7 +265,7 @@ public class MappingContext {
 
     public void printConfig() {
         for (Map.Entry<Class, ConfigRootElement> entry : configRootElements.entrySet()) {
-            System.out.println("Class: "+entry.getKey());
+            System.out.println("Class: " + entry.getKey());
             System.out.println(entry.getValue());
         }
     }
