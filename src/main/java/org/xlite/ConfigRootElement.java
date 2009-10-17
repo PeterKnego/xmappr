@@ -18,16 +18,16 @@ public class ConfigRootElement {
     @Attribute(converter = ClassNameConverter.class, defaultValue = "org.xlite.converters.ElementConverter")
     public Class<? extends Converter> converter;
 
-    @Element(itemType = ConfigNamespace.class)
+    @Element(targetType = ConfigNamespace.class)
     public List<ConfigNamespace> namespace;
 
     @Element
     public ConfigText text;
 
-    @Element(itemType = ConfigAttribute.class)
+    @Element(targetType = ConfigAttribute.class)
     public List<ConfigAttribute> attribute;
 
-    @Element(itemType = ConfigElement.class)
+    @Element(targetType = ConfigElement.class)
     public List<ConfigElement> element;
 
     public ConfigRootElement() {

@@ -31,7 +31,7 @@ public interface ElementConverter extends Converter {
      * @param format         Format string passed in from @XMLelement(format="..."). Used to set conversion options.
      * @param targetType
      * @param targetObject
-     * @return
+     * @return               Deserialized object.
      */
     public Object fromElement(XMLSimpleReader reader, MappingContext mappingContext, String defaultValue, String format, Class targetType, Object targetObject);
 

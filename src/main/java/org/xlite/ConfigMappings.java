@@ -7,8 +7,8 @@ import java.util.List;
 public class ConfigMappings {
 
     @Elements({
-            @Element(name = "root-element", itemType = ConfigRootElement.class),
-            @Element(name = "element", itemType = ConfigElement.class)
+            @Element(name = "root-element", targetType = ConfigRootElement.class),
+            @Element(name = "element", targetType = ConfigElement.class)
     })
     List mappings = new ArrayList();
 }

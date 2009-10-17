@@ -75,7 +75,7 @@ public class XmlConfigParseTest {
         @Attribute("attr2")
         public String a2;
 
-        @Element(itemType = Integer.class)
+        @Element(targetType = Integer.class)
         public List one;
 
         @Element("sub")

@@ -61,8 +61,8 @@ public class MultielementCollectionTest {
     @RootElement("root")
     public static class Root {
         @Elements({
-                @Element(name = "a", itemType = A.class),
-                @Element(name = "b", itemType = B.class)
+                @Element(name = "a", targetType = A.class),
+                @Element(name = "b", targetType = B.class)
         })
         @Text
         public ArrayList letters;

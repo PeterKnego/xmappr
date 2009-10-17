@@ -59,7 +59,7 @@ public class MultiattributeMapTest {
     public static class Root {
         @Attributes({
                 @Attribute(name = "a"),
-                @Attribute(name = "b", itemType = Integer.class),
+                @Attribute(name = "b", targetType = Integer.class),
                 @Attribute(name = "c"),
                 @Attribute("*")
         })
@@ -67,7 +67,7 @@ public class MultiattributeMapTest {
 
         @Attributes({
                 @Attribute(name = "e"),
-                @Attribute(name = "f", itemType = Integer.class),
+                @Attribute(name = "f", targetType = Integer.class),
                 @Attribute(name = "g"),
                 @Attribute(name = "h")
         })
