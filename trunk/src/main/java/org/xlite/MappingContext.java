@@ -127,7 +127,7 @@ public class MappingContext {
 
     /**
      * Finds the appropriate ElementConverter for the given Class among the registered ElementConverters. If none
-     * is found, an instance of ClassConverter is returned. ClassConverter will be returned only if XML mappings exist
+     * is found, the it will try to create an instance of ClassConverter. ClassConverter will be returned only if XML mappings exist
      * for given class.
      * <p/>
      * This method can change the internal state of MappingContext, so it needs to be synchronized.

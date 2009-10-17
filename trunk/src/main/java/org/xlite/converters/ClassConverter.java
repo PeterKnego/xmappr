@@ -84,7 +84,8 @@ public class ClassConverter implements ElementConverter {
 
         Object currentObject;
 
-        if (targetObject != null) {
+        // checks if targetObject if provided and checks if it is of correct type (gets rid of Collections or Maps)
+        if (targetObject != null && targetClass.isAssignableFrom(targetObject.getClass())) {
            currentObject = targetObject;
         } else {
             // instantiate object that maps to the current XML element
