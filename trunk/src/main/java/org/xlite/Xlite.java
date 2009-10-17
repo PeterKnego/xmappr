@@ -244,6 +244,8 @@ public class Xlite {
 
     /**
      * Sets output XML to be formatted in a human-readable form.
+     * Pretty print slows down Xlite considerably, so it should only be used when testing or 
+     * where human-readable output is needed.
      *
      * @param prettyPrint
      */
