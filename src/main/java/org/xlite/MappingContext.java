@@ -126,16 +126,27 @@ public class MappingContext {
     }
 
     /**
+     * Calls {@link org.xlite.MappingContext#lookupElementConverter(Class, boolean)} with second parameter <code>true</code>.
+     *
+     * @param type Class for which ElementConverter is to be found.
+     * @return
+     */
+    public synchronized ElementConverter lookupElementConverter(Class type) {
+        return lookupElementConverter(type, true);
+    }
+
+    /**
      * Finds the appropriate ElementConverter for the given Class among the registered ElementConverters. If none
      * is found, the it will try to create an instance of ClassConverter. ClassConverter will be returned only if XML mappings exist
      * for given class.
      * <p/>
      * This method can change the internal state of MappingContext, so it needs to be synchronized.
      *
-     * @param type
+     * @param type                     Class for which ElementConverter is to be found.
+     * @param throwExceptionIfNotFound If true, throws an XliteConfigurationException if no ElementConverter is found.
      * @return
      */
-    public synchronized ElementConverter lookupElementConverter(Class type) {
+    public synchronized ElementConverter lookupElementConverter(Class type, boolean throwExceptionIfNotFound) {
 
         // look in preconfigured converters
         for (ElementConverter elementConverter : elementConverters) {
@@ -153,17 +164,17 @@ public class MappingContext {
             // Try to use Class directly:
             // 1. create ConfigElement from Class
             // 2. create ClassConverter
-            ConfigElement newConfElement = ConfigurationProcessor.processClass(type, this);
+            ConfigElement newConfElement = ConfigurationProcessor.processClassAnnotations(type, this);
             converter = mappingBuilder.createClassConverter(type, newConfElement);
         }
 
-        if (converter == null) {
+        if (converter == null && throwExceptionIfNotFound) {
             throw new XliteConfigurationException("Error: could not find converter for class " + type.getName() +
                     "\nConverters are found in one of four ways:\n" +
-                    "1. Class can be converted by one if built in converters."+
-                    "2. Custom converter is assigned for this Class."+
-                    "3. Class contains XML mapping annotations and is handled directly by Xlite."+
-                    "4. Class is mapped via external XML configuration and is handled directly by Xlite.");
+                    "1. Class can be converted by one if built in converters.\n" +
+                    "2. Custom converter is assigned for this Class.\n" +
+                    "3. Class contains XML mapping annotations and is handled directly by Xlite.\n" +
+                    "4. Class is mapped via external XML configuration and is handled directly by Xlite.\n");
         }
 
         return converter;

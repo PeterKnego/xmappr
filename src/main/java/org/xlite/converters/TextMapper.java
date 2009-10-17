@@ -85,7 +85,6 @@ public class TextMapper {
      * @return
      */
     public String getValue(Object object) {
-//        return valueConverter.toValue(targetField.getValue(object), format);
         // is it a Collection?
         if (isCollection()) {
             if (valueConverter.canConvert(Collection.class)) {

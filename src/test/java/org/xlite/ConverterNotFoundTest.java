@@ -10,7 +10,7 @@ public class ConverterNotFoundTest {
     private static String xml = "" +
             "<top>" +
             " <sub>" +
-            "  <two >some content</two>" +
+            "  <two>some content</two>" +
             " </sub>" +
             "</top>";
 

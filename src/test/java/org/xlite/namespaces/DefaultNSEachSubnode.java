@@ -86,6 +86,8 @@ public class DefaultNSEachSubnode {
     }
 
     public static class cccc {
+        @Text
+        public String notext;
     }
 
     public static class BBB {
@@ -95,6 +97,8 @@ public class DefaultNSEachSubnode {
     }
 
     public static class CCC {
+        @Text
+        public String notext;
     }
 
     public static class x111 {
@@ -104,5 +108,7 @@ public class DefaultNSEachSubnode {
     }
 
     public static class x222 {
+        @Text
+        public String notext;
     }
 }

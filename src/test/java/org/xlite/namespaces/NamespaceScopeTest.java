@@ -84,6 +84,8 @@ public class NamespaceScopeTest {
     }
 
     public static class x111 {
+        @Text
+        public String notext;
     }
 
 

@@ -288,7 +288,7 @@ public class Xlite {
 
             // process annotated Class configurations
             for (Class classConfiguration : classConfigurations) {
-                ConfigRootElement rootConf = ConfigurationProcessor.processConfiguration(classConfiguration, mappingContext);
+                ConfigRootElement rootConf = ConfigurationProcessor.processRootClassAnnotations(classConfiguration, mappingContext);
                 mappingContext.addRootMapper(rootConf);
             }
 
