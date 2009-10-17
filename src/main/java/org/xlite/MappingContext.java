@@ -144,49 +144,30 @@ public class MappingContext {
             }
         }
 
+        ElementConverter converter = null;
+
+        // look in configuration elements
         if (configElements.containsKey(type)) {
-            return mappingBuilder.processClass(type, configElements.get(type));
+            converter = mappingBuilder.createClassConverter(type, configElements.get(type));
+        } else {
+            // Try to use Class directly:
+            // 1. create ConfigElement from Class
+            // 2. create ClassConverter
+            ConfigElement newConfElement = ConfigurationProcessor.processClass(type, this);
+            converter = mappingBuilder.createClassConverter(type, newConfElement);
         }
 
-        // Check if Class has any XML mapping annotations - use ClassConverter then.
-        ConfigElement newConfElement = ConfigurationProcessor.processClass(type, this);
-        if (newConfElement.element != null || newConfElement.attribute != null || newConfElement.text != null) {
-            return mappingBuilder.processClass(type, newConfElement);
+        if (converter == null) {
+            throw new XliteConfigurationException("Error: could not find converter for class " + type.getName() +
+                    "\nConverters are found in one of four ways:\n" +
+                    "1. Class can be converted by one if built in converters."+
+                    "2. Custom converter is assigned for this Class."+
+                    "3. Class contains XML mapping annotations and is handled directly by Xlite."+
+                    "4. Class is mapped via external XML configuration and is handled directly by Xlite.");
         }
 
-        return null;
-
-//        throw new XliteConfigurationException("Error: converter could not be found for class "+type.getName());
-
-        // checking if this Class was already processed in this tree trunk = this means loop exists in annotated classes
-//        if (classTreeWalker.contains(type)) {
-////            throw new XliteConfigurationException("ERROR: Loop detected in annotated classes. Class being processed for the second time: " + type.getName());
-//        }
-
-//        classTreeWalker.push(type);
-
-//        // check cache for this EC
-//        ElementConverter ec = null;
-//        for (ElementConverter elementConverter : elementConverterCache) {
-//            if (elementConverter.canConvert(type)) {
-//                ec = elementConverter;
-//                break;
-//            }
-//        }
-        // not found in cache?
-//        if (ec == null && lookupClassConverter) {
-//            // process it
-//            ec = mappingBuilder.processClass(type);
-//        }
-
-//        classTreeWalker.pop();
-//        return ec;
+        return converter;
     }
-
-
-//    public void addToElementConverterCache(ElementConverter elementConverter) {
-//        elementConverterCache.add(elementConverter);
-//    }
 
     /**
      * Creates a QName from compound XML element name. Compound element name is of form "prefix:name".
@@ -246,12 +227,7 @@ public class MappingContext {
     }
 
     public void addConfigElement(Class targetClass, ConfigElement element) {
-        if (!configElements.containsKey(targetClass)) {
-            configElements.put(targetClass, element);
-        } else {
-            throw new XliteConfigurationException("Error: Mapping for class " +
-                    targetClass.getName() + " is defined more than one time!");
-        }
+        configElements.put(targetClass, element);
     }
 
     public void addConfigElement(Class rootClass, ConfigRootElement element) {
