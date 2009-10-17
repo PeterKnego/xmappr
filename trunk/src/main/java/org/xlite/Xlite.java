@@ -65,7 +65,7 @@ public class Xlite {
 
     private volatile boolean initialized = false;
 
-    private boolean isPrettyPrint = true;
+    private boolean isPrettyPrint = false;
 
     /**
      * Creates a new Xlite instance.
