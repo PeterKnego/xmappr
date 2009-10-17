@@ -10,10 +10,6 @@ public class XliteException extends RuntimeException {
 
     private Throwable cause;
 
-    public XliteException(Throwable cause) {
-        this("", cause);
-    }
-
     public XliteException(String message) {
         this(message, null);
     }

@@ -28,7 +28,8 @@ public class ValueConverterWrapper implements ElementConverter {
         return valueConverter.canConvert(type);
     }
 
-    public Object fromElement(XMLSimpleReader reader, MappingContext mappingContext, String defaultValue, String format, Class targetType, Object targetObject) {
+    public Object fromElement(XMLSimpleReader reader, MappingContext mappingContext, String defaultValue,
+                              String format, Class targetType, Object targetObject) {
         String text = reader.getText().trim();
         if (text == null || text.length() == 0) {
             if (defaultValue != null) {
@@ -41,7 +42,8 @@ public class ValueConverterWrapper implements ElementConverter {
         return valueConverter.fromValue(text, format, targetType, targetObject);
     }
 
-    public void toElement(Object object, QName nodeName, XMLSimpleWriter writer, MappingContext mappingContext, String defaultValue, String format) {
+    public void toElement(Object object, QName nodeName, XMLSimpleWriter writer, MappingContext mappingContext,
+                          String defaultValue, String format) {
         if (object != null) {
             writer.startElement(nodeName);
             String value = valueConverter.toValue(object, format);

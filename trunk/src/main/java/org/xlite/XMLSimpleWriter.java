@@ -24,7 +24,7 @@ public class XMLSimpleWriter {
     private List<Element> predefinedNamespaces = new ArrayList<Element>();
     private ObjectStore objectStore;
 
-    private  final boolean isPrettyPrinting;
+    private final boolean isPrettyPrinting;
     private StringBuilder tabs = new StringBuilder("\n");
 
     public XMLSimpleWriter(XMLStreamWriter writer, XmlStreamSettings settings, boolean prettyPrint) {
@@ -43,7 +43,7 @@ public class XMLSimpleWriter {
             try {
                 writer.writeCharacters(tabs.toString());
             } catch (XMLStreamException e) {
-                throw new XliteException(e);
+                throw new XliteException("Error: " + e);
             }
         }
     }
@@ -64,7 +64,7 @@ public class XMLSimpleWriter {
         try {
             writer.writeStartDocument(settings.encoding, settings.version);
         } catch (XMLStreamException e) {
-            throw new XliteException(e);
+            throw new XliteException("Error: ", e);
         }
     }
 
@@ -94,7 +94,7 @@ public class XMLSimpleWriter {
                 flushElementCache();
                 prettyPrintDecreaseDepth();
 
-            // this node contains internal elements (text or subelements) and should have a normal closing tag
+                // this node contains internal elements (text or subelements) and should have a normal closing tag
             } else {
                 flushElementCache();
                 prettyPrintDecreaseDepth();
@@ -103,7 +103,7 @@ public class XMLSimpleWriter {
             }
 //            System.out.println("end:");
         } catch (XMLStreamException e) {
-            throw new XliteException(e);
+            throw new XliteException("Error: " + e);
         }
     }
 
@@ -114,7 +114,7 @@ public class XMLSimpleWriter {
             writer.writeEndDocument();
             writer.flush();
         } catch (XMLStreamException e) {
-            throw new XliteException(e);
+            throw new XliteException("Error: " + e);
         }
     }
 
@@ -136,7 +136,7 @@ public class XMLSimpleWriter {
             prettyPrint();
             writer.writeCharacters(text);
         } catch (XMLStreamException e) {
-            throw new XliteException(e);
+            throw new XliteException("Error: " + e);
         }
     }
 
@@ -146,7 +146,7 @@ public class XMLSimpleWriter {
             prettyPrint();
             writer.writeCData(data);
         } catch (XMLStreamException e) {
-            throw new XliteException(e);
+            throw new XliteException("Error: " + e);
         }
     }
 
@@ -156,7 +156,7 @@ public class XMLSimpleWriter {
             prettyPrint();
             writer.writeComment(text);
         } catch (XMLStreamException e) {
-            throw new XliteException(e);
+            throw new XliteException("Error: " + e);
         }
     }
 
@@ -173,7 +173,7 @@ public class XMLSimpleWriter {
     public void restoreSubTrees(Object reference) {
 
         // restore only if objectStore is setValue
-        if(objectStore == null) return;
+        if (objectStore == null) return;
 
         List<Integer> locations = objectStore.getLocations(reference);
         if (locations != null) {
@@ -181,7 +181,7 @@ public class XMLSimpleWriter {
                 try {
                     restoreSubTree(objectStore, location);
                 } catch (UnsupportedEncodingException e) {
-                    throw new XliteException(e);
+                    throw new XliteException("Error: " + e);
                 }
             }
         }
@@ -279,7 +279,7 @@ public class XMLSimpleWriter {
                 try {
                     writer.writeNamespace(ns.prefix, ns.nsURI);
                 } catch (XMLStreamException e) {
-                    throw new XliteException(e);
+                    throw new XliteException("Error: " + e);
                 }
             }
             predefinedNamespaces.clear();
@@ -309,7 +309,7 @@ public class XMLSimpleWriter {
             }
         }
         catch (XMLStreamException e) {
-            throw new XliteException(e);
+            throw new XliteException("Error: " + e);
         }
 
         // cache has been written out, so it can be cleared

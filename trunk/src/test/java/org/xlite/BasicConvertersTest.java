@@ -52,8 +52,10 @@ public class BasicConvertersTest {
     public void mainTest() throws IllegalAccessException, IOException, SAXException {
 
         StringReader reader = new StringReader(inXml);
-//        StringReader configuration = XmlConfigTester.reader(Primitives.class);
         Xlite xlite = new Xlite(Primitives.class);
+        xlite.setPrettyPrint(true);
+
+        System.out.println(xlite.getXmlConfiguration(Primitives.class));
 
         Primitives primitives = (Primitives) xlite.fromXML(reader);
 
