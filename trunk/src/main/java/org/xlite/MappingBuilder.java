@@ -52,7 +52,12 @@ public class MappingBuilder {
         return new RootMapper(rootQName, config.classType, rootConverter, mappingContext);
     }
 
-    public ClassConverter processClass(Class targetClass, ConfigElement config) {
+    public ClassConverter createClassConverter(Class targetClass, ConfigElement config) {
+
+        // Check that configuration contains subnodes
+        if (config.element == null && config.attribute == null && config.text == null) {
+            return null;
+        }
 
         ClassConverter classConverter = new ClassConverter(targetClass);
         mappingContext.addConverter(classConverter);
