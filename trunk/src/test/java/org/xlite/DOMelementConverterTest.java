@@ -60,7 +60,7 @@ public class DOMelementConverterTest {
     @RootElement("root")
     public static class Root {
         @Elements({
-                @Element(name = "b", itemType = B.class),
+                @Element(name = "b", targetType = B.class),
                 @Element("*")
         })
         @Text

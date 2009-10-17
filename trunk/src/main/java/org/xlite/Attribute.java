@@ -44,16 +44,16 @@ public @interface Attribute {
     String defaultValue() default "";
 
     /**
-     * ItemType is used to determine which converter will be used.
-     * Either itemType or converter element must be defined when a target field is a Collection.
+     * targetType is used to determine which converter will be used.
+     * Either targetType or converter element must be defined when a target field is a Collection.
      *
      * @return
      */
-    Class itemType() default Object.class;
+    Class targetType() default Object.class;
 
     /**
      * Custom converter assigned to convert this XML attribute.
-     * Either itemType or converter element must be defined when a target field is a Collection.
+     * Either targetType or converter element must be defined when a target field is a Collection.
      *
      * @return
      */

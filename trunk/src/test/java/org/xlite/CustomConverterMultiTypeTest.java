@@ -118,16 +118,16 @@ public class CustomConverterMultiTypeTest {
     @RootElement("root")
     public static class Root {
         @Attributes({
-                @Attribute(name = "one", converter = CustomMultiTypeValueConverter.class, itemType = One.class),
-                @Attribute(name = "two", converter = CustomMultiTypeValueConverter.class, itemType = Two.class),
-                @Attribute(name = "three", converter = CustomMultiTypeValueConverter.class, itemType = Three.class)
+                @Attribute(name = "one", converter = CustomMultiTypeValueConverter.class, targetType = One.class),
+                @Attribute(name = "two", converter = CustomMultiTypeValueConverter.class, targetType = Two.class),
+                @Attribute(name = "three", converter = CustomMultiTypeValueConverter.class, targetType = Three.class)
         })
         public Map attributes;
 
         @Elements({
-                @Element(name = "one", converter = CustomMultiTypeElementConverter.class, itemType = One.class),
-                @Element(name = "two", converter = CustomMultiTypeElementConverter.class, itemType = Two.class),
-                @Element(name = "three", converter = CustomMultiTypeElementConverter.class, itemType = Three.class)
+                @Element(name = "one", converter = CustomMultiTypeElementConverter.class, targetType = One.class),
+                @Element(name = "two", converter = CustomMultiTypeElementConverter.class, targetType = Two.class),
+                @Element(name = "three", converter = CustomMultiTypeElementConverter.class, targetType = Three.class)
         })
         public List subelements;
     }

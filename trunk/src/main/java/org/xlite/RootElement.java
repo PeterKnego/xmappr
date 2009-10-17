@@ -37,7 +37,7 @@ public @interface RootElement {
 
     /**
      * Custom converter assigned to convert this XML element.
-     * Either itemType or converter element must be defined when a target field is a Collection.
+     * Either targetType or converter element must be defined when a target field is a Collection.
      *
      * @return
      */

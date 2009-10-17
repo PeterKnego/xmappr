@@ -150,14 +150,14 @@ public class ConfigurationProcessor {
                         elementName,
                         field.getName(),
                         annotation.defaultValue(),
-                        annotation.itemType(),
+                        annotation.targetType(),
                         annotation.format(),
                         annotation.converter()
                 );
 
-                // Which class to process next? Defined by itemType or type of field?
-                // If itemType is not defined (==Object.class) then derive type from field.
-                Class nextClass = annotation.itemType().equals(Object.class) ? field.getType() : annotation.itemType();
+                // Which class to process next? Defined by targetType or type of field?
+                // If targetType is not defined (==Object.class) then derive type from field.
+                Class nextClass = annotation.targetType().equals(Object.class) ? field.getType() : annotation.targetType();
 
                 // Process next class if it's converter is not yet defined 
                 if (!mappingContext.isElementConverterDefined(nextClass)) {
@@ -214,7 +214,7 @@ public class ConfigurationProcessor {
                             elementName,
                             field.getName(),
                             annotation.defaultValue(),
-                            annotation.itemType(),
+                            annotation.targetType(),
                             annotation.format(),
                             annotation.converter()
                     );

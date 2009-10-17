@@ -31,7 +31,7 @@ public class ElementMapper {
 
     // the following three fields are used in handling Collection mapping
     private CollectionConverting collectionConverter;
-    private Map<Class, QName> itemTypes = new HashMap<Class, QName>();
+    private Map<Class, QName> targetTypes = new HashMap<Class, QName>();
     private Map<QName, ElementConverter> converterCache = new HashMap<QName, ElementConverter>();
 
     // default value as set by the @Element(defaultValue="..") annotation
@@ -62,11 +62,11 @@ public class ElementMapper {
         this.elementConverter = fieldConverter;
     }
 
-    public void addMapping(QName nodeName, ElementConverter elementConverter, Class itemType) {
+    public void addMapping(QName nodeName, ElementConverter elementConverter, Class targetType) {
 //        if (elementConverter == null) {
-//            elementConverter = mappingContext.lookupElementConverter(itemType);
+//            elementConverter = mappingContext.lookupElementConverter(targetType);
 //        }
-        this.itemTypes.put(itemType, nodeName);
+        this.targetTypes.put(targetType, nodeName);
         this.converterCache.put(nodeName, elementConverter);
     }
 
@@ -129,7 +129,7 @@ public class ElementMapper {
                 if (textMapper != null && textMapper.isTargetType(obj)) {
                     writer.addText(textMapper.getValue(obj));
                 } else {
-                    QName name = itemTypes.get(obj.getClass());
+                    QName name = targetTypes.get(obj.getClass());
                     ElementConverter converter = converterCache.get(name);
                     converter.toElement(obj, name, writer, mappingContext, defaultValue, format);
                 }
