@@ -82,12 +82,17 @@ public class ClassConverter implements ElementConverter {
 
     public Object fromElement(XMLSimpleReader reader, MappingContext mappingContext, String defaultValue, String format, Class targetType, Object targetObject) {
 
-        // instantiate object that maps to the current XML element
         Object currentObject;
-        try {
-            currentObject = targetClass.newInstance();
-        } catch (Exception e) {
-            throw new XliteException("Could not instantiate class " + targetClass.getName(), e);
+
+        if (targetObject != null) {
+           currentObject = targetObject;
+        } else {
+            // instantiate object that maps to the current XML element
+            try {
+                currentObject = targetClass.newInstance();
+            } catch (Exception e) {
+                throw new XliteException("Could not instantiate class " + targetClass.getName(), e);
+            }
         }
 
         // XML element attributes

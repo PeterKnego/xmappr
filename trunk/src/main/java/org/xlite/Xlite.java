@@ -119,10 +119,10 @@ public class Xlite {
     }
 
     /**
-     * Reads XML data from provided Reader and returns a deserialized object.
+     * Reads XML data from provided Reader and returns a new object.
      *
      * @param reader
-     * @return A deserialized object.
+     * @return A newly instantiated object containing XML mapped data..
      */
     public Object fromXML(Reader reader) {
 
@@ -132,6 +132,23 @@ public class Xlite {
         XMLSimpleReader simpleReader = new XMLSimpleReader(rdr, false);
 
         return getRootMapper(simpleReader).getRootObject(simpleReader);
+    }
+
+    /**
+     * Reads XML data from provided Reader and maps this data to provided object.
+     *
+     * @param reader XMLStreamReader where XML data will be read from.
+     * @param targetObject Object to which XML will be mapped.
+     * @return Provided target object. If provided target object was null then new object is created.
+     */
+    public Object fromXML(Reader reader, Object targetObject) {
+
+        initialize();
+
+        XMLStreamReader rdr = getXmlStreamReader(reader);
+        XMLSimpleReader simpleReader = new XMLSimpleReader(rdr, false);
+
+        return getRootMapper(simpleReader).getRootObject(simpleReader, targetObject);
     }
 
     /**

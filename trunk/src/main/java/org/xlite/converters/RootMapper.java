@@ -42,10 +42,14 @@ public class RootMapper {
     }
 
     public Object getRootObject(XMLSimpleReader reader) {
+      return getRootObject(reader, null);
+    }
+
+    public Object getRootObject(XMLSimpleReader reader, Object targetObject) {
         QName firstElement = reader.getRootName();
         if (firstElement.equals(rootNodeName)) {
             reader.moveDown();
-            return elementConverter.fromElement(reader, mappingContext, "", null, rootClass, null);
+            return elementConverter.fromElement(reader, mappingContext, "", null, rootClass, targetObject);
         } else {
             throw new XliteException("Error: wrong XML element name. Was expecting root element <" + rootNodeName +
                     "> in input stream, but instead got <" + firstElement + ">.");
