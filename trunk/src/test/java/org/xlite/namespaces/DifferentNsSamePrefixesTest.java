@@ -82,6 +82,8 @@ public class DifferentNsSamePrefixesTest {
     }
 
     public static class cccc {
+        @Text
+        public String notext;
     }
 
     public static class BBB {
@@ -91,6 +93,8 @@ public class DifferentNsSamePrefixesTest {
     }
 
     public static class CCC {
+        @Text
+        public String notext;
     }
 
     @Namespaces("lower=xnumber")
@@ -100,5 +104,7 @@ public class DifferentNsSamePrefixesTest {
     }
 
     public static class x222 {
+        @Text
+        public String notext;
     }
 }

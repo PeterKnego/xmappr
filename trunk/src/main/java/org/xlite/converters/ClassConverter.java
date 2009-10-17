@@ -86,7 +86,7 @@ public class ClassConverter implements ElementConverter {
 
         // checks if targetObject if provided and checks if it is of correct type (gets rid of Collections or Maps)
         if (targetObject != null && targetClass.isAssignableFrom(targetObject.getClass())) {
-           currentObject = targetObject;
+            currentObject = targetObject;
         } else {
             // instantiate object that maps to the current XML element
             try {
@@ -202,7 +202,8 @@ public class ClassConverter implements ElementConverter {
 
         // write element's value
         if (textMapper != null && !textMapper.isIntermixed()) {
-            writer.addText(textMapper.getValue(object));
+            String text = textMapper.getValue(object);
+            if (text != null) writer.addText(text);
         }
 
         // write subelements

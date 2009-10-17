@@ -51,9 +51,9 @@ public class DefaultNsOverridingTest {
         Xlite xlite = new Xlite(configuration);
 
         // predefined namespaces
-        xlite.addNamespace("u","uppercase");
-        xlite.addNamespace("xn","xnumber");
-        
+        xlite.addNamespace("u", "uppercase");
+        xlite.addNamespace("xn", "xnumber");
+
         aaa a = (aaa) xlite.fromXML(reader);
 
         Assert.assertTrue(a.node_bbbb.node_cccc != null);
@@ -103,6 +103,8 @@ public class DefaultNsOverridingTest {
     }
 
     public static class cccc {
+        @Text
+        public String notext;
     }
 
     @Namespaces("uppercase")
@@ -118,6 +120,8 @@ public class DefaultNsOverridingTest {
     }
 
     public static class CCC {
+        @Text
+        public String notext;
     }
 
     @Namespaces("xnumber")
@@ -133,12 +137,18 @@ public class DefaultNsOverridingTest {
     }
 
     public static class x222 {
+        @Text
+        public String notext;
     }
 
     public static class x666 {
+        @Text
+        public String notext;
     }
 
     public static class WWW {
+        @Text
+        public String notext;
     }
 }
 

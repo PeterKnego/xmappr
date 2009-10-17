@@ -27,7 +27,7 @@ public class ConfigurationProcessor {
         }
     }
 
-    public static ConfigRootElement processConfiguration(Class rootClass, MappingContext mappingContext) {
+    public static ConfigRootElement processRootClassAnnotations(Class rootClass, MappingContext mappingContext) {
 
         ConfigRootElement rootConfElement = new ConfigRootElement();
 
@@ -57,10 +57,10 @@ public class ConfigurationProcessor {
 //        return cm;
     }
 
-    public static ConfigElement processClass(Class elementClass, MappingContext mappingContext) {
+    public static ConfigElement processClassAnnotations(Class elementClass, MappingContext mappingContext) {
         Map<Class, ConfigElement> classCache = new HashMap<Class, ConfigElement>();
 
-        // ConfigElement at the top of the hierarchy of CongihElements
+        // ConfigElement at the top of the hierarchy of ConfigElements
         ConfigElement topConfigElement = new ConfigElement();
         processNextClass(elementClass, topConfigElement, mappingContext, classCache);
 

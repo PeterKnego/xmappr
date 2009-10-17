@@ -82,6 +82,8 @@ public class RootNsTest {
     }
 
     public static class cccc {
+        @Text
+        public String notext;
     }
 
     public static class BBB {
@@ -90,6 +92,8 @@ public class RootNsTest {
     }
 
     public static class CCC {
+        @Text
+        public String notext;
     }
 
     @Namespaces("xn=xnumber")
@@ -99,6 +103,8 @@ public class RootNsTest {
     }
 
     public static class x222 {
+        @Text
+        public String notext;
     }
 
 }

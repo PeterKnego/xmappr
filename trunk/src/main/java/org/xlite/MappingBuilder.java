@@ -23,8 +23,14 @@ public class MappingBuilder {
      */
     public RootMapper processConfiguration(ConfigRootElement config) {
 
-        // Try to find an ElementConverter that can convert target Class
-        ElementConverter rootConverter = mappingContext.lookupElementConverter(config.classType);
+        ElementConverter rootConverter;
+
+        // If custom converter is defined then use it
+        if (config.converter != null && !config.converter.equals(ElementConverter.class)) {
+            rootConverter = initializeConverter(config.converter);
+        } else { // try looking in predefined converters
+            rootConverter = mappingContext.lookupElementConverter(config.classType);
+        }
 
         // find and process class namespace context
         NsContext rootNs = processClassNamespaces(config.namespace);
@@ -113,7 +119,7 @@ public class MappingBuilder {
             Field field = getFieldFromName(configElement.field, classConverter.getTargetClass());
 
             // find the converter by the field type
-            ElementConverter converterByType = mappingContext.lookupElementConverter(field.getType());
+            ElementConverter converterByType = mappingContext.lookupElementConverter(field.getType(), false);
 
             // getValue converter for the class that the field references
             ElementConverter fieldConverter = null;
@@ -208,7 +214,7 @@ public class MappingBuilder {
 
                     } else {
                         // converter was not declared via annotation, so we just use a converter derived from field type
-                        fieldConverter = mappingContext.lookupElementConverter(targetType);
+                        fieldConverter = mappingContext.lookupElementConverter(targetType, true);
 //                        fieldConverter = null;
                     }
 
@@ -236,8 +242,17 @@ public class MappingBuilder {
                         }
 
                     } else {
-                        // converter was not declared via annotation, so we just use a converter derived from field type
-                        fieldConverter = converterByType;
+                        // converter was not declared via annotation
+                        if (converterByType == null) {
+
+                            // This is a hack, that will trigger an appropriate exception.
+                            // Since we already know that converterByType was not found we do the lookup again,
+                            // this time allowing exception to be thrown
+                            fieldConverter = mappingContext.lookupElementConverter(field.getType(), true);
+                        } else {
+//                            // use a converter derived from field type
+                            fieldConverter = converterByType;
+                        }
                     }
                 }
             }
