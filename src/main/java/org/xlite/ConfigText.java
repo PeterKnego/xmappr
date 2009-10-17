@@ -23,13 +23,13 @@ public class ConfigText {
         this.converter = converter;
     }
 
-    public String toString(String space) {
-
-        StringBuilder out = new StringBuilder();
-        out.append(space).append("text: ").append("field=").append(field).append("\n");
-        out.append(space).append("  ").append("format=").append(format).append("\n");
-        out.append(space).append("  ").append("converter=").append(converter.getName()).append("\n");
-
-        return out.toString();
-    }
+//    public String toString(String space) {
+//
+//        StringBuilder out = new StringBuilder();
+//        out.append(space).append("text: ").append("field=").append(field).append("\n");
+//        out.append(space).append("  ").append("format=").append(format).append("\n");
+//        out.append(space).append("  ").append("converter=").append(converter.getName()).append("\n");
+//
+//        return out.toString();
+//    }
 }

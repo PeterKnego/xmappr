@@ -36,15 +36,15 @@ public class ConfigAttribute {
         this.targetType = targetType;
     }
 
-    public String toString(String space) {
-        StringBuilder out = new StringBuilder();
-        out.append(space).append("attribute: ").append("name=").append(name).append("\n");
-        out.append(space).append("  ").append("field=").append(field).append("\n");
-        out.append(space).append("  ").append("defaultValue=").append(defaultvalue).append("\n");
-        out.append(space).append("  ").append("format=").append(format).append("\n");
-        out.append(space).append("  ").append("targetType=").append(targetType.getName()).append("\n");
-        out.append(space).append("  ").append("converter=").append(converter.getName()).append("\n");
-
-        return out.toString();
-    }
+//    public String toString(String space) {
+//        StringBuilder out = new StringBuilder();
+//        out.append(space).append("attribute: ").append("name=").append(name).append("\n");
+//        out.append(space).append("  ").append("field=").append(field).append("\n");
+//        out.append(space).append("  ").append("defaultValue=").append(defaultvalue).append("\n");
+//        out.append(space).append("  ").append("format=").append(format).append("\n");
+//        out.append(space).append("  ").append("targetType=").append(targetType.getName()).append("\n");
+//        out.append(space).append("  ").append("converter=").append(converter.getName()).append("\n");
+//
+//        return out.toString();
+//    }
 }

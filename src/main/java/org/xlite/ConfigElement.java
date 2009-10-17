@@ -50,36 +50,36 @@ public class ConfigElement {
         this.targetType = targetType;
     }
 
-    public String toString(String space) {
-        StringBuilder out = new StringBuilder();
-        out.append(space).append("element: ").append("name=").append(name).append("\n");
-        out.append(space).append("  ").append("field=").append(field).append("\n");
-        out.append(space).append("  ").append("defaultValue=").append(defaultvalue).append("\n");
-        out.append(space).append("  ").append("format=").append(format).append("\n");
-
-        if (targetType != null)
-            out.append(space).append("  ").append("targetType=").append(targetType.getName()).append("\n");
-
-        if (converter != null)
-            out.append(space).append("  ").append("converter=").append(converter.getName()).append("\n");
-
-        if (text != null)
-            out.append(text.toString(space + "  "));
-
-        if (namespace != null)
-            for (ConfigNamespace configNamespace : namespace) {
-                out.append(configNamespace.toString(space + "  ")).append("\n");
-            }
-
-        if (attribute != null)
-            for (ConfigAttribute configAttribute : attribute) {
-                out.append(configAttribute.toString(space + "  ")).append("\n");
-            }
-
-        if (element != null)
-            for (ConfigElement configElement : element) {
-                out.append(configElement.toString(space + "  ")).append("\n");
-            }
-        return out.toString();
-    }
+//    public String toString(String space) {
+//        StringBuilder out = new StringBuilder();
+//        out.append(space).append("element: ").append("name=").append(name).append("\n");
+//        out.append(space).append("  ").append("field=").append(field).append("\n");
+//        out.append(space).append("  ").append("defaultValue=").append(defaultvalue).append("\n");
+//        out.append(space).append("  ").append("format=").append(format).append("\n");
+//
+//        if (targetType != null)
+//            out.append(space).append("  ").append("targetType=").append(targetType.getName()).append("\n");
+//
+//        if (converter != null)
+//            out.append(space).append("  ").append("converter=").append(converter.getName()).append("\n");
+//
+//        if (text != null)
+//            out.append(text.toString(space + "  "));
+//
+//        if (namespace != null)
+//            for (ConfigNamespace configNamespace : namespace) {
+//                out.append(configNamespace.toString(space + "  ")).append("\n");
+//            }
+//
+//        if (attribute != null)
+//            for (ConfigAttribute configAttribute : attribute) {
+//                out.append(configAttribute.toString(space + "  ")).append("\n");
+//            }
+//
+//        if (element != null)
+//            for (ConfigElement configElement : element) {
+//                out.append(configElement.toString(space + "  ")).append("\n");
+//            }
+//        return out.toString();
+//    }
 }
