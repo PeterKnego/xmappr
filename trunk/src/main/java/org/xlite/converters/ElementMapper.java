@@ -130,6 +130,9 @@ public class ElementMapper {
                     writer.addText(textMapper.getValue(obj));
                 } else {
                     QName name = targetTypes.get(obj.getClass());
+                    if (name == null) {
+                        name = nodeName;
+                    }
                     ElementConverter converter = converterCache.get(name);
                     converter.toElement(obj, name, writer, mappingContext, defaultValue, format);
                 }

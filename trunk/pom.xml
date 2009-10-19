@@ -4,7 +4,7 @@
     <groupId>org.xlite</groupId>
     <artifactId>xlite</artifactId>
     <packaging>jar</packaging>
-    <version>1.0-beta4</version>
+    <version>1.0-beta4.1</version>
     <name>xlite</name>
     <description>Xlite is a simple library for mapping XML to your Java classes.</description>
     <url>http://www.xlite.org</url>
@@ -17,6 +17,8 @@
     </licenses>
     <properties>
         <m2st.version>2.0</m2st.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
     <scm>
         <url>http://www.xlite.org/svn/xlite/</url>
@@ -27,25 +29,6 @@
             <id>com.anasoft.os.repository.releases</id>
             <name>ANASOFT OpenSource releases</name>
             <url>http://anasoft-os-repo.googlecode.com/svn/repository/releases/</url>
-        </repository>
-        <!--<repository>-->
-        <!--<id>com.anasoft.os.repository.snapshots</id>-->
-        <!--<name>ANASOFT OpenSource snapshots</name>-->
-        <!--<url>http://anasoft-os-repo.googlecode.com/svn/repository/snapshots</url>-->
-        <!--</repository>-->
-
-        <repository>
-            <id>codehaus</id>
-            <name>Codehaus Release Repo</name>
-            <url>http://dist.codehaus.org</url>
-        </repository>
-        <repository>
-            <id>codehaus-snapshot</id>
-            <name>Codehaus Snapshot Repo</name>
-            <url>http://snapshots.repository.codehaus.org</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
         </repository>
     </repositories>
     <distributionManagement>
