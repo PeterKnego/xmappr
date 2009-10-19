@@ -170,6 +170,9 @@ public class XMLSimpleReader {
         return elementStack.peek().name;
     }
 
+    public String getAttribute(QName attributeName){
+        return elementStack.peek().getAttribute(attributeName);
+    }
 
     public Iterator<Map.Entry<QName, String>> getAttributeIterator() {
         return elementStack.peek().iterator();
@@ -194,6 +197,10 @@ public class XMLSimpleReader {
 
         public void putAttribute(QName qname, String value) {
             attributes.put(qname, value);
+        }
+
+        public String getAttribute(QName attributeName){
+            return attributes.get(attributeName);
         }
 
         public Iterator<Map.Entry<QName, String>> iterator() {
