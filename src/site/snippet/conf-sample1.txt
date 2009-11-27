@@ -1,3 +1,0 @@
-Configuration conf = new AnnotationConfiguration(Root.class);
-Xlite xf = new Xlite(conf);
-Root root = (Root) xf.fromXML(reader);

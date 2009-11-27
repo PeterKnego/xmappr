@@ -1,41 +1,32 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.xlite</groupId>
-    <artifactId>xlite</artifactId>
+    <groupId>org.xmappr</groupId>
+    <artifactId>xmappr</artifactId>
     <packaging>jar</packaging>
-    <version>1.0-beta4.1</version>
+    <version>0.9.0</version>
     <name>xlite</name>
-    <description>Xlite is a simple library for mapping XML to your Java classes.</description>
-    <url>http://www.xlite.org</url>
+    <description>Xmappr is a simple library for mapping XML to your Java classes.</description>
+    <url>http://xmappr.googlecode.com</url>
     <licenses>
         <license>
             <name>Simplified BSD license</name>
-            <url>http://www.xlite.org/licenses</url>
+            <url>http://xmappr.googlecode.com</url>
             <distribution>repo</distribution>
         </license>
     </licenses>
     <properties>
-        <m2st.version>2.0</m2st.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
     <scm>
-        <url>http://www.xlite.org/svn/xlite/</url>
+        <url>http://xmappr.googlecode.com/svn</url>
     </scm>
-
-    <repositories>
-        <repository>
-            <id>com.anasoft.os.repository.releases</id>
-            <name>ANASOFT OpenSource releases</name>
-            <url>http://anasoft-os-repo.googlecode.com/svn/repository/releases/</url>
-        </repository>
-    </repositories>
     <distributionManagement>
         <repository>
-            <id>xlite-repo</id>
-            <name>Xlite repository</name>
-            <url>scp://www.xlite.org:/var/www/maven/release/</url>
+            <id>xmappr-repo</id>
+            <name>Xmappr repository</name>
+            <url>dav://xmappr.googlecode.com/svn/maven-repo</url>
         </repository>
     </distributionManagement>
 
@@ -110,27 +101,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-site-plugin</artifactId>
-                <configuration>
-                    <templateFile>src/site/site.vm</templateFile>
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>com.anasoft.os</groupId>
-                        <artifactId>m2st-doxia-macros</artifactId>
-                        <version>${m2st.version}</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
         </plugins>
     </build>
-    <reporting>
-        <plugins>
-
-
-        </plugins>
-    </reporting>
-
 </project>
