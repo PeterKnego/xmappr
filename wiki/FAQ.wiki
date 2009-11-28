@@ -2,6 +2,10 @@
 #labels faq
 <wiki:toc max_depth="3" />
 
+==I have a question. Where can I submit it?==
+
+Just write it in a comment below this FAQ.
+
 ==Which JDK is required to use Xmappr?==
 
 Xmappr uses Java annotations for configuration, so the minimum supported JDK version is 1.5.
