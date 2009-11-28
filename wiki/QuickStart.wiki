@@ -36,6 +36,23 @@ Mapping is than done in just three lines of code:
 Xmappr xm = new Xmappr(Root.class);
 Root root = (Root) xm.fromXML(reader);
 }}}
+
+== Mapping via XML configuration==
+If you don't want to use annotations you can achieve the same effect with an external XML configuration file. For the above example the XML config would be:
+{{{
+<root-element name="root" class="package.name.Root">
+  <attribute field="a"/>
+  <element field="node"/>
+  <text field="text"/>
+</root-element>
+}}}
+In case of XML configuration, invoking Xmappr is just a bit different - pass a {{{Reader}}} to {{{Xmappr}}} where XML configuration can be read:
+{{{
+Reader xmlConfigReader = new FileReader("/path/to/XmlConfigFile");
+Xmappr xm = new Xmappr(xmlConfigReader);
+Root root = (Root) xm.fromXML(reader);
+}}}
+
 ==Mappings with a name==
 
 If XML element names differ from your field names, then just add element name to the Xmappr annotations:
@@ -53,4 +70,15 @@ public static class NewRoot {
     public String theTextOfTheNode;
 }
 }}}
+
+or with XML configuration:
+
+{{{
+<root-element name="root" class="package.name.NewRoot">
+  <attribute field="attribute" name="a"/>
+  <element field="someOtherNodeName" name="node"/>
+  <text field="theTextOfTheNode"/>
+</root-element>
+}}}
+
 Text elements don’t have names, of course.
