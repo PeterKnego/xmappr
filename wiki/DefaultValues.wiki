@@ -1,0 +1,6 @@
+#summary How default values are applied on serialization/deserialization.
+#labels inprogress
+
+= Default values =
+
+in progress..
