@@ -1,5 +1,5 @@
 #labels sidebar
-* [UsersGuide Users guide]
+* [UserGuide User guide]
   * [QuickStart Quick start]
   * [Converters Converters]
   * [NameSpaces XML namespaces]
