@@ -1,5 +1,5 @@
 #summary How default values are applied on serialization/deserialization.
-#labels inprogress
+#labels in_progress
 
 = Default values =
 
