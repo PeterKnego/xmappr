@@ -2,6 +2,9 @@
 
 == Documentation ==
 
+ * [Reference Reference]
+  * [AnnotationReference Annotations reference]
+  * [XmlConfigReference XML configuration reference]
  * [UserGuide User guide]
   * [QuickStart Quick start]
   * [Converters Converters]
@@ -11,8 +14,3 @@
   * [MappingCollections Mapping to java Collections]
   * [PreservingElementOrder Preserving order of XML elements]
 
------
-
- * [Reference Reference]
-  * [AnnotationReference Annotations reference]
-  * [XmlConfigReference XML configuration reference]
