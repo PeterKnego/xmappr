@@ -1,0 +1,5 @@
+#summary Mapping XML elements to a Java collection.
+
+= Mapping XML to collections =
+
+in progress..
