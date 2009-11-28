@@ -1,5 +1,6 @@
 #summary Quick Start
 #labels quick,start
+#sidebar TableOfContents
 
 = Quick Start =
 
