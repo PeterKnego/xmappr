@@ -2,7 +2,7 @@
 
 = Thread safety =
 
-Xmappr is thread safe and can be used in multiple threads concurrently. Let’s take a look at typical Xlite use to see how this is achieved:
+Xmappr is thread safe and can be used in multiple threads concurrently. Let’s take a look at typical Xmappr use to see how this is achieved:
 {{{
 // configuring Xmappr to map to Root class
 Xmappr xmappr = new Xmappr(Root.class);
