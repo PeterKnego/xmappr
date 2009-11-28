@@ -1,0 +1,8 @@
+
+==Project info==
+
+  * [Installation Installation]
+  * [License License]
+  * [FAQ FAQ]
+  * [Benchmarks Benchmarks]
+  * [Examples Example uses of Xmappr]
