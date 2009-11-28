@@ -1,4 +1,4 @@
-#summary XML namespace support.
+#summary XML namespaces support.
 
 <wiki:toc max_depth="1" />
 
