@@ -5,7 +5,7 @@
     <artifactId>xmappr</artifactId>
     <packaging>jar</packaging>
     <version>0.9.0</version>
-    <name>xlite</name>
+    <name>Xmappr</name>
     <description>Xmappr is a simple library for mapping XML to your Java classes.</description>
     <url>http://xmappr.googlecode.com</url>
     <licenses>
