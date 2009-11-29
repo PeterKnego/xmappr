@@ -403,6 +403,7 @@ public class Xmappr {
         }
 
         Xmappr xmappr = new Xmappr(ConfigRootElement.class);
+        xmappr.setPrettyPrint(true);
         StringWriter sw = new StringWriter();
         xmappr.toXML(confElement, sw);
 
