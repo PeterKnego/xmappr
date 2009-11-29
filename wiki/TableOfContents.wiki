@@ -2,7 +2,7 @@
 
 == Documentation ==
 
- * UserGuide User guide
+ * User guide
   * [QuickStart Quick start]
   * [Converters Converters]
   * [NameSpaces XML namespaces]
