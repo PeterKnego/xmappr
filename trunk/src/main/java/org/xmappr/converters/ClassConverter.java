@@ -7,6 +7,9 @@
 package org.xmappr.converters;
 
 import org.xmappr.*;
+import org.xmappr.mappers.AttributeMapper;
+import org.xmappr.mappers.ElementMapper;
+import org.xmappr.mappers.TextMapper;
 
 import javax.xml.namespace.QName;
 import java.util.IdentityHashMap;

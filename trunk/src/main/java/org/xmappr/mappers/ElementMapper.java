@@ -4,12 +4,13 @@
  * Copyright (c) 2008, 2009, Peter Knego & Xmappr contributors
  * All rights reserved.
  */
-package org.xmappr.converters;
+package org.xmappr.mappers;
 
-import org.xmappr.MappingContext;
-import org.xmappr.XMLSimpleReader;
-import org.xmappr.XMLSimpleWriter;
-import org.xmappr.XmapprException;
+import org.xmappr.*;
+import org.xmappr.converters.CollectionConverting;
+import org.xmappr.converters.ElementConverter;
+import org.xmappr.FieldAccessor;
+import org.xmappr.mappers.TextMapper;
 
 import javax.xml.namespace.QName;
 import java.lang.reflect.Field;
@@ -108,7 +109,8 @@ public class ElementMapper {
 
     private void setFieldValue(Object targetObject, XMLSimpleReader reader) {
         // process XML element and create an appropriate object
-        Object obj = elementConverter.fromElement(reader, mappingContext, defaultValue, format, targetType, targetField.getValue(targetObject));
+        Object obj = elementConverter.fromElement(reader, mappingContext, defaultValue, format, targetType,
+                targetField.getValue(targetObject));
 
         // do nothing if ElementConverter returns null
         if (obj != null) {
