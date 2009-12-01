@@ -1,6 +1,4 @@
-#summary Downloads
-
-==Downloads==
+=Downloads=
 
 Xmappr is best used via Maven. But if you need direct download, then just use project's Maven repository:
 
