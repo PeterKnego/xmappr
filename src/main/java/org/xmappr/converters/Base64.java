@@ -7,6 +7,9 @@
 
 package org.xmappr.converters;
 
+/**
+ * Utility class implementing Base64 decoder/encoder.
+ */
 public class Base64 {
     public static char[] base64code = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".toCharArray();
 
@@ -112,7 +115,7 @@ public class Base64 {
                     }
 
                     currentNibble = currentChar != '=' ? nibbles[currentChar] : 0;
-                    // char does not exist (==-1) in converison table
+                    // char does not exist (==-1) in conversion table
                     if (currentNibble == -1) {
                         throw new IllegalArgumentException("Illegal character in Base64 encoded data.");
                     }

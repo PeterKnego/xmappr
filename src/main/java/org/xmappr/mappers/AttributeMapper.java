@@ -4,9 +4,11 @@
  * Copyright (c) 2008, 2009, Peter Knego & Xmappr contributors
  * All rights reserved.
  */
-package org.xmappr.converters;
+package org.xmappr.mappers;
 
 import org.xmappr.XmapprException;
+import org.xmappr.FieldAccessor;
+import org.xmappr.converters.ValueConverter;
 
 import javax.xml.namespace.QName;
 import java.lang.reflect.Field;

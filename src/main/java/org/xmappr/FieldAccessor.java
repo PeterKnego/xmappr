@@ -4,7 +4,7 @@
  * Copyright (c) 2008, 2009, Peter Knego & Xmappr contributors
  * All rights reserved.
  */
-package org.xmappr.converters;
+package org.xmappr;
 
 import org.xmappr.XmapprException;
 

@@ -1,6 +1,9 @@
 package org.xmappr;
 
 import org.xmappr.converters.*;
+import org.xmappr.mappers.AttributeMapper;
+import org.xmappr.mappers.ElementMapper;
+import org.xmappr.mappers.TextMapper;
 
 import javax.xml.XMLConstants;
 import javax.xml.namespace.QName;
