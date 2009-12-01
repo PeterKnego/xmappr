@@ -20,7 +20,46 @@ Where {{{writer}}} is an instance of {{{java.io.Writer}}}.
 
 ==Preserving unmapped elements==
 When handling complex XML data, especially coming from 3rd parties, it's sometimes easier to just map a part of the XML to your classes, but still retain all other (unmapped) data when writting XML. This is one of the Xmappr's strong points.
- 
+For example, given this XML:
+{{{ 
+<customer>
+  <contact>
+    <firstname>Joe</firstname>
+    <lastname>Somebody</lastname>
+  </contact>
+  <address>
+    <street>Streetname</street>
+    <city>Big City</city>
+  </address>
+</customer>
+}}}
+you just want to map a part of it to this classes:
+{{{
+@RootElement
+class Customer{
+  @Element 
+  Contact contact;
+}
+
+class Contact{
+  @Element
+  String firstName;
+  @Element
+  String lastName;
+}
+}}}
+Normally {{{<address>}}} would not be mapped and would be skipped when reading XML and would not appear on output. This can be avoided by using {{{xmapper.fromXMLwithUnmapped(reader)}}}:
+{{{
+// reading XML while storing unmapped nodes
+Xmappr xmapper = new Xmappr(Customer.class);
+Result result = xmapper.fromXMLwithUnmapped(reader);
+Customer customer = result.getObject();
+
+// writing back with unmapped nodes
+xmapper.toXML(customer, result.getStore(), writer)
+}}}
+The {{{Result}}} object holds both instance of your class and unmapped data. When writing back to XML you have to provide this stored data in order to be serialized.
+More about this topic in [PreservingUnmappedelements preserving unmapped elements]. 
 
 ==Assigning custom converters==
 Xmappr by default picks the right converter based on the type of the target field (see [Converters converters]). But if you choose to write your own custom converter you have to assign it yourself:
