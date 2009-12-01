@@ -4,6 +4,8 @@
 
 =About converters=
 
+*NOTE: all example mappings shown in this section are made with annotations. You can make equivalent mappings via XML configuration as described in [QuickStart quick start].*
+
 Converters are used to convert XML nodes to Java types. Xmappr automatically chooses the right converter based on the field type to which given XML node is mapped. There are two abstract converter types: {{{ValueConverter}}} and {{{ElementConverter}}}. Each concrete converter extends one of them. Value converters take a simple string value and convert it to object of target type. Element converters are more complex: they convert whole XML sub-elements. They take the XML parser as input, traverse the whole XML sub-element and create an object of target type. Value converters are used to convert attribute and text values, while element converters are used to convert whole sub-element trees.
 
 But don’t fret: Xmappr chooses the right converter automatically based on the target field type:
