@@ -1,0 +1,38 @@
+<wiki:toc max_depth="2" />
+= Using Xmappr =
+
+==Reading XML==
+After mapping is defined (via annotations or XML config - see [QuickStart quick start]), Xmappr can be invoked:
+{{{
+Xmappr xmapper = new Xmappr(MyClass.class);
+MyClass myclass = (MyClass) xmapper.fromXML(reader);
+}}}
+where {{{MyClass}}} is your class for which you defined a mapping and {{{reader}}} is a {{{java.io.reader}}} where XML data is read from. 
+
+==Writing XML==
+Writing XML is done similarly: define mappings and then write your class to output.
+{{{
+Xmappr xm = new Xmappr(MyClass.class);
+MyClass myclass = new ...
+xmapper.toXML(myclass, writer)
+}}}
+Where {{{writer}}} is an instance of {{{java.io.Writer}}}.
+
+==Preserving unmapped elements==
+When handling complex XML data, especially coming from 3rd parties, it's sometimes easier to just map a part of the XML to your classes, but still retain all other (unmapped) data when writting XML. This is one of the Xmappr's strong points.
+ 
+
+==Assigning custom converters==
+Xmappr by default picks the right converter based on the type of the target field (see [Converters converters]). But if you choose to write your own custom converter you have to assign it yourself:
+{{{
+xmappr.addConverter(new MyCustomConverter());
+}}}
+This will add a new custom converter to the configuration and it will be used on all field types for which this converter is declared. Converters must implement a {{{Converter.canConvert(Class type)}}} method and decide for themselves which classes they can convert. Xmappr calls this method on all defined converters at configuration time to define which converter can convert a target class.
+If you configure multiple converters, like this:
+{{{
+xmappr.addConverter(new MyCustomConverter());
+xmappr.addConverter(new MyOtherConverter());
+}}}
+*NOTE: order of declaring converters is important!*
+Xmappr will probe declared converters in LIFO order: last added converter will be probed first. Custom converters before built-in ones. In case two converters declare to be able to convert the same type, the one that was defined last will be used.
+==
