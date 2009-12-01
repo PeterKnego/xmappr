@@ -44,7 +44,8 @@ Let’s look at this XML for example:
 }}}
 If we wanted to convert all elements of this XML via custom converters we’d need to write both a value converter and an element converter. XML attribute ‘a’ and text value ’some text’ can be converted by value converter. Also XML sub-element {{{<simple>}}} can be converted via value converter, because it only contains a simple text value. On the other hand, sub-element {{{<complex>}}} contains text value, an attribute and another sub-element. As such it must be converted via an element converter.
 
-NOTE: You need to write a custom converter only if your field’s type is a compiled class, i.e. you don’t have the source to it. If a target type is  one of your own classes, just annotate them with annotations and they will be handled by Xmappr automatically.
+*NOTE:* You need to write a custom converter only if your field’s type is a compiled class, i.e. you don’t have the source to it. If a target type is  one of your own classes, just annotate them (or write XML mapping configuration) and they will be handled by Xmappr automatically.
+
 Once you write your custom converter, you have to register it with Xmappr:
 ==Using custom converter configuration-wide==
 
@@ -97,6 +98,9 @@ public class IntConverter extends ValueConverter {
 ==Extending {{{ElementConverter}}}==
 
 Writing your own element converter is a bit more complex. Element converters are responsible for parsing XML on their own and producing an instance of the target type.  Please take a look at the {{{DOMelementConverter}}} class for example.
+
+(this section will be expanded in the future. In the mean time, if you need help with custom converters, as a question on Xmappr forum)
+
 ==Thread safety==
 
 Xmappr is thread safe, i.e. it can be safely invoked from various threads concurrently. This means that also all converters are thread safe. To achieve this they adhere to one of this rules:
@@ -107,5 +111,3 @@ Xmappr is thread safe, i.e. it can be safely invoked from various threads concur
 One of the converters which does this (point 2.) is {{{DateConverter}}}. Internally it uses {{{java.text.DateFormat}}}, which is slow to initialize (so we don’t want to do it on every invocation) and is also not thread safe. So we initialize it on first use and save it to {{{ThreadLocal}}}.
 
 For efficient use of {{{ThreadLocal}}} and fast multithreading it’s best to use thread pools. More about it in section on [ThreadSafety safe multi-threaded use].
-
-(this section will be expanded in the future. In the mean time, if you need help with custom converters, as a question on Xmappr forum)
