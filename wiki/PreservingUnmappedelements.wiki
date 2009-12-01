@@ -1,3 +1,95 @@
+<wiki:toc max_depth="2" />
+
 = Preserving unmapped XML elements =
 
-For a basic info on how to map just a subset of input XML, but still preserve unmapped elements on output, read [UsingXmappr#Preserving_unmapped_elements user guide].
+Hint: For a basic info on how to map just a subset of input XML, but still preserve unmapped elements on output, read [UsingXmappr#Preserving_unmapped_elements user guide].
+
+Xmappr supports two basic strategies for preserving unmapped nodes: first is using element storage and the second is mapping to {{{DomElements}}}.
+
+==Using element storage==
+As described in [UsingXmappr#Preserving_unmapped_elements user guide], unmapped elements can be stored in {{{Result}}} object. For given XML:
+
+{{{
+<customer>
+  <contact>
+    <firstname>Joe</firstname>
+    <lastname>Somebody</lastname>
+  </contact>
+  <address>
+    <street>Streetname</street>
+    <city>Big City</city>
+  </address>
+</customer>
+}}}
+
+mapped to the classes:
+
+{{{
+@RootElement
+class Customer{
+  @Element 
+  Contact contact;
+}
+
+class Contact{
+  @Element
+  String firstName;
+  @Element
+  String lastName;
+}
+}}}
+Storing unmapped elements to {{{Result}}}:
+{{{
+// reading XML while storing unmapped nodes
+Xmappr xmapper = new Xmappr(Customer.class);
+Result result = xmapper.fromXMLwithUnmapped(reader);
+Customer customer = result.getObject();
+
+// writing back with unmapped nodes
+xmapper.toXML(customer, result.getStore(), writer)
+}}}
+
+The {{{Result}}} will contain an {{{ObjectStore}}} which is a compact binary storage for unmapped elements. When writing out the XML you have to provide the {{{Result}}} in order for unmapped elements to be retrieved and written out.
+
+{{{ObjectStore}}} stores whole elements trees including subelements, attributes and text. In this case the element would be {{{<address>}}} and all it's subnodes.
+
+*LIMITATIONS* This technique has two limitations:
+  # {{{ObjectStore}}} contains weak references to your object (customer) in order to know where to restore unmapped XML elements. This means that you must not manipulate your object such that object identity would be changed (new instance creation/ replacing with other instance). This limitation only applies to those objects where elements would be restored. You can still change content/references in all objects that do not "contain" unmapped elements. This automatically applies to all leaf objects (at the edge of object tree).
+  # {{{ObjectStore}}} currently only stores whole XML element trees with all XML subelements, their XML attributes and XML text. However it does not store XML attributes or XML text in elements that are explicitly mapped: This means that you must explicitly map all such XML attibutes and text in order to be reserved from input to output.
+
+An example to demonstrate point 2.:
+{{{
+<customer isactive="true">
+  <contact>
+    <firstname>Joe</firstname>
+    <lastname>Somebody</lastname>
+  </contact>
+  <address pobox="1234">
+    <street>Streetname</street>
+    <city>Big City</city>
+  </address>
+</customer>
+}}}
+
+mapped to the classes:
+
+{{{
+@RootElement
+class Customer{
+  @Element 
+  Contact contact;
+}
+
+class Contact{
+  @Element
+  String firstName;
+  @Element
+  String lastName;
+}
+}}}
+
+In this case whole {{{<address>}}} would be stored, including attribute {{{pobox="1234"}}} and subelements {{{<street>}}} and {{{<city>}}}.
+However, since class {{{Customer}}} is explicitly mapped, attribute {{{isactive="true"}}} must be also explicitly mapped in order to be preserved. In the given case it's not mapped and would be hence lost.
+
+==Mapping to {{{DomElement}}}==
+
