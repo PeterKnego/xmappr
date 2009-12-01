@@ -1,0 +1,7 @@
+#summary Downloads
+
+==Downloads==
+
+Xmappr downloads are available through it's Maven repository:
+
+http://xmappr.googlecode.com/svn/repo/org/xmappr/xmappr/
