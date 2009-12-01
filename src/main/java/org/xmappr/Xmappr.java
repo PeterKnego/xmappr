@@ -300,7 +300,7 @@ public class Xmappr {
 
         List<ElementConverter> elementConverters = new ArrayList<ElementConverter>();
         elementConverters.add(new CollectionConverter());
-        elementConverters.add(new DomaElementConverter());
+        elementConverters.add(new DomElementConverter());
 
         // wraps every ValueConverter so that it can be used as a ElementConverter
         for (ValueConverter valueConverter : valueConverters) {
