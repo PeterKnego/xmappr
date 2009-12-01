@@ -14,6 +14,7 @@
   * [AnnotationReference Annotations reference]
   * [XmlConfigReference XML configuration reference]
  * [ProjectInfo Project info]
+  * [Downloads Downloads]
   * [Installation Installation]
   * [License License]
   * [FAQ FAQ]
