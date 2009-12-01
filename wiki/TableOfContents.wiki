@@ -5,6 +5,7 @@
  * [UserGuide User guide]
   * [QuickStart Quick start]
   * [AnnotationsVsXmlConfig Annotations vs. XML configuration]
+  * [UsingXmappr Using Xmappr]
   * [Converters Converters]
   * [NameSpaces XML namespaces]
   * [ThreadSafety Safe use in multiple threads]
