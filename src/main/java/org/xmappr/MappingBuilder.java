@@ -181,10 +181,10 @@ public class MappingBuilder {
                 }
 
                 // default converter for element catcher
-                fieldConverter = mappingContext.lookupElementConverter(DOMelement.class);
+                fieldConverter = mappingContext.lookupElementConverter(DomaElement.class);
 
                 // default targetType for element catcher (in case that target field is a Collection)
-                targetType = DOMelement.class;
+                targetType = DomaElement.class;
 
             } else { // normal name-to-field mapping
 
