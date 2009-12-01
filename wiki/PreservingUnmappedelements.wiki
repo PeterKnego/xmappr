@@ -1,0 +1,3 @@
+= Preserving unmapped XML elements =
+
+For a basic info on how to map just a subset of input XML, but still preserve unmapped elements on output, read [UsingXmappr#Preserving_unmapped_elements user guide].
