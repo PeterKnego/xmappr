@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.HashMap;
 import java.util.ArrayList;
 
-public class DOMelement {
+public class DomaElement {
 
     private QName name;
     private HashMap<QName, String> attributes = new HashMap<QName, String>();
@@ -38,7 +38,7 @@ public class DOMelement {
     }
 
     public static boolean isElement(Object obj) {
-        return DOMelement.class.equals(obj.getClass());
+        return DomaElement.class.equals(obj.getClass());
     }
 
     public void addAttribute(QName attrQName, String attrValue) {
@@ -49,7 +49,7 @@ public class DOMelement {
         elements.add(text);
     }
 
-    public void appendElement(DOMelement element) {
+    public void appendElement(DomaElement element) {
         elements.add(element);
     }
 }

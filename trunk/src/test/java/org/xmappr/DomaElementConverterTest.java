@@ -16,7 +16,7 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.List;
 
-public class DOMelementConverterTest {
+public class DomaElementConverterTest {
 
     private static String xml = "<root>" +
             "first some text" +
