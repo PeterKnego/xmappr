@@ -20,4 +20,4 @@ Then also add the dependency:
 </dependency>
 }}}
 
-If you don't use maven, then just [Download download] the jar amd put it on your classpath.
+If you don't use maven, then just [Downloads download] the jar amd put it on your classpath.
