@@ -4,6 +4,7 @@
 
  * [UserGuide User guide]
   * [QuickStart Quick start]
+  * [AnnotationsVsXmlConfig Annotations vs. XML configuration]
   * [Converters Converters]
   * [NameSpaces XML namespaces]
   * [ThreadSafety Safe use in multiple threads]
