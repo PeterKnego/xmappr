@@ -82,6 +82,16 @@ if(obj instanceof PacketOne){
 
 {{{Xmappr.fromXml(reader)}}} will produce the correct object based on the XML data from {{{reader}}}.
 
+== Mapping to an existing object instance ==
+
+So far we have seen that on every invocation of {{{Xmappr.fromXml(reader)}} a new instance of an object was created. Sometimes you just want to map XML to an existing object instance:
+
+{{{
+xmappr.fromXml(reader, targetObject)
+}}}
+
+Here {{{targetObject}}} would be populated with values from XML read from {{{reader}}}.
+
 ==Pretty printing the output==
 
 Sometimes the output is viewed by humans an in this case you'd want it to be pretty printed:
