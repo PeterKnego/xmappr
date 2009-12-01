@@ -2,14 +2,18 @@
 = Using Xmappr =
 
 ==Reading XML==
+
 After mapping is defined (via annotations or XML config - see [QuickStart quick start]), Xmappr can be invoked:
+
 {{{
 Xmappr xmapper = new Xmappr(MyClass.class);
 MyClass myclass = (MyClass) xmapper.fromXML(reader);
 }}}
+
 where {{{MyClass}}} is your class for which you defined a mapping and {{{reader}}} is a {{{java.io.reader}}} where XML data is read from. 
 
 ==Writing XML==
+
 Writing XML is done similarly: define mappings and then write your class to output.
 {{{
 Xmappr xm = new Xmappr(MyClass.class);
@@ -18,60 +22,85 @@ xmapper.toXML(myclass, writer)
 }}}
 Where {{{writer}}} is an instance of {{{java.io.Writer}}}.
 
-==Preserving unmapped elements==
-When handling complex XML data, especially coming from 3rd parties, it's sometimes easier to just map a part of the XML to your classes, but still retain all other (unmapped) data when writting XML. This is one of the Xmappr's strong points.
-For example, given this XML:
-{{{ 
-<customer>
-  <contact>
-    <firstname>Joe</firstname>
-    <lastname>Somebody</lastname>
-  </contact>
-  <address>
-    <street>Streetname</street>
-    <city>Big City</city>
-  </address>
-</customer>
+==Multi-mapping==
+
+When you have as input different XML documents, that come in unspecified order, then with usual XML parsers you need to check the root element and decide which parsing path you are going to take.
+
+With Xmappr you can simply declare multiple mappings. The correct mapping will then be automatically used based on the root element of given XML document. An example would be receiving XML documents from network (protocol implementation):
+
+{{{
+<packetone>
+  <payload>something</payload>
+</packetone>
 }}}
-you just want to map a part of it to this classes:
+
+should map to 
+
 {{{
 @RootElement
-class Customer{
-  @Element 
-  Contact contact;
-}
-
-class Contact{
+class PacketOne{
   @Element
-  String firstName;
-  @Element
-  String lastName;
+  String payload;
 }
 }}}
-Normally {{{<address>}}} would not be mapped and would be skipped when reading XML and would not appear on output. This can be avoided by using {{{xmapper.fromXMLwithUnmapped(reader)}}}:
-{{{
-// reading XML while storing unmapped nodes
-Xmappr xmapper = new Xmappr(Customer.class);
-Result result = xmapper.fromXMLwithUnmapped(reader);
-Customer customer = result.getObject();
 
-// writing back with unmapped nodes
-xmapper.toXML(customer, result.getStore(), writer)
-}}}
-The {{{Result}}} object holds both instance of your class and unmapped data. When writing back to XML you have to provide this stored data in order to be serialized.
-More about this topic in [PreservingUnmappedelements preserving unmapped elements]. 
+The other XML document is
 
-==Assigning custom converters==
-Xmappr by default picks the right converter based on the type of the target field (see [Converters converters]). But if you choose to write your own custom converter you have to assign it yourself:
 {{{
-xmappr.addConverter(new MyCustomConverter());
+<packettwo>
+  <data>1234</data>
+</packettwo>
 }}}
-This will add a new custom converter to the configuration and it will be used on all field types for which this converter is declared. Converters must implement a {{{Converter.canConvert(Class type)}}} method and decide for themselves which classes they can convert. Xmappr calls this method on all defined converters at configuration time to define which converter can convert a target class.
-If you configure multiple converters, like this:
+
+and maps to 
+
 {{{
-xmappr.addConverter(new MyCustomConverter());
-xmappr.addConverter(new MyOtherConverter());
+@RootElement
+class PacketTwo{
+  @Element
+  byte[] data;
+}
 }}}
-*NOTE: order of declaring converters is important!*
-Xmappr will probe declared converters in LIFO order: last added converter will be probed first. Custom converters before built-in ones. In case two converters declare to be able to convert the same type, the one that was defined last will be used.
-==
+
+Using this mappings would then go like this:
+
+{{{
+// use the first mapping
+Xmappr xmappr = new Xmappr(PacketOne.class);
+// use the second mapping
+xmappr.addMapping(PacketTwo.class);
+
+// reading XML - the right mapping is automatically chosen based on XML received
+Object obj = xmappr.fromXml(reader);
+
+if(obj instanceof PacketOne){
+  // do your thing..
+} else if (obj instanceof PacketTwo){
+  // do other thing..
+}
+}}}
+
+{{{Xmappr.fromXml(reader)}}} will produce the correct object based on the XML data from {{{reader}}}.
+
+==Pretty printing the output==
+
+Sometimes the output is viewed by humans an in this case you'd want it to be pretty printed:
+
+{{{
+xmapper.setPrettyPrint(true);
+}}}
+
+This will produce human readable XML with every XML element on it's own indented line. 
+*NOTE:* Pretty printing is processor intensive so writing XML will be several times slower and also produced XML will be bigger.
+
+==Using custom converters==
+Xmappr has built-in converters for most basic Java types. In case a target type is not supported, a custom converter can be written and injected into Xmappr. This is described in detail in section on [Converters converters].
+
+==Handling namespaces==
+If your XML defines namespaces on a root element, then you can configure namespace mapping on Xmapper instance:
+
+{{{
+xmappr.addNamespace("prefix", "namespace");
+}}}
+
+More about it in a section on [NameSpaces namespaces].
