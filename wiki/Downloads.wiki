@@ -2,6 +2,6 @@
 
 ==Downloads==
 
-Xmappr downloads are available through it's Maven repository:
+Xmappr is best used via Maven. But if you need direct download, then just use project's Maven repository:
 
 http://xmappr.googlecode.com/svn/repo/org/xmappr/xmappr/
