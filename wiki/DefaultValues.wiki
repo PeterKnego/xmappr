@@ -1,6 +1,47 @@
-#summary How default values are applied on serialization/deserialization.
 #labels in_progress
-
 = Default values =
 
-in progress..
+Default values of XML elements and XML attributes can be defined in mapping configuration:
+
+{{{
+@RootElement
+class Root {
+
+    @Attribute(defaultValue = "1")
+    public int one;
+
+    @Attribute(defaultValue = "2")
+    public int two;
+
+    @Element
+    public String a;
+
+    @Element(defaultValue = "2")
+    public int b;
+
+    @Element(defaultValue = "3")
+    public Integer c;
+}
+}}}
+
+when deserializing this XML:
+
+{{{
+<root one="">
+    <a>some value</a>
+    </b>
+</root>
+}}}
+
+You would get this values:
+
+{{{
+root.one == 1 // false
+root.two == 2 // true
+
+root.a.equals("some value") // true
+root.b == 2 // true
+root.c == null // false
+}}}
+
+Rule of thumb is: default attribute values apply when attributes are missing, and default element values apply when elements are empty. 
