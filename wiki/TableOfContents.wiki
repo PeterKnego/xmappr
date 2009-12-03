@@ -1,4 +1,4 @@
- * [UserGuide User guide]
+ * User guide
   * [QuickStart Quick start]
   * [AnnotationsVsXmlConfig Annotations vs. XML configuration]
   * [UsingXmappr Using Xmappr]
@@ -12,7 +12,7 @@
  * Reference
   * [AnnotationReference Annotations reference]
   * [XmlConfigReference XML configuration reference]
- * [ProjectInfo Project info]
+ * Project info
   * [Downloads Downloads]
   * [Installation Installation]
   * [License License]
