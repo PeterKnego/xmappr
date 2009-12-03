@@ -1,7 +1,3 @@
-#summary Xmappr documentation
-
-== Documentation ==
-
  * [UserGuide User guide]
   * [QuickStart Quick start]
   * [AnnotationsVsXmlConfig Annotations vs. XML configuration]
@@ -13,7 +9,7 @@
   * [MappingCollections Mapping to java Collections]
   * [PreservingElementOrder Preserving order of XML elements]
   * [PreservingUnmappedelements Preserving unmapped XML]
- * [Reference Reference]
+ * Reference
   * [AnnotationReference Annotations reference]
   * [XmlConfigReference XML configuration reference]
  * [ProjectInfo Project info]
