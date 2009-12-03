@@ -24,7 +24,7 @@ class Root {
 }
 }}}
 
-when deserializing this XML:
+when consuming this XML:
 
 {{{
 <root one="">
@@ -33,7 +33,7 @@ when deserializing this XML:
 </root>
 }}}
 
-You would get this values:
+you would get this values:
 
 {{{
 root.one == 1 // false
@@ -41,7 +41,7 @@ root.two == 2 // true
 
 root.a.equals("some value") // true
 root.b == 2 // true
-root.c == null // false
+root.c == 3 // false - value is actually null
 }}}
 
-Rule of thumb is: default attribute values apply when attributes are missing, and default element values apply when elements are empty. 
+Rule of thumb is: default attribute values apply when attributes are missing, and default element values apply when elements are empty. This also holds true when producing XML: if object value equals attribute default value, then attribute will not be produced and if object value equals element default value, then empty element will be produced. No element will be produced only when object value is {{{null}}}.
