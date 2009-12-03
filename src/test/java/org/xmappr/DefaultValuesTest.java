@@ -20,14 +20,14 @@ import java.io.StringWriter;
 public class DefaultValuesTest {
 
     //todo Default values for attributes?
-    private static String inXml = "<root attr='' >" +
+    private static String inXml = "<root>" +
             "<a>text1</a>" +
             "<b/>" +
             "</root>";
 
     private static String outXml = "<root>" +
             "<b/>" +
-            "<c></c>" +
+            "<c/>" +
             "</root>";
 
 
@@ -45,8 +45,10 @@ public class DefaultValuesTest {
         Root root = (Root) xmappr.fromXML(reader);
 
         // check values
+        Assert.assertEquals(root.one, 5);
         Assert.assertEquals(root.a.text, "text1");
         Assert.assertEquals(root.b, 2);
+        Assert.assertNull(root.c);
 
         // change value to null - this is going to omit the element from output
         root.a = null;
@@ -66,11 +68,11 @@ public class DefaultValuesTest {
         XMLAssert.assertXMLEqual(outXml, ssw);
     }
 
-    @RootElement("root")
+    @RootElement
     public static class Root {
 
         @Attribute(defaultValue = "5")
-        public int attr;
+        public int one;
 
         @Element
         public A a;
