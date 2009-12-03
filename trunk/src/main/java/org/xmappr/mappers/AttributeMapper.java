@@ -6,8 +6,8 @@
  */
 package org.xmappr.mappers;
 
-import org.xmappr.XmapprException;
 import org.xmappr.FieldAccessor;
+import org.xmappr.XmapprException;
 import org.xmappr.converters.ValueConverter;
 
 import javax.xml.namespace.QName;
@@ -36,7 +36,7 @@ public class AttributeMapper {
         this.isMap = Map.class.isAssignableFrom(targetField.getType());
     }
 
-    public void setValue(QName attributeName, Object container, String elementValue) {
+    public void setValue(QName attributeName, Object container, String attributeValue) {
         FieldAccessor targetField = this.targetField;
         // is it a Map?
         if (isMap) {
@@ -45,14 +45,14 @@ public class AttributeMapper {
                 targetMap = initializeMap(targetField.getType());
                 targetField.setValue(container, targetMap);
             }
-            Object obj = valueConverter.fromValue(elementValue, format, targetType, targetMap);
+            Object obj = valueConverter.fromValue(attributeValue, format, targetType, targetMap);
 
             // do nothing if ValueConverter returns null
             if (obj != null) {
                 targetMap.put(attributeName, obj);
             }
         } else {
-            setValue(container, elementValue);
+            setValue(container, attributeValue);
         }
     }
 
@@ -98,18 +98,18 @@ public class AttributeMapper {
      * Assigns a value to the Field.
      *
      * @param container    Instance of an Object that contains the Field.
-     * @param elementValue Value to be set.
+     * @param attributeValue Value to be set.
      */
-    private void setValue(Object container, String elementValue) {
-        // value is empty?
-        if (elementValue.length() == 0) {
+    private void setValue(Object container, String attributeValue) {
+        // value is null?
+        if (attributeValue == null) {
 
             // default value is used
             if (defaultObject != null) {
                 targetField.setValue(container, defaultObject);
             }
         } else {
-            Object tmp = valueConverter.fromValue(elementValue, format, targetType, targetField.getValue(container));
+            Object tmp = valueConverter.fromValue(attributeValue, format, targetType, targetField.getValue(container));
 
             // do nothing if ValueConverter returns null
             if (tmp != null) {
@@ -142,5 +142,12 @@ public class AttributeMapper {
 
     }
 
-
+    /**
+     * Is attribute default value defined.<br/>
+     * Attribute default value applies when attribute is missing.
+     * @return true if default value is defined.
+     */
+    public boolean hasDefaultValue() {
+        return defaultObject != null;
+    }
 }

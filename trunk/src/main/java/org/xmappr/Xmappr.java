@@ -347,7 +347,7 @@ public class Xmappr {
      * Adds a XML namespace to the list of predefined namespaces.
      * Predefined namespaces apply to all classes/fields in the mapping configuration.
      *
-     * @param compoundNamespace Namespace definition must be form "prefix=namespaceURI"
+     * @param compoundNamespace Namespace definition must be in "prefix=namespaceURI" form
      */
     public synchronized void addNamespace(String compoundNamespace) {
         checkConfigFinished();

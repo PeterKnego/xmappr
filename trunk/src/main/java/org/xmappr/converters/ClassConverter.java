@@ -12,10 +12,7 @@ import org.xmappr.mappers.ElementMapper;
 import org.xmappr.mappers.TextMapper;
 
 import javax.xml.namespace.QName;
-import java.util.IdentityHashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 //todo Write javadoc
 
@@ -39,6 +36,9 @@ public class ClassConverter implements ElementConverter {
     private Map<QName, ElementMapper> elementMappersByName = new LinkedHashMap<QName, ElementMapper>();
 
     private Map<QName, AttributeMapper> attributeMappers = new LinkedHashMap<QName, AttributeMapper>();
+
+    // AttributeMappers that handle default values
+    private List<QName> attributesWithDefaultValue;
 
     private NsContext classNamespaces;
 
@@ -77,13 +77,24 @@ public class ClassConverter implements ElementConverter {
 
     public void addAttributeMapper(QName attributeQName, AttributeMapper attributeMapper) {
         attributeMappers.put(attributeQName, attributeMapper);
+
+        // If this AttributeMapper handles default values
+        if (attributeMapper.hasDefaultValue()) {
+            // initialize list when needed
+            if (attributesWithDefaultValue == null) {
+                attributesWithDefaultValue = new ArrayList<QName>();
+            }
+            // save it to a the list.
+            attributesWithDefaultValue.add(attributeQName);
+        }
     }
 
     public boolean canConvert(Class type) {
         return targetClass.equals(type);
     }
 
-    public Object fromElement(XMLSimpleReader reader, MappingContext mappingContext, String defaultValue, String format, Class targetType, Object targetObject) {
+    public Object fromElement(XMLSimpleReader reader, MappingContext mappingContext, String defaultValue,
+                              String format, Class targetType, Object targetObject) {
 
         Object currentObject;
 
@@ -99,7 +110,10 @@ public class ClassConverter implements ElementConverter {
             }
         }
 
-        // XML element attributes
+        // make a copy of AttributeMappers that 
+        List<QName> copyofAttributesWithDefaultValue = (attributesWithDefaultValue == null) ? null : new ArrayList<QName>(attributesWithDefaultValue);
+
+        // reads XML element attributes
         Iterator<Map.Entry<QName, String>> attributeSet = reader.getAttributeIterator();
         while (attributeSet.hasNext()) {
             Map.Entry<QName, String> entry = attributeSet.next();
@@ -109,22 +123,37 @@ public class ClassConverter implements ElementConverter {
             // find the attribute mapper
             AttributeMapper attrMapper = attributeMappers.get(attrQName);
 
-//            if (attrValue.length() != 0) {
-            // if mapper for this attribute is defined, use it to setValue field to attribute value
+            // if mapper for this attribute is defined, use it to set field to attribute value
             if (attrMapper != null) {
+
+                // if this attribute has default value, mark it as being used (remove it from list)
+                if (attrMapper.hasDefaultValue()) {
+                    copyofAttributesWithDefaultValue.remove(attrQName);
+                }
+
+                // set the field value
                 attrMapper.setValue(attrQName, currentObject, attrValue);
             } else if (attributeCatcher != null) { // if there is a Mapper defined thet catches any attribute name
                 attributeCatcher.setValue(attrQName, currentObject, attrValue);
             }
-//            }
-//            System.out.println("ATTR: " + attrQName);
         }
 
+        // Default values on attributes come into effect only when attribute is not present.
+        // copyofAttributesWithDefaultValue contains attributes that were not present in current XML element.
+        // Default values will be now set.
+        if (copyofAttributesWithDefaultValue != null) {
+            for (QName attrDefVal : copyofAttributesWithDefaultValue) {
+                // null will trigger the default value
+                attributeMappers.get(attrDefVal).setValue(attrDefVal, currentObject, null);
+            }
+        }
+
+        // reads XML text nodes
         String text = reader.getText();
         if (text.length() != 0 && textMapper != null)
             textMapper.setValue(currentObject, text);
 
-        // XML subelements
+        // reads XML sub-elements
         QName qname;
         while (reader.moveDown()) {
             qname = reader.getName();
@@ -148,11 +177,11 @@ public class ClassConverter implements ElementConverter {
 //            System.out.println("BEFORE moveUp: "+reader.reader.getEventType()+" "+nm);
             reader.moveUp();
 
+            // checks if there is a XML text node after XML sub-element and reads it
             if (textMapper != null && textMapper.isIntermixed()) {
                 text = reader.getText();
                 if (text.length() != 0) textMapper.setValue(currentObject, text);
             }
-
         }
 
         return currentObject;
