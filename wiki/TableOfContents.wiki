@@ -2,7 +2,7 @@
 
 == Documentation ==
 
- * [UserGuide User guide]
+ * User guide
   * [QuickStart Quick start]
   * [AnnotationsVsXmlConfig Annotations vs. XML configuration]
   * [UsingXmappr Using Xmappr]
