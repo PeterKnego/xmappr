@@ -90,7 +90,7 @@ public class ClassConverter implements ElementConverter {
     }
 
     public boolean canConvert(Class type) {
-        return targetClass.equals(type);
+        return targetClass.isAssignableFrom(type);
     }
 
     public Object fromElement(XMLSimpleReader reader, MappingContext mappingContext, String defaultValue,

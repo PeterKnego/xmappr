@@ -24,7 +24,6 @@ public class RootMapper {
     private MappingContext mappingContext;
     private ElementConverter elementConverter;
     private Class rootClass;
-    private ElementConverter converter;
 
     public RootMapper(QName rootNodeName, Class rootClass, ElementConverter elementConverter, MappingContext mappingContext) {
         this.rootClass = rootClass;
@@ -42,10 +41,18 @@ public class RootMapper {
     }
 
     public Object getRootObject(XMLSimpleReader reader) {
-      return getRootObject(reader, null);
+        return getRootObject(reader, null);
     }
 
     public Object getRootObject(XMLSimpleReader reader, Object targetObject) {
+
+        // check that given target object can actually be converted by this element converter 
+        if (targetObject != null && !elementConverter.canConvert(targetObject.getClass())) {
+            throw new IllegalArgumentException("Target object of type " +
+                    rootClass.getName() + " was expected. " +
+                    "Instead an object of type " + targetObject.getClass().getName() + " was given.");
+        }
+
         QName firstElement = reader.getRootName();
         if (firstElement.equals(rootNodeName)) {
             reader.moveDown();
@@ -60,9 +67,5 @@ public class RootMapper {
         writer.predefineNamespaces(mappingContext.getPredefinedNamespaces());
         elementConverter.toElement(object, rootNodeName, writer, mappingContext, "", null);
         writer.endDocument();
-    }
-
-    public ElementConverter getConverter() {
-        return converter;
     }
 }
