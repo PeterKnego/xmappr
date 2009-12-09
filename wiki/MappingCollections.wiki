@@ -23,6 +23,18 @@ class Root{
 }
 }}}
 
+Here Xmappr will take every {{{<number>}}} element, convert it to {{{Integer}}} and add it to an instance of {{{ArrayList}}}.
 
+Since Java generics' type erasure removes runtime type information, an alternative way for providing type information has to be used. This is the job of {{{targetType}}} attribute of the {{{@Element}}} annotation. When a target field is a {{{Collection}}} this attribute must be provided, otherwise an exception is thrown. 
 
 == Mapping different elements to a {{{Collection}}} ==
+
+Sometimes different XML elements must be mapped to one {{{Collection}}}:
+
+{{{
+<root>
+  <one>1</one>
+  <two>2</two>
+  <three>3</three>
+</root>
+}}} 
