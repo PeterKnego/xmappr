@@ -1,5 +1,28 @@
-#summary Mapping XML elements to a Java collection.
+<wiki:toc>
 
-= Mapping XML to collections =
+== Mapping multiple elements to a {{{Collection}}} ==
 
-in progress..
+Xmappr can map multiple XML elements to a subtype of {{{java.util.Collection}}}.
+
+{{{
+<root>
+  <number>1</number>
+  <number>2</number>
+  <number>3</number>
+</root>
+}}}
+
+can be mapped to a {{{java.util.Collection}}} like this:
+
+{{{
+@RootElement
+class Root{
+
+  @Element(targetType=Integer.class)
+  List number;
+}
+}}}
+
+
+
+== Mapping different elements to a {{{Collection}}} ==
