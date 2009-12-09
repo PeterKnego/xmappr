@@ -25,16 +25,67 @@ class Root{
 
 Here Xmappr will take every {{{<number>}}} element, convert it to {{{Integer}}} and add it to an instance of {{{ArrayList}}}.
 
-Since Java generics' type erasure removes runtime type information, an alternative way for providing type information has to be used. This is the job of {{{targetType}}} attribute of the {{{@Element}}} annotation. When a target field is a {{{Collection}}} this attribute must be provided, otherwise an exception is thrown. 
+Xmappr normally derives target type from field type, but since Java generics' type erasure removes runtime type information, an alternative way for providing type information has to be used. This is the job of {{{targetType}}} attribute of the {{{@Element}}} annotation. When a target field is a {{{Collection}}} this attribute must be provided, otherwise an exception is thrown. 
 
 == Mapping different elements to a {{{Collection}}} ==
 
-Sometimes different XML elements must be mapped to one {{{Collection}}}:
+Sometimes different XML elements must be mapped to the same {{{Collection}}}:
 
 {{{
 <root>
   <one>1</one>
-  <two>2</two>
-  <three>3</three>
+  <two>2.2</two>
+  <three>Three</three>
 </root>
 }}} 
+
+are mapped to:
+
+{{{
+@RootElement
+class Root{
+
+  @Elements({
+    @Element(name="one", targetType=Integer.class),
+    @Element(name="two", targetType=Double.class),
+    @Element(name="three", targetType=String.class)
+  })
+  List number;
+}
+}}}
+
+The {{{@Elements}}} annotation wraps multiple {{{@Element}}} annotations so that multiple mappings can be defined on one {{{Collection}}}. Every {{{@Element}}} mapping can have it's own target type or converter defined.
+
+== Wildcard mapping ==
+
+When there are a lot of different XML subelements, they can all be mapped to a single {{{java.util.Collection}}} with one {{{@Element}}} line. 
+
+Given the above XML snippet a wildcard mapping can be done like this:
+
+
+{{{
+@RootElement
+class Root{
+
+  @Element("*")
+  List number;
+}
+}}}
+
+Here all subelements of the {{{<root>}}} element will be mapped to the {{{number}}} field.
+
+*NOTE:* Wildcard name {{{"*"}}} is a special name and NOT a regular expression. Things like {{{"*a"}}} are not possible and will not work.
+
+It's also possible to mix-and-match named {{{@Element}}}s and wildcard {{{@Element}}}s:
+
+{{{
+@RootElement
+class Root{
+
+  @Elements({
+    @Element(name="one", targetType=Integer.class),
+    @Element("*")
+  })
+  List number;
+}
+}}}
