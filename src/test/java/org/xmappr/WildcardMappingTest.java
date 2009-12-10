@@ -25,7 +25,7 @@ public class WildcardMappingTest {
             "</root>";
 
     /**
-     *  Maps to a custom class Numbers with a custom NumbersConverter
+     * Maps to a custom class Numbers with a custom NumbersConverter
      */
     @RootElement
     public static class Root {
@@ -35,12 +35,15 @@ public class WildcardMappingTest {
     }
 
     /**
-     * Maps to a java.util.List with a custom SingleNumberConverter
+     * Maps to a java.util.List with a custom SingleNumberConverter and adds some mapper mixing
      */
     @RootElement("root")
     public static class RootTwo {
 
-        @Element(name = "*", converter = SingleNumberConverter.class)
+        @Elements({
+                @Element(name = "one", targetType = Integer.class),
+                @Element(name = "*", converter = SingleNumberConverter.class)
+        })
         public List numbers;
     }
 

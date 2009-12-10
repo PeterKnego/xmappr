@@ -9,8 +9,6 @@ package org.xmappr.mappers;
 import org.xmappr.*;
 import org.xmappr.converters.CollectionConverting;
 import org.xmappr.converters.ElementConverter;
-import org.xmappr.FieldAccessor;
-import org.xmappr.mappers.TextMapper;
 
 import javax.xml.namespace.QName;
 import java.lang.reflect.Field;
@@ -20,6 +18,7 @@ import java.util.Map;
 
 
 //todo write javadoc - IMPORTANT
+
 /**
  * @author peter
  */
@@ -33,7 +32,8 @@ public class ElementMapper {
     // the following three fields are used in handling Collection mapping
     private CollectionConverting collectionConverter;
     private Map<Class, QName> targetTypes = new HashMap<Class, QName>();
-    private Map<QName, ElementConverter> converterCache = new HashMap<QName, ElementConverter>();
+    private Map<QName, ElementConverter> convertersByQName = new HashMap<QName, ElementConverter>();
+    private Map<Class, ElementConverter> converterCache;
 
     // default value as set by the @Element(defaultValue="..") annotation
     private String defaultValue;
@@ -68,7 +68,7 @@ public class ElementMapper {
 //            elementConverter = mappingContext.lookupElementConverter(targetType);
 //        }
         this.targetTypes.put(targetType, nodeName);
-        this.converterCache.put(nodeName, elementConverter);
+        this.convertersByQName.put(nodeName, elementConverter);
     }
 
     public void readElement(QName nodeName, Object targetObject, XMLSimpleReader reader) {
@@ -89,13 +89,13 @@ public class ElementMapper {
         }
 
         // find the converter for given node name
-        ElementConverter cachedConverter = converterCache.get(nodeName);
+        ElementConverter cachedConverter = convertersByQName.get(nodeName);
         ElementConverter converter = cachedConverter != null ? cachedConverter : elementConverter;
 
         if (converter == null) {
             throw new XmapprException("Error: could not find converter for node: " + nodeName +
                     " in collection " + collection.getClass().getName() +
-                    " in class " + collection.getClass().getEnclosingClass() +
+                    " in class " + targetType.getName() +
                     ". Collection contains element types that are not defined in @Element annotation.");
         }
 
@@ -131,12 +131,26 @@ public class ElementMapper {
                 if (textMapper != null && textMapper.isTargetType(obj)) {
                     writer.addText(textMapper.getValue(obj));
                 } else {
+                    // check if given object matches any of the target types
                     QName name = targetTypes.get(obj.getClass());
+                    // if not, try finding the right converter for this object
+                    ElementConverter converterFound = null;
                     if (name == null) {
-                        name = nodeName;
+                        for (ElementConverter converter : convertersByQName.values()) {
+                            if (converter.canConvert(obj.getClass())) {
+                                converterFound = converter;
+                            }
+                        }
+                    } else {
+                        // converter found via target type
+                        converterFound = convertersByQName.get(name);
                     }
-                    ElementConverter converter = converterCache.get(name);
-                    converter.toElement(obj, name, writer, mappingContext, defaultValue, format);
+                    if (converterFound == null) {
+                        throw new XmapprException("No converter found for the object type " + obj.getClass().getName() +
+                                " in collection " + collection.getClass().getName() +
+                                " in class " + targetType.getName());
+                    }
+                    converterFound.toElement(obj, name, writer, mappingContext, defaultValue, format);
                 }
             }
 
