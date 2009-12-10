@@ -93,8 +93,8 @@ class Root{
 
 Element {{{<one>}}} will be converted to {{{Integer}}}, while {{{<two>}}} and {{{<three>}}} will be converted to {{{DomElement}}}.
  
-=== With custom converter ===
-A custom target type or converter can be assigned to wildcard mappings:
+=== Using custom converter ===
+Custom target type or converter can be used also with wildcard mappings:
 
 {{{
 @RootElement
@@ -106,5 +106,7 @@ class Root{
 }}}
 
 In this case all XML elements will be converted to {{{String}}}s and added to the {{{numbers}}} list.
+
+== Mapping XML elements and XML text to a Collection ==
 
 = Mapping multiple XML attributes to a {{{Collection}}} =
