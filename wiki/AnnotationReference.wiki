@@ -1,5 +1,26 @@
 #labels in_progress
+<wiki:toc>
 
-=Annotations reference=
+= {{{@RootElement}}} = 
 
-in progress..
+
+
+= {{{@Attribute}}} = 
+
+
+
+= {{{@Attributes}}} = 
+
+
+= {{{@Element}}} = 
+
+
+
+= {{{@Elements}}} = 
+
+
+
+= {{{@Text}}} = 
+
+
+= {{{@Namespaces}}} =
