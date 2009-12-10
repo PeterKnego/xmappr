@@ -1,6 +1,6 @@
 <wiki:toc>
 
-== Mapping multiple elements to a {{{Collection}}} ==
+= Mapping multiple XML elements to a {{{Collection}}} =
 
 Xmappr can map multiple XML elements to a subtype of {{{java.util.Collection}}}.
 
@@ -62,7 +62,6 @@ When there are a lot of different XML subelements, they can all be mapped to a s
 
 Given the above XML snippet a wildcard mapping can be done like this:
 
-
 {{{
 @RootElement
 class Root{
@@ -72,9 +71,11 @@ class Root{
 }
 }}}
 
-Here all subelements of the {{{<root>}}} element will be mapped to the {{{number}}} field.
+Here all subelements of the {{{<root>}}} element will be mapped to the {{{number}}} field. When using wildcard element names the default converter is {{{DomElementConverter}}}, so all matched elements will be converted to {{{DomElement}}} instances.  
 
 *NOTE:* Wildcard name {{{"*"}}} is a special name and NOT a regular expression. Things like {{{"*a"}}} are not possible and will not work.
+
+=== Mixing different mappings ===
 
 It's also possible to mix-and-match named {{{@Element}}}s and wildcard {{{@Element}}}s:
 
@@ -89,3 +90,21 @@ class Root{
   List number;
 }
 }}}
+
+Element {{{<one>}}} will be converted to {{{Integer}}}, while {{{<two>}}} and {{{<three>}}} will be converted to {{{DomElement}}}.
+ 
+=== With custom converter ===
+A custom target type or converter can be assigned to wildcard mappings:
+
+{{{
+@RootElement
+class Root{
+
+  @Element(name="*", targetType=String.class)
+  List numbers;
+}
+}}}
+
+In this case all XML elements will be converted to {{{String}}}s and added to the {{{numbers}}} list.
+
+= Mapping multiple XML attributes to a {{{Collection}}} =
