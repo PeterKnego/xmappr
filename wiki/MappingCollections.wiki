@@ -137,9 +137,9 @@ class Root{
 List {{{elements}}} will contain the following elements in this order: Integer(1), String("first text"), Integer(2) and String("second text").
 *NOTE:* Mixing XML text and XML elements is useful when mapping XHTML. 
 
-= Mapping multiple XML attributes to a {{{Collection}}} =
+= Mapping multiple XML attributes to a {{{Map}}} =
 
-Multiple XML attributes can be mapped to {{{java.util.Collection}}} much the same way as XML elements, as described in the previous section.
+Multiple XML attributes can be mapped to {{{java.util.Map}}} much the same way as XML elements are mapped to a {{{Collection}}}, as described in the previous section.
 There are however some differences and it's best to explain them on a big example:
 
 {{{
@@ -153,13 +153,13 @@ class Root {
     @Attribute(name = "b", targetType = Integer.class),
     @Attribute(name = "c"),
     @Attribute("*")})
-  Map firstAttributes;
+  Map firstMap;
 
    @Attributes({
      @Attribute("i"),
      @Attribute(name = "k", targetType = Double.class),
      @Attribute("l")})
-   Map secondAttributes;
+   Map secondMap;
 }
 }}}
 
@@ -167,4 +167,4 @@ The differences to XML element mappings are:
   # {{{@Attribute}}} mappings must be used on subtype of {{{java.util.Map}}}, whereas {{{@Element}}} is used on {{{java.util.Collection}}}.
   # Default target type for {{{@Attribute}}} mapping is {{{String}}}, whereas for {{{@Element}}} the default target type is {{{DomElement}}}.
   # {{{@Attribute}}} mappings can not be mixed with {{{@Text}}} mappings, obviously.
-  # XML attributes do not have order, so they can be safely splited between two {{{Map}}}s, as example shows. The same thing can be also done with XML elements, but this would break their order.
+  # XML attributes do not have order, so they can be safely splitted between two {{{Map}}}s, as example shows. The same thing can be also done with XML elements, but this would break their order.
