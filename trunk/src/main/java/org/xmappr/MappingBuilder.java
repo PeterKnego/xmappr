@@ -114,7 +114,7 @@ public class MappingBuilder {
 
         if (configElements == null) return;
 
-        boolean isElementCatcher = false;
+        boolean isWildcardMapping = false;
         Map<String, ElementMapper> fieldMapperCache = new HashMap<String, ElementMapper>();
 
         for (ConfigElement configElement : configElements) {
@@ -161,30 +161,37 @@ public class MappingBuilder {
             QName qname = mappingContext.getQName(elementName, getFieldNamespaces(field), classConverter.getClassNamespaces(),
                     classConverter.getTargetClass().getName(), field.getName());
 
-            // element catcher for wildcard names
+            // wildcard mapping - maps any element name to given field
             if (elementName.equals("*")) {
-                // double use of element catcher @Element("*") within a single class
-                if (isElementCatcher) {
+                // double use of wildcard mapping @Element("*") within a single class
+                if (isWildcardMapping) {
                     throw new XmapprConfigurationException("Error: Incorrect use of Element(\"*\")" +
                             field.getName() + " in class " + field.getDeclaringClass().getSimpleName() +
                             "Wildcard name mapping @Element(\"*\") can be used only one time within a class");
                 }
-                isElementCatcher = true;
+                isWildcardMapping = true;
 
+                // was custom converter assigned via annotation?
+                if (annotatedConverter != null) {
+                    fieldConverter = initializeConverter(annotatedConverter);
 
-                if (annotatedConverter != null || targetType != null) {
-                    throw new XmapprConfigurationException("Error: Can  not assign converter for " +
-                            "collection " + field.getName() +
-                            " in class " + field.getDeclaringClass().getSimpleName() +
-                            "When @Element annotation name is a wildcard name \"*\", 'converter' or " +
-                            "'targetType' values can not be used.");
+                    // check if target type is defined and
+                    // that assigned converter can actually convert to this type
+                    if (targetType != null && !fieldConverter.canConvert(targetType)) {
+                        throw new XmapprConfigurationException("Error: assigned converter type does not " +
+                                "match target type.\n" +
+                                "Converter " + fieldConverter.getClass().getName() +
+                                " can not be used to convert data of type " + field.getType() + ".\n" +
+                                "Please check XML annotations on field '" + field.getName() +
+                                "' in class " + field.getDeclaringClass().getName() + ".");
+                    }
+
+                } else {
+                    // default targetType for element catcher (in case that target field is a Collection)
+                    targetType = DomElement.class;
+                    // default converter for element catcher
+                    fieldConverter = mappingContext.lookupElementConverter(targetType, true);
                 }
-
-                // default converter for element catcher
-                fieldConverter = mappingContext.lookupElementConverter(DomElement.class);
-
-                // default targetType for element catcher (in case that target field is a Collection)
-                targetType = DomElement.class;
 
             } else { // normal name-to-field mapping
 
@@ -208,7 +215,7 @@ public class MappingBuilder {
                         // that assigned converter can actually convert to this type
                         if (targetType != null && !fieldConverter.canConvert(targetType)) {
                             throw new XmapprConfigurationException("Error: assigned converter type does not " +
-                                    "match field type.\n" +
+                                    "match target type.\n" +
                                     "Converter " + fieldConverter.getClass().getName() +
                                     " can not be used to convert data of type " + field.getType() + ".\n" +
                                     "Please check XML annotations on field '" + field.getName() +
@@ -275,7 +282,7 @@ public class MappingBuilder {
                 fieldMapper.setTargetType(field.getType());
             }
 
-            if (isElementCatcher) {
+            if (isWildcardMapping) {
                 fieldMapper.setConverter(fieldConverter);
                 classConverter.setElementCatcher(fieldMapper);
                 classConverter.addElementMapper(new QName("*"), fieldMapper);
