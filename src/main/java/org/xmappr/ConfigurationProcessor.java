@@ -62,6 +62,7 @@ public class ConfigurationProcessor {
 
         // ConfigElement at the top of the hierarchy of ConfigElements
         ConfigElement topConfigElement = new ConfigElement();
+        topConfigElement.targetType = elementClass;
         processNextClass(elementClass, topConfigElement, mappingContext, classCache);
 
         // process elements
@@ -75,7 +76,7 @@ public class ConfigurationProcessor {
 
         classCache.put(elementClass, configElement);
 
-        configElement.targetType = elementClass;
+//        configElement.targetType = elementClass;
         configElement.attribute = processAttributeAnnotations(elementClass);
         configElement.text = processTextAnnotations(elementClass);
 
