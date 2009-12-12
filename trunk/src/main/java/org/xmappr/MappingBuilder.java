@@ -32,7 +32,7 @@ public class MappingBuilder {
         if (config.converter != null && !config.converter.equals(ElementConverter.class)) {
             rootConverter = initializeConverter(config.converter);
         } else { // try looking in predefined converters
-            rootConverter = mappingContext.lookupElementConverter(config.classType);
+            rootConverter = mappingContext.lookupElementConverter(config.classType, false);
         }
 
         // find and process class namespace context

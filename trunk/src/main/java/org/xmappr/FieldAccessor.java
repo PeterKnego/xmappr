@@ -6,8 +6,6 @@
  */
 package org.xmappr;
 
-import org.xmappr.XmapprException;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -72,9 +70,15 @@ public class FieldAccessor {
 
     private Method findAccessorMethod(String prepend, Class... type) {
         StringBuilder getter = new StringBuilder(prepend);
-        getter.append(targetField.getName());
-        getter.replace(prepend.length(), prepend.length() + 1, String.valueOf(getter.charAt(3)).toUpperCase());
-        try {
+        String fieldName = targetField.getName();
+
+        // sometimes filed names are in the form "_privateField"
+        if (fieldName.startsWith("_")) {
+            getter.append(String.valueOf(fieldName.charAt(1)).toUpperCase()).append(fieldName, 2, fieldName.length());
+        } else {
+            getter.append(String.valueOf(fieldName.charAt(0)).toUpperCase()).append(fieldName, 1, fieldName.length());
+        }
+         try {
             return targetField.getDeclaringClass().getMethod(getter.toString(), type);
         } catch (NoSuchMethodException e) {
             throw new XmapprException("Could not find " + prepend + "ter method for private field:", e);

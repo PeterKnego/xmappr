@@ -95,7 +95,7 @@ public class ElementMapper {
         if (converter == null) {
             throw new XmapprException("Error: could not find converter for node: " + nodeName +
                     " in collection " + collection.getClass().getName() +
-                    " in class " + targetType.getName() +
+                    " in class " + targetObject.getClass().getName() +
                     ". Collection contains element types that are not defined in @Element annotation.");
         }
 
@@ -148,7 +148,7 @@ public class ElementMapper {
                     if (converterFound == null) {
                         throw new XmapprException("No converter found for the object type " + obj.getClass().getName() +
                                 " in collection " + collection.getClass().getName() +
-                                " in class " + targetType.getName());
+                                " in class " + object.getClass().getName());
                     }
                     converterFound.toElement(obj, name, writer, mappingContext, defaultValue, format);
                 }
