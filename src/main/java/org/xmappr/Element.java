@@ -35,8 +35,6 @@ public @interface Element {
      */
     String name() default "";
 
-    //todo Check handling of default values in all situations
-
     /**
      * Default value to be used when XML element is empty.
      *

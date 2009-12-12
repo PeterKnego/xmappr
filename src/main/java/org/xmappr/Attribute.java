@@ -34,10 +34,8 @@ public @interface Attribute {
      */
     String name() default "";
 
-    //todo Check if default values are used on Attributes?
-
     /**
-     * Default value to be used when XML attribute is empty.
+     * Default value to be used when XML attribute is missing.
      *
      * @return
      */
@@ -45,7 +43,7 @@ public @interface Attribute {
 
     /**
      * targetType is used to determine which converter will be used.
-     * Either targetType or converter element must be defined when a target field is a Collection.
+     * Either targetType or converter element must be defined when a target field is a Map.
      *
      * @return
      */
@@ -53,7 +51,7 @@ public @interface Attribute {
 
     /**
      * Custom converter assigned to convert this XML attribute.
-     * Either targetType or converter element must be defined when a target field is a Collection.
+     * Either targetType or converter element must be defined when a target field is a Map.
      *
      * @return
      */

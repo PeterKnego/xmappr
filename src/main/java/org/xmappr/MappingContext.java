@@ -171,7 +171,7 @@ public class MappingContext {
         if (converter == null && throwExceptionIfNotFound) {
             throw new XmapprConfigurationException("Error: could not find converter for class " + type.getName() +
                     "\nConverters are found in one of four ways:\n" +
-                    "1. Class can be converted by one if built in converters.\n" +
+                    "1. Class can be converted by one of built-in converters.\n" +
                     "2. Custom converter is assigned for this Class.\n" +
                     "3. Class contains XML mapping annotations and is handled directly by Xmappr.\n" +
                     "4. Class is mapped via external XML configuration and is handled directly by Xmappr.\n");
