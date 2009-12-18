@@ -4,7 +4,7 @@
 
 ==I have a question. Where can I submit it?==
 
-Just write it in a comment below this FAQ.
+Please use [http://groups.google.com/group/xmappr mailing list] to ask questions.
 
 ==Which JDK is required to use Xmappr?==
 
