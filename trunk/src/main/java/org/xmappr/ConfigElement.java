@@ -25,16 +25,16 @@ public class ConfigElement {
     @Attribute(converter = ClassNameConverter.class, defaultValue = "org.xmappr.converters.ElementConverter")
     public Class<? extends Converter> converter;
 
-    @Element(targetType = ConfigNamespace.class)
+    @Element
     public List<ConfigNamespace> namespace;
 
     @Element
     public ConfigText text;
 
-    @Element(targetType = ConfigAttribute.class)
+    @Element
     public List<ConfigAttribute> attribute;
 
-    @Element(targetType = ConfigElement.class)
+    @Element
     public List<ConfigElement> element;
 
     public ConfigElement() {
