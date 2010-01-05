@@ -123,7 +123,7 @@ public class CollectionConverterTest {
         @Text
         public String text;
 
-        @Element(value = "item", targetType = Item.class)
+        @Element(value = "item")
         public List<Item> list;
     }
 

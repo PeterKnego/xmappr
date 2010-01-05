@@ -8,6 +8,8 @@ import org.xmappr.mappers.TextMapper;
 import javax.xml.XMLConstants;
 import javax.xml.namespace.QName;
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.*;
 
 public class MappingBuilder {
@@ -127,39 +129,29 @@ public class MappingBuilder {
             // getValue converter for the class that the field references
             ElementConverter fieldConverter = null;
 
-            // if target field is a collection, then a collection converter must be defined
-            boolean isCollectionConverter = false;
-            CollectionConverting collectionConverter = null;
-            if (converterByType != null && CollectionConverting.class.isAssignableFrom(converterByType.getClass())) {
-                collectionConverter = (CollectionConverting) converterByType;
-                isCollectionConverter = true;
-            }
+            // If target field is a collection, then a collection converter must be defined.
+            // This will also pick up any custom-defined collection converters.
+            CollectionConverting collectionConverter =
+                    (converterByType != null && CollectionConverting.class.isAssignableFrom(converterByType.getClass())) ?
+                            (CollectionConverting) converterByType : null;
 
             // Is ElementMapper for this field already initialized?
-            ElementMapper fieldMapper = fieldMapperCache.get(configElement.field);
+            ElementMapper fieldMapper = initializeFieldMapper(fieldMapperCache, configElement, field, collectionConverter);
 
-            // If not then initialize it
-            if (fieldMapper == null) {
-                fieldMapper = new ElementMapper(field, collectionConverter, mappingContext);
-                // then save it
-                fieldMapperCache.put(configElement.field, fieldMapper);
-            }
+            // set to default values according to annotations
+            Class<?> targetType = Object.class.equals(configElement.targetType) ? null : configElement.targetType;
 
-            Class<?> targetType = configElement.targetType;
-            Class<? extends Converter> annotatedConverter = configElement.converter;
-
-            // setValue to default values according to annotations
-            if (Object.class.equals(targetType)) {
-                targetType = null;
-            }
-            if (annotatedConverter == null || annotatedConverter.equals(ElementConverter.class)) {
-                annotatedConverter = null;
-            }
+            // same
+            Class<? extends Converter> annotatedConverter =
+                    ElementConverter.class.equals(configElement.converter) ? null : configElement.converter;
 
             // getValue QName that field maps to
             String elementName = configElement.name;
             QName qname = mappingContext.getQName(elementName, getFieldNamespaces(field), classConverter.getClassNamespaces(),
                     classConverter.getTargetClass().getName(), field.getName());
+
+            // get default value of this element (or reset it to null if empty)
+            String defaultValue = ("".equals(configElement.defaultvalue)) ? null : configElement.defaultvalue;
 
             // wildcard mapping - maps any element name to given field
             if (elementName.equals("*")) {
@@ -171,129 +163,170 @@ public class MappingBuilder {
                 }
                 isWildcardMapping = true;
 
-                // was custom converter assigned via annotation?
-                if (annotatedConverter != null) {
-                    fieldConverter = initializeConverter(annotatedConverter);
-
-                    // check if target type is defined and
-                    // that assigned converter can actually convert to this type
-                    if (targetType != null && !fieldConverter.canConvert(targetType)) {
-                        throw new XmapprConfigurationException("Error: assigned converter type does not " +
-                                "match target type.\n" +
-                                "Converter " + fieldConverter.getClass().getName() +
-                                " can not be used to convert data of type " + field.getType() + ".\n" +
-                                "Please check XML annotations on field '" + field.getName() +
-                                "' in class " + field.getDeclaringClass().getName() + ".");
-                    }
-
-                } else {
-                    // default targetType for element catcher (in case that target field is a Collection)
-                    targetType = DomElement.class;
-                    // default converter for element catcher
-                    fieldConverter = mappingContext.lookupElementConverter(targetType, true);
-                }
+                assignWildcardMapper(classConverter, configElement, field, collectionConverter, fieldMapper,
+                        targetType, annotatedConverter, qname, defaultValue);
 
             } else { // normal name-to-field mapping
 
                 // target field is a collection
-                if (isCollectionConverter) {
+                if (collectionConverter != null) {
 
-                    // if it's a collection, then @Element must have either "targetType" or 'converter' value defined
-                    if (annotatedConverter == null && targetType == null) {
-                        throw new XmapprConfigurationException("Error: Can  not assign converter " +
-                                "for collection " + field.getName() +
-                                " in class " + field.getDeclaringClass().getSimpleName() +
-                                ". When @Element annotation is used on a collection, " +
-                                "either 'converter' value or 'targetType' value must be declared.");
-                    }
-
-                    // was custom converter assigned via annotation?
-                    if (annotatedConverter != null) {
-                        fieldConverter = initializeConverter(annotatedConverter);
-
-                        // check if item type is set and
-                        // that assigned converter can actually convert to this type
-                        if (targetType != null && !fieldConverter.canConvert(targetType)) {
-                            throw new XmapprConfigurationException("Error: assigned converter type does not " +
-                                    "match target type.\n" +
-                                    "Converter " + fieldConverter.getClass().getName() +
-                                    " can not be used to convert data of type " + field.getType() + ".\n" +
-                                    "Please check XML annotations on field '" + field.getName() +
-                                    "' in class " + field.getDeclaringClass().getName() + ".");
-                        }
-
-                    } else {
-                        // converter was not declared via annotation, so we just use a converter derived from field type
-                        fieldConverter = mappingContext.lookupElementConverter(targetType, true);
-//                        fieldConverter = null;
-                    }
+                    assignCollectionConverter(classConverter, field, fieldMapper, targetType, annotatedConverter, qname);
 
                 } else { // target field is a normal field (not a collection)
 
-//                            if (targetType != null) {
-//                                throw new XmapprConfigurationException("Error: Wrong @Element annotation value on " +
-//                                        "field " + field.getName() +
-//                                        "in class " + field.getDeclaringClass().getName() + ". " +
-//                                        "@Element 'targetType' can only be used on field types that implement Collection.");
-//                            }
-
-                    // was custom converter assigned via annotation?
-                    if (annotatedConverter != null) {
-                        fieldConverter = initializeConverter(annotatedConverter);
-
-                        // check that assigned converter can actually convert to the target field type
-                        if (!fieldConverter.canConvert(field.getType())) {
-                            throw new XmapprConfigurationException("Error: assigned converter type does not " +
-                                    "match field type.\nConverter " + fieldConverter.getClass().getName() +
-                                    " can not be used to convert " +
-                                    "data of type " + field.getType() + ".\n" +
-                                    "Please check XML annotations on field '" + field.getName() +
-                                    "' in class " + field.getDeclaringClass().getName() + ".");
-                        }
-
-                    } else {
-                        // converter was not declared via annotation
-                        if (converterByType == null) {
-
-                            // This is a hack, that will trigger an appropriate exception.
-                            // Since we already know that converterByType was not found we do the lookup again,
-                            // this time allowing exception to be thrown
-                            fieldConverter = mappingContext.lookupElementConverter(field.getType(), true);
-                        } else {
-//                            // use a converter derived from field type
-                            fieldConverter = converterByType;
-                        }
-                    }
+                    assignFieldConverter(classConverter, configElement, field, converterByType, fieldMapper, annotatedConverter, qname, defaultValue);
                 }
             }
-
-            // getValue default value of this element
-            String defaultValue = configElement.defaultvalue;
-            if ("".equals(defaultValue)) {
-                defaultValue = null;
-            }
-
-            if (isCollectionConverter) {
-                fieldMapper.addMapping(qname, fieldConverter, targetType);
-            } else {
-                fieldMapper.setConverter(fieldConverter);
-                fieldMapper.setDefaultValue(defaultValue);
-                fieldMapper.setFormat(configElement.format);
-                fieldMapper.setTargetType(field.getType());
-            }
-
-            if (isWildcardMapping) {
-                fieldMapper.setConverter(fieldConverter);
-                classConverter.setElementCatcher(fieldMapper);
-                classConverter.addElementMapper(new QName("*"), fieldMapper);
-            } else { // normal element mapping
-                classConverter.addElementMapper(qname, fieldMapper);
-            }
-
-//                System.out.println(currentClass.getSimpleName() + "." + field.getName() + " element:" +
-//                          elementName + " converter:" + conv);
-
         }
+    }
+
+    private void assignFieldConverter(ClassConverter classConverter, ConfigElement configElement, Field field, ElementConverter converterByType, ElementMapper fieldMapper, Class<? extends Converter> annotatedConverter, QName qname, String defaultValue) {
+        ElementConverter fieldConverter;// was custom converter assigned via annotation?
+        if (annotatedConverter != null) {
+            fieldConverter = initializeConverter(annotatedConverter);
+
+            // check that assigned converter can actually convert to the target field type
+            if (!fieldConverter.canConvert(field.getType())) {
+                throw new XmapprConfigurationException("Error: assigned converter type does not " +
+                        "match field type.\nConverter " + fieldConverter.getClass().getName() +
+                        " can not be used to convert " +
+                        "data of type " + field.getType() + ".\n" +
+                        "Please check XML annotations on field '" + field.getName() +
+                        "' in class " + field.getDeclaringClass().getName() + ".");
+            }
+
+        } else {
+            // converter was not declared via annotation
+            if (converterByType == null) {
+
+                // This is a hack, that will trigger an appropriate exception.
+                // Since we already know that converterByType was not found we do the lookup again,
+                // this time allowing exception to be thrown
+                fieldConverter = mappingContext.lookupElementConverter(field.getType(), true);
+            } else {
+//                            // use a converter derived from field type
+                fieldConverter = converterByType;
+            }
+        }
+
+        fieldMapper.setConverter(fieldConverter);
+        fieldMapper.setDefaultValue(defaultValue);
+        fieldMapper.setFormat(configElement.format);
+        fieldMapper.setTargetType(field.getType());
+        classConverter.addElementMapper(qname, fieldMapper);
+    }
+
+    private void assignCollectionConverter(ClassConverter classConverter, Field field, ElementMapper fieldMapper,
+                                           Class<?> targetType, Class<? extends Converter> annotatedConverter, QName qname) {
+
+        Class parametrizedType = getParameterizedType(field.getGenericType());
+
+        // if it's a collection, then it must have a type parameter defined or
+        // @Element must have either "targetType" or 'converter' value defined
+        if (parametrizedType == null && (annotatedConverter == null && targetType == null)) {
+            throw new XmapprConfigurationException("Error: Can  not assign converter " +
+                    "for collection '" + field.getName() + "' " +
+                    "in class " + field.getDeclaringClass().getName() +
+                    ". When @Element annotation is used on a collection, " +
+                    "it must be a generic type with a type parameter (e.g. List<Integer>) or " +
+                    " @Element annotation must have 'converter' or 'targetType' attributes defined.");
+        }
+
+        // if 'targetType' is not defined we use parametrized type instead
+        targetType = targetType == null ? parametrizedType : targetType;
+
+        ElementConverter fieldConverter;
+        // was custom converter assigned via annotation?
+        if (annotatedConverter != null) {
+            fieldConverter = initializeConverter(annotatedConverter);
+
+            // check if item type is set and
+            // that assigned converter can actually convert to this type
+            if (targetType != null && !fieldConverter.canConvert(targetType)) {
+                throw new XmapprConfigurationException("Error: assigned converter type does not " +
+                        "match target type.\n" +
+                        "Converter " + fieldConverter.getClass().getName() +
+                        " can not be used to convert data of type " + field.getType() + ".\n" +
+                        "Please check XML annotations on field '" + field.getName() +
+                        "' in class " + field.getDeclaringClass().getName() + ".");
+            }
+        } else {
+            // converter was not declared via annotation, so we just use a converter derived from field type
+            fieldConverter = mappingContext.lookupElementConverter(targetType, true);
+//                        fieldConverter = null;
+        }
+
+        fieldMapper.addMapping(qname, fieldConverter, targetType);
+        classConverter.addElementMapper(qname, fieldMapper);
+    }
+
+    private static Class getParameterizedType(Type genericType) {
+        if (genericType instanceof ParameterizedType) {
+            Type[] typeArguments = ((ParameterizedType) genericType).getActualTypeArguments();
+            if (typeArguments.length == 1) {
+                Type paraType = typeArguments[0];
+                if (paraType instanceof Class)
+                    return (Class) paraType;
+            }
+        }
+        return null;
+    }
+
+    private void assignWildcardMapper(ClassConverter classConverter,
+                                      ConfigElement configElement,
+                                      Field field,
+                                      CollectionConverting collectionConverter,
+                                      ElementMapper fieldMapper,
+                                      Class<?> targetType, Class<? extends Converter> annotatedConverter,
+                                      QName qname, String defaultValue) {
+
+        ElementConverter fieldConverter;// was custom converter assigned via annotation?
+        if (annotatedConverter != null) {
+            fieldConverter = initializeConverter(annotatedConverter);
+
+            // check if target type is defined and
+            // that assigned converter can actually convert to this type
+            if (targetType != null && !fieldConverter.canConvert(targetType)) {
+                throw new XmapprConfigurationException("Error: assigned converter type does not " +
+                        "match target type.\n" +
+                        "Converter " + fieldConverter.getClass().getName() +
+                        " can not be used to convert data of type " + targetType + ".\n" +
+                        "Please check XML annotations on field '" + field.getName() +
+                        "' in class " + field.getDeclaringClass().getName() + ".");
+            }
+        } else {
+            // default targetType for element catcher (in case that target field is a Collection)
+            targetType = DomElement.class;
+            // default converter for element catcher
+            fieldConverter = mappingContext.lookupElementConverter(targetType, true);
+        }
+
+        if (collectionConverter != null) {
+            fieldMapper.addMapping(qname, fieldConverter, targetType);
+        } else {
+            fieldMapper.setConverter(fieldConverter);
+            fieldMapper.setDefaultValue(defaultValue);
+            fieldMapper.setFormat(configElement.format);
+            fieldMapper.setTargetType(field.getType());
+        }
+
+        fieldMapper.setConverter(fieldConverter);
+        classConverter.setElementCatcher(fieldMapper);
+        classConverter.addElementMapper(new QName("*"), fieldMapper);
+    }
+
+    private ElementMapper initializeFieldMapper(Map<String, ElementMapper> fieldMapperCache, ConfigElement configElement,
+                                                Field field, CollectionConverting collectionConverter) {
+
+        ElementMapper fieldMapper = fieldMapperCache.get(configElement.field);
+        // If not then initialize it
+        if (fieldMapper == null) {
+            fieldMapper = new ElementMapper(field, collectionConverter, mappingContext);
+            // then save it
+            fieldMapperCache.put(configElement.field, fieldMapper);
+        }
+        return fieldMapper;
     }
 
     private ElementConverter initializeConverter(Class<? extends Converter> annotatedConverter) {
