@@ -1,0 +1,10 @@
+== Things to do when releasing ==
+
+_This is here just to remind the forgetful admins_
+
+  # make sure all code is commited to svn repo (check changelists in Idea)
+  # all tests must pass!
+  # build & release: mvn deploy
+  # create svn tag for release: svn copy https://xmappr.googlecode.com/svn/trunk/ https://xmappr.googlecode.com/svn/tags/x.y.z --username peter@knego.net -m "release x.y.z"
+
+optional: build step will create javadoc in trunk/apidocs - commit it to svn
