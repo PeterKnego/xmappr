@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MultielementCollectionTest {
 
@@ -65,8 +66,15 @@ public class MultielementCollectionTest {
                 @Element(name = "b", targetType = B.class)
         })
         @Text
-        public ArrayList letters;
+        private List letters;
 
+        public List getLetters() {
+            return letters;
+        }
+
+        public void setLetters(List letters) {
+            this.letters = letters;
+        }
     }
 
     public static class A {
