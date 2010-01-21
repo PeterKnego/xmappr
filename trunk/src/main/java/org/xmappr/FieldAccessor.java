@@ -7,6 +7,7 @@
 package org.xmappr;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
@@ -38,7 +39,9 @@ public class FieldAccessor {
         } else {
             try {
                 setter.invoke(obj, value);
-            } catch (Exception e) {
+            } catch (InvocationTargetException e) {
+                throw new XmapprException("Setter method could not be called! ", e);
+            } catch (IllegalAccessException e) {
                 throw new XmapprException("Setter method could not be called! ", e);
             }
         }
