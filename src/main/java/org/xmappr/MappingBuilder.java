@@ -582,24 +582,4 @@ public class MappingBuilder {
         throw new XmapprConfigurationException("Error: Could not find field '" + fieldName + "'" +
                 " in class " + targetClass.getName());
     }
-
-    /**
-     * Collects all fields (public and private) in a given class and its superclasses.
-     *
-     * @param clazz Child class
-     * @return List of fields
-     */
-    private List<Field> getAllFields(Class clazz) {
-        List<Field> fields = new ArrayList<Field>();
-        Class cl = clazz;
-        do {
-            for (Field field : cl.getDeclaredFields()) {
-                if (!field.isSynthetic()) {
-                    fields.add(field);
-                }
-            }
-            cl = cl.getSuperclass();
-        } while (cl != Object.class);
-        return fields;
-    }
 }
