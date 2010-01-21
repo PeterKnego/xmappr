@@ -25,15 +25,14 @@ import java.util.Map;
 public class ElementMapper {
 
     private FieldAccessor targetField;
-    private Class targetType;
     private MappingContext mappingContext;
-    private ElementConverter elementConverter;
+    private ElementConverter wildcardConverter;
 
     // the following three fields are used in handling Collection mapping
     private CollectionConverting collectionConverter;
     private Map<Class, QName> targetTypes = new HashMap<Class, QName>();
+    private Map<QName, Class> targetTypesByQname = new HashMap<QName, Class>();
     private Map<QName, ElementConverter> convertersByQName = new HashMap<QName, ElementConverter>();
-    private Map<Class, ElementConverter> converterCache;
 
     // default value as set by the @Element(defaultValue="..") annotation
     private String defaultValue;
@@ -47,10 +46,6 @@ public class ElementMapper {
         this.collectionConverter = collectionConverter;
     }
 
-    public void setTargetType(Class targetType) {
-        this.targetType = targetType;
-    }
-
     public void setDefaultValue(String defaultValue) {
         this.defaultValue = defaultValue;
     }
@@ -59,21 +54,20 @@ public class ElementMapper {
         this.format = format;
     }
 
-    public void setConverter(ElementConverter fieldConverter) {
-        this.elementConverter = fieldConverter;
+    public void setWildcardConverter(ElementConverter fieldConverter) {
+        this.wildcardConverter = fieldConverter;
     }
 
     public void addMapping(QName nodeName, ElementConverter elementConverter, Class targetType) {
-//        if (elementConverter == null) {
-//            elementConverter = mappingContext.lookupElementConverter(targetType);
-//        }
+
         this.targetTypes.put(targetType, nodeName);
+        this.targetTypesByQname.put(nodeName, targetType);
         this.convertersByQName.put(nodeName, elementConverter);
     }
 
     public void readElement(QName nodeName, Object targetObject, XMLSimpleReader reader) {
         if (collectionConverter == null) {
-            setFieldValue(targetObject, reader);
+            setFieldValue(nodeName, targetObject, reader);
         } else {
             collectionAddItem(nodeName, targetObject, reader);
         }
@@ -90,7 +84,8 @@ public class ElementMapper {
 
         // find the converter for given node name
         ElementConverter cachedConverter = convertersByQName.get(nodeName);
-        ElementConverter converter = cachedConverter != null ? cachedConverter : elementConverter;
+        ElementConverter converter = cachedConverter != null ? cachedConverter : wildcardConverter;
+        Class targetType = targetTypesByQname.get(nodeName);
 
         if (converter == null) {
             throw new XmapprException("Error: could not find converter for node: " + nodeName +
@@ -107,9 +102,12 @@ public class ElementMapper {
         }
     }
 
-    private void setFieldValue(Object targetObject, XMLSimpleReader reader) {
+    private void setFieldValue(QName nodeName, Object targetObject, XMLSimpleReader reader) {
         // process XML element and create an appropriate object
-        Object obj = elementConverter.fromElement(reader, mappingContext, defaultValue, format, targetType,
+        ElementConverter cachedConverter = convertersByQName.get(nodeName);
+        ElementConverter converter = cachedConverter != null ? cachedConverter : wildcardConverter;
+        Class targetType = targetTypesByQname.get(nodeName);
+        Object obj = converter.fromElement(reader, mappingContext, defaultValue, format, targetType,
                 targetField.getValue(targetObject));
 
         // do nothing if ElementConverter returns null
@@ -127,7 +125,6 @@ public class ElementMapper {
                 return;
             }
             for (Object obj : collection) {
-//                System.out.println("---OBJ:"+obj);
                 if (textMapper != null && textMapper.isTargetType(obj)) {
                     writer.addText(textMapper.getValue(obj));
                 } else {
@@ -155,7 +152,8 @@ public class ElementMapper {
             }
 
         } else {   // normal field
-            elementConverter.toElement(targetField.getValue(object), nodeName, writer, mappingContext, defaultValue, format);
+            convertersByQName.get(nodeName).toElement(
+                    targetField.getValue(object), nodeName, writer, mappingContext, defaultValue, format);
         }
     }
 
