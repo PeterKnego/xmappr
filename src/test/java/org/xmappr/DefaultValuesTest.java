@@ -19,7 +19,6 @@ import java.io.StringWriter;
 
 public class DefaultValuesTest {
 
-    //todo Default values for attributes?
     private static String inXml = "<root>" +
             "<a>text1</a>" +
             "<b/>" +

@@ -4,27 +4,40 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.io.StringReader;
-import java.util.List;
 
 public class ComplexParentClassTest {
 
-    private static String xml = "" +
-            "<base>" +
+    private static String xmlOne = "" +
+            "<root>" +
             "<one>onetext</one>" +
+            "</root> ";
+
+    private static String xmlTwo = "" +
+            "<root>" +
             "<two>twotext" +
-            "<inner>2</inner>" +
+            "<inner>13</inner>" +
             "</two>" +
-            "</base> ";
+            "</root> ";
 
     @Test
     public void mainTest() {
 
-        StringReader reader = new StringReader(xml);
+        StringReader readerOne = new StringReader(xmlOne);
+        StringReader readerTwo = new StringReader(xmlTwo);
 
-        Xmappr xmappr = new Xmappr(Base.class);
+        Xmappr xmappr = new Xmappr(Root.class);
 
-        Base base = (Base) xmappr.fromXML(reader);
-       
+        Root first = (Root) xmappr.fromXML(readerOne);
+        Root second = (Root) xmappr.fromXML(readerTwo);
+
+        // first XML produces instance of One class
+        Assert.assertEquals(first.parent.getClass(), One.class);
+
+        // second XML produces instance of Two class        
+        Assert.assertEquals(second.parent.getClass(), Two.class);
+        Assert.assertEquals(((Two)second.parent).inner, 13);
+
+        System.out.println("");
 
     }
 
@@ -46,12 +59,12 @@ public class ComplexParentClassTest {
     }
 
     @RootElement
-    public static class Base {
+    public static class Root {
 
         @Elements({
                 @Element(name = "one", targetType = One.class),
                 @Element(name = "two", targetType = Two.class)
         })
-        public List parent;
+        public Parent parent;
     }
 }
