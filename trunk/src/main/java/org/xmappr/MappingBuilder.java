@@ -126,17 +126,13 @@ public class MappingBuilder {
 
             Field field = getFieldFromName(configElement.field, classConverter.getTargetClass());
 
-            // find the converter by the field type
-            ElementConverter converterByType = mappingContext.lookupElementConverter(field.getType(), false);
-
-            // getValue converter for the class that the field references
-            ElementConverter fieldConverter = null;
-
+            // find a converter for this field type
+            ElementConverter converterByFieldType = mappingContext.lookupElementConverter(field.getType(), false);
             // If target field is a collection, then a collection converter must be defined.
             // This will also pick up any custom-defined collection converters.
             CollectionConverting collectionConverter =
-                    (converterByType != null && CollectionConverting.class.isAssignableFrom(converterByType.getClass())) ?
-                            (CollectionConverting) converterByType : null;
+                    (converterByFieldType != null && CollectionConverting.class.isAssignableFrom(converterByFieldType.getClass())) ?
+                            (CollectionConverting) converterByFieldType : null;
 
             // Is ElementMapper for this field already initialized?
             ElementMapper fieldMapper = initializeFieldMapper(fieldMapperCache, configElement, field, collectionConverter);
@@ -180,7 +176,7 @@ public class MappingBuilder {
                 } else { // target field is a normal field (not a collection)
 
                     assignFieldConverter(classConverter, configElement, field, targetType,
-                            converterByType, fieldMapper, annotatedConverter, qname, defaultValue);
+                            fieldMapper, annotatedConverter, qname, defaultValue);
                 }
             }
         }
@@ -190,7 +186,6 @@ public class MappingBuilder {
                                       ConfigElement configElement,
                                       Field field,
                                       Class<?> targetType,
-                                      ElementConverter converterByType,
                                       ElementMapper fieldMapper,
                                       Class<? extends Converter> annotatedConverter,
                                       QName qname,
@@ -211,16 +206,21 @@ public class MappingBuilder {
             }
 
         } else {
-            // converter was not declared via annotation
-            if (converterByType == null) {
-
-                // This is a hack, that will trigger an appropriate exception.
-                // Since we already know that converterByType was not found we do the lookup again,
-                // this time allowing exception to be thrown
+//            // converter was not declared via annotation
+//            if (converterByType == null) {
+//
+//                // This is a hack, that will trigger an appropriate exception.
+//                // Since we already know that converterByType was not found we do the lookup again,
+//                // this time allowing exception to be thrown
+//                fieldConverter = mappingContext.lookupElementConverter(field.getType(), true);
+//            } else {
+////                            // use a converter derived from field type
+//                fieldConverter = converterByType;
+//            }
+            if (targetType == null) {
                 fieldConverter = mappingContext.lookupElementConverter(field.getType(), true);
             } else {
-//                            // use a converter derived from field type
-                fieldConverter = converterByType;
+                fieldConverter = mappingContext.lookupElementConverter(targetType, true);
             }
         }
 
