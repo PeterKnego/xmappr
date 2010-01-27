@@ -4,7 +4,6 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.io.StringReader;
-import java.lang.reflect.Field;
 
 public class InterfaceTest {
 
@@ -12,53 +11,64 @@ public class InterfaceTest {
             "<products>" +
             "<apple>an apple</apple>" +
             "<orange>an orange</orange>" +
-            "</fruits> ";
+            "</products> ";
 
     @Test
     public void mainTest() {
-
-        Field[] fields = Apple.class.getDeclaredFields();
-        for (Field field : fields) {
-            System.out.println(field.getName()+":"+field.getType().getName());
-        }
 
         StringReader reader = new StringReader(xml);
 
         Xmappr xmappr = new Xmappr(Products.class);
 
         Products child = (Products) xmappr.fromXML(reader);
-        Assert.assertEquals(child.apple.hiddenText, "an apple");
-        Assert.assertEquals(child.orange.hiddenText, "an orange");
+        Assert.assertEquals(child.apple.getText(), "an apple");
+        Assert.assertEquals(child.orange.getText(), "an orange");
     }
 
     @RootElement
     public static class Products {
 
         @Element(targetType = Apple.class)
-        private Fruit apple;
+        public Fruit apple;
 
         @Element(targetType = Orange.class)
-        private Fruit orange;
+        public Fruit orange;
     }
 
 
     public static interface Fruit {
-        String hiddenText = null;
-        String two = null;
+
+        @Text
+        public void setText(String text);
+
+        @Text
+        public String getText();
     }
 
     public static class Apple extends BaseFruit implements Fruit {
         public String hiddenText;
 
 
+        public void setText(String text) {
+            hiddenText = text;
+        }
+
+        public String getText() {
+            return hiddenText;
+        }
     }
 
 
-
-     public static class Orange implements Fruit {
+    public static class Orange implements Fruit {
         public String hiddenText;
 
+        public void setText(String text) {
+            hiddenText = text;
+        }
 
+        public String getText() {
+            return hiddenText;
+        }
     }
 
     private static class BaseFruit {

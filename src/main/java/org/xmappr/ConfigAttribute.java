@@ -3,13 +3,29 @@ package org.xmappr;
 import org.xmappr.converters.ClassNameConverter;
 import org.xmappr.converters.ValueConverter;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+
 public class ConfigAttribute {
+
+    // This fields are not configurable via mapping configuration.
+    // They are derived during the validation phase.
+    public Class baseType;
+    public Method getterMethod;
+    public Method setterMethod;
+    public Field targetField;
 
     @Attribute
     public String name;
 
     @Attribute
     public String field;
+
+    @Attribute
+    public String getter;
+
+    @Attribute
+    public String setter;
 
     @Attribute
     public String defaultvalue;
@@ -26,25 +42,41 @@ public class ConfigAttribute {
     public ConfigAttribute() {
     }
 
-    public ConfigAttribute(String name, String field, String defaultValue,
-                           Class targetType, String format, Class<? extends ValueConverter> converter) {
+    public ConfigAttribute(String attributeName, Class baseType, Field targetField, String field,
+                           Method getterMethod, String getterName, Method setterMethod, String setterName,
+                           String defaultValue, Class targetType,
+                           String format, Class<? extends ValueConverter> converter) {
+        this.baseType = baseType;
+        this.targetField = targetField;
+        this.field = field;
+        this.getterMethod = getterMethod;
+        this.getter = getterName;
+        this.setterMethod = setterMethod;
+        this.setter = setterName;
+
         this.converter = converter;
         this.defaultvalue = defaultValue;
-        this.field = field;
         this.format = format;
-        this.name = name;
+        this.name = attributeName;
         this.targetType = targetType;
     }
 
-//    public String toString(String space) {
-//        StringBuilder out = new StringBuilder();
-//        out.append(space).append("attribute: ").append("name=").append(name).append("\n");
-//        out.append(space).append("  ").append("field=").append(field).append("\n");
-//        out.append(space).append("  ").append("defaultValue=").append(defaultvalue).append("\n");
-//        out.append(space).append("  ").append("format=").append(format).append("\n");
-//        out.append(space).append("  ").append("targetType=").append(targetType.getName()).append("\n");
-//        out.append(space).append("  ").append("converter=").append(converter.getName()).append("\n");
-//
-//        return out.toString();
-//    }
+    public String toString(String space) {
+        StringBuilder out = new StringBuilder();
+        out.append(space).append("<attribute ").append("name=").append(name).append("\r\n");
+        out.append(space).append("  ").append("field=").append(field).append("\n");
+        out.append(space).append("  ").append("getter=").append(getter).append("\n");
+        out.append(space).append("  ").append("setter=").append(setter).append("\n");
+        out.append(space).append("  ").append("defaultValue=").append(defaultvalue).append("\n");
+        out.append(space).append("  ").append("format=").append(format).append("\n");
+        out.append(space).append("  ").append("targetType=").append(targetType.getName()).append("\n");
+        out.append(space).append("  ").append("converter=").append(converter.getName()).append(" />\n");
+
+        return out.toString();
+    }
+
+    @Override
+    public String toString() {
+        return this.toString("");
+    }
 }

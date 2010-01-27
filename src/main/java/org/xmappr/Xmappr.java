@@ -58,10 +58,9 @@ public class Xmappr {
     private final XMLOutputFactory xmlOutputFactory;
 
     private List<Reader> xmlConfigurations = new ArrayList<Reader>();
-    private List<Class> classConfigurations = new ArrayList<Class>();
+    private List<Class<? extends RootElement>> classConfigurations = new ArrayList<Class<? extends RootElement>>();
 
     public MappingContext mappingContext;
-    private MappingBuilder mappingBuilder;
 
     private volatile boolean initialized = false;
 
@@ -84,7 +83,6 @@ public class Xmappr {
         List<ElementConverter> elementConverters = setupElementConverters(valueConverters);
 
         this.mappingContext = new MappingContext(elementConverters, valueConverters);
-        this.mappingBuilder = new MappingBuilder(mappingContext);
 
         XMLInputFactory xmlInputFactory1;
         XMLOutputFactory xmlOutputFactory1;
@@ -282,13 +280,13 @@ public class Xmappr {
 
             // process XML configurations
             for (Reader xmlConfiguration : xmlConfigurations) {
-                ConfigRootElement rootConf = ConfigurationProcessor.processConfiguration(xmlConfiguration, mappingContext);
+                ConfigRootElement rootConf = ConfigurationProcessor.parseXmlConfiguration(xmlConfiguration, mappingContext);
                 mappingContext.addRootMapper(rootConf);
             }
 
             // process annotated Class configurations
-            for (Class classConfiguration : classConfigurations) {
-                ConfigRootElement rootConf = ConfigurationProcessor.processRootClassAnnotations(classConfiguration, mappingContext);
+            for (Class<? extends RootElement> classConfiguration : classConfigurations) {
+                ConfigRootElement rootConf = ConfigurationProcessor.readRootElementAnnotations(classConfiguration, mappingContext);
                 mappingContext.addRootMapper(rootConf);
             }
 
@@ -406,6 +404,8 @@ public class Xmappr {
         xmappr.setPrettyPrint(true);
         StringWriter sw = new StringWriter();
         xmappr.toXML(confElement, sw);
+
+        System.out.println(sw.toString());
 
         return sw.toString();
     }

@@ -103,14 +103,14 @@ public class ExistingObjectTest {
     @RootElement("primitives")
     public static class Primitives {
 
-        // tests mapping element attribute to private field
-        @Attribute
         private int in;
 
+        @Attribute
         public int getIn() {
             return in;
         }
 
+        @Attribute
         public void setIn(int in) {
             this.in = in;
         }
@@ -133,14 +133,14 @@ public class ExistingObjectTest {
         @Attribute
         public char ch;
 
-        // tests mapping element value to private field
-        @Text
         private String value;
 
+        @Text
         public String getValue() {
             return value;
         }
 
+        @Text
         public void setValue(String value) {
             this.value = value;
         }
@@ -151,16 +151,16 @@ public class ExistingObjectTest {
         @Element(name = "short", defaultValue = "0")
         public short shortNode;
 
+        @Element
         public Integer getIv() {
             return iv;
         }
 
+        @Element
         public void setIv(Integer iv) {
             this.iv = iv;
         }
 
-        // tests mapping element to private field
-        @Element
         private Integer iv;
 
         @Element

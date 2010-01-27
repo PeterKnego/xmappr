@@ -19,8 +19,8 @@ import java.lang.annotation.RetentionPolicy;
  * Annotation used to group multiple Element annotation together.
  * Used when multiple Element annotations must be defined on a field.
  */
-@Target(value = {ElementType.FIELD})
-@Retention(value = RetentionPolicy.RUNTIME)
+@Target({ElementType.FIELD, ElementType.METHOD})
+@Retention(RetentionPolicy.RUNTIME)
 public @interface Elements {
     /**
      * An array of Element annotations.
