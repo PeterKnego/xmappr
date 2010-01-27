@@ -98,13 +98,11 @@ public class MappingContext {
     }
 
     public RootMapper getRootMapper(Class targetClass) {
-        RootMapper mapper = classMappings.get(targetClass);
-        return mapper;
+        return classMappings.get(targetClass);
     }
 
     public RootMapper getRootMapper(QName name) {
-        RootMapper mapper = nameMappings.get(name);
-        return mapper;
+        return nameMappings.get(name);
     }
 
     public ValueConverter lookupValueConverter(Class type) {
@@ -155,7 +153,7 @@ public class MappingContext {
             }
         }
 
-        ElementConverter converter = null;
+        ElementConverter converter;
 
         // look in configuration elements
         if (configElements.containsKey(type)) {
@@ -164,7 +162,7 @@ public class MappingContext {
             // Try to use Class directly:
             // 1. create ConfigElement from Class
             // 2. create ClassConverter
-            ConfigElement newConfElement = ConfigurationProcessor.processClassAnnotations(type, this);
+            ConfigElement newConfElement = ConfigurationProcessor.processClassTree(type, this);
             converter = mappingBuilder.createClassConverter(type, newConfElement);
         }
 
@@ -187,11 +185,9 @@ public class MappingContext {
      * @param elementName Compound name of XML element in "prefix:name" format.
      * @param fieldNS
      * @param classNS
-     * @param className
-     * @param fieldName
      * @return
      */
-    public QName getQName(String elementName, NsContext fieldNS, NsContext classNS, String className, String fieldName) {
+    public QName getQName(String elementName, NsContext fieldNS, NsContext classNS) {
 
         // split xml element name into prefix and local part
         int index = elementName.indexOf(':');
@@ -215,9 +211,8 @@ public class MappingContext {
 
         // used prefix must be defined in at least one namespace
         if (prefix.length() != 0 && (fieldNsURI == null && classNsURI == null && predefinedNsURI == null)) {
-            throw new XmapprConfigurationException("ERROR: used namespace prefix is not defined in any namespace.\n" +
-                    "Name prefix '" + prefix + "' used on field '" + fieldName +
-                    "' in class " + className + " is not defined in any declared XML namespace.\n");
+            throw new XmapprConfigurationException("ERROR: Name prefix '" + prefix
+                    + "' is not defined in any declared XML namespace.\n");
         }
 
         // choose the namespaceURI that is not null from field, class, predefined or
@@ -238,6 +233,13 @@ public class MappingContext {
     }
 
     public void addConfigElement(Class targetClass, ConfigElement element) {
+
+//        // if it is in preconfigured converters - then don't add it 
+//        for (ElementConverter elementConverter : elementConverters) {
+//            if (elementConverter.canConvert(targetClass)) {
+//                return ;
+//            }
+//        }
         configElements.put(targetClass, element);
     }
 
@@ -247,13 +249,6 @@ public class MappingContext {
         } else {
             throw new XmapprConfigurationException("Error: Mapping for class " +
                     rootClass.getName() + " is defined more than one time!");
-        }
-    }
-
-    public void printConfig() {
-        for (Map.Entry<Class, ConfigRootElement> entry : configRootElements.entrySet()) {
-            System.out.println("Class: " + entry.getKey());
-            System.out.println(entry.getValue());
         }
     }
 }

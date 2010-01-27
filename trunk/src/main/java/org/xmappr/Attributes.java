@@ -15,8 +15,8 @@ import java.lang.annotation.Target;
  * Annotation used to group multiple Attribute annotation together.
  * Used when multiple Attribute annotations must be defined on a field.
  */
-@Target(value = {ElementType.FIELD})
-@Retention(value = RetentionPolicy.RUNTIME)
+@Target({ElementType.FIELD, ElementType.METHOD})
+@Retention(RetentionPolicy.RUNTIME)
 public @interface Attributes {
     /**
      * An array of Attribute annotations.

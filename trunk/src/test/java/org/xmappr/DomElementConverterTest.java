@@ -38,8 +38,8 @@ public class DomElementConverterTest {
 
         // Double step to make Xmappr work harder (not necessary normally - do not copy)
         // Reads Class configuration, produces XML configuration from it and then feeds it to Xmappr
-        StringReader configuration = XmlConfigTester.reader(Root.class);
-        Xmappr xmappr = new Xmappr(configuration);
+//        StringReader configuration = XmlConfigTester.reader(Root.class);
+        Xmappr xmappr = new Xmappr(Root.class);
         xmappr.setPrettyPrint(false);
 
         Root root = (Root) xmappr.fromXML(reader);

@@ -12,6 +12,7 @@ import org.xmappr.converters.ValueConverter;
 
 import javax.xml.namespace.QName;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -25,15 +26,16 @@ public class AttributeMapper {
     private final String format;
     private final boolean isMap;
 
-    public AttributeMapper(Field targetField, Class targetType, ValueConverter valueConverter, String defaultValue, String format) {
-        this.targetField = new FieldAccessor(targetField);
+    public AttributeMapper(Field targetField, Method getter, Method setter, Class baseType,
+                           Class targetType, ValueConverter valueConverter, String defaultValue, String format) {
+        this.targetField = new FieldAccessor(targetField, getter, setter);
         this.targetType = targetType;
         this.valueConverter = valueConverter;
         if (defaultValue != null) {
             this.defaultObject = valueConverter.fromValue(defaultValue, format, targetType, null);
         }
         this.format = format;
-        this.isMap = Map.class.isAssignableFrom(targetField.getType());
+        this.isMap = Map.class.isAssignableFrom(baseType);
     }
 
     public void setValue(QName attributeName, Object container, String attributeValue) {
@@ -97,7 +99,7 @@ public class AttributeMapper {
     /**
      * Assigns a value to the Field.
      *
-     * @param container    Instance of an Object that contains the Field.
+     * @param container      Instance of an Object that contains the Field.
      * @param attributeValue Value to be set.
      */
     private void setValue(Object container, String attributeValue) {
@@ -145,6 +147,7 @@ public class AttributeMapper {
     /**
      * Is attribute default value defined.<br/>
      * Attribute default value applies when attribute is missing.
+     *
      * @return true if default value is defined.
      */
     public boolean hasDefaultValue() {

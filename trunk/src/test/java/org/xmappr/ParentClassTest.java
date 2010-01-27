@@ -58,15 +58,16 @@ public class ParentClassTest {
         public byte bytv;
 
 
+        @Element
         public Double getDbv() {
             return dbv;
         }
 
+        @Element
         public void setDbv(Double dbv) {
             this.dbv = dbv;
         }
 
-        @Element
         private Double dbv;
     }
 

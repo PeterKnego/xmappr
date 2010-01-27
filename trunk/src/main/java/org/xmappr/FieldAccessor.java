@@ -9,7 +9,6 @@ package org.xmappr;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 
 /**
  * @author peter
@@ -20,13 +19,15 @@ public class FieldAccessor {
     private Method getter;
     private Method setter;
 
-    public FieldAccessor(Field targetField) {
+    public FieldAccessor(Field targetField, Method getter, Method setter) {
         this.targetField = targetField;
-        // field is not public - need to access it through accessor methods
-        if (!Modifier.isPublic(targetField.getModifiers())) {
-            this.getter = findAccessorMethod("get");
-            this.setter = findAccessorMethod("set", targetField.getType());
+        this.getter = getter;
+        this.setter = setter;
+
+        if (targetField == null && getter == null && setter == null) {
+            throw new XmapprException("ERROR: No method available to access field!");
         }
+
     }
 
     public void setValue(Object obj, Object value) {
@@ -81,7 +82,7 @@ public class FieldAccessor {
         } else {
             getter.append(String.valueOf(fieldName.charAt(0)).toUpperCase()).append(fieldName, 1, fieldName.length());
         }
-         try {
+        try {
             return targetField.getDeclaringClass().getMethod(getter.toString(), type);
         } catch (NoSuchMethodException e) {
             throw new XmapprException("Could not find " + prepend + "ter method for private field:", e);

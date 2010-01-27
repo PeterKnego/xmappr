@@ -31,7 +31,12 @@ public class ConfigNamespace {
 
     }
 
-//    public String toString(String space) {
-//        return space + uri + ":" + prefix;
-//    }
+    public String toString(String space) {
+        return space + "<namespace " + uri + "=" + prefix + " />";
+    }
+
+    @Override
+    public String toString() {
+        return this.toString("");
+    }
 }

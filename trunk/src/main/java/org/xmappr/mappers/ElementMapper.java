@@ -12,6 +12,7 @@ import org.xmappr.converters.ElementConverter;
 
 import javax.xml.namespace.QName;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -40,8 +41,9 @@ public class ElementMapper {
     // converter formatting options as set by the @Element(format="..") annotation
     private String format;
 
-    public ElementMapper(Field targetField, CollectionConverting collectionConverter, MappingContext mappingContext) {
-        this.targetField = new FieldAccessor(targetField);
+    public ElementMapper(Field targetField, Method getter, Method setter,
+                         CollectionConverting collectionConverter, MappingContext mappingContext) {
+        this.targetField = new FieldAccessor(targetField, getter, setter);
         this.mappingContext = mappingContext;
         this.collectionConverter = collectionConverter;
     }

@@ -16,9 +16,17 @@ import java.lang.annotation.Target;
 /**
  * Annotation used to map a field to XML text elements.
  */
-@Target(value = {ElementType.FIELD})
-@Retention(value = RetentionPolicy.RUNTIME)
+@Target({ElementType.FIELD, ElementType.METHOD})
+@Retention(RetentionPolicy.RUNTIME)
 public @interface Text {
+
+    /**
+     * targetType is used to determine which converter will be used.
+     * Either targetType or converter element must be defined when a target field is a Collection.
+     *
+     * @return
+     */
+    Class targetType() default Object.class;
 
     /**
      * Custom converter assigned to convert this field.

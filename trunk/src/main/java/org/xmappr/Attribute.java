@@ -16,8 +16,8 @@ import java.lang.annotation.Target;
 /**
  * Annotation used to map a field to XML attribute.
  */
-@Target(value = {ElementType.FIELD})
-@Retention(value = RetentionPolicy.RUNTIME)
+@Target({ElementType.FIELD, ElementType.METHOD})
+@Retention(RetentionPolicy.RUNTIME)
 public @interface Attribute {
 
     /**

@@ -11,6 +11,7 @@ import org.xmappr.converters.CollectionConverting;
 import org.xmappr.converters.ValueConverter;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Collection;
 
 public class TextMapper {
@@ -23,6 +24,7 @@ public class TextMapper {
     private String format;
 
     //todo finish this javadoc
+
     /**
      * @param targetField
      * @param targetType
@@ -31,9 +33,9 @@ public class TextMapper {
      * @param isIntermixed
      * @param format
      */
-    public TextMapper(Field targetField, Class targetType, ValueConverter valueConverter,
+    public TextMapper(Field targetField, Method getter, Method setter, Class targetType, ValueConverter valueConverter,
                       CollectionConverting collectionConverter, boolean isIntermixed, String format) {
-        this.targetField = new FieldAccessor(targetField);
+        this.targetField = new FieldAccessor(targetField, getter, setter);
         this.valueConverter = valueConverter;
         this.targetType = targetType;
         this.collectionConverter = collectionConverter;
@@ -43,7 +45,7 @@ public class TextMapper {
 
 
     public boolean isCollection() {
-        return Collection.class.isAssignableFrom(targetField.getType());
+        return collectionConverter != null;
     }
 
     public boolean isIntermixed() {

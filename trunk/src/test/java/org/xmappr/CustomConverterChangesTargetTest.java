@@ -40,7 +40,7 @@ public class CustomConverterChangesTargetTest {
         xmappr.setPrettyPrint(false);
 
         One one = (One) xmappr.fromXML(reader);
-        Assert.assertEquals((int) one.getValues().size(), 4);
+        Assert.assertEquals(one.getValues().size(), 4);
         Assert.assertEquals((int) one.getValues().get(0), 0);
         Assert.assertEquals((int) one.getValues().get(1), 1);
         Assert.assertEquals((int) one.getValues().get(2), 2);
@@ -55,7 +55,6 @@ public class CustomConverterChangesTargetTest {
     @RootElement("one")
     public static class One {
 
-        @Text(converter = IntegerCollectionConverter.class)
         private List<Integer> values = new ArrayList<Integer>();
 
 
@@ -63,10 +62,12 @@ public class CustomConverterChangesTargetTest {
             values.add(0);
         }
 
+        @Text(converter = IntegerCollectionConverter.class)
         public List<Integer> getValues() {
             return values;
         }
 
+        @Text(converter = IntegerCollectionConverter.class)
         public void setValues(List<Integer> values) {
             this.values = values;
         }
