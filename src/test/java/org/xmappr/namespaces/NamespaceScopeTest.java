@@ -23,11 +23,11 @@ public class NamespaceScopeTest {
             "<lower:aaa xmlns:lower = \"lowercase\" >\n" +
             "  <lower:BBB xmlns:lower = \"uppercase\" >\n" +
             "    <lower:x111 />\n" +
-            "    <cccc xmlns:lower = \"xnumber\" >\n" +
-            "      <lower:x111 />\n" +
-            "    </cccc>\n" +
+            "    <lower:cccc xmlns:lower = \"xnumber\" >\n" +
+            "      <lower:x222 />\n" +
+            "    </lower:cccc>\n" +
             "  </lower:BBB>\n" +
-            "  <lower:x111 />\n" +
+            "  <lower:x333 />\n" +
             "</lower:aaa>";
 
     @Test
@@ -40,11 +40,12 @@ public class NamespaceScopeTest {
         Xmappr xmappr = new Xmappr(configuration);
 //        conf.addNamespace("l=lowercase");
 
+
         aaa a = (aaa) xmappr.fromXML(reader);
 
-        Assert.assertNotNull(a.node_BBB.node_ccc.node_x111);
-        Assert.assertNotNull(a.node_BBB.node_x111);
-        Assert.assertNotNull(a.node_x111);
+        Assert.assertNotNull(a.node_BBB.node_ccc.x2);
+        Assert.assertNotNull(a.node_BBB.x1);
+        Assert.assertNotNull(a.x3);
 
         // writing back to XML
         StringWriter sw = new StringWriter();
@@ -62,25 +63,26 @@ public class NamespaceScopeTest {
         @Element("l:BBB")
         public BBB node_BBB;
 
-        @Element("l:x111")
-        public x111 node_x111;
+        @Namespaces("l=lowercase")
+        @Element("l:x333")
+        public x333 x3;
     }
 
-    @Namespaces("l=uppercase")
     public static class BBB {
 
         @Namespaces("l=xnumber")
         @Element("cccc")
         public ccc node_ccc;
 
+        @Namespaces("l=uppercase")
         @Element("l:x111")
-        public x111 node_x111;
+        public x111 x1;
     }
 
-    @Namespaces("l=xnumber")
     public static class ccc {
-        @Element("l:x111")
-        public x111 node_x111;
+        @Namespaces("l=xnumber")
+        @Element("l:x222")
+        public x222 x2;
     }
 
     public static class x111 {
@@ -88,5 +90,14 @@ public class NamespaceScopeTest {
         public String notext;
     }
 
+    public static class x222 {
+        @Text
+        public String notext;
+    }
+
+    public static class x333 {
+        @Text
+        public String notext;
+    }
 
 }

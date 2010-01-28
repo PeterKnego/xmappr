@@ -54,11 +54,14 @@ public class ConfigurationProcessor {
 
         configElement.element = readElementAnnotations(elementClass, mappingContext, classCache);
 
-        configElement.namespace = readNamespaceAnnotations((Namespaces) elementClass.getAnnotation(Namespaces.class));
+//        final Namespaces nsAnno = (Namespaces) elementClass.getAnnotation(Namespaces.class);
+//        configElement.namespace = readNamespaceAnnotations(nsAnno);
 
     }
 
     public static void saveConfigRootElement(ConfigRootElement configRootElement, MappingContext mappingContext) {
+
+        XmlConfigurationValidator.validateConfigRootElement(configRootElement);
 
         // Save processed configuration
         mappingContext.addConfigElement(configRootElement.classType, configRootElement);
@@ -70,14 +73,16 @@ public class ConfigurationProcessor {
         }
     }
 
-    public static void saveConfigElement(Class elementClass, ConfigElement configElement, MappingContext mappingContext) {
+    public static void saveConfigElement(Class parentClass, ConfigElement configElement, MappingContext mappingContext) {
 
+        Class nextClass;
 
-        // next class - derive it from targetType or field type
-        Class nextClass = (configElement.targetType == null || configElement.targetType.equals(Object.class))
-                ? configElement.baseType : configElement.targetType;
-
-        validateConfigElement(configElement, nextClass);
+        if (configElement.fromAnnotation) {
+            nextClass = (configElement.targetType != null) && !configElement.targetType.equals(Object.class)
+                    ? configElement.targetType : configElement.baseType;
+        } else {
+            nextClass = XmlConfigurationValidator.validateConfigElement(configElement, parentClass);
+        }
 
         if (!mappingContext.configElementExists(nextClass)) {
 
@@ -93,6 +98,7 @@ public class ConfigurationProcessor {
         }
     }
 
+
     public static ConfigRootElement readRootElementAnnotations(Class<? extends RootElement> rootClass, MappingContext mappingContext) {
 
         ConfigRootElement rootConfElement = new ConfigRootElement();
@@ -104,6 +110,7 @@ public class ConfigurationProcessor {
                 rootAnnotation.name() : rootClass.getSimpleName().toLowerCase());
 
         rootConfElement.namespace = readNamespaceAnnotations((Namespaces) rootClass.getAnnotation(Namespaces.class));
+        rootConfElement.fromAnnotation = true;
         rootConfElement.name = rootName;
         rootConfElement.classType = rootClass;
         rootConfElement.converter = rootAnnotation.converter();
@@ -119,146 +126,6 @@ public class ConfigurationProcessor {
         return rootConfElement;
     }
 
-    private static void validateConfigElement(ConfigElement configElement, Class elementClass) {
-
-        // no need to validate if element was derived from Annotations
-        if (configElement.fromAnnotation) {
-            return;
-        }
-//        System.out.println("______________________________");
-//        System.out.println(configElement.toString(" "));
-
-        if (configElement.attribute != null)
-            for (ConfigAttribute configAttribute : configElement.attribute) {
-                validateConfigAttribute(configAttribute, elementClass);
-            }
-
-        if (configElement.text != null) {
-            validateConfigText(configElement.text, elementClass);
-        }
-    }
-
-    private static void validateConfigText(ConfigText text, Class elementClass) {
-
-        // target is not defined
-        if (text.field == null && text.getter == null && text.setter == null) {
-            throw new XmapprConfigurationException("Error: Unknown mapping target: neither 'field' nor " +
-                    "'getter' and/or 'setter' attributes are defined. Mapping must define ONE target: either 'field' or " +
-                    "'getter' and/or 'setter' attributes." +
-                    "\nOffending mapping:\n\n" + text);
-        }
-        if (text.field != null && (text.getter != null || text.setter != null)) {
-            throw new XmapprConfigurationException("Error: Ambiguous mapping target: both 'field' and one of " +
-                    "'getter' or 'setter' attributes defined. Mapping must define only ONE target: either 'field' or " +
-                    " 'getter' and/or 'setter' attributes." +
-                    "\nOffending mapping:\n\n" + text);
-        }
-
-        // field defined
-        if (text.field != null) {
-            text.targetField = findField(elementClass, text.field);
-            text.baseType = text.targetField.getType();
-        } else {
-            // when using getter or setter, a targetType must be defined
-            if (text.targetType == null || Object.class.equals(text.targetType)) {
-                throw new XmapprConfigurationException("Error: No target type defined. When using getter or setter" +
-                        " method, a 'targetType' attribute must be defined" +
-                        "\nOffending mapping:\n\n" + text);
-            }
-            text.baseType = text.targetType;
-
-            // getter name defined
-            if (text.getterMethod == null && text.getter != null) {
-                try {
-                    // find a getter method
-                    Method getterMethod = elementClass.getMethod(text.getter, Void.TYPE);
-                    if (!getterMethod.getReturnType().equals(text.targetType))
-                        throw new NoSuchMethodException();
-                    text.getterMethod = getterMethod;
-                } catch (NoSuchMethodException e) {
-                    throw new XmapprConfigurationException("Error: Getter method not found in class " +
-                            elementClass.getName() +
-                            " No method matches " + text.getter +
-                            "() with return type " + text.targetType.getName() + "." +
-                            "\nOffending mapping:\n\n" + text);
-                }
-            } else if (text.setterMethod == null && text.setter != null) {
-                try {
-                    // find a setter method
-                    text.setterMethod = elementClass.getMethod(text.setter, text.targetType);
-                } catch (NoSuchMethodException e) {
-                    throw new XmapprConfigurationException("Error: Setter method not found in class " +
-                            elementClass.getName() +
-                            " No method matches: " + text.setter +
-                            "(" + text.targetType.getName() + ") with return type void." +
-                            "\nOffending mapping:\n\n" + text);
-                }
-            }
-        }
-
-    }
-
-    private static void validateConfigAttribute(ConfigAttribute attribute, Class elementClass) {
-
-        // target is not defined - try to find a field from attribute name
-        if (attribute.field == null && attribute.getter == null && attribute.setter == null) {
-            if (findField(elementClass, attribute.name) != null) {
-                attribute.field = attribute.name;
-            }
-        }
-
-        if (attribute.field != null && (attribute.getter != null || attribute.setter != null)) {
-            throw new XmapprConfigurationException("Error: Ambiguous mapping target: both 'field' and one of " +
-                    "'getter' or 'setter' attributes defined. Mapping must define only ONE target: either 'field' or " +
-                    "one of 'getter' or 'setter' attributes." +
-                    "\nOffending mapping:\n\n" + attribute);
-        }
-
-        // field defined
-        if (attribute.field != null) {
-            attribute.targetField = findField(elementClass, attribute.field);
-            attribute.baseType = attribute.targetField.getType();
-        } else {
-
-            // when using getter or setter, a targetType must be defined
-            if (attribute.targetType == null || Object.class.equals(attribute.targetType)) {
-                throw new XmapprConfigurationException("Error: No target type defined. When using getter or setter" +
-                        " method, a 'targetType' attribute must be defined" +
-                        "\nOffending mapping:\n\n" + attribute);
-            }
-            attribute.baseType = attribute.targetType;
-
-            // getter name defined
-            if (attribute.getterMethod == null && attribute.getter != null) {
-                try {
-                    // find a getter method
-                    Method getterMethod = elementClass.getMethod(attribute.getter, Void.TYPE);
-                    if (!getterMethod.getReturnType().equals(attribute.targetType))
-                        throw new NoSuchMethodException();
-                    attribute.getterMethod = getterMethod;
-                } catch (NoSuchMethodException e) {
-                    throw new XmapprConfigurationException("Error: Getter method not found in class " +
-                            elementClass.getName() +
-                            " No method matches " + attribute.getter +
-                            "() with return type " + attribute.targetType.getName() + "." +
-                            "\nOffending mapping:\n\n" + attribute);
-                }
-            } else if (attribute.setterMethod == null && attribute.setter != null) {
-                try {
-                    // find a setter method
-                    attribute.setterMethod = elementClass.getMethod(attribute.setter, attribute.targetType);
-                } catch (NoSuchMethodException e) {
-                    throw new XmapprConfigurationException("Error: Setter method not found in class " +
-                            elementClass.getName() +
-                            " No method matches: " + attribute.setter +
-                            "(" + attribute.targetType.getName() + ") with return type void." +
-                            "\nOffending mapping:\n\n" + attribute);
-                }
-            }
-        }
-
-    }
-
 
     private static List<ConfigElement> readElementAnnotations(Class elementClass, MappingContext mappingContext,
                                                               Map<Class, ConfigElement> classCache) {
@@ -270,6 +137,8 @@ public class ConfigurationProcessor {
         for (Field field : elementClass.getFields()) {
 
             Element[] annotations = getElementAnnotations(field);
+
+            List<ConfigNamespace> nsList = readNamespaceAnnotations((Namespaces) field.getAnnotation(Namespaces.class));
 
             // are there any @Attribute annotations on this field
             for (Element annotation : annotations) {
@@ -293,7 +162,8 @@ public class ConfigurationProcessor {
                         annotation.defaultValue(),
                         annotation.targetType(),
                         annotation.format(),
-                        annotation.converter()
+                        annotation.converter(),
+                        nsList
                 );
 
                 // Which class to process next? Defined by targetType or type of field?
@@ -325,6 +195,8 @@ public class ConfigurationProcessor {
 
         // scan class methods for @Element annotations
         for (Method method : elementClass.getMethods()) {
+
+            List<ConfigNamespace> nsList = readNamespaceAnnotations((Namespaces) method.getAnnotation(Namespaces.class));
 
             // process all @Element annotations of given method
             for (Element annotation : getElementAnnotations(method)) {
@@ -397,6 +269,13 @@ public class ConfigurationProcessor {
                     element.targetType = targetType;
                     element.format = annotation.format();
                     element.converter = annotation.converter();
+                    if (element.namespace != null && element.namespace.equals(nsList)) {
+                        throw new XmapprConfigurationException("Error: Ambiguous namespace mapping. " +
+                                "Getter and setter both define @Namespaces with different values. Accessor methods map" +
+                                "to the same XML element so the namespaces (if defined on both methods) must be the same.");
+                    }
+                    element.namespace = nsList;
+
                 } else {
                     element = new ConfigElement(
                             true,
@@ -411,7 +290,8 @@ public class ConfigurationProcessor {
                             annotation.defaultValue(),
                             annotation.targetType(),
                             annotation.format(),
-                            annotation.converter()
+                            annotation.converter(),
+                            nsList
                     );
                     confElementCache.put(elementName, element);
                 }
@@ -606,7 +486,7 @@ public class ConfigurationProcessor {
         int found = 0;
         Text fieldAnnotation = null;
         Field targetField = null;
-        
+
         for (Field field : elementClass.getFields()) {
             if (field.getAnnotation(Text.class) != null) {
                 found++;
@@ -825,6 +705,7 @@ public class ConfigurationProcessor {
         return annotations;
     }
 
+
     /**
      * Checks that given method has a setter form: starts with 'get' and then uppercase char.
      *
@@ -862,20 +743,6 @@ public class ConfigurationProcessor {
         return null;
     }
 
-    private static Field findField(Class clazz, String fieldName) {
-
-        // only process real classes
-        if (clazz.isPrimitive() || fieldName == null) {
-            return null;
-        }
-
-        try {
-            return clazz.getField(fieldName);
-        } catch (NoSuchFieldException e) {
-            // no field with given name was found
-            return null;
-        }
-    }
 
     private static List<ConfigNamespace> readNamespaceAnnotations(Namespaces nsAnnotation) {
         List<ConfigNamespace> namespaces = null;

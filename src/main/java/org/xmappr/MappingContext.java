@@ -87,7 +87,11 @@ public class MappingContext {
      */
     public Object processNextElement(Class targetType, Object targetObject, XMLSimpleReader reader, String defaultValue, String format) {
         // find the converter for given Class
-        ElementConverter converter = lookupElementConverter(targetType);
+        ElementConverter result;
+        synchronized (this) {
+            result = lookupElementConverter(targetType, true);
+        }
+        ElementConverter converter = result;
         return converter.fromElement(reader, this, defaultValue, format, targetType, targetObject);
     }
 
@@ -121,16 +125,6 @@ public class MappingContext {
             }
         }
         return false;
-    }
-
-    /**
-     * Calls {@link org.xmappr.MappingContext#lookupElementConverter(Class, boolean)} with second parameter <code>true</code>.
-     *
-     * @param type Class for which ElementConverter is to be found.
-     * @return
-     */
-    public synchronized ElementConverter lookupElementConverter(Class type) {
-        return lookupElementConverter(type, true);
     }
 
     /**

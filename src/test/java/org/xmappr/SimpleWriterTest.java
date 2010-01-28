@@ -32,8 +32,8 @@ public class SimpleWriterTest {
 
         // Double step to make Xmappr work harder (not necessary normally - do not copy)
         // Reads Class configuration, produces XML configuration from it and then feeds it to Xmappr
-        StringReader configuration = XmlConfigTester.reader(A.class);
-        Xmappr xmappr = new Xmappr(configuration);
+//        StringReader configuration = XmlConfigTester.reader(A.class);
+        Xmappr xmappr = new Xmappr(A.class);
         xmappr.addNamespace("", "ns1");
 
         A a = (A) xmappr.fromXML(reader);
@@ -54,7 +54,6 @@ public class SimpleWriterTest {
         public B b;
     }
 
-    //    @Namespaces("ns2")
     public static class B {
         @Element
         public C c;
