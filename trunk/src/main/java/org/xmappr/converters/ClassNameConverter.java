@@ -2,37 +2,39 @@ package org.xmappr.converters;
 
 import org.xmappr.XmapprConfigurationException;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class ClassNameConverter extends ValueConverter {
 
-//    private static Map<String, Class> classNames;
-//
-//    static{
-//        classNames = new HashMap<String, Class>();
-//        classNames.put("int", int.class);
-//        classNames.put("Integer", Integer.class);
-//        classNames.put("byte", byte.class);
-//        classNames.put("Byte", Byte.class);
-//        classNames.put("char", char.class);
-//        classNames.put("Character", Character.class);
-//        classNames.put("boolean", boolean.class);
-//        classNames.put("Boolean", Boolean.class);
-//        classNames.put("long", long.class);
-//        classNames.put("Long", Long.class);
-//        classNames.put("", .class);
-//
-//    }
+    private static Map<String, Class> classNames;
+
+    static{
+        classNames = new HashMap<String, Class>();
+        classNames.put("int", Integer.class);
+        classNames.put("byte", Byte.class);
+        classNames.put("char", Character.class);
+        classNames.put("boolean", Boolean.class);
+        classNames.put("long", Long.class);
+        classNames.put("float", Float.class);
+        classNames.put("double", Double.class);
+        classNames.put("short", Short.class);
+    }
 
     @Override
     public Object fromValue(String className, String format, Class targetType, Object targetObject) {
 
         // given class name could be an abbreviation, so we construct various possible variants
-        String[] tryNames = new String[2];
+        String[] tryNames = new String[3];
 
         // full class name with package was given
         tryNames[0] = className;
 
         // Java primitive types - e.g. Integer becomes java.util.Integer
         tryNames[1] = "java.lang." + className;
+
+        // Java primitive types - e.g. Integer becomes java.util.Integer
+        tryNames[2] = classNames.containsKey(className) ? classNames.get(className).getName() : "";
 
         // now try to get Class from various class names
         Class clazz = null;
@@ -41,6 +43,7 @@ public class ClassNameConverter extends ValueConverter {
                 clazz = Class.forName(name);
                 break;
             } catch (ClassNotFoundException e) {
+
                 // this is normal, class was not found - will try next class name
             }
         }
@@ -75,4 +78,15 @@ public class ClassNameConverter extends ValueConverter {
         return Class.class.equals(type.getClass());
     }
 
+
+    public static void main(String[] args) {
+
+        Class inte = int.class;
+
+        try {
+            Class clazz = Class.forName("java.lang.int");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+    }
 }

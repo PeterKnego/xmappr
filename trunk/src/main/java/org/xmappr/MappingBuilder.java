@@ -528,7 +528,11 @@ public class MappingBuilder {
             // is target type a collection?
             if (Collection.class.isAssignableFrom(baseType)) {
 
-                collectionConverter = (CollectionConverting) mappingContext.lookupElementConverter(baseType);
+                ElementConverter result;
+                synchronized (mappingContext) {
+                    result = mappingContext.lookupElementConverter(baseType, true);
+                }
+                collectionConverter = (CollectionConverting) result;
                 targetType = String.class;
 //                    throw new XmapprConfigurationException("Error: @Text annotation on a collection field of "
 //                            + currentClass.getName() + ". No converter parameter provided.");

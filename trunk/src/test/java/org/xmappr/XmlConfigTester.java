@@ -8,7 +8,6 @@ public class XmlConfigTester {
 
     public static StringReader reader(Class rootClass) {
         return reader(rootClass, null);
-
     }
 
     public static StringReader reader(Class rootClass, String[] namespaces) {

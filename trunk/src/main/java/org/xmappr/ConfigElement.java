@@ -58,21 +58,23 @@ public class ConfigElement {
 
     public ConfigElement(boolean fromAnnotation, String name, Class baseType, Field targetField, String field,
                          Method getterMethod, String getterName, Method setterMethod, String setterName,
-                         String defaultValue, Class targetType, String format, Class<? extends Converter> converter) {
+                         String defaultValue, Class targetType, String format, Class<? extends Converter> converter,
+                         List<ConfigNamespace> namespaces) {
         this.fromAnnotation = fromAnnotation;
         this.baseType = baseType;
         this.targetField = targetField;
         this.field = field;
         this.getterMethod = getterMethod;
-        this.getter= getterName;
+        this.getter = getterName;
         this.setterMethod = setterMethod;
-        this.setter=setterName;
+        this.setter = setterName;
 
         this.converter = converter;
         this.defaultvalue = defaultValue;
         this.format = format;
         this.name = name;
         this.targetType = targetType;
+        this.namespace = namespaces;
     }
 
     public String toString(String space) {

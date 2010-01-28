@@ -400,6 +400,8 @@ public class Xmappr {
             throw new XmapprConfigurationException("Error: No XML mappings found for class " + rootClass.getName());
         }
 
+        XmlConfigurationValidator.outputXmlChecker(confElement);
+
         Xmappr xmappr = new Xmappr(ConfigRootElement.class);
         xmappr.setPrettyPrint(true);
         StringWriter sw = new StringWriter();
@@ -409,6 +411,8 @@ public class Xmappr {
 
         return sw.toString();
     }
+
+
 
     /**
      * Container class to hold deserialized Object and unmapped XML elements.
