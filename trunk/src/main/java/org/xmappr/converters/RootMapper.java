@@ -68,4 +68,8 @@ public class RootMapper {
         elementConverter.toElement(object, rootNodeName, writer, mappingContext, "", null);
         writer.endDocument();
     }
+
+    public ElementConverter getElementConverter() {
+        return elementConverter;
+    }
 }

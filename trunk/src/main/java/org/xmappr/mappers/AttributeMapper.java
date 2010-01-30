@@ -26,7 +26,7 @@ public class AttributeMapper {
     private final String format;
     private final boolean isMap;
 
-    public AttributeMapper(Field targetField, Method getter, Method setter, Class baseType,
+    public AttributeMapper(Field targetField, Method getter, Method setter, Class accessorType,
                            Class targetType, ValueConverter valueConverter, String defaultValue, String format) {
         this.targetField = new FieldAccessor(targetField, getter, setter);
         this.targetType = targetType;
@@ -35,7 +35,7 @@ public class AttributeMapper {
             this.defaultObject = valueConverter.fromValue(defaultValue, format, targetType, null);
         }
         this.format = format;
-        this.isMap = Map.class.isAssignableFrom(baseType);
+        this.isMap = Map.class.isAssignableFrom(accessorType);
     }
 
     public void setValue(QName attributeName, Object container, String attributeValue) {

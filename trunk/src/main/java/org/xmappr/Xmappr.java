@@ -401,6 +401,7 @@ public class Xmappr {
         }
 
         XmlConfigurationValidator.outputXmlChecker(confElement);
+        System.out.println(confElement);
 
         Xmappr xmappr = new Xmappr(ConfigRootElement.class);
         xmappr.setPrettyPrint(true);

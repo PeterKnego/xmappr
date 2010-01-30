@@ -29,10 +29,10 @@ public class MappingContext {
     private MappingBuilder mappingBuilder;
     private NsContext predefinedNamespaces = new NsContext();
 
-    private Map<Class, RootMapper> classMappings = new HashMap<Class, RootMapper>();
-    private Map<QName, RootMapper> nameMappings = new HashMap<QName, RootMapper>();
+    private Map<Class, RootMapper> rootMappersByClass = new HashMap<Class, RootMapper>();
+    private Map<QName, RootMapper> rootMappersByName = new HashMap<QName, RootMapper>();
 
-    private Map<Class, ConfigElement> configElements = new HashMap<Class, ConfigElement>();
+//    private Map<Class, ConfigElement> configElements = new HashMap<Class, ConfigElement>();
     private Map<Class, ConfigRootElement> configRootElements = new HashMap<Class, ConfigRootElement>();
 
     public MappingContext(List<ElementConverter> elementConverters, List<ValueConverter> valueConverters) {
@@ -89,7 +89,7 @@ public class MappingContext {
         // find the converter for given Class
         ElementConverter result;
         synchronized (this) {
-            result = lookupElementConverter(targetType, true);
+            result = lookupElementConverter(targetType, null, true);
         }
         ElementConverter converter = result;
         return converter.fromElement(reader, this, defaultValue, format, targetType, targetObject);
@@ -97,16 +97,17 @@ public class MappingContext {
 
     public void addRootMapper(ConfigRootElement rootConfigElement) {
         RootMapper rootMapper = mappingBuilder.processConfiguration(rootConfigElement);
-        nameMappings.put(rootMapper.getRootNodeName(), rootMapper);
-        classMappings.put(rootMapper.getRootClass(), rootMapper);
+        rootMappersByName.put(rootMapper.getRootNodeName(), rootMapper);
+        rootMappersByClass.put(rootMapper.getRootClass(), rootMapper);
+        addConfigRootElement(rootMapper.getRootClass(), rootConfigElement);
     }
 
     public RootMapper getRootMapper(Class targetClass) {
-        return classMappings.get(targetClass);
+        return rootMappersByClass.get(targetClass);
     }
 
     public RootMapper getRootMapper(QName name) {
-        return nameMappings.get(name);
+        return rootMappersByName.get(name);
     }
 
     public ValueConverter lookupValueConverter(Class type) {
@@ -138,26 +139,36 @@ public class MappingContext {
      * @param throwExceptionIfNotFound If true, throws an XmapprConfigurationException if no ElementConverter is found.
      * @return
      */
-    public synchronized ElementConverter lookupElementConverter(Class type, boolean throwExceptionIfNotFound) {
+    public synchronized ElementConverter lookupElementConverter(Class type, ConfigElement element, boolean throwExceptionIfNotFound) {
 
-        // look in preconfigured converters
+        // first look in preconfigured converters
         for (ElementConverter elementConverter : elementConverters) {
             if (elementConverter.canConvert(type)) {
                 return elementConverter;
             }
         }
 
-        ElementConverter converter;
+//                // look in configuration elements
+//        if (configElements.containsKey(type)) {
+//            converter = mappingBuilder.createClassConverter(type, configElements.get(type));
+//        } else {
+//            // Try to use Class directly:
+//            // 1. create ConfigElement from Class
+//            // 2. create ClassConverter
+//            ConfigElement newConfElement = ConfigurationProcessor.processClassTree(type, this);
+//            converter = mappingBuilder.createClassConverter(type, newConfElement);
+//        }
 
-        // look in configuration elements
-        if (configElements.containsKey(type)) {
-            converter = mappingBuilder.createClassConverter(type, configElements.get(type));
+        ElementConverter converter = null;
+
+        if (element != null) {
+            converter = mappingBuilder.createClassConverter(type, element);
         } else {
-            // Try to use Class directly:
-            // 1. create ConfigElement from Class
-            // 2. create ClassConverter
-            ConfigElement newConfElement = ConfigurationProcessor.processClassTree(type, this);
-            converter = mappingBuilder.createClassConverter(type, newConfElement);
+
+            //
+            if (rootMappersByClass.containsKey(type)) {
+                converter = rootMappersByClass.get(type).getElementConverter();
+            }
         }
 
         if (converter == null && throwExceptionIfNotFound) {
@@ -218,26 +229,28 @@ public class MappingContext {
         return new QName(theURI, localPart, prefix);
     }
 
+
+//    public boolean configElementExists(Class elementClass) {
+//        return configElements.containsKey(elementClass);
+//    }
+
+//    public void addConfigElement(Class targetClass, ConfigElement element) {
+//
+////        // if it is in preconfigured converters - then don't add it
+////        for (ElementConverter elementConverter : elementConverters) {
+////            if (elementConverter.canConvert(targetClass)) {
+////                return ;
+////            }
+////        }
+//        configElements.put(targetClass, element);
+//    }
+
+
     public ConfigRootElement lookupConfigRootElement(Class rootClass) {
         return configRootElements.get(rootClass);
     }
 
-    public boolean configElementExists(Class elementClass) {
-        return configElements.containsKey(elementClass);
-    }
-
-    public void addConfigElement(Class targetClass, ConfigElement element) {
-
-//        // if it is in preconfigured converters - then don't add it 
-//        for (ElementConverter elementConverter : elementConverters) {
-//            if (elementConverter.canConvert(targetClass)) {
-//                return ;
-//            }
-//        }
-        configElements.put(targetClass, element);
-    }
-
-    public void addConfigElement(Class rootClass, ConfigRootElement element) {
+    public void addConfigRootElement(Class rootClass, ConfigRootElement element) {
         if (!configRootElements.containsKey(rootClass)) {
             configRootElements.put(rootClass, element);
         } else {

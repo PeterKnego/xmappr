@@ -11,7 +11,7 @@ public class ConfigElement {
 
     // This fields are not configurable via mapping configuration.
     // They are derived during the validation phase.
-    public Class baseType;
+    public Class accessorType;
     public boolean fromAnnotation;
     public Method getterMethod;
     public Method setterMethod;
@@ -56,12 +56,12 @@ public class ConfigElement {
     public ConfigElement() {
     }
 
-    public ConfigElement(boolean fromAnnotation, String name, Class baseType, Field targetField, String field,
+    public ConfigElement(boolean fromAnnotation, String name, Class accessorType, Field targetField, String field,
                          Method getterMethod, String getterName, Method setterMethod, String setterName,
                          String defaultValue, Class targetType, String format, Class<? extends Converter> converter,
                          List<ConfigNamespace> namespaces) {
         this.fromAnnotation = fromAnnotation;
-        this.baseType = baseType;
+        this.accessorType = accessorType;
         this.targetField = targetField;
         this.field = field;
         this.getterMethod = getterMethod;
@@ -82,6 +82,7 @@ public class ConfigElement {
         out.append(space).append("<element ").append("name=").append(name).append("\n");
         out.append(space).append("  ").append("fromAnnotation=").append(fromAnnotation).append("\n");
         out.append(space).append("  ").append("field=").append(field).append("\n");
+        out.append(space).append("  ").append("targetField=").append(targetField).append("\n");
         out.append(space).append("  ").append("getter=").append(getter).append("\n");
         out.append(space).append("  ").append("setter=").append(setter).append("\n");
         out.append(space).append("  ").append("defaultValue=").append(defaultvalue).append("\n");
@@ -90,11 +91,14 @@ public class ConfigElement {
         if (targetType != null)
             out.append(space).append("  ").append("targetType=").append(targetType.getName()).append("\n");
 
+        if (accessorType != null)
+                    out.append(space).append("  ").append("accessorType=").append(accessorType.getName()).append("\n");
+
         if (converter != null)
             out.append(space).append("  ").append("converter=").append(converter.getName()).append("\n");
 
         if (text != null)
-            out.append(text.toString(space + "  "));
+            out.append(text.toString(space + "  ")).append("\n");;
 
         if (namespace != null)
             for (ConfigNamespace configNamespace : namespace) {
@@ -116,9 +120,11 @@ public class ConfigElement {
 
     @Override
     public String toString() {
+//        return toString("");
         StringBuilder out = new StringBuilder();
         out.append("<element ").append("name=").append(name).append("\n");
         out.append("  ").append("field=").append(field).append("\n");
+        out.append("  ").append("targetField=").append(targetField).append("\n");
         out.append("  ").append("defaultValue=").append(defaultvalue).append("\n");
         out.append("  ").append("format=").append(format).append(" />\n");
         return out.toString();

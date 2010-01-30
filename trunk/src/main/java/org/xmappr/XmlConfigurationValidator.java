@@ -2,6 +2,7 @@ package org.xmappr;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Collection;
 
 public class XmlConfigurationValidator {
 
@@ -24,15 +25,58 @@ public class XmlConfigurationValidator {
 
     public static void xmlElementChecker(ConfigElement element) {
 
+        Class parametrizedType = null;
+
+        // fill in targetType parameter - it's obligatory for XML based config
         if (element.targetType == null || element.targetType.equals(Object.class)) {
             if (element.targetField != null) {
                 element.targetType = element.targetField.getType();
+                if (ConfigurationProcessor.isCollectionType(element.targetField.getType())) {
+                    parametrizedType = ConfigurationProcessor.getParameterizedType(element.targetField.getGenericType());
+                    if (parametrizedType == null) {
+                        throw new XmapprConfigurationException("Error: @Element annotation is used on " +
+                                "field " + element.targetField.getName() + " (class " +
+                                element.targetField.getDeclaringClass().getName() +
+                                ") is of  " + element.targetField.getType() + " type. " +
+                                "@Element annotation defined on fields of java.util.Collection type must have " +
+                                "either 'targetType' attribute defined or Collection type must be a " +
+                                "parametrized generic type (e.g. List<String>).");
+                    } else {
+                        element.targetType = parametrizedType;
+                    }
+                }
             } else if (element.getterMethod != null) {
                 element.targetType = element.getterMethod.getReturnType();
+                if (ConfigurationProcessor.isCollectionType(element.getterMethod.getReturnType())) {
+                    parametrizedType = ConfigurationProcessor.getParameterizedType(element.getterMethod.getGenericReturnType());
+                    if (parametrizedType == null) {
+                        throw new XmapprConfigurationException("Error: @Element annotation is used on " +
+                                "getter method " + element.getterMethod.getName() + " (class " +
+                                element.getterMethod.getDeclaringClass().getName() +
+                                ") which has " + element.getterMethod.getReturnType() + " return type. " +
+                                "@Element annotation defined on types of java.util.Collection type must have " +
+                                "either 'targetType' attribute defined or Collection type must be a " +
+                                "parametrized generic type (e.g. List<String>).");
+                    } else {
+                        element.targetType = parametrizedType;
+                    }
+                }
             } else if (element.setterMethod != null) {
                 element.targetType = element.setterMethod.getParameterTypes()[0];
-            } else {
-                throw new XmapprConfigurationException("Xmappr system error: Please report this on mailing list.");
+                if (ConfigurationProcessor.isCollectionType(element.setterMethod.getParameterTypes()[0])) {
+                    parametrizedType = ConfigurationProcessor.getParameterizedType(element.setterMethod.getGenericParameterTypes()[0]);
+                    if (parametrizedType == null) {
+                        throw new XmapprConfigurationException("Error: @Element annotation is used on " +
+                                "setter method " + element.setterMethod.getName() + " (class " +
+                                element.setterMethod.getDeclaringClass().getName() +
+                                ") which has " + element.getterMethod.getParameterTypes()[0] + " parameter type. " +
+                                "@Element annotation defined on types of java.util.Collection type must have " +
+                                "either 'targetType' attribute defined or Collection type must be a " +
+                                "parametrized generic type (e.g. List<String>).");
+                    } else {
+                        element.targetType = parametrizedType;
+                    }
+                }
             }
         }
 
@@ -51,6 +95,7 @@ public class XmlConfigurationValidator {
         if (element.text != null) xmlTextChecker(element.text);
 
     }
+
 
     public static void xmlAttributeChecker(ConfigAttribute attribute) {
         if (attribute.targetType == null || attribute.targetType.equals(Object.class)) {
@@ -110,13 +155,20 @@ public class XmlConfigurationValidator {
         if (configRootElement.text != null) {
             validateConfigText(configRootElement.text, targetClass);
         }
+
+        if (configRootElement.element != null) {
+            for (ConfigElement element : configRootElement.element) {
+                validateConfigElement(element, targetClass);
+            }
+        }
     }
 
 
-    public static Class validateConfigElement(ConfigElement configElement, Class containingClass) {
+    public static void validateConfigElement(ConfigElement configElement, Class containingClass) {
 
         Class nextClass = validateConfigElementInternals(configElement, containingClass);
 
+        if (nextClass == null) return;
 
         if (configElement.attribute != null)
             for (ConfigAttribute configAttribute : configElement.attribute) {
@@ -127,7 +179,10 @@ public class XmlConfigurationValidator {
             validateConfigText(configElement.text, nextClass);
         }
 
-        return nextClass;
+        if (configElement.element != null)
+            for (ConfigElement element : configElement.element) {
+                validateConfigElement(element, nextClass);
+            }
     }
 
     public static Class validateConfigElementInternals(ConfigElement element, Class containingClass) {
@@ -147,6 +202,8 @@ public class XmlConfigurationValidator {
                     "'getter' and/or 'setter' attributes." +
                     "\nOffending mapping:\n\n" + element);
         }
+
+        // both 'field' and 'getter' or 'setter' are defined
         if (element.field != null && (element.getter != null || element.setter != null)) {
             throw new XmapprConfigurationException("Error: Ambiguous mapping target: both 'field' and one of " +
                     "'getter' or 'setter' attributes defined. Mapping must define only ONE target: either 'field' or " +
@@ -157,8 +214,29 @@ public class XmlConfigurationValidator {
         // field defined
         if (element.field != null) {
             element.targetField = findField(containingClass, element.field);
-            element.baseType = element.targetField.getType();
-            nextClass = element.baseType;
+            element.accessorType = element.targetField.getType();
+
+            // If targetType is not defined (==Object.class) then derive type from field.
+            if (element.targetType != null && !element.targetType.equals(Object.class)) {
+                nextClass = element.targetType;
+            } else {
+                // is field a Collection
+                if (Collection.class.isAssignableFrom(element.targetField.getType())) {
+                    Class parametrizedType = ConfigurationProcessor.getParameterizedType(element.targetField.getGenericType());
+                    if (parametrizedType == null) {
+                        throw new XmapprConfigurationException("Error: XML element mapped to " +
+                                "field " + element.field + " (class " + containingClass.getName() +
+                                ") is of  " + element.targetField.getType() + " type. " +
+                                "<element> mapped to fields of java.util.Collection type must have " +
+                                "either 'targetType' attribute defined or Collection type must be a " +
+                                "parametrized generic type (e.g. List<String>).");
+                    }
+                    nextClass = parametrizedType;
+                } else {
+                    nextClass = element.accessorType;
+                }
+            }
+
         } else {
             // when using getter or setter, a targetType must be defined
             if (element.targetType == null || Object.class.equals(element.targetType)) {
@@ -166,8 +244,8 @@ public class XmlConfigurationValidator {
                         " method, a 'targetType' attribute must be defined" +
                         "\nOffending mapping:\n\n" + element);
             }
-            element.baseType = element.targetType;
-            nextClass = element.baseType;
+            element.accessorType = element.targetType;
+            nextClass = element.accessorType;
 
             // getter name defined
             if (element.getterMethod == null && element.getter != null) {
@@ -197,7 +275,6 @@ public class XmlConfigurationValidator {
                 }
             }
         }
-
         return nextClass;
     }
 
@@ -220,15 +297,15 @@ public class XmlConfigurationValidator {
         // field defined
         if (text.field != null) {
             text.targetField = findField(containingClass, text.field);
-            text.baseType = text.targetField.getType();
+            text.accessorType = text.targetField.getType();
         } else {
             // when using getter or setter, a targetType must be defined
             if (text.targetType == null || Object.class.equals(text.targetType)) {
-                 throw new XmapprConfigurationException("Error: No target type defined. When using getter or setter" +
+                throw new XmapprConfigurationException("Error: No target type defined. When using getter or setter" +
                         " method, a 'targetType' attribute must be defined" +
                         "\nOffending mapping:\n\n" + text);
             }
-            text.baseType = text.targetType;
+            text.accessorType = text.targetType;
 
             // getter name defined
             if (text.getterMethod == null && text.getter != null) {
@@ -285,7 +362,7 @@ public class XmlConfigurationValidator {
         // field defined
         if (attribute.field != null) {
             attribute.targetField = findField(elementClass, attribute.field);
-            attribute.baseType = attribute.targetField.getType();
+            attribute.accessorType = attribute.targetField.getType();
         } else {
 
             // when using getter or setter, a targetType must be defined
@@ -294,7 +371,7 @@ public class XmlConfigurationValidator {
                         " method, a 'targetType' attribute must be defined" +
                         "\nOffending mapping:\n\n" + attribute);
             }
-            attribute.baseType = attribute.targetType;
+            attribute.accessorType = attribute.targetType;
 
             // getter name defined
             if (attribute.getterMethod == null && attribute.getter != null) {

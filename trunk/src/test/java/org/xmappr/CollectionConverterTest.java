@@ -132,7 +132,7 @@ public class CollectionConverterTest {
         @Text
         public String text;
 
-        @Element(value = "subitem", targetType = SubItem.class)
+        @Element(name = "subitem", targetType = SubItem.class)
         public List<SubItem> subs;
     }
 
