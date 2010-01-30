@@ -61,17 +61,23 @@ public class MultielementCollectionTest {
 
     @RootElement("root")
     public static class Root {
+
+        private List letters;
+
         @Elements({
                 @Element(name = "a", targetType = A.class),
                 @Element(name = "b", targetType = B.class)
         })
         @Text
-        private List letters;
-
         public List getLetters() {
             return letters;
         }
 
+        @Elements({
+                @Element(name = "a", targetType = A.class),
+                @Element(name = "b", targetType = B.class)
+        })
+        @Text
         public void setLetters(List letters) {
             this.letters = letters;
         }

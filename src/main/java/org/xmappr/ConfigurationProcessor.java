@@ -1,15 +1,15 @@
 package org.xmappr;
 
+import org.xmappr.converters.ElementConverter;
 import org.xmappr.converters.EmptyStringConverter;
 import org.xmappr.converters.ValueConverter;
 
 import java.io.Reader;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.*;
 
 public class ConfigurationProcessor {
 
@@ -22,7 +22,7 @@ public class ConfigurationProcessor {
                 xmlConfigurationParser.addConverter(new EmptyStringConverter());
             }
             ConfigRootElement configRootElement = (ConfigRootElement) xmlConfigurationParser.fromXML(xmlReader);
-            saveConfigRootElement(configRootElement, mappingContext);
+            XmlConfigurationValidator.validateConfigRootElement(configRootElement);
             return configRootElement;
         } catch (XmapprException xe) {
             throw new XmapprConfigurationException("Error: XML configuration could not be processed: " + xe);
@@ -30,7 +30,7 @@ public class ConfigurationProcessor {
     }
 
     public static ConfigElement processClassTree(Class elementClass, MappingContext mappingContext) {
-        Map<Class, ConfigElement> classCache = new HashMap<Class, ConfigElement>();
+        Map<String, ConfigElement> classCache = new HashMap<String, ConfigElement>();
 
         // ConfigElement at the top of the hierarchy of ConfigElements
         ConfigElement topConfigElement = new ConfigElement();
@@ -39,15 +39,15 @@ public class ConfigurationProcessor {
         processNextClass(elementClass, topConfigElement, mappingContext, classCache);
 
         // process elements
-        saveConfigElement(elementClass, topConfigElement, mappingContext);
+        XmlConfigurationValidator.validateConfigElement(topConfigElement, elementClass);
 
         return topConfigElement;
     }
 
     private static void processNextClass(Class elementClass, ConfigElement configElement,
-                                         MappingContext mappingContext, Map<Class, ConfigElement> classCache) {
+                                         MappingContext mappingContext, Map<String, ConfigElement> classCache) {
 
-        classCache.put(elementClass, configElement);
+//        classCache.put(elementClass, configElement);
 
         configElement.attribute = readAttributeAnnotations(elementClass);
         configElement.text = readTextAnnotations(elementClass);
@@ -59,44 +59,44 @@ public class ConfigurationProcessor {
 
     }
 
-    public static void saveConfigRootElement(ConfigRootElement configRootElement, MappingContext mappingContext) {
-
-        XmlConfigurationValidator.validateConfigRootElement(configRootElement);
-
-        // Save processed configuration
-        mappingContext.addConfigElement(configRootElement.classType, configRootElement);
-
-        if (configRootElement.element != null) {
-            for (ConfigElement nextElement : configRootElement.element) {
-                ConfigurationProcessor.saveConfigElement(configRootElement.classType, nextElement, mappingContext);
-            }
-        }
-    }
-
-    public static void saveConfigElement(Class parentClass, ConfigElement configElement, MappingContext mappingContext) {
-
-        Class nextClass;
-
-        if (configElement.fromAnnotation) {
-            nextClass = (configElement.targetType != null) && !configElement.targetType.equals(Object.class)
-                    ? configElement.targetType : configElement.baseType;
-        } else {
-            nextClass = XmlConfigurationValidator.validateConfigElement(configElement, parentClass);
-        }
-
-        if (!mappingContext.configElementExists(nextClass)) {
-
-            // save processed configuration
-            mappingContext.addConfigElement(nextClass, configElement);
-
-            if (configElement.element != null) {
-                for (ConfigElement nextElement : configElement.element) {
-                    // process further
-                    saveConfigElement(nextClass, nextElement, mappingContext);
-                }
-            }
-        }
-    }
+//    public static void saveConfigRootElement(ConfigRootElement configRootElement, MappingContext mappingContext) {
+//
+//        XmlConfigurationValidator.validateConfigRootElement(configRootElement);
+//
+//        // Save processed configuration
+//        mappingContext.addConfigRootElement(configRootElement.classType, configRootElement);
+//
+//        if (configRootElement.element != null) {
+//            for (ConfigElement nextElement : configRootElement.element) {
+//                saveConfigElement(configRootElement.classType, nextElement, mappingContext);
+//            }
+//        }
+//    }
+//
+//    public static void saveConfigElement(Class parentClass, ConfigElement configElement, MappingContext mappingContext) {
+//
+//        Class nextClass;
+//
+//        if (configElement.fromAnnotation) {
+//            nextClass = (configElement.targetType != null) && !configElement.targetType.equals(Object.class)
+//                    ? configElement.targetType : configElement.accessorType;
+//        } else {
+//            nextClass = XmlConfigurationValidator.validateConfigElement(configElement, parentClass);
+//        }
+//
+//        if (!mappingContext.configElementExists(nextClass)) {
+//
+//            // save processed configuration
+//            mappingContext.addConfigElement(nextClass, configElement);
+//
+//            if (configElement.element != null) {
+//                for (ConfigElement nextElement : configElement.element) {
+//                    // process further
+//                    saveConfigElement(nextClass, nextElement, mappingContext);
+//                }
+//            }
+//        }
+//    }
 
 
     public static ConfigRootElement readRootElementAnnotations(Class<? extends RootElement> rootClass, MappingContext mappingContext) {
@@ -117,18 +117,18 @@ public class ConfigurationProcessor {
         rootConfElement.attribute = readAttributeAnnotations(rootClass);
         rootConfElement.text = readTextAnnotations(rootClass);
 
-        Map<Class, ConfigElement> classCache = new HashMap<Class, ConfigElement>();
+        Map<String, ConfigElement> classCache = new HashMap<String, ConfigElement>();
         rootConfElement.element = readElementAnnotations(rootClass, mappingContext, classCache);
 
         // passes the element configuration
-        saveConfigRootElement(rootConfElement, mappingContext);
+        XmlConfigurationValidator.validateConfigRootElement(rootConfElement);
 
         return rootConfElement;
     }
 
 
     private static List<ConfigElement> readElementAnnotations(Class elementClass, MappingContext mappingContext,
-                                                              Map<Class, ConfigElement> classCache) {
+                                                              Map<String, ConfigElement> classCache) {
 
         // Getters & setters come in pairs which produce one ConfigAttribute.
         // Cache ConfigAttributes until all methods are processed.
@@ -144,7 +144,7 @@ public class ConfigurationProcessor {
             for (Element annotation : annotations) {
 
                 // when @Attribute is defined on field, the base type is the type of field
-                Class baseType = field.getType();
+                Class accessorType = field.getType();
 
                 String elementName = annotation.value().length() != 0 ? annotation.value()
                         : (annotation.name().length() != 0 ? annotation.name() : field.getName());
@@ -152,7 +152,7 @@ public class ConfigurationProcessor {
                 ConfigElement element = new ConfigElement(
                         true,
                         elementName,
-                        baseType,
+                        accessorType,
                         field,
                         field.getName(),
                         null,
@@ -166,29 +166,58 @@ public class ConfigurationProcessor {
                         nsList
                 );
 
-                // Which class to process next? Defined by targetType or type of field?
-                // If targetType is not defined (==Object.class) then derive type from field.
-                Class nextClass = annotation.targetType().equals(Object.class) ? field.getType() : annotation.targetType();
+                // if custom converter is not defined then we need to look for more configuration
+                if (annotation.converter().equals(ElementConverter.class)) {
 
-                // Process next class if it's converter is not yet defined 
-                if (!mappingContext.isElementConverterDefined(nextClass)) {
-
-                    // Was this class already processed?
-                    // This eliminates loops.
-                    if (classCache.containsKey(nextClass)) {
-
-                        // use an existing
-                        element = classCache.get(nextClass);
+                    // Which class to process next? Defined by targetType or type of field?
+                    // If targetType is not defined (==Object.class) then derive type from field.
+                    Class nextClass;
+                    if (!annotation.targetType().equals(Object.class)) {
+                        nextClass = annotation.targetType();
                     } else {
+                        // Require parametrized type when field is a Collection AND element name is not "*"
+                        if (Collection.class.isAssignableFrom(field.getType()) && !elementName.equals("*")) {
 
-                        // recursive call to process next class
-                        processNextClass(nextClass, element, mappingContext, classCache);
+                            Class parametrizedType = getParameterizedType(field.getGenericType());
+                            if (parametrizedType == null) {
+                                throw new XmapprConfigurationException("Error: @Element annotation is used on " +
+                                        "field " + field.getName() + " (class " + elementClass.getName() +
+                                        ") is of  " + field.getType() + " type. " +
+                                        "@Element annotation defined on fields of java.util.Collection type must have " +
+                                        "either 'targetType' attribute defined or Collection type must be a " +
+                                        "parametrized generic type (e.g. List<String>).");
+                            }
+                            nextClass = parametrizedType;
+                        } else {
+                            nextClass = field.getType();
+                        }
+                    }
+
+                    String uniqueElementName = elementClass.getName() + "$" + elementName;
+
+                    // Process next class if it's converter is not yet defined
+                    if (!mappingContext.isElementConverterDefined(nextClass)) {
+
+                        // Was this class already processed?
+                        // This eliminates loops.
+                        if (classCache.containsKey(uniqueElementName)) {
+
+                            // use an existing
+                            element = classCache.get(uniqueElementName);
+                        } else {
+
+                            // recursive call to process next class
+                            classCache.put(uniqueElementName, element);
+                            processNextClass(nextClass, element, mappingContext, classCache);
+                        }
                     }
                 }
 
+                // initialize cache if needed
                 if (confElementCache == null) {
                     confElementCache = new HashMap<String, ConfigElement>();
                 }
+
                 confElementCache.put(elementName, element);
             }
         }
@@ -202,7 +231,7 @@ public class ConfigurationProcessor {
             for (Element annotation : getElementAnnotations(method)) {
 
                 String elementName = null;
-                Class baseType, targetType = annotation.targetType();
+                Class accessorType, targetType = annotation.targetType();
                 Method getter = null, setter = null;
 
                 // Check if this is a getter or setter
@@ -218,7 +247,7 @@ public class ConfigurationProcessor {
                             : getGetterName(method));
 
                     // base type is defined by getter's return type
-                    baseType = method.getReturnType();
+                    accessorType = method.getReturnType();
 
                 } else if (hasSetterFormat(method, annotation.targetType())) {
 
@@ -232,7 +261,7 @@ public class ConfigurationProcessor {
                             : getSetterName(method));
 
                     // base type is defined by setter's argument type
-                    baseType = method.getParameterTypes()[0];
+                    accessorType = method.getParameterTypes()[0];
 
                 } else {
                     throw new XmapprConfigurationException("Error: @Element annotation on " +
@@ -250,7 +279,7 @@ public class ConfigurationProcessor {
                 }
 
                 if (annotation.targetType() == null || annotation.targetType().equals(Object.class)) {
-                    targetType = baseType;
+                    targetType = accessorType;
                 }
 
                 if (confElementCache == null) {
@@ -262,7 +291,7 @@ public class ConfigurationProcessor {
                     if (element.field != null) {
                         // todo ERROR - XML element defined via both field and method
                     }
-                    element.baseType = baseType;
+                    element.accessorType = accessorType;
                     element.getterMethod = getter == null ? element.getterMethod : getter;
                     element.setterMethod = setter == null ? element.setterMethod : setter;
                     element.defaultvalue = annotation.defaultValue();
@@ -280,7 +309,7 @@ public class ConfigurationProcessor {
                     element = new ConfigElement(
                             true,
                             elementName,
-                            baseType,
+                            accessorType,
                             null,
                             null,
                             getter,
@@ -318,7 +347,7 @@ public class ConfigurationProcessor {
             for (Attribute annotation : getAttributeAnnotations(field)) {
 
                 // when @Attribute is defined on field, the base type is the type of field
-                Class baseType = field.getType();
+                Class accessorType = field.getType();
 
                 // Try getting XML element name from @Attribute annotation.
                 // If not defined, use the name of the field
@@ -331,7 +360,7 @@ public class ConfigurationProcessor {
 
                 ConfigAttribute attribute = new ConfigAttribute(
                         attributeName,
-                        baseType,
+                        accessorType,
                         field,
                         field.getName(),
                         null,
@@ -367,7 +396,7 @@ public class ConfigurationProcessor {
             for (Attribute annotation : getAttributeAnnotations(method)) {
 
                 String attributeName;
-                Class baseType, targetType = annotation.targetType();
+                Class accessorType, targetType = annotation.targetType();
                 Method getter = null, setter = null;
 
                 // Check if this is a getter or setter
@@ -383,7 +412,7 @@ public class ConfigurationProcessor {
                             : getGetterName(method));
 
                     // base type is defined by getter's return type
-                    baseType = method.getReturnType();
+                    accessorType = method.getReturnType();
 
                 } else if (hasSetterFormat(method, annotation.targetType())) {
 
@@ -397,7 +426,7 @@ public class ConfigurationProcessor {
                             : getSetterName(method));
 
                     // base type is defined by setter's argument type
-                    baseType = method.getParameterTypes()[0];
+                    accessorType = method.getParameterTypes()[0];
 
                 } else {
                     throw new XmapprConfigurationException("Error: @Attribute annotation on " +
@@ -408,7 +437,7 @@ public class ConfigurationProcessor {
                 }
 
                 if (annotation.targetType() == null || annotation.targetType().equals(Object.class)) {
-                    targetType = baseType;
+                    targetType = accessorType;
                 }
 
                 // XML element name could not be derived from method name, nor from @Attribute annotation
@@ -427,7 +456,7 @@ public class ConfigurationProcessor {
                     if (attribute.field != null) {
                         // todo XML attribute defined via both - ERROR
                     }
-                    attribute.baseType = baseType;
+                    attribute.accessorType = accessorType;
                     attribute.getterMethod = getter == null ? attribute.getterMethod : getter;
                     attribute.setterMethod = setter == null ? attribute.setterMethod : setter;
                     attribute.getter = getter == null ? attribute.getter : getter.getName();
@@ -439,7 +468,7 @@ public class ConfigurationProcessor {
                 } else {
                     attribute = new ConfigAttribute(
                             attributeName,
-                            baseType,
+                            accessorType,
                             null,
                             null,
                             getter,
@@ -523,7 +552,7 @@ public class ConfigurationProcessor {
         for (Method method : elementClass.getMethods()) {
 
             Text annotation = method.getAnnotation(Text.class);
-            Class baseType;
+            Class accessorType;
             Method getter = null, setter = null;
 
             if (annotation != null) {
@@ -540,7 +569,7 @@ public class ConfigurationProcessor {
                     getter = method;
 
                     // base type is defined by getter's return type
-                    baseType = getter.getReturnType();
+                    accessorType = getter.getReturnType();
 
                 } else if (hasSetterFormat(method, annotation.targetType())) {
 
@@ -548,7 +577,7 @@ public class ConfigurationProcessor {
                     setter = method;
 
                     // base type is defined by setter's argument type
-                    baseType = setter.getParameterTypes()[0];
+                    accessorType = setter.getParameterTypes()[0];
 
                 } else {
                     throw new XmapprConfigurationException("Error: @Text annotation on " +
@@ -560,7 +589,7 @@ public class ConfigurationProcessor {
 
                 if (configText == null) {
                     configText = new ConfigText(
-                            baseType,
+                            accessorType,
                             null,
                             null,
                             getter,
@@ -758,4 +787,46 @@ public class ConfigurationProcessor {
         return namespaces;
     }
 
+    public static Class getParameterizedType(Type genericType) {
+        if (genericType instanceof ParameterizedType) {
+            Type[] typeArguments = ((ParameterizedType) genericType).getActualTypeArguments();
+            if (typeArguments.length == 1) {
+                Type paraType = typeArguments[0];
+                if (paraType instanceof Class)
+                    return (Class) paraType;
+            }
+        }
+        return null;
+    }
+
+    public static boolean isCollectionType(Class type) {
+        return Collection.class.isAssignableFrom(type);
+    }
+
+
+
+
+//    public static Class getCollectionParameterizedType(Field field) {
+//        Type genericType = field.getGenericType();
+//        if (Collection.class.isAssignableFrom(field.getType())) {
+//            return getParameterizedType(genericType);
+//        }
+//        return null;
+//    }
+//
+//    public static Class getCollectionParameterizedType(Method getter, Method setter) {
+//        Type genericType;
+//        if (getter != null) {
+//            genericType = getter.getGenericReturnType();
+//            if (Collection.class.isAssignableFrom(getter.getReturnType())) {
+//                return getParameterizedType(genericType);
+//            }
+//        } else if (setter != null) {
+//            genericType = setter.getGenericParameterTypes()[0];
+//            if (Collection.class.isAssignableFrom(setter.getParameterTypes()[0])) {
+//                return getParameterizedType(genericType);
+//            }
+//        }
+//        return null;
+//    }
 }

@@ -10,7 +10,7 @@ public class ConfigAttribute {
 
     // This fields are not configurable via mapping configuration.
     // They are derived during the validation phase.
-    public Class baseType;
+    public Class accessorType;
     public Method getterMethod;
     public Method setterMethod;
     public Field targetField;
@@ -42,11 +42,11 @@ public class ConfigAttribute {
     public ConfigAttribute() {
     }
 
-    public ConfigAttribute(String attributeName, Class baseType, Field targetField, String field,
+    public ConfigAttribute(String attributeName, Class accessorType, Field targetField, String field,
                            Method getterMethod, String getterName, Method setterMethod, String setterName,
                            String defaultValue, Class targetType,
                            String format, Class<? extends ValueConverter> converter) {
-        this.baseType = baseType;
+        this.accessorType = accessorType;
         this.targetField = targetField;
         this.field = field;
         this.getterMethod = getterMethod;

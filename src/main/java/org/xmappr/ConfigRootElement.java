@@ -39,16 +39,16 @@ public class ConfigRootElement {
     public String toString() {
         String space = "  ";
         StringBuilder out = new StringBuilder();
-        out.append("ConfigRootElement:  name=").append(name).append("\n");
+        out.append("<root-element>  name=").append(name).append("\n");
 
         if (classType != null)
-            out.append("  classType=").append(classType.getName()).append("\n");
+            out.append(space).append("classType=").append(classType.getName()).append("\n");
 
         if (converter != null)
-            out.append("  converter=").append(converter.getName()).append("\n");
+            out.append(space).append("converter=").append(converter.getName()).append("\n");
 
         if (text != null)
-            out.append(text.toString(space + "  "));
+            out.append(space).append(text.toString(space + "  "));
 
         if (namespace != null)
             for (ConfigNamespace configNamespace : namespace) {
@@ -64,6 +64,7 @@ public class ConfigRootElement {
             for (ConfigElement configElement : element) {
                 out.append(configElement.toString(space)).append("\n");
             }
+        out.append("/>");
 
         return out.toString();
     }

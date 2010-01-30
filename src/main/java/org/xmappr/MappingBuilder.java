@@ -9,8 +9,6 @@ import javax.xml.XMLConstants;
 import javax.xml.namespace.QName;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -38,7 +36,7 @@ public class MappingBuilder {
         if (config.converter != null && !config.converter.equals(ElementConverter.class)) {
             rootConverter = initializeConverter(config.converter);
         } else { // try looking in predefined converters
-            rootConverter = mappingContext.lookupElementConverter(config.classType, false);
+            rootConverter = mappingContext.lookupElementConverter(config.classType, null, false);
         }
 
         // find and process class namespace context
@@ -127,8 +125,12 @@ public class MappingBuilder {
 
             Field field = configElement.targetField;
 
+            // custom converter defined
+            Class<? extends Converter> annotatedConverter =
+                    ElementConverter.class.equals(configElement.converter) ? null : configElement.converter;
+
             // find a converter for this field type
-            ElementConverter baseConverter = mappingContext.lookupElementConverter(configElement.baseType, false);
+            ElementConverter baseConverter = mappingContext.lookupElementConverter(configElement.accessorType, configElement, false);
             // If target field is a collection, then a collection converter must be defined.
             // This will also pick up any custom-defined collection converters.
             CollectionConverting collectionConverter =
@@ -141,10 +143,6 @@ public class MappingBuilder {
 
             // set to default values according to annotations
             Class<?> targetType = Object.class.equals(configElement.targetType) ? null : configElement.targetType;
-
-            // same
-            Class<? extends Converter> annotatedConverter =
-                    ElementConverter.class.equals(configElement.converter) ? null : configElement.converter;
 
             // getValue QName that field maps to
             String elementName = configElement.name;
@@ -172,7 +170,8 @@ public class MappingBuilder {
                 // target field is a collection
                 if (collectionConverter != null) {
 
-                    assignCollectionConverter(classConverter, field, fieldMapper, targetType, annotatedConverter, qname);
+                    assignCollectionConverter(classConverter, field, fieldMapper, targetType, annotatedConverter,
+                            qname, configElement);
 
                 } else { // target field is a normal field (not a collection)
 
@@ -196,21 +195,30 @@ public class MappingBuilder {
         if (annotatedConverter != null) {
             fieldConverter = initializeConverter(annotatedConverter);
 
-            // check that assigned converter can actually convert to the target field type
-            if (!fieldConverter.canConvert(field.getType())) {
-                throw new XmapprConfigurationException("Error: assigned converter type does not " +
-                        "match field type.\nConverter " + fieldConverter.getClass().getName() +
-                        " can not be used to convert " +
-                        "data of type " + field.getType() + ".\n" +
-                        "Please check XML annotations on field '" + field.getName() +
-                        "' in class " + field.getDeclaringClass().getName() + ".");
-            }
+            //todo this is validation - move it to ConfigurationProcessr and XmlConfigurationValidator
+//            // check that assigned converter can actually convert to the target or field type
+//            if (targetType != null && !fieldConverter.canConvert(targetType)) {
+//                throw new XmapprConfigurationException("Error: assigned converter type does not " +
+//                        "match field type.\nConverter " + fieldConverter.getClass().getName() +
+//                        " can not be used to convert " +
+//                        "data of type " + field.getType() + ".\n" +
+//                        "Please check XML annotations on field '" + field.getName() +
+//                        "' in class " + field.getDeclaringClass().getName() + ".");
+//            } else if (!fieldConverter.canConvert(field.getType())) {
+//                throw new XmapprConfigurationException("Error: assigned converter type does not " +
+//                        "match field type.\nConverter " + fieldConverter.getClass().getName() +
+//                        " can not be used to convert " +
+//                        "data of type " + field.getType() + ".\n" +
+//                        "Please check XML annotations on field '" + field.getName() +
+//                        "' in class " + field.getDeclaringClass().getName() + ".");
+//            }
+
 
         } else {
             if (targetType == null) {
-                fieldConverter = mappingContext.lookupElementConverter(field.getType(), true);
+                fieldConverter = mappingContext.lookupElementConverter(field.getType(), configElement, true);
             } else {
-                fieldConverter = mappingContext.lookupElementConverter(targetType, true);
+                fieldConverter = mappingContext.lookupElementConverter(targetType, configElement, true);
             }
         }
 
@@ -221,15 +229,16 @@ public class MappingBuilder {
     }
 
     private void assignCollectionConverter(ClassConverter classConverter, Field field, ElementMapper fieldMapper,
-                                           Class<?> targetType, Class<? extends Converter> annotatedConverter, QName qname) {
+                                           Class<?> targetType, Class<? extends Converter> annotatedConverter,
+                                           QName qname, ConfigElement configElement) {
 
-        Class parametrizedType = getParameterizedType(field.getGenericType());
+        Class parametrizedType = ConfigurationProcessor.getParameterizedType(field.getGenericType());
 
         // if it's a collection, then it must have a type parameter defined or
         // @Element must have either "targetType" or 'converter' value defined
         if (parametrizedType == null && (annotatedConverter == null && targetType == null)) {
             throw new XmapprConfigurationException("Error: Can  not assign converter " +
-                    "for collection '" + field.getName() + "' " +
+                    "for collection '" + field.getName() + "'" +
                     "in class " + field.getDeclaringClass().getName() +
                     ". When @Element annotation is used on a collection, " +
                     "it must be a generic type with a type parameter (e.g. List<Integer>) or " +
@@ -256,24 +265,12 @@ public class MappingBuilder {
             }
         } else {
             // converter was not declared via annotation, so we just use a converter derived from field type
-            fieldConverter = mappingContext.lookupElementConverter(targetType, true);
+            fieldConverter = mappingContext.lookupElementConverter(targetType, configElement, true);
 //                        fieldConverter = null;
         }
 
         fieldMapper.addMapping(qname, fieldConverter, targetType);
         classConverter.addElementMapper(qname, fieldMapper);
-    }
-
-    private static Class getParameterizedType(Type genericType) {
-        if (genericType instanceof ParameterizedType) {
-            Type[] typeArguments = ((ParameterizedType) genericType).getActualTypeArguments();
-            if (typeArguments.length == 1) {
-                Type paraType = typeArguments[0];
-                if (paraType instanceof Class)
-                    return (Class) paraType;
-            }
-        }
-        return null;
     }
 
     private void assignWildcardMapper(ClassConverter classConverter,
@@ -305,7 +302,7 @@ public class MappingBuilder {
             if (targetType == null) {
                 targetType = DomElement.class;
             }
-            fieldConverter = mappingContext.lookupElementConverter(targetType, true);
+            fieldConverter = mappingContext.lookupElementConverter(targetType, configElement, true);
         }
 
         if (collectionConverter == null) {
@@ -366,11 +363,11 @@ public class MappingBuilder {
         for (ConfigAttribute configAttribute : configAttributes) {
 
             Field field = configAttribute.targetField;
-            Class baseType = configAttribute.baseType;
+            Class accessorType = configAttribute.accessorType;
             String attributeName = configAttribute.name;
 
             // find the converter by the field type
-            ValueConverter baseConverter = mappingContext.lookupValueConverter(baseType);
+            ValueConverter baseConverter = mappingContext.lookupValueConverter(accessorType);
 
             // get ValueConverter for the class that the field references
             ValueConverter converter;
@@ -390,7 +387,7 @@ public class MappingBuilder {
             QName qname = mappingContext.getQName(attributeName, null, classConverter.getClassNamespaces());
 
             // Is target field a Map?
-            if (Map.class.isAssignableFrom(baseType)) {
+            if (Map.class.isAssignableFrom(accessorType)) {
 
                 if (annotatedConverter != null) { // 'converter' defined
                     try {
@@ -419,7 +416,7 @@ public class MappingBuilder {
 
                 // if targetType is not defined we assign it based on field type
                 if (targetType == null) {
-                    targetType = baseType;
+                    targetType = accessorType;
                 }
 
                 // was custom converter assigned via annotation?
@@ -432,11 +429,11 @@ public class MappingBuilder {
                     }
 
                     // check that assigned converter can actually convert to the target field type
-                    if (!converter.canConvert(baseType)) {
+                    if (!converter.canConvert(accessorType)) {
                         throw new XmapprConfigurationException("Error: assigned converter type " +
                                 "does not match field type.\n" +
                                 "Converter " + converter.getClass().getName() + " can not be used " +
-                                "to convert data of type " + baseType + ".\n" +
+                                "to convert data of type " + accessorType + ".\n" +
                                 "Please check XML annotations on field '" + attributeName +
                                 "' in class " + field.getDeclaringClass().getName() + ".");
                     }
@@ -449,7 +446,7 @@ public class MappingBuilder {
                 // attribute catcher
                 if (attributeName.equals("*")) {
                     throw new XmapprConfigurationException("Error: Wrong @Attribute annotation value " +
-                            "on field " + attributeName + " in class " + baseType.getDeclaringClass().getName() +
+                            "on field " + attributeName + " in class " + accessorType.getDeclaringClass().getName() +
                             ". @Attribute wildcard name \"*\" can only be used on " +
                             "field types that implement Map.");
                 }
@@ -460,7 +457,7 @@ public class MappingBuilder {
                 // assign an attribute catcher
                 classConverter.setAttributeCatcher(
                         new AttributeMapper(field, configAttribute.getterMethod, configAttribute.setterMethod,
-                                baseType, targetType, converter, null, configAttribute.format)
+                                accessorType, targetType, converter, null, configAttribute.format)
                 );
             } else {
                 // normal one-to-one attribute mapping
@@ -479,7 +476,7 @@ public class MappingBuilder {
                 classConverter.addAttributeMapper(
                         qname,
                         new AttributeMapper(field, configAttribute.getterMethod, configAttribute.setterMethod,
-                                baseType, targetType, converter, defaultValue, configAttribute.format)
+                                accessorType, targetType, converter, defaultValue, configAttribute.format)
                 );
             }
         }
@@ -507,7 +504,7 @@ public class MappingBuilder {
 
         if (configText == null) return;
 
-        Class baseType = configText.baseType;
+        Class accessorType = configText.accessorType;
 
         // find the appropriate converter
         ValueConverter valueConverter;
@@ -526,11 +523,11 @@ public class MappingBuilder {
         } else {  // default converter derived from field type
 
             // is target type a collection?
-            if (Collection.class.isAssignableFrom(baseType)) {
+            if (Collection.class.isAssignableFrom(accessorType)) {
 
                 ElementConverter result;
                 synchronized (mappingContext) {
-                    result = mappingContext.lookupElementConverter(baseType, true);
+                    result = mappingContext.lookupElementConverter(accessorType, null, true);
                 }
                 collectionConverter = (CollectionConverting) result;
                 targetType = String.class;
@@ -538,7 +535,7 @@ public class MappingBuilder {
 //                            + currentClass.getName() + ". No converter parameter provided.");
             } else {
                 // choose converter according to field type
-                targetType = baseType;
+                targetType = accessorType;
             }
             valueConverter = mappingContext.lookupValueConverter(targetType);
 
@@ -547,7 +544,7 @@ public class MappingBuilder {
             if (!valueConverter.canConvert(targetType)) {
                 throw new XmapprConfigurationException("Error: assigned converter type does not match field type.\n" +
                         "Converter " + valueConverter.getClass().getName() + " can not be used to convert " +
-                        "data of type " + baseType + ".\n");
+                        "data of type " + accessorType + ".\n");
             }
 
         }
@@ -567,7 +564,7 @@ public class MappingBuilder {
         classConverter.setTextMapper(new TextMapper(configText.targetField, configText.getterMethod, configText.setterMethod,
                 targetType, valueConverter, collectionConverter, isIntermixed, configText.format));
 
-//            System.out.println(currentClass.getSimpleName() + "." + baseType.getName() + " value "
+//            System.out.println(currentClass.getSimpleName() + "." + accessorType.getName() + " value "
 //                    + " converter:" + valueConverter.getClass().getSimpleName());
     }
 

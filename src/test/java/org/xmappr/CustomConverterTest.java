@@ -35,8 +35,9 @@ public class CustomConverterTest {
 
         // Double step to make Xmappr work harder (not necessary normally - do not copy)
         // Reads Class configuration, produces XML configuration from it and then feeds it to Xmappr
-//        StringReader configuration = XmlConfigTester.reader(One.class);
-        Xmappr xmappr = new Xmappr(One.class);
+        StringReader configuration = XmlConfigTester.reader(One.class);
+        Xmappr xmappr = new Xmappr(configuration);
+        xmappr.addMapping(Three.class);
         One one = (One) xmappr.fromXML(reader);
 
         Assert.assertEquals(one.text, "SHOULD BE UPPER CASE"); // should be converted to upper case
@@ -132,6 +133,7 @@ public class CustomConverterTest {
 
     }
 
+    @RootElement("three")
     public static class Three {
 
         @Attribute(name = "val", converter = LowerCaseConverter.class)
