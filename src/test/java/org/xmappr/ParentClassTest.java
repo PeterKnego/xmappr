@@ -23,7 +23,15 @@ public class ParentClassTest {
 
     @Test
     public void mainTest() {
+        StringReader reader = new StringReader(ParentClassTest.xml);
+        Xmappr xmappr = new Xmappr(Child.class);
 
+        Child child = (Child) xmappr.fromXML(reader);
+        asserts(child);
+    }
+
+    @Test
+    public void mainTestViaXML() {
         StringReader reader = new StringReader(ParentClassTest.xml);
 
         // Double step to make Xmappr work harder (not necessary normally - do not copy)
@@ -32,6 +40,10 @@ public class ParentClassTest {
         Xmappr xmappr = new Xmappr(configuration);
 
         Child child = (Child) xmappr.fromXML(reader);
+        asserts(child);
+    }
+
+    private void asserts(Child child) {
         Assert.assertEquals(child.val, "A text value");
         Assert.assertEquals(child.i, 1000);
         Assert.assertEquals(child.l, 9999);

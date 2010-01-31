@@ -32,31 +32,36 @@ public class MultielementCollectionTest {
 
     @Test
     public void test() throws IOException, SAXException {
-
         StringReader reader = new StringReader(xml);
-
-        // Double step to make Xmappr work harder (not necessary normally - do not copy)
-        // Reads Class configuration, produces XML configuration from it and then feeds it to Xmappr
-//        StringReader configuration = XmlConfigTester.reader(Root.class);
         Xmappr xmappr = new Xmappr(Root.class);
         xmappr.setPrettyPrint(true);
-
-//        Xmappr.Result result = xmappr.fromXMLwithUnmapped(reader);
-//        Root one = (Root) result.getObject();
         Root one = (Root) xmappr.fromXML(reader);
 
         // writing back to XML
         StringWriter sw = new StringWriter();
-//        xmappr.toXML(one, result.getStore(), sw);
         xmappr.toXML(one, sw);
-        String ssw = sw.toString();
-        System.out.println("");
-        System.out.println(xml);
-        System.out.println("");
-        System.out.println(ssw);
 
         XMLUnit.setIgnoreWhitespace(true);
-        XMLAssert.assertXMLEqual(xml, ssw);
+        XMLAssert.assertXMLEqual(xml, sw.toString());
+    }
+
+    @Test
+    public void testViaXML() throws IOException, SAXException {
+        StringReader reader = new StringReader(xml);
+
+        // Double step to make Xmappr work harder (not necessary normally - do not copy)
+        // Reads Class configuration, produces XML configuration from it and then feeds it to Xmappr
+        StringReader configuration = XmlConfigTester.reader(Root.class);
+        Xmappr xmappr = new Xmappr(configuration);
+        xmappr.setPrettyPrint(true);
+        Root one = (Root) xmappr.fromXML(reader);
+
+        // writing back to XML
+        StringWriter sw = new StringWriter();
+        xmappr.toXML(one, sw);
+
+        XMLUnit.setIgnoreWhitespace(true);
+        XMLAssert.assertXMLEqual(xml, sw.toString());
     }
 
     @RootElement("root")

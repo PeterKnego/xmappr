@@ -29,29 +29,19 @@ public class LoopTest {
     @org.testng.annotations.Test
     public void configurationLoopTest() throws IOException, SAXException {
         StringReader reader = new StringReader(inXml);
-
         Xmappr xmappr = new Xmappr(Test.class);
         xmappr.setPrettyPrint(true);
-
         Test test = (Test) xmappr.fromXML(reader);
-//        xmappr.mappingContext.printConfig();
-
-//        Assert.assertNotNull(test.back);
 
         // writing back to XML
         StringWriter sw = new StringWriter();
         xmappr.toXML(test, sw);
-
-        System.out.println(inXml);
-        System.out.println("");
-        System.out.println(sw);
 
         XMLUnit.setIgnoreWhitespace(true);
         XMLAssert.assertXMLEqual(inXml, sw.toString());
     }
 
     // classes Test and Back have a circular reference
-
     @RootElement("test")
     public static class Test {
         @Element

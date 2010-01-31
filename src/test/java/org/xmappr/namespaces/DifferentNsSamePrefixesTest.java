@@ -38,14 +38,25 @@ public class DifferentNsSamePrefixesTest {
     @Test
     public void test() throws IOException, SAXException {
         StringReader reader = new StringReader(xml);
+        Xmappr xmappr = new Xmappr(aaa.class);
+        aaa a = (aaa) xmappr.fromXML(reader);
+
+        asserts(xmappr, a);
+    }
+    @Test
+    public void testViaXML() throws IOException, SAXException {
+        StringReader reader = new StringReader(xml);
 
         // Double step to make Xmappr work harder (not necessary normally - do not copy)
         // Reads Class configuration, produces XML configuration from it and then feeds it to Xmappr
         StringReader configuration = XmlConfigTester.reader(aaa.class);
         Xmappr xmappr = new Xmappr(configuration);
-
         aaa a = (aaa) xmappr.fromXML(reader);
 
+        asserts(xmappr, a);
+    }
+
+    private void asserts(Xmappr xmappr, aaa a) throws SAXException, IOException {
         Assert.assertTrue(a.node_bbbb.node_cccc != null);
         Assert.assertTrue(a.node_BBB.node_CCC != null);
         Assert.assertTrue(a.node_x111.node_x222 != null);

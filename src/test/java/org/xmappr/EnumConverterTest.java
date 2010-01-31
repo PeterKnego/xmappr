@@ -24,8 +24,15 @@ public class EnumConverterTest {
 
     @Test
     public void testEnum() {
+        StringReader reader = new StringReader(xml);
+        Xmappr xmappr = new Xmappr(Root.class);
+        Root root = (Root) xmappr.fromXML(reader);
 
-        // do the mapping
+        asserts(root);
+    }
+
+    @Test
+    public void testEnumViaXML() {
         StringReader reader = new StringReader(xml);
 
         // Double step to make Xmappr work harder (not necessary normally - do not copy)
@@ -34,7 +41,10 @@ public class EnumConverterTest {
         Xmappr xmappr = new Xmappr(configuration);
         Root root = (Root) xmappr.fromXML(reader);
 
-        // check values
+        asserts(root);
+    }
+
+    private void asserts(Root root) {
         Assert.assertEquals(root.simple, SimpleEnum.ONE);
         Assert.assertEquals(root.poly, PolyEnum.TEN);
     }

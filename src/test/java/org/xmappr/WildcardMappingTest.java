@@ -60,17 +60,29 @@ public class WildcardMappingTest {
     public void test() throws IOException, SAXException {
         Reader reader = new StringReader(xml);
         Xmappr xmappr = new Xmappr(Root.class);
+        asserts(reader, xmappr);
+    }
 
+    @Test
+    public void testViaXML() throws IOException, SAXException {
+        Reader reader = new StringReader(xml);
+        // Double step to make Xmappr work harder (not necessary normally - do not copy)
+        // Reads Class configuration, produces XML configuration from it and then feeds it to Xmappr
+        StringReader configuration = XmlConfigTester.reader(Root.class);
+        Xmappr xmappr = new Xmappr(configuration);
+        asserts(reader, xmappr);
+    }
+
+    private void asserts(Reader reader, Xmappr xmappr) throws SAXException, IOException {
         // read XML
         Root root = (Root) xmappr.fromXML(reader);
-
-        // check that three elements were read
-        Assert.assertEquals(root.numbers.data.size(), 3);
 
         // write out XML
         Writer writer = new StringWriter();
         xmappr.toXML(root, writer);
 
+        // check that three elements were read
+        Assert.assertEquals(root.numbers.data.size(), 3);
         //test that output matches input
         XMLUnit.setIgnoreWhitespace(true);
         XMLAssert.assertXMLEqual(xml, writer.toString());
@@ -80,7 +92,20 @@ public class WildcardMappingTest {
     public void testList() throws IOException, SAXException {
         Reader reader = new StringReader(xml);
         Xmappr xmappr = new Xmappr(RootTwo.class);
+        assertsList(reader, xmappr);
+    }
 
+    @Test
+    public void testListViaXML() throws IOException, SAXException {
+        Reader reader = new StringReader(xml);
+        // Double step to make Xmappr work harder (not necessary normally - do not copy)
+        // Reads Class configuration, produces XML configuration from it and then feeds it to Xmappr
+        StringReader configuration = XmlConfigTester.reader(Root.class);
+        Xmappr xmappr = new Xmappr(configuration);
+        assertsList(reader, xmappr);
+    }
+
+    private void assertsList(Reader reader, Xmappr xmappr) throws SAXException, IOException {
         // read XML
         RootTwo rootTwo = (RootTwo) xmappr.fromXML(reader);
 

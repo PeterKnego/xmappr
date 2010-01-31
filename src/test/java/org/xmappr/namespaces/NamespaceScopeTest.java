@@ -33,16 +33,26 @@ public class NamespaceScopeTest {
     @Test
     public void test() throws IOException, SAXException {
         StringReader reader = new StringReader(xml);
+        Xmappr xmappr = new Xmappr(aaa.class);
+        aaa a = (aaa) xmappr.fromXML(reader);
+
+        asserts(xmappr, a);
+    }
+
+    @Test
+    public void testViaXML() throws IOException, SAXException {
+        StringReader reader = new StringReader(xml);
 
         // Double step to make Xmappr work harder (not necessary normally - do not copy)
         // Reads Class configuration, produces XML configuration from it and then feeds it to Xmappr
         StringReader configuration = XmlConfigTester.reader(aaa.class);
         Xmappr xmappr = new Xmappr(configuration);
-//        conf.addNamespace("l=lowercase");
-
-
         aaa a = (aaa) xmappr.fromXML(reader);
 
+        asserts(xmappr, a);
+    }
+
+    private void asserts(Xmappr xmappr, aaa a) throws SAXException, IOException {
         Assert.assertNotNull(a.node_BBB.node_ccc.x2);
         Assert.assertNotNull(a.node_BBB.x1);
         Assert.assertNotNull(a.x3);

@@ -38,7 +38,6 @@ public class XmlConfigParseTest {
 
     @Test
     public void basicTest() throws IOException, SAXException {
-
         StringReader inputData = new StringReader(xml);
         StringReader configData = new StringReader(xmlConfig);
 
@@ -55,12 +54,8 @@ public class XmlConfigParseTest {
         classXmappr.toXML(cx, swClass);
         xmlXmappr.toXML(xx, swXml);
 
-        System.out.println(swClass.toString());
-        System.out.println(swXml.toString());
-
         XMLUnit.setIgnoreWhitespace(true);
         XMLAssert.assertXMLEqual(swClass.toString(), swXml.toString());
-
     }
 
     @RootElement

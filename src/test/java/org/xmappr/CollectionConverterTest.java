@@ -42,9 +42,17 @@ public class CollectionConverterTest {
             "</item>\n" +
             "</one>\n";
 
-    @Test
+     @Test
     public void collectionConverterTest() throws IOException, SAXException {
+        StringReader reader = new StringReader(xml);
+        Xmappr xmappr = new Xmappr(One.class);
 
+        One one = (One) xmappr.fromXML(reader);
+        asserts(xmappr, one);
+    }
+
+    @Test
+    public void collectionConverterTestViaXML() throws IOException, SAXException {
         StringReader reader = new StringReader(xml);
 
         // Double step to make Xmappr work harder (not necessary normally - do not copy)
@@ -53,7 +61,10 @@ public class CollectionConverterTest {
         Xmappr xmappr = new Xmappr(configuration);
 
         One one = (One) xmappr.fromXML(reader);
+        asserts(xmappr, one);
+    }
 
+    private void asserts(Xmappr xmappr, One one) throws SAXException, IOException {
         Assert.assertEquals(one.text, "just some text"); // should be converted to upper case
         Assert.assertEquals(one.list.size(), 2);
         Assert.assertEquals(one.list.get(0).text, "first item text");
@@ -91,7 +102,6 @@ public class CollectionConverterTest {
         XMLStreamReader xsr = of.createXMLStreamReader(new StringReader(""));
         XMLSimpleReader sr = new XMLSimpleReader(xsr, false);
         cc.fromElement(sr, new MappingContext(null, null), "", null, null, null);
-
     }
 
     @Test(expectedExceptions = XmapprException.class)
@@ -119,7 +129,6 @@ public class CollectionConverterTest {
 
     @RootElement("one")
     public static class One {
-
         @Text
         public String text;
 
@@ -128,7 +137,6 @@ public class CollectionConverterTest {
     }
 
     public static class Item {
-
         @Text
         public String text;
 
@@ -137,7 +145,6 @@ public class CollectionConverterTest {
     }
 
     public static class SubItem {
-
         @Text
         public String text;
     }

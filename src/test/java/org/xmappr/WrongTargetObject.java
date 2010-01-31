@@ -13,6 +13,16 @@ public class WrongTargetObject {
     @Test
     public void testCorrect() {
         StringReader reader = new StringReader(inXml);
+        Xmappr xmappr = new Xmappr(Root.class);
+        xmappr.setPrettyPrint(false);
+
+        Root root = new Root();
+        xmappr.fromXML(reader, root);
+    }
+
+    @Test
+    public void testCorrectViaXML() {
+        StringReader reader = new StringReader(inXml);
 
         // Double step to make Xmappr work harder (not necessary normally - do not copy)
         // Reads Class configuration, produces XML configuration from it and then feeds it to Xmappr
@@ -26,6 +36,16 @@ public class WrongTargetObject {
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testWrong() {
+        StringReader reader = new StringReader(inXml);
+        Xmappr xmappr = new Xmappr(Root.class);
+        xmappr.setPrettyPrint(false);
+
+        Object root = new Object();
+        xmappr.fromXML(reader, root);  // object of wrong type passed
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testWrongViaXML() {
         StringReader reader = new StringReader(inXml);
 
         // Double step to make Xmappr work harder (not necessary normally - do not copy)

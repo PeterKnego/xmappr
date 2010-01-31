@@ -32,8 +32,17 @@ public class DateConverterTest {
             "<node>2001-07-04 12:08:56</node>" +
             "</test>";
 
-    @org.testng.annotations.Test
+     @org.testng.annotations.Test
     public void test() throws IOException, SAXException, ParseException {
+        StringReader reader = new StringReader(inXml);
+        Xmappr xmappr = new Xmappr(Test.class);
+
+        Test test = (Test) xmappr.fromXML(reader);
+        asserts(xmappr, test);
+    }
+
+    @org.testng.annotations.Test
+    public void testViaXML() throws IOException, SAXException, ParseException {
         StringReader reader = new StringReader(inXml);
 
         // Double step to make Xmappr work harder (not necessary normally - do not copy)
@@ -42,7 +51,10 @@ public class DateConverterTest {
         Xmappr xmappr = new Xmappr(configuration);
 
         Test test = (Test) xmappr.fromXML(reader);
+        asserts(xmappr, test);
+    }
 
+    private void asserts(Xmappr xmappr, Test test) throws ParseException, SAXException, IOException {
         // writing back to XML
         StringWriter sw = new StringWriter();
         xmappr.toXML(test, sw);
@@ -56,7 +68,6 @@ public class DateConverterTest {
         Assert.assertEquals(test.node, df.parse("2001.07.04 12:08:56"));
         XMLUnit.setIgnoreWhitespace(true);
         XMLAssert.assertXMLEqual(inXml, ssw);
-
     }
 
     @org.testng.annotations.Test(expectedExceptions = XmapprException.class)

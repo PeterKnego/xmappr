@@ -18,26 +18,11 @@ import java.io.StringWriter;
 
 public class SubTreeStoreTest {
 
-//    static String xml = "<a xmlns=\"ns1\" xmlns:s=\"ns2\">\n" +
-//            "<s:b>\n" +
-//            "<c>\n" +
-//            "<i:ignored xmlns:i=\"iii\" ia=\"11\" ia2=\"12\">" +
-//            "<ign/>" +
-//            "IGNORED" +
-//            "<subignored asub=\"666\"><subsub/></subignored>" +
-//            "</i:ignored>\n" +
-//            "<d attrD=\"DDD\" ></d>\n" +
-//            "</c>\n" +
-//            "</s:b>\n" +
-//            "</a>";
-
-
     private static String xml = "<x:a xmlns:x=\"ns1\" xmlns:s=\"ns2\" xmlns:w=\"ns3\">\n" +
             "<s:b>\n" +
             "<x:c>CCCCCCC\n" +
             "<x:d attrD=\"DDD\" ></x:d>\n" +
             "<x:e>EEEE</x:e>\n" +
-//            "<w:emptico xmlns:w=\"www\"/>\n" +
             "<x:subignored asub=\"666\">\n" +
             "<x:subsub/>\n" +
             "</x:subignored>\n" +

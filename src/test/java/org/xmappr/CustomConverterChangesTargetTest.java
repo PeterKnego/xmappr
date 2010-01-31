@@ -27,10 +27,18 @@ public class CustomConverterChangesTargetTest {
     static final String xml1 = "<one>1,2,3</one>";
     static final String xml2 = "<one>0,1,2,3</one>";
 
+     @Test
+    public void basicTest() {
+        StringReader reader = new StringReader(xml1);
+        Xmappr xmappr = new Xmappr(One.class);
+        xmappr.setPrettyPrint(false);
+
+        One one = (One) xmappr.fromXML(reader);
+        asserts(xmappr, one);
+    }
 
     @Test
-    public void basicTest() {
-
+    public void basicTestViaXML() {
         StringReader reader = new StringReader(xml1);
 
         // Double step to make Xmappr work harder (not necessary normally - do not copy)
@@ -40,6 +48,10 @@ public class CustomConverterChangesTargetTest {
         xmappr.setPrettyPrint(false);
 
         One one = (One) xmappr.fromXML(reader);
+        asserts(xmappr, one);
+    }
+
+    private void asserts(Xmappr xmappr, One one) {
         Assert.assertEquals(one.getValues().size(), 4);
         Assert.assertEquals((int) one.getValues().get(0), 0);
         Assert.assertEquals((int) one.getValues().get(1), 1);
@@ -54,9 +66,7 @@ public class CustomConverterChangesTargetTest {
 
     @RootElement("one")
     public static class One {
-
         private List<Integer> values = new ArrayList<Integer>();
-
 
         public One() {
             values.add(0);

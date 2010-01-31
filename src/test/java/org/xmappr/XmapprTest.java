@@ -15,7 +15,15 @@ public class XmapprTest {
 
     @Test
     public void basicTest() {
+        StringReader reader = new StringReader(SampleXml.xml);
+        Xmappr xmappr = new Xmappr(SampleXml.One.class);
 
+        SampleXml.One one = (SampleXml.One) xmappr.fromXML(reader);
+        asserts(one);
+    }
+
+     @Test
+    public void basicTestViaXML() {
         StringReader reader = new StringReader(SampleXml.xml);
 
         // Double step to make Xmappr work harder (not necessary normally - do not copy)
@@ -24,6 +32,10 @@ public class XmapprTest {
         Xmappr xmappr = new Xmappr(configuration);
 
         SampleXml.One one = (SampleXml.One) xmappr.fromXML(reader);
+        asserts(one);
+    }
+
+    private void asserts(SampleXml.One one) {
         Assert.assertEquals(one.attr, "text1");
         Assert.assertEquals(one.attr2, 1111);
         Assert.assertEquals(one.attr3, 1.1f, 0.0f);
@@ -42,8 +54,6 @@ public class XmapprTest {
         Assert.assertTrue(one.two.four.b);
         Assert.assertEquals(one.two.four.c, 'f');
         Assert.assertEquals(one.two.four.f, -15.555f, 0.0f);
-
-
     }
 
 

@@ -34,6 +34,15 @@ public class ByteArrayConverterTest {
     @org.testng.annotations.Test
     public void test() throws IOException, SAXException {
         StringReader reader = new StringReader(inXml);
+        Xmappr xmappr = new Xmappr(Test.class);
+
+        Test test = (Test) xmappr.fromXML(reader);
+        asserts(xmappr, test);
+    }
+
+    @org.testng.annotations.Test
+    public void testViaXML() throws IOException, SAXException {
+        StringReader reader = new StringReader(inXml);
 
         // Double step to make Xmappr work harder (not necessary normally - do not copy)
         // Reads Class configuration, produces XML configuration from it and then feeds it to Xmappr
@@ -41,7 +50,10 @@ public class ByteArrayConverterTest {
         Xmappr xmappr = new Xmappr(configuration);
 
         Test test = (Test) xmappr.fromXML(reader);
+        asserts(xmappr, test);
+    }
 
+    private void asserts(Xmappr xmappr, Test test) throws SAXException, IOException {
         // writing back to XML
         StringWriter sw = new StringWriter();
         xmappr.toXML(test, sw);
@@ -54,7 +66,6 @@ public class ByteArrayConverterTest {
         Assert.assertEquals(new String(test.node), loremIpsum);
         XMLUnit.setIgnoreWhitespace(true);
         XMLAssert.assertXMLEqual(inXml, ssw);
-
     }
 
     @RootElement("test")

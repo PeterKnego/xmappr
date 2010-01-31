@@ -33,6 +33,23 @@ public class AttributeNsTest {
     public void test() throws IOException, SAXException {
         StringReader reader = new StringReader(xml);
 
+        Xmappr xmappr = new Xmappr(aaa.class);
+
+        // predefined namespaces
+        xmappr.addNamespace("l","lowercase");
+        xmappr.addNamespace("u","uppercase");
+        xmappr.addNamespace("xn","xnumber");
+        xmappr.addNamespace("","defaultNS");
+
+        aaa a = (aaa) xmappr.fromXML(reader);
+
+        asserts(xmappr, a);
+    }
+
+    @Test
+    public void testViaXML() throws IOException, SAXException {
+        StringReader reader = new StringReader(xml);
+
         //default namespace
         // Double step to make Xmappr work harder (not necessary normally - do not copy)
         // Reads Class configuration, produces XML configuration from it and then feeds it to Xmappr
@@ -48,6 +65,10 @@ public class AttributeNsTest {
 
         aaa a = (aaa) xmappr.fromXML(reader);
 
+        asserts(xmappr, a);
+    }
+
+    private void asserts(Xmappr xmappr, aaa a) throws SAXException, IOException {
         Assert.assertEquals(a.node_bbbb.zz, 11);
         Assert.assertEquals(a.node_bbbb.node_ccc.WW, 22);
         Assert.assertEquals(a.node_BBB.sss, "***");

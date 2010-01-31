@@ -13,10 +13,18 @@ public class CustomConverterOnRootElement {
 
     @Test
     public void test() {
-
         Xmappr xmappr = new Xmappr(RoundedInt.class);
-//        xmappr.addConverter(new RoundedIntValueConverter());
+        RoundedInt roundedInt = (RoundedInt) xmappr.fromXML(new StringReader(xml));
 
+        Assert.assertEquals(roundedInt.value, 1);
+    }
+
+    @Test
+    public void testViaXML() {
+        // Double step to make Xmappr work harder (not necessary normally - do not copy)
+        // Reads Class configuration, produces XML configuration from it and then feeds it to Xmappr
+        StringReader configuration = XmlConfigTester.reader(RoundedInt.class);
+        Xmappr xmappr = new Xmappr(configuration);
         RoundedInt roundedInt = (RoundedInt) xmappr.fromXML(new StringReader(xml));
 
         Assert.assertEquals(roundedInt.value, 1);

@@ -36,9 +36,6 @@ public class ComplexParentClassTest {
         // second XML produces instance of Two class        
         Assert.assertEquals(second.parent.getClass(), Two.class);
         Assert.assertEquals(((Two)second.parent).inner, 13);
-
-        System.out.println("");
-
     }
 
     public static class Parent {

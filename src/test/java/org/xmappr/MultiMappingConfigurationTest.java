@@ -31,13 +31,23 @@ public class MultiMappingConfigurationTest {
     public void test() throws IOException, SAXException {
         StringReader reader1 = new StringReader(xml1);
         StringReader reader2 = new StringReader(xml2);
+        Xmappr xmappr = new Xmappr(One.class);
+        asserts(reader1, reader2, xmappr);
+    }
 
-        // configure the first mapping
+     @Test
+    public void testViaXML() throws IOException, SAXException {
+        StringReader reader1 = new StringReader(xml1);
+        StringReader reader2 = new StringReader(xml2);
+
         // Double step to make Xmappr work harder (not necessary normally - do not copy)
         // Reads Class configuration, produces XML configuration from it and then feeds it to Xmappr
         StringReader configuration = XmlConfigTester.reader(One.class);
         Xmappr xmappr = new Xmappr(configuration);
+        asserts(reader1, reader2, xmappr);
+    }
 
+    private void asserts(StringReader reader1, StringReader reader2, Xmappr xmappr) throws SAXException, IOException {
         // add the second mapping
         xmappr.addMapping(Two.class);
         xmappr.setPrettyPrint(true);

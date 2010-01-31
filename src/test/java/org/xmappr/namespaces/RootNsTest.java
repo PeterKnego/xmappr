@@ -36,6 +36,20 @@ public class RootNsTest {
     public void test() throws IOException, SAXException {
         StringReader reader = new StringReader(xml);
         StringWriter writer = new StringWriter();
+        Xmappr xmappr = new Xmappr(aaa.class);
+
+        // predefined namespaces
+        xmappr.addNamespace("l","lowercase");
+        xmappr.addNamespace("u","uppercase");
+
+        aaa a = (aaa) xmappr.fromXML(reader);
+        asserts(writer, xmappr, a);
+    }
+
+    @Test
+    public void testViaXML() throws IOException, SAXException {
+        StringReader reader = new StringReader(xml);
+        StringWriter writer = new StringWriter();
 
         // Double step to make Xmappr work harder (not necessary normally - do not copy)
         // Reads Class configuration, produces XML configuration from it and then feeds it to Xmappr
@@ -47,7 +61,10 @@ public class RootNsTest {
         xmappr.addNamespace("u","uppercase");
 
         aaa a = (aaa) xmappr.fromXML(reader);
+        asserts(writer, xmappr, a);
+    }
 
+    private void asserts(StringWriter writer, Xmappr xmappr, aaa a) throws SAXException, IOException {
         Assert.assertTrue(a.node_bbbb.node_cccc != null);
         Assert.assertTrue(a.node_BBB.node_CCC != null);
         Assert.assertTrue(a.node_x111.node_x222 != null);

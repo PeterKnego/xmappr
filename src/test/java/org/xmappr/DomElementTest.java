@@ -28,8 +28,25 @@ public class DomElementTest {
     public void test() {
         Reader reader = new StringReader(xml);
         Xmappr xmappr = new Xmappr(Customer.class);
-        Customer customer = (Customer) xmappr.fromXML(reader);
 
+        Customer customer = (Customer) xmappr.fromXML(reader);
+        asserts(customer);
+    }
+
+    @Test
+    public void testViaXML() {
+        Reader reader = new StringReader(xml);
+
+        // Double step to make Xmappr work harder (not necessary normally - do not copy)
+        // Reads Class configuration, produces XML configuration from it and then feeds it to Xmappr
+        StringReader configuration = XmlConfigTester.reader(Customer.class);
+        Xmappr xmappr = new Xmappr(configuration);
+
+        Customer customer = (Customer) xmappr.fromXML(reader);
+        asserts(customer);
+    }
+
+    private void asserts(Customer customer) {
         // <address> has two subelements
         Assert.assertEquals(customer.address.getElements().size(), 3);
         // first node is <street>

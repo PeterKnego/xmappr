@@ -12,6 +12,8 @@ public class ConfigElement {
     // This fields are not configurable via mapping configuration.
     // They are derived during the validation phase.
     public Class accessorType;
+    public Class converterType;
+    public boolean isCollection;
     public boolean fromAnnotation;
     public Method getterMethod;
     public Method setterMethod;
@@ -56,12 +58,15 @@ public class ConfigElement {
     public ConfigElement() {
     }
 
-    public ConfigElement(boolean fromAnnotation, String name, Class accessorType, Field targetField, String field,
+    public ConfigElement(boolean fromAnnotation, String name, Class accessorType, boolean isCollection,
+                         Class converterType, Field targetField, String field,
                          Method getterMethod, String getterName, Method setterMethod, String setterName,
                          String defaultValue, Class targetType, String format, Class<? extends Converter> converter,
                          List<ConfigNamespace> namespaces) {
         this.fromAnnotation = fromAnnotation;
         this.accessorType = accessorType;
+        this.isCollection = isCollection;
+        this.converterType = converterType;
         this.targetField = targetField;
         this.field = field;
         this.getterMethod = getterMethod;
@@ -92,13 +97,13 @@ public class ConfigElement {
             out.append(space).append("  ").append("targetType=").append(targetType.getName()).append("\n");
 
         if (accessorType != null)
-                    out.append(space).append("  ").append("accessorType=").append(accessorType.getName()).append("\n");
+            out.append(space).append("  ").append("accessorType=").append(accessorType.getName()).append("\n");
 
         if (converter != null)
             out.append(space).append("  ").append("converter=").append(converter.getName()).append("\n");
 
         if (text != null)
-            out.append(text.toString(space + "  ")).append("\n");;
+            out.append(text.toString(space + "  ")).append("\n");
 
         if (namespace != null)
             for (ConfigNamespace configNamespace : namespace) {
