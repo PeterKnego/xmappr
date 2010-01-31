@@ -11,7 +11,6 @@ public class XmlConfigTester {
     }
 
     public static StringReader reader(Class rootClass, String[] namespaces) {
-
         Xmappr xmappr = new Xmappr(rootClass);
 
         if(namespaces!=null){
@@ -25,5 +24,4 @@ public class XmlConfigTester {
 
         return new StringReader(classConf);
     }
-
 }

@@ -6,7 +6,6 @@ import java.io.StringReader;
 
 public class ConverterNotFoundTest {
 
-
     private static String xml = "" +
             "<top>" +
             " <sub>" +
@@ -22,17 +21,14 @@ public class ConverterNotFoundTest {
 
     @RootElement
     public static class Top {
-
         @Element("sub")
         public Sub subelement;
-
     }
 
     /**
      * This class contains no XML mapping annotations, so it wont be processed.
      */
     public static class Sub {
-
         public String text;
     }
 }

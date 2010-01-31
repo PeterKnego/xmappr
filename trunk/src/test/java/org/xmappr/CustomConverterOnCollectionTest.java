@@ -1,13 +1,18 @@
 package org.xmappr;
 
+import org.custommonkey.xmlunit.XMLAssert;
+import org.custommonkey.xmlunit.XMLUnit;
 import org.testng.annotations.Test;
 import org.xmappr.converters.ElementConverter;
+import org.xml.sax.SAXException;
 
 import javax.xml.namespace.QName;
+import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class CustomConverterOnCollectionTest {
@@ -30,7 +35,7 @@ public class CustomConverterOnCollectionTest {
             "</users>";
 
     @Test
-    public void test() {
+    public void test() throws IOException, SAXException {
         Xmappr xmappr = new Xmappr(Users.class);
         xmappr.setPrettyPrint(true);
         Users root = (Users) xmappr.fromXML(new StringReader(xml));
@@ -38,15 +43,18 @@ public class CustomConverterOnCollectionTest {
         StringWriter sw = new StringWriter();
         xmappr.toXML(root, sw);
 
-        System.out.println(sw);
+        XMLUnit.setIgnoreWhitespace(true);
+        XMLAssert.assertXMLEqual(xml, sw.toString());
     }
 
     @RootElement("users")
     public static class Users {
         @Element
         public Integer page;
+
         @Element
         public Integer perPage;
+
         @Element(name = "user", converter = UserCompoundConverter.class)
         public Collection<UserCompound> users;
     }
@@ -98,7 +106,7 @@ public class CustomConverterOnCollectionTest {
                     userMeta.key = reader.getAttribute(new QName("key"));
                     userMeta.value = reader.getText();
                     if (userCompound.meta == null) {
-                        userCompound.meta = new HashMap<String, UserMeta>();
+                        userCompound.meta = new LinkedHashMap<String, UserMeta>();
                     }
                     userCompound.meta.put(userMeta.key, userMeta);
                 }

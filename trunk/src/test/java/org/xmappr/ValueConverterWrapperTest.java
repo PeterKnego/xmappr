@@ -6,6 +6,9 @@
  */
 package org.xmappr;
 
+import org.testng.Assert;
+import org.testng.annotations.Test;
+
 import java.io.StringReader;
 
 public class ValueConverterWrapperTest {
@@ -18,8 +21,17 @@ public class ValueConverterWrapperTest {
             "</node>\n" +
             "</root>";
 
-    public static void main(String[] args) {
+    @Test
+    public void test() {
+        StringReader reader = new StringReader(xml);
+        Xmappr xmappr = new Xmappr(Root.class);
+        Root root = (Root) xmappr.fromXML(reader);
+        Assert.assertEquals(root.a, new Float(2.2));
+        Assert.assertEquals(root.node, new Integer(123));
+    }
 
+    @Test
+    public void testViaXML() {
         StringReader reader = new StringReader(xml);
 
         // Double step to make Xmappr work harder (not necessary normally - do not copy)
@@ -27,6 +39,8 @@ public class ValueConverterWrapperTest {
         StringReader configuration = XmlConfigTester.reader(Root.class);
         Xmappr xmappr = new Xmappr(configuration);
         Root root = (Root) xmappr.fromXML(reader);
+        Assert.assertEquals(root.a, new Float(2.2));
+        Assert.assertEquals(root.node, new Integer(123));
     }
 
     @RootElement

@@ -31,30 +31,37 @@ public class DomElementConverterTest {
             "<data>YYY</data>" +
             "</root>";
 
-    @Test
+     @Test
     public void test() throws IOException, SAXException {
-
         StringReader reader = new StringReader(xml);
-
-        // Double step to make Xmappr work harder (not necessary normally - do not copy)
-        // Reads Class configuration, produces XML configuration from it and then feeds it to Xmappr
-//        StringReader configuration = XmlConfigTester.reader(Root.class);
         Xmappr xmappr = new Xmappr(Root.class);
         xmappr.setPrettyPrint(false);
 
         Root root = (Root) xmappr.fromXML(reader);
+        asserts(xmappr, root);
+    }
 
+    @Test
+    public void testViaXML() throws IOException, SAXException {
+        StringReader reader = new StringReader(xml);
+
+        // Double step to make Xmappr work harder (not necessary normally - do not copy)
+        // Reads Class configuration, produces XML configuration from it and then feeds it to Xmappr
+        StringReader configuration = XmlConfigTester.reader(Root.class);
+        Xmappr xmappr = new Xmappr(configuration);
+        xmappr.setPrettyPrint(false);
+
+        Root root = (Root) xmappr.fromXML(reader);
+        asserts(xmappr, root);
+    }
+
+    private void asserts(Xmappr xmappr, Root root) throws SAXException, IOException {
         // writing back to XML
         StringWriter sw = new StringWriter();
         xmappr.toXML(root, sw);
-        String ssw = sw.toString();
-        System.out.println("");
-        System.out.println(xml);
-        System.out.println("");
-        System.out.println(ssw);
 
         XMLUnit.setIgnoreWhitespace(true);
-        XMLAssert.assertXMLEqual(xml, ssw);
+        XMLAssert.assertXMLEqual(xml, sw.toString());
     }
 
     @RootElement("root")

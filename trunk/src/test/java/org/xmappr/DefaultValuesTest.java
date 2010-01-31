@@ -29,10 +29,18 @@ public class DefaultValuesTest {
             "<c/>" +
             "</root>";
 
-
     @Test
     public void test() throws IOException, SAXException {
+        StringReader reader = new StringReader(inXml);
+        Xmappr xmappr = new Xmappr(Root.class);
+        xmappr.setPrettyPrint(false);
 
+        Root root = (Root) xmappr.fromXML(reader);
+        asserts(xmappr, root);
+    }
+
+    @Test
+    public void testViaXML() throws IOException, SAXException {
         StringReader reader = new StringReader(inXml);
 
         // Double step to make Xmappr work harder (not necessary normally - do not copy)
@@ -42,7 +50,10 @@ public class DefaultValuesTest {
         xmappr.setPrettyPrint(false);
 
         Root root = (Root) xmappr.fromXML(reader);
+        asserts(xmappr, root);
+    }
 
+    private void asserts(Xmappr xmappr, Root root) throws SAXException, IOException {
         // check values
         Assert.assertEquals(root.one, 5);
         Assert.assertEquals(root.a.text, "text1");

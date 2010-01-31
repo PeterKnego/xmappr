@@ -30,7 +30,16 @@ public class CustomConverterTest {
 
     @Test
     public void customConverterTest() {
+        StringReader reader = new StringReader(xml);
+        Xmappr xmappr = new Xmappr(One.class);
+        xmappr.addMapping(Three.class);
 
+        One one = (One) xmappr.fromXML(reader);
+        asserts(one);
+    }
+
+    @Test
+    public void customConverterTestViaXML() {
         StringReader reader = new StringReader(xml);
 
         // Double step to make Xmappr work harder (not necessary normally - do not copy)
@@ -38,14 +47,17 @@ public class CustomConverterTest {
         StringReader configuration = XmlConfigTester.reader(One.class);
         Xmappr xmappr = new Xmappr(configuration);
         xmappr.addMapping(Three.class);
-        One one = (One) xmappr.fromXML(reader);
 
+        One one = (One) xmappr.fromXML(reader);
+        asserts(one);
+    }
+
+    private void asserts(One one) {
         Assert.assertEquals(one.text, "SHOULD BE UPPER CASE"); // should be converted to upper case
         Assert.assertEquals(one.custom.getClass(), Custom.class);
         Assert.assertEquals(one.custom.value, "this is a text of a custom field");
         Assert.assertEquals(one.custom.three.attr, "should be lower case"); // should be converted to lower case
         Assert.assertEquals(one.custom.three.textField, "textThree");
-
     }
 
     @Test(expectedExceptions = XmapprException.class)

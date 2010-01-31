@@ -34,9 +34,22 @@ public class DefaultNSEachSubnode {
                     "    <x222 />\n" +
                     "  </x111>\n" +
                     "</aaa>";
+     @Test
+    public void test() throws IOException, SAXException {
+        StringReader reader = new StringReader(xml);
+
+        Xmappr xmappr = new Xmappr(aaa.class);
+
+        // this is set for testing purposes - making sure that class defined namespace overrides this
+        xmappr.addNamespace("","defaultRoot2");
+
+        aaa a = (aaa) xmappr.fromXML(reader);
+
+         asserts(xmappr, a);
+    }
 
     @Test
-    public void test() throws IOException, SAXException {
+    public void testViaXML() throws IOException, SAXException {
         StringReader reader = new StringReader(xml);
 
         // Double step to make Xmappr work harder (not necessary normally - do not copy)
@@ -49,6 +62,10 @@ public class DefaultNSEachSubnode {
 
         aaa a = (aaa) xmappr.fromXML(reader);
 
+        asserts(xmappr, a);
+    }
+
+    private void asserts(Xmappr xmappr, aaa a) throws SAXException, IOException {
         Assert.assertTrue(a.node_bbb.node_cccc != null);
         Assert.assertTrue(a.node_BBB.node_CCC != null);
         Assert.assertTrue(a.node_x111.node_x222 != null);

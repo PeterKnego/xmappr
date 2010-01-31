@@ -23,8 +23,17 @@ public class BigDecimalConverterTest {
             "<node>123.456</node>" +
             "</test>";
 
-    @org.testng.annotations.Test
+     @org.testng.annotations.Test
     public void test() throws IOException, SAXException {
+        StringReader reader = new StringReader(inXml);
+        Xmappr xmappr = new Xmappr(Test.class);
+
+        Test test = (Test) xmappr.fromXML(reader);
+        asserts(xmappr, test);
+    }
+
+    @org.testng.annotations.Test
+    public void testViaXML() throws IOException, SAXException {
         StringReader reader = new StringReader(inXml);
 
         // Double step to make Xmappr work harder (not necessary normally - do not copy)
@@ -33,7 +42,10 @@ public class BigDecimalConverterTest {
         Xmappr xmappr = new Xmappr(configuration);
 
         Test test = (Test) xmappr.fromXML(reader);
+        asserts(xmappr, test);
+    }
 
+    private void asserts(Xmappr xmappr, Test test) throws SAXException, IOException {
         // writing back to XML
         StringWriter sw = new StringWriter();
         xmappr.toXML(test, sw);
@@ -46,7 +58,6 @@ public class BigDecimalConverterTest {
         Assert.assertEquals(test.node, new BigDecimal("123.456"));
         XMLUnit.setIgnoreWhitespace(true);
         XMLAssert.assertXMLEqual(inXml, ssw);
-
     }
 
     @RootElement("test")

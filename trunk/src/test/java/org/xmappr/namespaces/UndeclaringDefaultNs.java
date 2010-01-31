@@ -30,6 +30,18 @@ public class UndeclaringDefaultNs {
     @Test
     public void test() throws IOException, SAXException {
         StringReader reader = new StringReader(xml);
+        Xmappr xmappr = new Xmappr(aaa.class);
+
+        // predefined default namespace
+        xmappr.addNamespace("","lowercase");
+
+        aaa a = (aaa) xmappr.fromXML(reader);
+        asserts(xmappr, a);
+    }
+
+    @Test
+    public void testViaXML() throws IOException, SAXException {
+        StringReader reader = new StringReader(xml);
 
         // Double step to make Xmappr work harder (not necessary normally - do not copy)
         // Reads Class configuration, produces XML configuration from it and then feeds it to Xmappr
@@ -40,7 +52,10 @@ public class UndeclaringDefaultNs {
         xmappr.addNamespace("","lowercase");
 
         aaa a = (aaa) xmappr.fromXML(reader);
+        asserts(xmappr, a);
+    }
 
+    private void asserts(Xmappr xmappr, aaa a) throws SAXException, IOException {
         Assert.assertTrue(a.node_bbb.node_ccc.node_ddd != null);
 
         // writing back to XML
@@ -49,7 +64,6 @@ public class UndeclaringDefaultNs {
 //        System.out.println(sw);
         XMLUnit.setIgnoreWhitespace(true);
         XMLAssert.assertXMLEqual(xml, sw.toString());
-
     }
 
     @RootElement("aaa")

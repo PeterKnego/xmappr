@@ -25,17 +25,29 @@ public class MultiattributeMapTest {
 
     @Test
     public void test() throws IOException, SAXException {
-
         StringReader reader = new StringReader(in);
-
-        // Double step to make Xmappr work harder (not necessary normally - do not copy)
-        // Reads Class configuration, produces XML configuration from it and then feeds it to Xmappr
-//        StringReader configuration = XmlConfigTester.reader(Root.class);
         Xmappr xmappr = new Xmappr(Root.class);
         xmappr.setPrettyPrint(false);
 
         Root one = (Root) xmappr.fromXML(reader);
+        asserts(xmappr, one);
+    }
 
+    @Test
+    public void testViaXML() throws IOException, SAXException {
+        StringReader reader = new StringReader(in);
+
+        // Double step to make Xmappr work harder (not necessary normally - do not copy)
+        // Reads Class configuration, produces XML configuration from it and then feeds it to Xmappr
+        StringReader configuration = XmlConfigTester.reader(Root.class);
+        Xmappr xmappr = new Xmappr(configuration);
+        xmappr.setPrettyPrint(false);
+
+        Root one = (Root) xmappr.fromXML(reader);
+        asserts(xmappr, one);
+    }
+
+    private void asserts(Xmappr xmappr, Root one) throws SAXException, IOException {
         Assert.assertEquals(one.attrs.get(new QName("a")), "abc");
         Assert.assertEquals(one.attrs.get(new QName("b")), 123);
         Assert.assertEquals(one.attrs.get(new QName("c")), "mama");
@@ -46,10 +58,6 @@ public class MultiattributeMapTest {
         // writing back to XML
         StringWriter sw = new StringWriter();
         xmappr.toXML(one, sw);
-        System.out.println("");
-        System.out.println(in);
-        System.out.println("");
-        System.out.println(sw.toString());
 
         XMLUnit.setIgnoreWhitespace(true);
         XMLAssert.assertXMLEqual(out, sw.toString());

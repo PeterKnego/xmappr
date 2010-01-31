@@ -41,15 +41,25 @@ public class DefaultNsOverridingTest {
             "  </x111>\n" +
             "</aaa>";
 
-    @Test
+     @Test
     public void test() throws IOException, SAXException {
+        StringReader reader = new StringReader(xml);
+
+        Xmappr xmappr = new Xmappr(aaa.class);
+        asserts(reader, xmappr);
+    }
+    @Test
+    public void testViaXML() throws IOException, SAXException {
         StringReader reader = new StringReader(xml);
 
         // Double step to make Xmappr work harder (not necessary normally - do not copy)
         // Reads Class configuration, produces XML configuration from it and then feeds it to Xmappr
         StringReader configuration = XmlConfigTester.reader(aaa.class, new String[]{"u=uppercase", "xn=xnumber"});
         Xmappr xmappr = new Xmappr(configuration);
+        asserts(reader, xmappr);
+    }
 
+    private void asserts(StringReader reader, Xmappr xmappr) throws SAXException, IOException {
         // predefined namespaces
         xmappr.addNamespace("u", "uppercase");
         xmappr.addNamespace("xn", "xnumber");

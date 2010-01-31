@@ -39,10 +39,8 @@ public class ExistingObjectTest {
             "<short/>" +
             "</primitives> ";
 
-
     @Test
     public void mainTest() throws IllegalAccessException, IOException, SAXException {
-
         StringReader reader = new StringReader(inXml);
         Xmappr xmappr = new Xmappr(Primitives.class);
         xmappr.setPrettyPrint(true);
@@ -54,7 +52,30 @@ public class ExistingObjectTest {
         primitives.flv = -1.1f;
 
         xmappr.fromXML(reader, primitives);
+        asserts(xmappr, primitives);
+    }
 
+    @Test
+    public void mainTestViaXML() throws IllegalAccessException, IOException, SAXException {
+        StringReader reader = new StringReader(inXml);
+
+        // Double step to make Xmappr work harder (not necessary normally - do not copy)
+        // Reads Class configuration, produces XML configuration from it and then feeds it to Xmappr
+        StringReader configuration = XmlConfigTester.reader(Primitives.class);
+        Xmappr xmappr = new Xmappr(configuration);
+        xmappr.setPrettyPrint(true);
+
+        // create an existing object with some data
+        Primitives primitives = new Primitives();
+        primitives.in = 1000;
+        primitives.value = "A text value";
+        primitives.flv = -1.1f;
+
+        xmappr.fromXML(reader, primitives);
+        asserts(xmappr, primitives);
+    }
+
+    private void asserts(Xmappr xmappr, Primitives primitives) throws SAXException, IOException {
         // attributes
         Assert.assertEquals(primitives.in, 1000);
         Assert.assertEquals(primitives.l, 9999);
@@ -97,7 +118,6 @@ public class ExistingObjectTest {
 
         XMLUnit.setIgnoreWhitespace(true);
         XMLAssert.assertXMLEqual(outXml, ssw);
-
     }
 
     @RootElement("primitives")

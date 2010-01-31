@@ -31,13 +31,24 @@ public class CustomConverterMultiTypeTest {
     @Test
     public void customConverterMultiTypeTest() {
         StringReader reader = new StringReader(xml);
+        Xmappr xmappr = new Xmappr(Root.class);
+        Root root = (Root) xmappr.fromXML(reader);
+        asserts(root);
+    }
+
+    @Test
+    public void customConverterMultiTypeTestViaXML() {
+        StringReader reader = new StringReader(xml);
 
         // Double step to make Xmappr work harder (not necessary normally - do not copy)
         // Reads Class configuration, produces XML configuration from it and then feeds it to Xmappr
         StringReader configuration = XmlConfigTester.reader(Root.class);
         Xmappr xmappr = new Xmappr(configuration);
         Root root = (Root) xmappr.fromXML(reader);
+        asserts(root);
+    }
 
+    private void asserts(Root root) {
         // check that Map contains three attributes
         Assert.assertEquals(root.attributes.size(), 3);
 
@@ -45,7 +56,6 @@ public class CustomConverterMultiTypeTest {
         Assert.assertEquals(root.attributes.get(new QName("one")).getClass(), One.class);
         Assert.assertEquals(root.attributes.get(new QName("two")).getClass(), Two.class);
         Assert.assertEquals(root.attributes.get(new QName("three")).getClass(), Three.class);
-
     }
 
     /**
@@ -81,7 +91,6 @@ public class CustomConverterMultiTypeTest {
      * Custom ElementConverter that can convert to multiple classes
      */
     public static class CustomMultiTypeElementConverter implements ElementConverter {
-
         // capable of converting multiple types:
         // One.class, Two.class, Three.class
         public boolean canConvert(Class type) {
@@ -90,7 +99,6 @@ public class CustomConverterMultiTypeTest {
 
 
         public Object fromElement(XMLSimpleReader reader, MappingContext mappingContext, String defaultValue, String format, Class targetType, Object targetObject) {
-
             // read the text value of current XML element
             String value = reader.getText();
 
@@ -105,13 +113,11 @@ public class CustomConverterMultiTypeTest {
             } else if (Three.class.equals(targetType)) {
                 return new Three(Integer.valueOf(value));
             }
-
             return null;
         }
 
         // not used
         public void toElement(Object object, QName nodeName, XMLSimpleWriter writer, MappingContext mappingContext, String defaultValue, String format) {
-
         }
     }
 
