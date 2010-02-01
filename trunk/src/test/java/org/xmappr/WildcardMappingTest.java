@@ -100,7 +100,7 @@ public class WildcardMappingTest {
         Reader reader = new StringReader(xml);
         // Double step to make Xmappr work harder (not necessary normally - do not copy)
         // Reads Class configuration, produces XML configuration from it and then feeds it to Xmappr
-        StringReader configuration = XmlConfigTester.reader(Root.class);
+        StringReader configuration = XmlConfigTester.reader(RootTwo.class);
         Xmappr xmappr = new Xmappr(configuration);
         assertsList(reader, xmappr);
     }

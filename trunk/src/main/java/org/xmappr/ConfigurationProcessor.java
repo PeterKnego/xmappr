@@ -155,7 +155,7 @@ public class ConfigurationProcessor {
                 // Rule 2.: converterType equals accessorType, unless accessorType is a Collection,
                 // then converterType equals Collection's parametrized type.
                 Class converterType = isCollection ?  // accessor is a Collection?
-                        getParameterizedType(field.getGenericType()) :  // get it's parametrized type
+                        getParameterizedCollectionType(field.getGenericType()) :  // get it's parametrized type
                         accessorType;
 
                 // look if custom converter defined
@@ -201,56 +201,17 @@ public class ConfigurationProcessor {
                         nsList
                 );
 
-//                // if custom converter is not defined then we need to look for more configuration
-//                if (annotation.converter().equals(ElementConverter.class)) {
-//
-//                    // Which class to process next? Defined by targetType or type of field?
-//                    // If targetType is not defined (==Object.class) then derive type from field.
-//                    Class nextClass;
-//                    if (!annotation.targetType().equals(Object.class)) {
-//                        nextClass = annotation.targetType();
-//                    } else {
-//                        // Require parametrized type when field is a Collection AND element name is not "*"
-//                        if (Collection.class.isAssignableFrom(field.getType()) && !elementName.equals("*")) {
-//
-//                            Class parametrizedType = getParameterizedType(field.getGenericType());
-//                            if (parametrizedType == null) {
-//                                throw new XmapprConfigurationException("Error: @Element annotation is used on " +
-//                                        "field " + field.getName() + " (class " + elementClass.getName() +
-//                                        ") is of  " + field.getType() + " type. " +
-//                                        "@Element annotation defined on fields of java.util.Collection type must have " +
-//                                        "either 'targetType' attribute defined or Collection type must be a " +
-//                                        "parametrized generic type (e.g. List<String>).");
-//                            }
-//                            nextClass = parametrizedType;
-//                        } else {
-//                            nextClass = field.getType();
-//                        }
-//                    }
-//
-//                    String uniqueElementName = elementClass.getName() + "$" + elementName;
-//
-//                    // Process next class if it's converter is not yet defined
-//                    if (!mappingContext.isElementConverterDefined(nextClass)) {
-//
-//                        // Was this class already processed?
-//                        // This eliminates loops.
-//                        if (classCache.containsKey(uniqueElementName)) {
-//
-//                            // use an existing
-//                            element = classCache.get(uniqueElementName);
-//                        } else {
-//
-//                            // recursive call to process next class
-//                            classCache.put(uniqueElementName, element);
-//                            processNextClass(nextClass, element, mappingContext, classCache);
-//                        }
-//                    }
-//                }
-
                 // initialize cache if needed
                 if (confElementCache == null) {
                     confElementCache = new HashMap<String, ConfigElement>();
+                }
+
+                // error - duplicate element names
+                if (confElementCache.containsKey(elementName)) {
+                    throw new XmapprConfigurationException("Error: @Element annotation on "
+                            + "field " + field.getName() + " in class " + elementClass.getName()
+                            + " contains a duplicate XML element name: " + elementName
+                            + " @Element annotations must map to unique XML elements.");
                 }
 
                 confElementCache.put(elementName, element);
@@ -267,7 +228,7 @@ public class ConfigurationProcessor {
 
                 String elementName = null;
                 Class accessorType, converterType;
-                Method getter = null, setter = null;
+                Method getterMethod = null, setterMethod = null;
 
                 // retrieve targetType
                 Class targetType = annotation.targetType().equals(Object.class) ? null : annotation.targetType();
@@ -278,14 +239,14 @@ public class ConfigurationProcessor {
                 Class getterType = hasGetterFormat(method);
                 Class setterType = hasSetterFormat(method);
 
-                // Check if this is a getter or setter
+                // Check if this is a getter or setterMethod
                 if (getterType != null) {
 
                     // define the getter
-                    getter = method;
+                    getterMethod = method;
 
                     // Try getting XML element name from @Element annotation.
-                    // If not defined, use name derived from setter method name
+                    // If not defined, use name derived from setterMethod method name
                     elementName = annotation.value().length() != 0 ? annotation.value()
                             : (annotation.name().length() != 0 ? annotation.name()
                             : getGetterName(method));
@@ -299,13 +260,13 @@ public class ConfigurationProcessor {
                     // Rule 2.: converterType equals accessorType, unless accessorType is a Collection,
                     // then converterType equals Collection's parametrized type.
                     converterType = isCollection ?  // accessor is a Collection?
-                            getParameterizedType(getter.getGenericReturnType()) :  // get it's parametrized type
+                            getParameterizedCollectionType(getterMethod.getGenericReturnType()) :  // get it's parametrized type
                             accessorType;
 
                 } else if (setterType != null) {
 
-                    // define the setter
-                    setter = method;
+                    // define the setterMethod
+                    setterMethod = method;
 
                     // Try getting XML element name from @Element annotation.
                     // If not defined, use name derived from getter method name
@@ -313,16 +274,16 @@ public class ConfigurationProcessor {
                             : (annotation.name().length() != 0 ? annotation.name()
                             : getSetterName(method));
 
-                    // Rule 1.: base type is defined by setter's argument type
+                    // Rule 1.: base type is defined by setterMethod's argument type
                     accessorType = setterType;
 
-                    // is setter type a Collection?
+                    // is setterMethod type a Collection?
                     isCollection = Collection.class.isAssignableFrom(setterType);
 
                     // Rule 2.: converterType equals accessorType, unless accessorType is a Collection,
                     // then converterType equals Collection's parametrized type.
                     converterType = isCollection ?  // accessor is a Collection?
-                            getParameterizedType(setter.getGenericParameterTypes()[0]) :  // get it's parametrized type
+                            getParameterizedCollectionType(setterMethod.getGenericParameterTypes()[0]) :  // get it's parametrized type
                             accessorType;
 
                 } else {
@@ -360,8 +321,15 @@ public class ConfigurationProcessor {
                         // todo ERROR - XML element defined via both field and method
                     }
                     element.accessorType = accessorType;
-                    element.getterMethod = getter == null ? element.getterMethod : getter;
-                    element.setterMethod = setter == null ? element.setterMethod : setter;
+                    element.getterMethod = getterMethod == null ? element.getterMethod : getterMethod;
+                    if (getterMethod != null) {
+                        element.getter = getterMethod.getName();
+                        element.getterMethod = getterMethod;
+                    }
+                    if (setterMethod != null) {
+                        element.setter = setterMethod.getName();
+                        element.setterMethod = setterMethod;
+                    }
                     element.defaultvalue = "".equals(annotation.defaultValue()) ? null : annotation.defaultValue();
                     element.targetType = targetType;
                     element.format = annotation.format();
@@ -382,10 +350,10 @@ public class ConfigurationProcessor {
                             converterType,
                             null,
                             null,
-                            getter,
-                            (getter == null) ? null : getter.getName(),
-                            setter,
-                            (setter == null) ? null : setter.getName(),
+                            getterMethod,
+                            (getterMethod == null) ? null : getterMethod.getName(),
+                            setterMethod,
+                            (setterMethod == null) ? null : setterMethod.getName(),
                             "".equals(annotation.defaultValue()) ? null : annotation.defaultValue(),
                             targetType,
                             annotation.format(),
@@ -464,31 +432,72 @@ public class ConfigurationProcessor {
             // scan class methods for @Attribute annotations
             for (Attribute annotation : getAttributeAnnotations(field)) {
 
-                // when @Attribute is defined on field, the base type is the type of field
-                Class accessorType = field.getType();
+//                // when @Attribute is defined on field, the base type is the type of field
+//                Class accessorType = field.getType();
+//
+//
+////                // if targetType annotation is not defined, use type of the field
+////                Class targetType = (annotation.targetType().equals(Object.class))
+////                        ? field.getType() : annotation.targetType();
 
-                // Try getting XML element name from @Attribute annotation.
+                // Try getting XML attribute name from @Attribute annotation.
                 // If not defined, use the name of the field
                 String attributeName = annotation.value().length() != 0 ? annotation.value()
                         : (annotation.name().length() != 0 ? annotation.name() : field.getName());
 
-//                // if targetType annotation is not defined, use type of the field
-//                Class targetType = (annotation.targetType().equals(Object.class))
-//                        ? field.getType() : annotation.targetType();
+                // Rule 1.: accessorType is type of field
+                Class accessorType = field.getType();
+
+                // XML element name is derived from annotation or from field name
+                String elementName = annotation.value().length() != 0 ? annotation.value()
+                        : (annotation.name().length() != 0 ? annotation.name() : field.getName());
+
+                // accessorType is a Collection
+                boolean isMap = isMapType(field.getType());
+
+                // Rule 2.: converterType equals accessorType, unless accessorType is a Collection,
+                // then converterType equals Collection's parametrized type.
+                Class converterType = isMap ?  // accessor is a Collection?
+                        getParameterizedMapType(field.getGenericType()) :  // get it's parametrized type
+                        accessorType;
+
+                // look if custom converter defined
+                Class<? extends ValueConverter> customConverter = annotation.converter().equals(ValueConverter.class)
+                        ? null : annotation.converter();
+
+                // Rule 3.: if name is a wildcard mapping ("*") then converter is DomElementConverter, unless
+                // custom converter is already defined by user
+                if (elementName.equals("*") && customConverter == null) {
+                    customConverter = StringConverter.class;
+                }
+
+                // retrieve targetType
+                Class targetType = annotation.targetType().equals(Object.class) ? null : annotation.targetType();
+
+                // Rule 6.: Attributes mapped to Maps fall back to String. Given:
+                // 1. it's a Map and
+                // 2. custom converter is not defined and
+                // 3. converterType could not be inferred and
+                // 4. targetType is not defined
+                // Then targetType is implicitly set to String
+                if (isMap && customConverter == null && converterType == null && targetType == null) {
+                    targetType = String.class;
+                }
 
                 ConfigAttribute attribute = new ConfigAttribute(
                         attributeName,
                         accessorType,
+                        isMap,
                         field,
                         field.getName(),
                         null,
                         null,
                         null,
                         null,
-                        annotation.defaultValue(),
-                        annotation.targetType(),
+                        "".equals(annotation.defaultValue()) ? null : annotation.defaultValue(),
+                        targetType,
                         annotation.format(),
-                        annotation.converter()
+                        customConverter
                 );
 
                 if (confAttributeCache == null) {
@@ -513,9 +522,19 @@ public class ConfigurationProcessor {
             // process all @Attribute annotations of given method
             for (Attribute annotation : getAttributeAnnotations(method)) {
 
+//                String attributeName;
+//                Class accessorType, targetType = annotation.targetType();
+//                Method getter = null, setter = null;
+
                 String attributeName;
-                Class accessorType, targetType = annotation.targetType();
-                Method getter = null, setter = null;
+                Class accessorType, converterType;
+                Method getterMethod = null, setterMethod = null;
+
+                // retrieve targetType
+                Class targetType = annotation.targetType().equals(Object.class) ? null : annotation.targetType();
+
+                // accessorType is a Collection
+                boolean isMap;
 
                 Class getterType = hasGetterFormat(method);
                 Class setterType = hasSetterFormat(method);
@@ -524,7 +543,7 @@ public class ConfigurationProcessor {
                 if (getterType != null) {
 
                     // define the getter
-                    getter = method;
+                    getterMethod = method;
 
                     // Try getting XML element name from @Attribute annotation.
                     // If not defined, use name derived from setter method name
@@ -535,10 +554,19 @@ public class ConfigurationProcessor {
                     // base type is defined by getter's return type
                     accessorType = getterType;
 
+                    // is getter type a Collection?
+                    isMap = isMapType(getterType);
+
+                    // Rule 2.: converterType equals accessorType, unless accessorType is a Collection,
+                    // then converterType equals Collection's parametrized type.
+                    converterType = isMap ?  // accessor is a Collection?
+                            getParameterizedMapType(getterMethod.getGenericReturnType()) :  // get it's parametrized type
+                            accessorType;
+
                 } else if (setterType != null) {
 
                     // define the setter
-                    setter = method;
+                    setterMethod = method;
 
                     // Try getting XML element name from @Attribute annotation.
                     // If not defined, use name derived from getter method name
@@ -548,6 +576,15 @@ public class ConfigurationProcessor {
 
                     // base type is defined by setter's argument type
                     accessorType = setterType;
+
+                    // is setterMethod type a Collection?
+                    isMap = Collection.class.isAssignableFrom(setterType);
+
+                    // Rule 2.: converterType equals accessorType, unless accessorType is a Collection,
+                    // then converterType equals Collection's parametrized type.
+                    converterType = isMap ?  // accessor is a Collection?
+                            getParameterizedMapType(setterMethod.getGenericParameterTypes()[0]) :  // get it's parametrized type
+                            accessorType;
 
                 } else {
                     throw new XmapprConfigurationException("Error: @Attribute annotation on " +
@@ -568,6 +605,16 @@ public class ConfigurationProcessor {
                             "must follow name convention for getters/setters (i.e. it must be of getXY or setXY form).");
                 }
 
+                // look if custom converter defined
+                Class<? extends ValueConverter> customConverter = annotation.converter().equals(ValueConverter.class)
+                        ? null : annotation.converter();
+
+                // Rule 3.: if name is a wildcard mapping ("*") then converter is DomElementConverter, unless
+                // custom converter is already defined by user
+                if (attributeName.equals("*") && customConverter == null) {
+                    customConverter = StringConverter.class;
+                }
+
                 if (confAttributeCache == null) {
                     confAttributeCache = new HashMap<String, ConfigAttribute>();
                 }
@@ -578,10 +625,14 @@ public class ConfigurationProcessor {
                         // todo XML attribute defined via both - ERROR
                     }
                     attribute.accessorType = accessorType;
-                    attribute.getterMethod = getter == null ? attribute.getterMethod : getter;
-                    attribute.setterMethod = setter == null ? attribute.setterMethod : setter;
-                    attribute.getter = getter == null ? attribute.getter : getter.getName();
-                    attribute.setter = setter == null ? attribute.setter : setter.getName();
+                    if (getterMethod != null) {
+                        attribute.getter = getterMethod.getName();
+                        attribute.getterMethod = getterMethod;
+                    }
+                    if (setterMethod != null) {
+                        attribute.setter = setterMethod.getName();
+                        attribute.setterMethod = setterMethod;
+                    }
                     attribute.defaultvalue = annotation.defaultValue();
                     attribute.targetType = targetType;
                     attribute.format = annotation.format();
@@ -590,16 +641,17 @@ public class ConfigurationProcessor {
                     attribute = new ConfigAttribute(
                             attributeName,
                             accessorType,
+                            isMap,
                             null,
                             null,
-                            getter,
-                            (getter == null) ? null : getter.getName(),
-                            setter,
-                            (setter == null) ? null : setter.getName(),
-                            annotation.defaultValue(),
+                            getterMethod,
+                            (getterMethod == null) ? null : getterMethod.getName(),
+                            setterMethod,
+                            (setterMethod == null) ? null : setterMethod.getName(),
+                            "".equals(annotation.defaultValue()) ? null : annotation.defaultValue(),
                             targetType,
                             annotation.format(),
-                            annotation.converter()
+                            customConverter
                     );
                     confAttributeCache.put(attributeName, attribute);
                 }
@@ -614,7 +666,7 @@ public class ConfigurationProcessor {
     }
 
     public static Class hasGetterFormat(Method method) {
-        if (method.getParameterTypes().length == 0) {
+        if (method != null && method.getParameterTypes().length == 0) {
             return method.getReturnType();
         }
         return null;
@@ -622,7 +674,7 @@ public class ConfigurationProcessor {
     }
 
     public static Class hasSetterFormat(Method method) {
-        if (method.getReturnType().equals(Void.TYPE) && method.getParameterTypes().length == 1) {
+        if (method != null && equalTypes(method.getReturnType(), (Void.TYPE)) && method.getParameterTypes().length == 1) {
             return method.getParameterTypes()[0];
         }
         return null;
@@ -643,37 +695,68 @@ public class ConfigurationProcessor {
         }
         if (found > 1) {
             throw new XmapprConfigurationException("Error: Multiple @Text annotations in class "
-                    + elementClass.getName() + ". Max one @Text fieldAnnotation can be present in a class.");
+                    + elementClass.getName() + ". Max one @Tex annotation can be present in a class.");
         }
 
         ConfigText configText = null;
         if (found == 1) {
 
-            // if targetType annotation is not defined, use type of the field
-            Class targetType = (fieldAnnotation.targetType().equals(Object.class))
-                    ? targetField.getType() : fieldAnnotation.targetType();
+            // Rule 1.: accessorType is type of field
+            Class accessorType = targetField.getType();
+
+            // accessorType is a Collection
+            boolean isCollection = Collection.class.isAssignableFrom(targetField.getType());
+
+            // Rule 2.: converterType equals accessorType, unless accessorType is a Collection,
+            // then converterType equals Collection's parametrized type.
+            Class converterType = isCollection ?  // accessor is a Collection?
+                    getParameterizedCollectionType(targetField.getGenericType()) :  // get it's parametrized type
+                    accessorType;
+
+            // look if custom converter defined
+            Class<? extends ValueConverter> customConverter = fieldAnnotation.converter().equals(ValueConverter.class)
+                    ? null : fieldAnnotation.converter();
+
+            // retrieve targetType
+            Class targetType = fieldAnnotation.targetType().equals(Object.class) ? null : fieldAnnotation.targetType();
+
+            // Rule 7.: if custom converter is not defined then converterType is obligatory
+            if (customConverter == null && converterType == null && targetType == null) {
+                targetType = String.class;
+            }
 
             configText = new ConfigText(
                     targetField.getType(),
                     targetField,
                     targetField.getName(),
+                    isCollection,
+                    converterType,
                     null,
                     null,
                     null,
                     null,
                     targetType,
                     fieldAnnotation.format(),
-                    fieldAnnotation.converter());
+                    customConverter);
         }
 
         // continue with searching @Text annotations on methods
         for (Method method : elementClass.getMethods()) {
 
             Text annotation = method.getAnnotation(Text.class);
-            Class accessorType;
-            Method getter = null, setter = null;
+//            Class accessorType;
+//            Method getter = null, setter = null;
 
             if (annotation != null) {
+
+                Class accessorType, converterType;
+                Method getterMethod = null, setterMethod = null;
+
+                // retrieve targetType
+                Class targetType = annotation.targetType().equals(Object.class) ? null : annotation.targetType();
+
+                // accessorType is a Collection
+                boolean isCollection;
 
                 Class getterType = hasGetterFormat(method);
                 Class setterType = hasSetterFormat(method);
@@ -681,40 +764,76 @@ public class ConfigurationProcessor {
                 // Check if this is a getter or setter
                 if (getterType != null) {
 
-                    // define the getter
-                    getter = method;
+//                    // define the getter
+//                    getter = method;
+//
+//                    // base type is defined by getter's return type
+//                    accessorType = getterType;
 
-                    // base type is defined by getter's return type
+                    // define the getter
+                    getterMethod = method;
+
+                    // Rule 1.: base type is defined by getter's return type
                     accessorType = getterType;
+
+                    // is getter type a Collection?
+                    isCollection = Collection.class.isAssignableFrom(getterType);
+
+                    // Rule 2.: converterType equals accessorType, unless accessorType is a Collection,
+                    // then converterType equals Collection's parametrized type.
+                    converterType = isCollection ?  // accessor is a Collection?
+                            getParameterizedCollectionType(getterMethod.getGenericReturnType()) :  // get it's parametrized type
+                            accessorType;
 
                 } else if (setterType != null) {
 
-                    // define the setter
-                    setter = method;
+//                    // define the setter
+//                    setter = method;
+//
+//                    // base type is defined by setter's argument type
+//                    accessorType = setterType;
 
-                    // base type is defined by setter's argument type
+                    // define the setterMethod
+                    setterMethod = method;
+
+                    // Rule 1.: base type is defined by setterMethod's argument type
                     accessorType = setterType;
 
+                    // is setterMethod type a Collection?
+                    isCollection = Collection.class.isAssignableFrom(setterType);
+
+                    // Rule 2.: converterType equals accessorType, unless accessorType is a Collection,
+                    // then converterType equals Collection's parametrized type.
+                    converterType = isCollection ?  // accessor is a Collection?
+                            getParameterizedCollectionType(setterMethod.getGenericParameterTypes()[0]) :  // get it's parametrized type
+                            accessorType;
+
                 } else {
-                    throw new XmapprConfigurationException("Error: @Text annotation on " +
+                    throw new XmapprConfigurationException("Error: @Text annotation is used on " +
                             "method " + method.getName() + " in class " + elementClass.getName()
-                            + " does not seem to be an appropriate field accessor method. "
-                            + "Getter method must return " + annotation.targetType() + " and take no arguments."
-                            + "Setter method must return void and take one argument of type " + annotation.targetType());
+                            + " , which does not seem to be an appropriate field accessor method. "
+                            + "Getter method must not return void and take no arguments."
+                            + "Setter method must return void and take one argument.");
                 }
+
+                // look if custom converter defined
+                Class<? extends ValueConverter> customConverter = annotation.converter().equals(ValueConverter.class)
+                        ? null : annotation.converter();
 
                 if (configText == null) {
                     configText = new ConfigText(
                             accessorType,
                             null,
                             null,
-                            getter,
-                            (getter == null) ? null : getter.getName(),
-                            setter,
-                            (setter == null) ? null : setter.getName(),
-                            annotation.targetType(),
+                            isCollection,
+                            converterType,
+                            getterMethod,
+                            (getterMethod == null) ? null : getterMethod.getName(),
+                            setterMethod,
+                            (setterMethod == null) ? null : setterMethod.getName(),
+                            targetType,
                             annotation.format(),
-                            annotation.converter());
+                            customConverter);
                 } else {
                     // double mapping - @Text defined on both field and method
                     if (configText.targetField != null) {
@@ -725,22 +844,22 @@ public class ConfigurationProcessor {
 
                     } else if (configText.setterMethod != null) {
                         // setter can not be defined twice
-                        if (setter != null) {
+                        if (setterMethod != null) {
                             throw new XmapprConfigurationException("Error: Duplicate use of @Text annotation."
-                                    + "Methods " + setter.getName() + " and " + configText.setterMethod.getName()
+                                    + "Methods " + setterMethod.getName() + " and " + configText.setterMethod.getName()
                                     + " in class " + elementClass.getName() + " both appear to be setters and both "
                                     + "contain @Text annotation. @Text can only be used on one getter and/or one setter.");
                         }
                         // getter and setter do not have compatible types
-                        if (!getter.getReturnType().equals(configText.setterMethod.getParameterTypes()[0])) {
+                        if (!equalTypes(getterMethod.getReturnType(), (configText.setterMethod.getParameterTypes()[0]))) {
                             throw new XmapprConfigurationException("Error: Incompatible getter and setter types."
                                     + "@Text annotations in class " + elementClass.getName()
-                                    + " define getter method " + getter.getName()
+                                    + " define getter method " + getterMethod.getName()
                                     + " and setter method " + configText.setterMethod.getName()
                                     + ". Return type of getter and first argument of setter must be of the same type.");
                         }
-                        configText.getterMethod = getter;
-                        configText.getter = getter.getName();
+                        configText.getterMethod = getterMethod;
+                        configText.getter = getterMethod.getName();
                         if (annotation.format().length() != 0)
                             configText.format = annotation.format();
                         if (!annotation.converter().equals(ValueConverter.class))
@@ -750,23 +869,22 @@ public class ConfigurationProcessor {
 
                     } else if (configText.getterMethod != null) {
                         // getter can not be defined twice
-                        if (getter != null) {
+                        if (getterMethod != null) {
                             throw new XmapprConfigurationException("Error: Duplicate use of @Text annotation."
-                                    + "Methods " + getter.getName() + " and " + configText.getterMethod.getName()
+                                    + "Methods " + getterMethod.getName() + " and " + configText.getterMethod.getName()
                                     + " in class " + elementClass.getName() + " both appear to be getters and both "
                                     + "contain @Text annotation. @Text can only be used on one getter and/or one setter.");
                         }
                         // getter and setter do not have compatible types
-                        if (!configText.getterMethod.getReturnType().equals(setter.getParameterTypes()[0])) {
+                        if (!equalTypes(configText.getterMethod.getReturnType(), (setterMethod.getParameterTypes()[0]))) {
                             throw new XmapprConfigurationException("Error: Incompatible getter and setter types."
                                     + "@Text annotations in class " + elementClass.getName()
                                     + " define getter method " + configText.getterMethod.getName()
-                                    + " and setter method " + setter.getName()
+                                    + " and setter method " + setterMethod.getName()
                                     + ". Return type of getter and first argument of setter must be of the same type.");
-
                         }
-                        configText.setterMethod = setter;
-                        configText.setter = setter.getName();
+                        configText.setterMethod = setterMethod;
+                        configText.setter = setterMethod.getName();
                         if (annotation.format().length() != 0)
                             configText.format = annotation.format();
                         if (!annotation.converter().equals(ValueConverter.class))
@@ -903,18 +1021,7 @@ public class ConfigurationProcessor {
         return namespaces;
     }
 
-    public static Class getParameterizedType(Field field, Method getter, Method setter) {
-        if (field != null) {
-            getParameterizedType(field.getGenericType());
-        } else if (getter != null) {
-            getParameterizedType(getter.getGenericReturnType());
-        } else if (setter != null) {
-            getParameterizedType(setter.getGenericParameterTypes()[0]);
-        }
-        return null;
-    }
-
-    public static Class getParameterizedType(Type genericType) {
+    public static Class getParameterizedCollectionType(Type genericType) {
         if (genericType instanceof ParameterizedType) {
             Type[] typeArguments = ((ParameterizedType) genericType).getActualTypeArguments();
             if (typeArguments.length == 1) {
@@ -926,15 +1033,31 @@ public class ConfigurationProcessor {
         return null;
     }
 
+    public static Class getParameterizedMapType(Type genericType) {
+        if (genericType instanceof ParameterizedType) {
+            Type[] typeArguments = ((ParameterizedType) genericType).getActualTypeArguments();
+            if (typeArguments.length == 2) {
+                Type paraType = typeArguments[1];
+                if (paraType instanceof Class)
+                    return (Class) paraType;
+            }
+        }
+        return null;
+    }
+
     public static boolean isCollectionType(Class type) {
         return Collection.class.isAssignableFrom(type);
+    }
+
+    public static boolean isMapType(Class type) {
+        return Map.class.isAssignableFrom(type);
     }
 
 
 //    public static Class getCollectionParameterizedType(Field field) {
 //        Type genericType = field.getGenericType();
 //        if (Collection.class.isAssignableFrom(field.getType())) {
-//            return getParameterizedType(genericType);
+//            return getParameterizedCollectionType(genericType);
 //        }
 //        return null;
 //    }
@@ -944,14 +1067,42 @@ public class ConfigurationProcessor {
 //        if (getter != null) {
 //            genericType = getter.getGenericReturnType();
 //            if (Collection.class.isAssignableFrom(getter.getReturnType())) {
-//                return getParameterizedType(genericType);
+//                return getParameterizedCollectionType(genericType);
 //            }
 //        } else if (setter != null) {
 //            genericType = setter.getGenericParameterTypes()[0];
 //            if (Collection.class.isAssignableFrom(setter.getParameterTypes()[0])) {
-//                return getParameterizedType(genericType);
+//                return getParameterizedCollectionType(genericType);
 //            }
 //        }
 //        return null;
 //    }
+
+    private static Map<Class<?>, Class<?>> primToWrap = new HashMap<Class<?>, Class<?>>(16);
+
+    static {
+        primToWrap.put(boolean.class, Boolean.class);
+        primToWrap.put(byte.class, Byte.class);
+        primToWrap.put(char.class, Character.class);
+        primToWrap.put(double.class, Double.class);
+        primToWrap.put(float.class, Float.class);
+        primToWrap.put(int.class, Integer.class);
+        primToWrap.put(long.class, Long.class);
+        primToWrap.put(short.class, Short.class);
+        primToWrap.put(void.class, Void.class);
+    }
+
+    /**
+     * checks if types are equal, takin primitive types into account
+     *
+     * @param type1
+     * @param type2
+     * @return
+     */
+    public static boolean equalTypes(Class type1, Class type2) {
+        if (type1.isPrimitive()) type1 = primToWrap.get(type1);
+        if (type2.isPrimitive()) type2 = primToWrap.get(type2);
+
+        return type1.equals(type2);
+    }
 }

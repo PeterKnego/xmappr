@@ -69,7 +69,15 @@ public class FieldAccessor {
     }
 
     public Class getType() {
-        return targetField.getType();
+        if (targetField != null) {
+            return targetField.getType();
+        } else if (getter != null) {
+            return getter.getReturnType();
+        } else if (setter != null) {
+            return setter.getParameterTypes()[0];
+        }
+        // this should not happen, since it's checked in constructor
+        return null;
     }
 
     private Method findAccessorMethod(String prepend, Class... type) {

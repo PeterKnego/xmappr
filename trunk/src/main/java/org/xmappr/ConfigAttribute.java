@@ -13,6 +13,7 @@ public class ConfigAttribute {
     public Class accessorType;
     public Method getterMethod;
     public Method setterMethod;
+    private boolean isMap;
     public Field targetField;
 
     @Attribute
@@ -42,11 +43,12 @@ public class ConfigAttribute {
     public ConfigAttribute() {
     }
 
-    public ConfigAttribute(String attributeName, Class accessorType, Field targetField, String field,
+    public ConfigAttribute(String attributeName, Class accessorType, boolean isMap, Field targetField, String field,
                            Method getterMethod, String getterName, Method setterMethod, String setterName,
                            String defaultValue, Class targetType,
                            String format, Class<? extends ValueConverter> converter) {
         this.accessorType = accessorType;
+        this.isMap = isMap;
         this.targetField = targetField;
         this.field = field;
         this.getterMethod = getterMethod;
@@ -69,8 +71,10 @@ public class ConfigAttribute {
         out.append(space).append("  ").append("setter=").append(setter).append("\n");
         out.append(space).append("  ").append("defaultValue=").append(defaultvalue).append("\n");
         out.append(space).append("  ").append("format=").append(format).append("\n");
-        out.append(space).append("  ").append("targetType=").append(targetType.getName()).append("\n");
-        out.append(space).append("  ").append("converter=").append(converter.getName()).append(" />\n");
+        if (targetType != null)
+            out.append(space).append("  ").append("targetType=").append(targetType.getName()).append("\n");
+        if (converter != null)
+            out.append(space).append("  ").append("converter=").append(converter.getName()).append(" />\n");
 
         return out.toString();
     }

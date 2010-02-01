@@ -11,6 +11,8 @@ public class ConfigText {
     // This fields are not configurable via mapping configuration.
     // They are derived during the validation phase.
     public Class accessorType;
+    private boolean isCollection;
+    private Class converterType;
     public Method getterMethod;
     public Method setterMethod;
     public Field targetField;
@@ -36,12 +38,14 @@ public class ConfigText {
     public ConfigText() {
     }
 
-    public ConfigText(Class accessorType, Field targetField, String field,
+    public ConfigText(Class accessorType, Field targetField, String field,boolean isCollection, Class converterType,
                       Method getterMethod, String getterName, Method setterMethod, String setterName,
                       Class targetType, String format, Class<? extends ValueConverter> converter) {
         this.accessorType = accessorType;
         this.targetField = targetField;
         this.field = field;
+        this.isCollection = isCollection;
+        this.converterType = converterType;
         this.getterMethod = getterMethod;
         this.getter = getterName;
         this.setterMethod = setterMethod;
