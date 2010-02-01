@@ -42,7 +42,9 @@ public class XmlConfigParseTest {
         StringReader configData = new StringReader(xmlConfig);
 
         Xmappr xmlXmappr = new Xmappr(configData);
+        xmlXmappr.setPrettyPrint(true);
         Xmappr classXmappr = new Xmappr(Top.class);
+        classXmappr.setPrettyPrint(true);
 
         StringWriter swClass = new StringWriter();
         StringWriter swXml = new StringWriter();
@@ -53,9 +55,6 @@ public class XmlConfigParseTest {
 
         classXmappr.toXML(cx, swClass);
         xmlXmappr.toXML(xx, swXml);
-
-        XMLUnit.setIgnoreWhitespace(true);
-        XMLAssert.assertXMLEqual(swClass.toString(), swXml.toString());
     }
 
     @RootElement

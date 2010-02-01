@@ -11,6 +11,7 @@ import org.custommonkey.xmlunit.XMLUnit;
 import org.testng.annotations.Test;
 import org.xml.sax.SAXException;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
