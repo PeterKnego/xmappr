@@ -100,7 +100,7 @@ public class CollectionConverterTest {
         ElementConverter cc = new CollectionConverter();
         XMLInputFactory of = XMLInputFactory.newInstance();
         XMLStreamReader xsr = of.createXMLStreamReader(new StringReader(""));
-        XMLSimpleReader sr = new XMLSimpleReader(xsr, false);
+        XMLSimpleReader sr = new XMLSimpleReader(xsr, false, new XmlStreamSettings());
         cc.fromElement(sr, new MappingContext(null, null), "", null, null, null);
     }
 

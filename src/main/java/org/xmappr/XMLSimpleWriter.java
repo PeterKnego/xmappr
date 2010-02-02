@@ -19,7 +19,7 @@ import java.util.Map;
 public class XMLSimpleWriter {
 
     private XMLStreamWriter writer;
-    private XmlStreamSettings settings = new XmlStreamSettings();
+    private XmlStreamSettings settings;
     private List<Element> elementCache = new ArrayList<Element>();
     private List<Element> predefinedNamespaces = new ArrayList<Element>();
     private ObjectStore objectStore;
@@ -194,7 +194,6 @@ public class XMLSimpleWriter {
 //        XMLSimpleReader.printStore(objectStore, "RE-STORE");
 
         String prefix, localName, nsURI, value, data;
-        String encoding = settings.encoding;  // default encoding
         int first, second, third;
         Map<String, String> nsCache = new HashMap<String, String>();
         boolean emptyNode = true;
@@ -219,8 +218,6 @@ public class XMLSimpleWriter {
                 case XMLStreamConstants.START_DOCUMENT:
                     emptyNode = true;
                     String header = new String(element.data);
-                    String[] headers = header.split("\n");
-                    encoding = headers[0].equals("null") ? encoding : headers[0];  // default encoding is UTF-8
                     startDocument();
                     break;
                 case XMLStreamConstants.END_DOCUMENT:
@@ -262,11 +259,11 @@ public class XMLSimpleWriter {
                     break;
                 case XMLStreamConstants.CHARACTERS:
                     emptyNode = false;
-                    addText(new String(element.data, encoding));
+                    addText(new String(element.data, "UTF-8"));
                     break;
                 case XMLStreamConstants.CDATA:
                     emptyNode = false;
-                    addComment(new String(element.data, encoding));
+                    addComment(new String(element.data, "UTF-8"));
                     break;
             }
             element = store.getNextElement();

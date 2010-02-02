@@ -46,17 +46,17 @@ public class ObjectStore {
         markedPosition = 0;
     }
 
-        public void mark() {
+    public void mark() {
         this.markedPosition = position;
     }
 
-    public void trim(){
+    public void trim() {
         namespaceCache.clear();
 //        XMLSimpleReader.printStore(this, "data");
         byte[] newData = new byte[data.length];
-        System.arraycopy(data, markedPosition, newData, 0, position-markedPosition+1);
+        System.arraycopy(data, markedPosition, newData, 0, position - markedPosition + 1);
         data = newData;
-        position = position-markedPosition;
+        position = position - markedPosition;
         markedPosition = 0;
 //        XMLSimpleReader.printStore(this, "new data");
 
@@ -88,10 +88,10 @@ public class ObjectStore {
         return element.command == END_BLOCK;
     }
 
-    public void cacheNamespace(String prefix, String namespaceURI, String encoding) {
+    public void cacheNamespace(String prefix, String namespaceURI) {
         if (!namespaceCache.containsKey(prefix)) {
             namespaceCache.put(prefix, prefix);
-            addElement(NAMESPACE_CACHE, prefix + "=" + namespaceURI, encoding);
+            addElement(NAMESPACE_CACHE, prefix + "=" + namespaceURI);
         }
     }
 
@@ -99,15 +99,12 @@ public class ObjectStore {
         return addElement(command, (byte[]) null);
     }
 
-    public int addElement(int command, String source, String encoding) {
-        encoding = encoding == null ? "UTF-8" : encoding;
+    public int addElement(int command, String source) {
         try {
-//            System.out.println("    add:" + command + " " + source);
-            return addElement(command, source.getBytes(encoding));
+            return addElement(command, source.getBytes("UTF-8"));
         } catch (UnsupportedEncodingException e) {
-            System.out.println(e.getMessage());
+          throw new XmapprException("Xmappr system error: please notify the mailing list");  // should not happen
         }
-        return -1;
     }
 
     public int addElement(int commandID, byte[] source) {

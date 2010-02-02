@@ -54,6 +54,7 @@ public class BasicConvertersTest {
         StringReader reader = new StringReader(inXml);
         Xmappr xmappr = new Xmappr(Primitives.class);
         xmappr.setPrettyPrint(true);
+        xmappr.setHeader("UTF-8", "1.0");
 
 //        System.out.println(xmappr.getXmlConfiguration(Primitives.class));
 
