@@ -10,6 +10,7 @@ import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
+import java.nio.charset.Charset;
 import java.util.*;
 
 /**
@@ -24,7 +25,7 @@ import java.util.*;
 public class XMLSimpleReader {
 
     private XMLStreamReader reader;
-    private XmlStreamSettings settings = new XmlStreamSettings();
+    private XmlStreamSettings settings;
 
     private Stack<Element> elementStack = new Stack<Element>();
     private boolean isEnd = false;
@@ -33,13 +34,14 @@ public class XMLSimpleReader {
     private ObjectStore objectStore;
     private QName rootName;
 
-    public XMLSimpleReader(XMLStreamReader reader) {
-        this(reader, false);
+    public XMLSimpleReader(XMLStreamReader reader, XmlStreamSettings settings) {
+        this(reader, false, settings);
     }
 
-    public XMLSimpleReader(XMLStreamReader reader, boolean isStoringUnknownElements) {
+    public XMLSimpleReader(XMLStreamReader reader, boolean isStoringUnknownElements, XmlStreamSettings settings) {
         this.reader = reader;
         this.isStoringUnknownElements = isStoringUnknownElements;
+        this.settings = settings;
         if (this.isStoringUnknownElements) {
             objectStore = new ObjectStore(200, 200);
             eventCache = new ObjectStore(200, 200);
@@ -66,8 +68,7 @@ public class XMLSimpleReader {
         }
         // read stream settings at the beginning of the document
         if (reader.getEventType() == XMLStreamConstants.START_DOCUMENT) {
-            settings.encoding = reader.getEncoding() == null ? "UTF-8" : reader.getEncoding();
-            settings.version = reader.getVersion() == null ? "1.0" : reader.getVersion();
+            // nothing to do - encoding is set by the external Reader
         }
 
         for (int event = nextEvent(); true; event = nextEvent()) {
@@ -170,7 +171,7 @@ public class XMLSimpleReader {
         return elementStack.peek().name;
     }
 
-    public String getAttribute(QName attributeName){
+    public String getAttribute(QName attributeName) {
         return elementStack.peek().getAttribute(attributeName);
     }
 
@@ -199,7 +200,7 @@ public class XMLSimpleReader {
             attributes.put(qname, value);
         }
 
-        public String getAttribute(QName attributeName){
+        public String getAttribute(QName attributeName) {
             return attributes.get(attributeName);
         }
 
@@ -286,7 +287,7 @@ public class XMLSimpleReader {
         objectStore.copyFrom(eventCache);
         eventCache.reset();
 
-        // check if stream is already at the end of subtree (happens when there is only one empty node in a sutree)
+        // check if stream is already at the end of subtree (happens when there is only one empty node in a subtree)
         int event = reader.getEventType();
         if (event == XMLStreamConstants.END_ELEMENT) {
             objectStore.addEnd();
@@ -321,7 +322,8 @@ public class XMLSimpleReader {
         String name;
         switch (xmlEventType) {
             case XMLStreamConstants.START_DOCUMENT:
-                store.addElement(XMLStreamConstants.START_DOCUMENT);
+                store.addElement(XMLStreamConstants.START_DOCUMENT,
+                        (  "UTF-8\n" + settings.version).getBytes());  // save the encoding settings
                 break;
             case XMLStreamConstants.END_DOCUMENT:
                 store.addElement(XMLStreamConstants.END_DOCUMENT);
@@ -329,41 +331,40 @@ public class XMLSimpleReader {
             case XMLStreamConstants.START_ELEMENT:
                 qName = reader.getName();
                 // save namespace
-                store.cacheNamespace(qName.getPrefix(), qName.getNamespaceURI(), settings.encoding);
+                store.cacheNamespace(qName.getPrefix(), qName.getNamespaceURI());
                 name = qName.getPrefix() + "=" + qName.getLocalPart();
-                store.addElement(XMLStreamConstants.START_ELEMENT, name, settings.encoding);
-                addAtributes(store, settings.encoding);
-                addNamespaces(store, settings.encoding);
+                store.addElement(XMLStreamConstants.START_ELEMENT, name);
+                addAtributes(store);
+                addNamespaces(store);
                 break;
             case XMLStreamConstants.END_ELEMENT:
                 store.addElement(XMLStreamConstants.END_ELEMENT);
                 break;
             case XMLStreamConstants.CHARACTERS:
                 if (!reader.isWhiteSpace()) {
-                    store.addElement(XMLStreamConstants.CHARACTERS, reader.getText().trim(), settings.encoding);
+                    store.addElement(XMLStreamConstants.CHARACTERS, reader.getText().trim());
                 }
                 break;
         }
     }
 
-    private void addAtributes(ObjectStore store, String encoding) {
+    private void addAtributes(ObjectStore store) {
         QName qName;
         String name;
         for (int i = 0, n = reader.getAttributeCount(); i < n; ++i) {
             qName = reader.getAttributeName(i);
             name = qName.getPrefix() + "=" + qName.getLocalPart(); //+ qName.getNamespaceURI();
-            store.addElement(XMLStreamConstants.ATTRIBUTE, name + "=" + reader.getAttributeValue(i), encoding);
+            store.addElement(XMLStreamConstants.ATTRIBUTE, name + "=" + reader.getAttributeValue(i));
         }
     }
 
-    private void addNamespaces(ObjectStore store, String encoding) {
+    private void addNamespaces(ObjectStore store) {
         String uri;
         String prefix;
         for (int i = 0, n = reader.getNamespaceCount(); i < n; ++i) {
             uri = reader.getNamespaceURI(i);
             prefix = reader.getNamespacePrefix(i);
-            store.addElement(XMLStreamConstants.NAMESPACE, prefix + "=" + uri, encoding);
+            store.addElement(XMLStreamConstants.NAMESPACE, prefix + "=" + uri);
         }
     }
-
 }

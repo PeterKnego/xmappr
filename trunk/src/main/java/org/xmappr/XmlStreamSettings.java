@@ -6,6 +6,8 @@
  */
 package org.xmappr;
 
+import java.nio.charset.Charset;
+
 public class XmlStreamSettings {
 
     // default settings
@@ -16,4 +18,6 @@ public class XmlStreamSettings {
 
     public String encoding;
     public String version;
+    public boolean writeHeader;
+
 }

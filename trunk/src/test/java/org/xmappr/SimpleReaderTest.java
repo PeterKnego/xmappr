@@ -22,7 +22,7 @@ public class SimpleReaderTest {
         StringReader sreader = new StringReader(xmlString);
         XMLInputFactory factory = XMLInputFactory.newInstance();
         XMLStreamReader parser = factory.createXMLStreamReader(sreader);  // todo make this a part of SimpleReader.newInstance()
-        return new XMLSimpleReader(parser);
+        return new XMLSimpleReader(parser, new XmlStreamSettings());
     }
 
     private XMLSimpleWriter getWriter(Writer writer) throws XMLStreamException {

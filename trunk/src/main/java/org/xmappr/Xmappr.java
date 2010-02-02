@@ -63,8 +63,8 @@ public class Xmappr {
     public MappingContext mappingContext;
 
     private volatile boolean initialized = false;
-
     private boolean isPrettyPrint = false;
+    private XmlStreamSettings settings = new XmlStreamSettings();
 
     /**
      * Creates a new Xmappr instance.
@@ -127,7 +127,7 @@ public class Xmappr {
         initialize();
 
         XMLStreamReader rdr = getXmlStreamReader(reader);
-        XMLSimpleReader simpleReader = new XMLSimpleReader(rdr, false);
+        XMLSimpleReader simpleReader = new XMLSimpleReader(rdr, false, settings);
 
         return getRootMapper(simpleReader).getRootObject(simpleReader);
     }
@@ -135,7 +135,7 @@ public class Xmappr {
     /**
      * Reads XML data from provided Reader and maps this data to provided object.
      *
-     * @param reader XMLStreamReader where XML data will be read from.
+     * @param reader       XMLStreamReader where XML data will be read from.
      * @param targetObject Object to which XML will be mapped.
      * @return Provided target object. If provided target object was null then new object is created.
      */
@@ -144,7 +144,7 @@ public class Xmappr {
         initialize();
 
         XMLStreamReader rdr = getXmlStreamReader(reader);
-        XMLSimpleReader simpleReader = new XMLSimpleReader(rdr, false);
+        XMLSimpleReader simpleReader = new XMLSimpleReader(rdr, false, settings);
 
         return getRootMapper(simpleReader).getRootObject(simpleReader, targetObject);
     }
@@ -159,7 +159,7 @@ public class Xmappr {
 
         initialize();
 
-        XMLSimpleReader simpleReader = new XMLSimpleReader(getXmlStreamReader(reader), true);
+        XMLSimpleReader simpleReader = new XMLSimpleReader(getXmlStreamReader(reader), true, settings);
 
         Object object = getRootMapper(simpleReader).getRootObject(simpleReader);
         return new Result(object, simpleReader.getObjectStore());
@@ -186,7 +186,7 @@ public class Xmappr {
             throw new XmapprConfigurationException("Error: No class mapping found for " +
                     "root class: " + sourceClass.getName());
         }
-        rootMapper.toXML(source, simpleWriter);
+        rootMapper.toXML(source, simpleWriter, settings.writeHeader);
     }
 
     /**
@@ -212,7 +212,7 @@ public class Xmappr {
             throw new XmapprConfigurationException("Error: No class mapping found for " +
                     "root class: " + sourceClass.getName());
         }
-        rootMapper.toXML(source, simpleWriter);
+        rootMapper.toXML(source, simpleWriter, settings.writeHeader);
     }
 
     private RootMapper getRootMapper(XMLSimpleReader simpleReader) {
@@ -246,6 +246,17 @@ public class Xmappr {
         } catch (XMLStreamException e) {
             throw new XmapprException("Error initalizing XMLStreamWriter", e);
         }
+    }
+
+    public void setHeader(String encoding, String version) {
+        if (encoding == null && version == null) {
+            settings.writeHeader = false;
+        } else {
+            settings.writeHeader = true;
+            settings.encoding = encoding;
+            settings.version = version;
+        }
+
     }
 
     /**
@@ -412,8 +423,6 @@ public class Xmappr {
 
         return sw.toString();
     }
-
-
 
     /**
      * Container class to hold deserialized Object and unmapped XML elements.
