@@ -223,8 +223,10 @@ public class ConfigurationProcessor {
 
             List<ConfigNamespace> nsList = readNamespaceAnnotations((Namespaces) method.getAnnotation(Namespaces.class));
 
+            final Element[] annotations = getElementAnnotations(method);
+
             // process all @Element annotations of given method
-            for (Element annotation : getElementAnnotations(method)) {
+            for (Element annotation : annotations) {
 
                 String elementName = null;
                 Class accessorType, converterType;
@@ -687,15 +689,17 @@ public class ConfigurationProcessor {
         Field targetField = null;
 
         for (Field field : elementClass.getFields()) {
-            if (field.getAnnotation(Text.class) != null) {
-                found++;
-                fieldAnnotation = field.getAnnotation(Text.class);
+            Text annotation = getTextAnnotation(field);
+            if (annotation != null) {
+                fieldAnnotation = annotation;
                 targetField = field;
+                found++;
             }
-        }
-        if (found > 1) {
-            throw new XmapprConfigurationException("Error: Multiple @Text annotations in class "
-                    + elementClass.getName() + ". Max one @Tex annotation can be present in a class.");
+            if (found > 1) {
+                throw new XmapprConfigurationException("Error: Multiple @Text annotations in class "
+                        + elementClass.getName() + " or it's parent classes and interfaces." +
+                        " Max one @Text annotation can be present in a class or it's parent classes and interfaces.");
+            }
         }
 
         ConfigText configText = null;
@@ -743,9 +747,7 @@ public class ConfigurationProcessor {
         // continue with searching @Text annotations on methods
         for (Method method : elementClass.getMethods()) {
 
-            Text annotation = method.getAnnotation(Text.class);
-//            Class accessorType;
-//            Method getter = null, setter = null;
+            Text annotation = getTextAnnotation(method);
 
             if (annotation != null) {
 
@@ -900,6 +902,66 @@ public class ConfigurationProcessor {
         return configText;
     }
 
+    private static Text getTextAnnotation(Field field) {
+        Text annotation = field.getAnnotation(Text.class);
+
+        // no annotations found on this method
+        if (annotation == null) {
+            List<Class> parents = new ArrayList<Class>();
+            // add a superclass
+            Class superClass = field.getDeclaringClass().getSuperclass();
+            if (superClass != null && !superClass.equals(Object.class)) {
+                parents.add(superClass);
+            }
+            // add all interfaces
+            final Class<?>[] interfaces = field.getDeclaringClass().getInterfaces();
+            Collections.addAll(parents, interfaces);
+            for (Class parent : parents) {
+                Field nextField;
+                try {
+                    nextField = parent.getField(field.getName());
+                    Text result = getTextAnnotation(nextField);
+                    if (result != null) {
+                    }
+                    return result;
+                } catch (NoSuchFieldException e) {
+                    // no field found
+                }
+            }
+        }
+        return annotation;
+    }
+
+    public static Text getTextAnnotation(Method method) {
+        Text annotation = method.getAnnotation(Text.class);
+
+        // no annotations found on this method
+        if (annotation == null) {
+            List<Class> parents = new ArrayList<Class>();
+            // add a superclass
+            Class superClass = method.getDeclaringClass().getSuperclass();
+            if (superClass != null && !superClass.equals(Object.class)) {
+                parents.add(superClass);
+            }
+            // add all interfaces
+            final Class<?>[] interfaces = method.getDeclaringClass().getInterfaces();
+            Collections.addAll(parents, interfaces);
+            for (Class parent : parents) {
+                Method nextMethod;
+                try {
+                    nextMethod = parent.getMethod(method.getName(), method.getParameterTypes());
+                    Text result = getTextAnnotation(nextMethod);
+                    if (result != null) {
+                    }
+                    return result;
+                } catch (NoSuchMethodException e) {
+                    // method not found
+                }
+            }
+        }
+        return annotation;
+    }
+
     private static Element[] getElementAnnotations(Field field) {
         // collect all @Attribute annotations in a single array for easier processing
         Element[] annotations = new Element[0];
@@ -917,7 +979,35 @@ public class ConfigurationProcessor {
         return annotations;
     }
 
-    private static Element[] getElementAnnotations(Method method) {
+    public static Element[] getElementAnnotations(Method method) {
+        Element[] annotations = getDeclaredElementAnnotations(method);
+
+        // no annotations found on this method
+        if (annotations.length == 0) {
+            List<Class> parents = new ArrayList<Class>();
+            // add a superclass
+            Class superClass = method.getDeclaringClass().getSuperclass();
+            if (superClass != null && !superClass.equals(Object.class)) {
+                parents.add(superClass);
+            }
+            // add all interfaces
+            final Class<?>[] interfaces = method.getDeclaringClass().getInterfaces();
+            Collections.addAll(parents, interfaces);
+            for (Class parent : parents) {
+                Method nextMethod;
+                try {
+                    nextMethod = parent.getMethod(method.getName(), method.getParameterTypes());
+                    return getElementAnnotations(nextMethod);
+                } catch (NoSuchMethodException e) {
+                    // method not found
+                }
+            }
+        }
+        return annotations;
+    }
+
+
+    private static Element[] getDeclaredElementAnnotations(Method method) {
         // collect all @Attribute annotations in a single array for easier processing
         Element[] annotations = new Element[0];
         Elements multiAnno = method.getAnnotation(Elements.class);
@@ -934,7 +1024,35 @@ public class ConfigurationProcessor {
         return annotations;
     }
 
-    private static Attribute[] getAttributeAnnotations(Method method) {
+    public static Attribute[] getAttributeAnnotations(Method method) {
+        Attribute[] annotations = getDeclaredAttributeAnnotations(method);
+
+        // no annotations found on this method
+        if (annotations.length == 0) {
+            List<Class> parents = new ArrayList<Class>();
+            // add a superclass
+            Class superClass = method.getDeclaringClass().getSuperclass();
+            if (superClass != null && !superClass.equals(Object.class)) {
+                parents.add(superClass);
+            }
+            // add all interfaces
+            final Class<?>[] interfaces = method.getDeclaringClass().getInterfaces();
+            Collections.addAll(parents, interfaces);
+            for (Class parent : parents) {
+                Method nextMethod;
+                try {
+                    nextMethod = parent.getMethod(method.getName(), method.getParameterTypes());
+                    Attribute[] result = getAttributeAnnotations(nextMethod);
+                    return result;
+                } catch (NoSuchMethodException e) {
+                    // method not found
+                }
+            }
+        }
+        return annotations;
+    }
+
+    private static Attribute[] getDeclaredAttributeAnnotations(Method method) {
         // collect all @Attribute annotations in a single array for easier processing
         Attribute[] annotations = new Attribute[0];
         Attributes multiAnno = method.getAnnotation(Attributes.class);
