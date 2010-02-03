@@ -2,6 +2,7 @@
 
 _This is here just to remind the forgetful admins_
 
+  # increment the release number in pom.xml!!!
   # make sure all code is commited to svn repo (check changelists in Idea)
   # all tests must pass!
   # build & release: mvn deploy
