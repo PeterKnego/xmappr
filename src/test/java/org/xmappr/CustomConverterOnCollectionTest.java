@@ -10,16 +10,11 @@ import javax.xml.namespace.QName;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 public class CustomConverterOnCollectionTest {
 
     public static String xml = "<users>\n" +
-            "    <page>1</page>\n" +
-            "    <perPage>2</perPage>\n" +
             "    <user>\n" +
             "        <id>1</id>\n" +
             "        <main>test</main>\n" +
@@ -49,14 +44,8 @@ public class CustomConverterOnCollectionTest {
 
     @RootElement("users")
     public static class Users {
-        @Element
-        public Integer page;
-
-        @Element
-        public Integer perPage;
-
         @Element(name = "user", converter = UserCompoundConverter.class)
-        public Collection<UserCompound> users;
+        public List<UserCompound> users;
     }
 
     public static class UserCompound {
