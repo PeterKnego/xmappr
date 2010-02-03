@@ -48,14 +48,9 @@ public class SubTreeStoreTest {
         // writing back to XML
         StringWriter sw = new StringWriter();
         xmappr.toXML(a, result.getStore(), sw);
-        String ssw = sw.toString();
-        System.out.println("");
-        System.out.println(xml);
-        System.out.println("");
-        System.out.println(ssw);
 
         XMLUnit.setIgnoreWhitespace(true);
-        XMLAssert.assertXMLEqual(xml, ssw);
+        XMLAssert.assertXMLEqual(xml, sw.toString());
     }
 
     @RootElement("x:a")

@@ -412,14 +412,10 @@ public class Xmappr {
         }
 
         XmlConfigurationValidator.outputXmlChecker(confElement);
-        System.out.println(confElement);
-
         Xmappr xmappr = new Xmappr(ConfigRootElement.class);
         xmappr.setPrettyPrint(true);
         StringWriter sw = new StringWriter();
         xmappr.toXML(confElement, sw);
-
-        System.out.println(sw.toString());
 
         return sw.toString();
     }

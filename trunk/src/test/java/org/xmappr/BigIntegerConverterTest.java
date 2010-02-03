@@ -49,15 +49,10 @@ public class BigIntegerConverterTest {
         // writing back to XML
         StringWriter sw = new StringWriter();
         xmappr.toXML(test, sw);
-        String ssw = sw.toString();
-        System.out.println("");
-        System.out.println(inXml);
-        System.out.println("");
-        System.out.println(ssw);
 
         Assert.assertEquals(test.node, new BigInteger("987654321987654321"));
         XMLUnit.setIgnoreWhitespace(true);
-        XMLAssert.assertXMLEqual(inXml, ssw);
+        XMLAssert.assertXMLEqual(inXml, sw.toString());
     }
 
     @RootElement("test")

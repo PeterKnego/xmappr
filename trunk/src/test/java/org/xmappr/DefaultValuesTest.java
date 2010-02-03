@@ -68,14 +68,9 @@ public class DefaultValuesTest {
         // writing back to XML
         StringWriter sw = new StringWriter();
         xmappr.toXML(root, sw);
-        String ssw = sw.toString();
-        System.out.println("");
-        System.out.println(outXml);
-        System.out.println("");
-        System.out.println(ssw);
 
         XMLUnit.setIgnoreWhitespace(true);
-        XMLAssert.assertXMLEqual(outXml, ssw);
+        XMLAssert.assertXMLEqual(outXml, sw.toString());
     }
 
     @RootElement

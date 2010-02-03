@@ -70,12 +70,10 @@ public class RootNsTest {
         Assert.assertTrue(a.node_x111.node_x222 != null);
 
         xmappr.toXML(a, writer);
-        System.out.println(writer.toString());
 
         // writing back to XML
         StringWriter sw = new StringWriter();
         xmappr.toXML(a, sw);
-        System.out.println(sw);
         XMLUnit.setIgnoreWhitespace(true);
         XMLAssert.assertXMLEqual(xml, sw.toString());
     }

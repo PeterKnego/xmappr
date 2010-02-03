@@ -58,10 +58,6 @@ public class ByteArrayConverterTest {
         StringWriter sw = new StringWriter();
         xmappr.toXML(test, sw);
         String ssw = sw.toString();
-        System.out.println("");
-        System.out.println(inXml);
-        System.out.println("");
-        System.out.println(ssw);
 
         Assert.assertEquals(new String(test.node), loremIpsum);
         XMLUnit.setIgnoreWhitespace(true);
