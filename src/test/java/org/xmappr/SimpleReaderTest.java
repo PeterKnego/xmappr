@@ -157,8 +157,6 @@ public class SimpleReaderTest {
 //        writer.addText("text");
         writer.endElement();
         writer.endDocument();
-
-        System.out.println("writerTest: " + sw.toString());
     }
 
     @Test
@@ -174,7 +172,6 @@ public class SimpleReaderTest {
         writer.writeEndDocument();
         writer.flush();
         writer.close();
-        System.out.println(sw.toString());
     }
 
 
@@ -189,14 +186,11 @@ public class SimpleReaderTest {
                 Map.Entry<QName, String> entry = attrIterator.next();
                 element.attributes.put(entry.getKey(), entry.getValue());
             }
-//            System.out.println("NODE-"+element.name.getLocalPart());
-//            System.out.println("text1: "+reader.getText());
             List<Element> subElements = processSubElements(reader);
             if (!subElements.isEmpty()) {
                 element.subelements.addAll(subElements);
             }
             element.value = reader.getText();
-//            System.out.println("text2: "+reader.getText());
             reader.moveUp();
         }
         return elements;
@@ -209,20 +203,20 @@ public class SimpleReaderTest {
         List<Element> subelements = new ArrayList<Element>();
     }
 
-    private static void printElements(Element element, String prefix) {
-        System.out.print(prefix + "<" + element.name.getLocalPart());
-        for (QName qName : element.attributes.keySet()) {
-            System.out.print(" " + qName + "=\"" + element.attributes.get(qName) + "\"");
-        }
-        System.out.println(">");
-        if (element.value != null && element.value.length() != 0) {
-            System.out.println(prefix + element.value);
-        }
-        for (Element subnode : element.subelements) {
-            printElements(subnode, prefix + "  ");
-        }
-        System.out.println(prefix + "</" + element.name.getLocalPart() + ">");
-
-    }
+//    private static void printElements(Element element, String prefix) {
+//        System.out.print(prefix + "<" + element.name.getLocalPart());
+//        for (QName qName : element.attributes.keySet()) {
+//            System.out.print(" " + qName + "=\"" + element.attributes.get(qName) + "\"");
+//        }
+//        System.out.println(">");
+//        if (element.value != null && element.value.length() != 0) {
+//            System.out.println(prefix + element.value);
+//        }
+//        for (Element subnode : element.subelements) {
+//            printElements(subnode, prefix + "  ");
+//        }
+//        System.out.println(prefix + "</" + element.name.getLocalPart() + ">");
+//
+//    }
 
 }

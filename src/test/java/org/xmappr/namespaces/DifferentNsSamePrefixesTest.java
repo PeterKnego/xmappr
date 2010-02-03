@@ -64,8 +64,6 @@ public class DifferentNsSamePrefixesTest {
         // writing back to XML
         StringWriter sw = new StringWriter();
         xmappr.toXML(a, sw);
-        System.out.println(xml);
-        System.out.println(sw);
         XMLUnit.setIgnoreWhitespace(true);
         XMLAssert.assertXMLEqual(xml, sw.toString());
     }

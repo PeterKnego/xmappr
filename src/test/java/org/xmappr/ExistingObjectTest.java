@@ -110,14 +110,9 @@ public class ExistingObjectTest {
         // writing back to XML
         StringWriter sw = new StringWriter();
         xmappr.toXML(primitives, sw);
-        String ssw = sw.toString();
-        System.out.println("");
-        System.out.println(inXml);
-        System.out.println("");
-        System.out.println(ssw);
 
         XMLUnit.setIgnoreWhitespace(true);
-        XMLAssert.assertXMLEqual(outXml, ssw);
+        XMLAssert.assertXMLEqual(outXml, sw.toString());
     }
 
     @RootElement("primitives")

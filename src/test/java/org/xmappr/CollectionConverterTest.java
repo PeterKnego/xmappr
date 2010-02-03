@@ -78,10 +78,6 @@ public class CollectionConverterTest {
         StringWriter writer = new StringWriter();
         xmappr.toXML(one, writer);
 
-        System.out.println(xml);
-        System.out.println("\n");
-        System.out.println(writer.toString());
-
         XMLUnit.setIgnoreWhitespace(true);
         XMLAssert.assertXMLEqual(xml, writer.toString());
     }

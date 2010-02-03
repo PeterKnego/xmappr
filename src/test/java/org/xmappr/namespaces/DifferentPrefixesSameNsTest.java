@@ -68,8 +68,6 @@ public class DifferentPrefixesSameNsTest {
         // writing back to XML
         StringWriter sw = new StringWriter();
         xmappr.toXML(a, sw);
-        System.out.println(xml);
-        System.out.println(sw);
         XMLUnit.setIgnoreWhitespace(true);
         XMLAssert.assertXMLEqual(xml, sw.toString());
     }
@@ -88,8 +86,8 @@ public class DifferentPrefixesSameNsTest {
         public x111 node_x111;
     }
 
-    @Namespaces("l=lowercase")
     public static class bbbb {
+        @Namespaces("l=lowercase")
         @Element("l:cccc")
         public cccc node_cccc;
     }
@@ -109,13 +107,12 @@ public class DifferentPrefixesSameNsTest {
         public String notext;
     }
 
-    @Namespaces("xn=lowercase")
     public static class x111 {
+        @Namespaces("xn=lowercase")
         @Element("xn:x222")
         public x222 node_x222;
     }
 
-    @Namespaces("xn=lowercase")
     public static class x222 {
         @Text
         public String notext;

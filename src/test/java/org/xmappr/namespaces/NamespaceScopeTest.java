@@ -73,7 +73,7 @@ public class NamespaceScopeTest {
         @Element("l:BBB")
         public BBB node_BBB;
 
-        @Namespaces("l=lowercase")
+//        @Namespaces("l=lowercase")
         @Element("l:x333")
         public x333 x3;
     }
@@ -81,7 +81,7 @@ public class NamespaceScopeTest {
     public static class BBB {
 
         @Namespaces("l=xnumber")
-        @Element("cccc")
+        @Element("l:cccc")
         public ccc node_ccc;
 
         @Namespaces("l=uppercase")

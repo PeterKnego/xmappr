@@ -58,16 +58,11 @@ public class DateConverterTest {
         // writing back to XML
         StringWriter sw = new StringWriter();
         xmappr.toXML(test, sw);
-        String ssw = sw.toString();
-        System.out.println("");
-        System.out.println(inXml);
-        System.out.println("");
-        System.out.println(ssw);
         DateFormat df = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
 
         Assert.assertEquals(test.node, df.parse("2001.07.04 12:08:56"));
         XMLUnit.setIgnoreWhitespace(true);
-        XMLAssert.assertXMLEqual(inXml, ssw);
+        XMLAssert.assertXMLEqual(inXml, sw.toString());
     }
 
     @org.testng.annotations.Test(expectedExceptions = XmapprException.class)

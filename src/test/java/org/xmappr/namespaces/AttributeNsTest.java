@@ -78,8 +78,6 @@ public class AttributeNsTest {
 
         StringWriter sw = new StringWriter();
         xmappr.toXML(a, sw);
-        System.out.println(xml);
-        System.out.println(sw.toString());
 
         // writing back to XML
         XMLUnit.setIgnoreWhitespace(true);
