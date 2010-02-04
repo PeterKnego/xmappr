@@ -3,6 +3,7 @@
   * [AnnotationsVsXmlConfig Annotations vs. XML configuration]
   * [UsingXmappr Using Xmappr]
   * [Converters Converters]
+  * [GettersSetters Getters and Setters]
   * [NameSpaces XML namespaces]
   * [ThreadSafety Safe use in multiple threads]
   * [DefaultValues Default values]
