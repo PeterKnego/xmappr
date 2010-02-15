@@ -1,5 +1,8 @@
 package org.xmappr;
 
+import org.xmappr.annotation.Attribute;
+import org.xmappr.annotation.Element;
+import org.xmappr.annotation.RootElement;
 import org.xmappr.converters.ClassNameConverter;
 import org.xmappr.converters.Converter;
 

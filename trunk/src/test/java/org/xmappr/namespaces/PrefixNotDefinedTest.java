@@ -7,6 +7,8 @@
 package org.xmappr.namespaces;
 
 import org.xmappr.*;
+import org.xmappr.annotation.Element;
+import org.xmappr.annotation.RootElement;
 
 import java.io.StringReader;
 

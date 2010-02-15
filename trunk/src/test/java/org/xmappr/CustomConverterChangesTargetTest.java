@@ -10,6 +10,8 @@ import org.custommonkey.xmlunit.XMLAssert;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import org.xmappr.annotation.RootElement;
+import org.xmappr.annotation.Text;
 import org.xmappr.converters.ValueConverter;
 
 import java.io.StringReader;

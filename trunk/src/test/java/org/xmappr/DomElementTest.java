@@ -2,6 +2,8 @@ package org.xmappr;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import org.xmappr.annotation.Element;
+import org.xmappr.annotation.RootElement;
 
 import javax.xml.namespace.QName;
 import java.io.Reader;

@@ -10,6 +10,10 @@ import org.custommonkey.xmlunit.XMLAssert;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.custommonkey.xmlunit.exceptions.XpathException;
 import org.testng.annotations.Test;
+import org.xmappr.annotation.Attribute;
+import org.xmappr.annotation.Element;
+import org.xmappr.annotation.RootElement;
+import org.xmappr.annotation.Text;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;

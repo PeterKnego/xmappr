@@ -163,12 +163,12 @@ public class MappingBuilder {
 
         Class useType = configElement.targetType != null ? configElement.targetType : configElement.converterType;
 
-        ElementConverter fieldConverter;// was custom converter assigned via annotation?
+        // was custom converter assigned via annotation?
+        ElementConverter fieldConverter;
         if (configElement.converter != null) {
             fieldConverter = initializeConverter(configElement.converter);
-
         } else {
-                fieldConverter = mappingContext.lookupElementConverter(useType, configElement, true);
+            fieldConverter = mappingContext.lookupElementConverter(useType, configElement, true);
         }
 
         fieldMapper.addMapping(qname, fieldConverter, useType);
@@ -184,11 +184,10 @@ public class MappingBuilder {
         // if 'targetType' is not defined we use parametrized type instead
         Class useType = configElement.targetType != null ? configElement.targetType : configElement.converterType;
 
-        ElementConverter fieldConverter;
         // was custom converter assigned via annotation?
+        ElementConverter fieldConverter;
         if (configElement.converter != null) {
             fieldConverter = initializeConverter(configElement.converter);
-
         } else {
             // converter was not declared via annotation, so we just use a converter derived from field type
             fieldConverter = mappingContext.lookupElementConverter(useType, configElement, true);
@@ -243,7 +242,7 @@ public class MappingBuilder {
                 fieldConverter = new ValueConverterWrapper(vc);
             } else {
                 throw new XmapprConfigurationException("Error: Can not instantiate Converter " + annotatedConverter +
-                        ", beacuse it's of wrong type: Converters defined on @Element annotation must" +
+                        ", because it's of wrong type: Converters defined on @Element annotation must" +
                         "implement either ElementCoverter or ValueConverter");
             }
 
@@ -371,7 +370,7 @@ public class MappingBuilder {
                     qname = new QName(localPart);
                 }
 
-                // getValue default value of this element
+                // get default value of this element
                 String defaultValue = (configAttribute.defaultvalue == null || configAttribute.defaultvalue.length() == 0)
                         ? null : configAttribute.defaultvalue;
 

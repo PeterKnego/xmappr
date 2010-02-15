@@ -9,6 +9,10 @@ package org.xmappr;
 import org.custommonkey.xmlunit.XMLAssert;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.testng.annotations.Test;
+import org.xmappr.annotation.Attribute;
+import org.xmappr.annotation.Element;
+import org.xmappr.annotation.Namespaces;
+import org.xmappr.annotation.RootElement;
 import org.xml.sax.SAXException;
 
 import javax.xml.stream.XMLStreamException;

@@ -4,15 +4,28 @@
  * Copyright (c) 2008, 2009, Peter Knego & Xmappr contributors
  * All rights reserved.
  */
-package org.xmappr;
+package org.xmappr.annotation;
 
 import java.lang.annotation.Target;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-@Target({ElementType.TYPE, ElementType.FIELD, ElementType.METHOD})
+/**
+ * @author peter
+ */
+
+/**
+ * Annotation used to group multiple Element annotation together.
+ * Used when multiple Element annotations must be defined on a field.
+ */
+@Target({ElementType.FIELD, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Namespaces {
-    String[] value() default {};
+public @interface Elements {
+    /**
+     * An array of Element annotations.
+     *
+     * @return
+     */
+    Element[] value();
 }

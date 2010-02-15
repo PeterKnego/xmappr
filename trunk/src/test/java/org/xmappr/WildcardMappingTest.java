@@ -4,6 +4,9 @@ import org.custommonkey.xmlunit.XMLAssert;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import org.xmappr.annotation.Element;
+import org.xmappr.annotation.Elements;
+import org.xmappr.annotation.RootElement;
 import org.xmappr.converters.ElementConverter;
 import org.xml.sax.SAXException;
 
@@ -43,6 +46,19 @@ public class WildcardMappingTest {
         @Elements({
                 @Element(name = "one", targetType = Integer.class),
                 @Element(name = "*", converter = SingleNumberConverter.class)
+        })
+        public List numbers;
+    }
+
+    /**
+     * Maps to a java.util.List with a custom SingleNumberConverter and adds some mapper mixing
+     */
+    @RootElement("root")
+    public static class RootThree {
+
+        @Elements({
+                @Element(name = "one", targetType = Integer.class),
+                @Element(name = "*", targetType = Double.class)
         })
         public List numbers;
     }
@@ -115,6 +131,41 @@ public class WildcardMappingTest {
         // write out XML
         Writer writer = new StringWriter();
         xmappr.toXML(rootTwo, writer);
+
+        //test that output matches input
+        XMLUnit.setIgnoreWhitespace(true);
+        XMLAssert.assertXMLEqual(xml, writer.toString());
+    }
+
+    @Test
+    public void testThree() throws IOException, SAXException {
+        Reader reader = new StringReader(xml);
+        Xmappr xmappr = new Xmappr(RootThree.class);
+        assertsThree(reader, xmappr);
+    }
+
+    @Test
+    public void testThreeViaXML() throws IOException, SAXException {
+        Reader reader = new StringReader(xml);
+        // Double step to make Xmappr work harder (not necessary normally - do not copy)
+        // Reads Class configuration, produces XML configuration from it and then feeds it to Xmappr
+        StringReader configuration = XmlConfigTester.reader(RootThree.class);
+        Xmappr xmappr = new Xmappr(configuration);
+        assertsThree(reader, xmappr);
+    }
+
+    private void assertsThree(Reader reader, Xmappr xmappr) throws SAXException, IOException {
+        // read XML
+        RootThree rootThree = (RootThree) xmappr.fromXML(reader);
+
+        // check that three elements were read
+        Assert.assertEquals(rootThree.numbers.size(), 3);
+        Assert.assertEquals(rootThree.numbers.get(1), new Double(2));
+
+
+        // write out XML
+        Writer writer = new StringWriter();
+        xmappr.toXML(rootThree, writer);
 
         //test that output matches input
         XMLUnit.setIgnoreWhitespace(true);
