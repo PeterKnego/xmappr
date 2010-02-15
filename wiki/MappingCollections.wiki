@@ -102,12 +102,14 @@ Custom target type or converter can be used also with wildcard mappings:
 @RootElement
 class Root{
 
-  @Element(name="*", targetType=String.class)
+  @Element(name="*", converter=MyCustomConverter.class)
   List numbers;
 }
 }}}
 
-In this case all XML elements will be converted to {{{String}}}s and added to the {{{numbers}}} list.
+In this case all XML elements will be converted to the type that {{{MyCustomConverter}}} is producing and added to the {{{numbers}}} list.
+
+*NOTE:* If you use a custom converter with a wildcard mapping, then this custom converter must have a way of producing XML element names from Java objects. Take a look at {{{NumbersConverter}}} in [http://code.google.com/p/xmappr/source/browse/trunk/src/test/java/org/xmappr/WildcardMappingTest.java WildcardMappingTest.java] to see how it can be done.  
 
 == Mapping XML elements and XML text to a Collection ==
 
@@ -128,13 +130,13 @@ This XML can be mapped to single {{{java.util.Collection}}}:
 @RootElement
 class Root{
 
-  @Element(name="*", targetType=Integer.class)
+  @Element("*")
   @Text
   List elements;
 }
 }}}
 
-List {{{elements}}} will contain the following elements in this order: Integer(1), String("first text"), Integer(2) and String("second text").
+List {{{elements}}} will contain the following elements in this order: {{{DomElement}}}, String("first text"), {{{DomElement}}} and String("second text").
 *NOTE:* Mixing XML text and XML elements is useful when mapping XHTML. 
 
 = Mapping multiple XML attributes to a {{{Map}}} =
