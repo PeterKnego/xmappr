@@ -14,7 +14,7 @@ public class Base64 {
     public static char[] base64code = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".toCharArray();
 
     // initialize nibbles array (used for decoding)
-    private static byte[] nibbles = new byte[128];
+    private static final byte[] nibbles = new byte[128];
 
     static {
         for (int i = 0; i < nibbles.length; i++) nibbles[i] = -1;

@@ -1,5 +1,6 @@
 package org.xmappr;
 
+import org.xmappr.annotation.Attribute;
 import org.xmappr.converters.ClassNameConverter;
 import org.xmappr.converters.ValueConverter;
 

@@ -4,7 +4,7 @@
  * Copyright (c) 2008, 2009, Peter Knego & Xmappr contributors
  * All rights reserved.
  */
-package org.xmappr;
+package org.xmappr.annotation;
 
 import org.xmappr.converters.Converter;
 import org.xmappr.converters.ElementConverter;
@@ -22,22 +22,21 @@ import java.lang.annotation.RetentionPolicy;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface RootElement {
     /**
-     * The name of the XML element that a field maps to.
+     * The name of the root XML element that a class maps to.
      *
      * @return
      */
     String value() default "";
 
     /**
-     * The name of the XML element that a field maps to.
+     * The name of the root XML element that a class maps to.
      *
      * @return
      */
     String name() default "";
 
     /**
-     * Custom converter assigned to convert this XML element.
-     * Either targetType or converter element must be defined when a target field is a Collection.
+     * Assigns custom converter to be used to convert this XML element.
      *
      * @return
      */

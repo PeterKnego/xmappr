@@ -11,6 +11,10 @@ import org.custommonkey.xmlunit.XMLUnit;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import org.xmappr.*;
+import org.xmappr.annotation.Element;
+import org.xmappr.annotation.Namespaces;
+import org.xmappr.annotation.RootElement;
+import org.xmappr.annotation.Text;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;

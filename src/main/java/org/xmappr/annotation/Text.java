@@ -4,54 +4,32 @@
  * Copyright (c) 2008, 2009, Peter Knego & Xmappr contributors
  * All rights reserved.
  */
-package org.xmappr;
+package org.xmappr.annotation;
 
 import org.xmappr.converters.ValueConverter;
 
 import java.lang.annotation.ElementType;
-import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotation used to map a field to XML attribute.
+ * Annotation used to map a field to XML text elements.
  */
 @Target({ElementType.FIELD, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Attribute {
-
-    /**
-     * The name of the XML attribute that a field maps to.
-     *
-     * @return
-     */
-    String value() default "";
-
-    /**
-     * The name of the XML attribute that a field maps to.
-     *
-     * @return
-     */
-    String name() default "";
-
-    /**
-     * Default value to be used when XML attribute is missing.
-     *
-     * @return
-     */
-    String defaultValue() default "";
+public @interface Text {
 
     /**
      * targetType is used to determine which converter will be used.
-     * Either targetType or converter element must be defined when a target field is a Map.
+     * Either targetType or converter element must be defined when a target field or method is a Collection.
      *
      * @return
      */
     Class targetType() default Object.class;
 
     /**
-     * Custom converter assigned to convert this XML attribute.
-     * Either targetType or converter element must be defined when a target field is a Map.
+     * Custom converter assigned.
      *
      * @return
      */

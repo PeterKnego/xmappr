@@ -6,6 +6,7 @@
  */
 package org.xmappr;
 
+import org.xmappr.annotation.RootElement;
 import org.xmappr.converters.*;
 
 import javax.xml.namespace.QName;

@@ -8,6 +8,7 @@ package org.xmappr;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import org.xmappr.annotation.*;
 import org.xmappr.converters.ElementConverter;
 import org.xmappr.converters.ValueConverter;
 

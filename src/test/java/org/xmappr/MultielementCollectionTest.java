@@ -9,13 +9,15 @@ package org.xmappr;
 import org.custommonkey.xmlunit.XMLAssert;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.testng.annotations.Test;
+import org.xmappr.annotation.Element;
+import org.xmappr.annotation.Elements;
+import org.xmappr.annotation.RootElement;
+import org.xmappr.annotation.Text;
 import org.xml.sax.SAXException;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.util.ArrayList;
 import java.util.List;
 
 public class MultielementCollectionTest {

@@ -6,6 +6,11 @@
  */
 package org.xmappr;
 
+import org.xmappr.annotation.Attribute;
+import org.xmappr.annotation.Element;
+import org.xmappr.annotation.RootElement;
+import org.xmappr.annotation.Text;
+
 public class SampleXml {
 
     static String xml =

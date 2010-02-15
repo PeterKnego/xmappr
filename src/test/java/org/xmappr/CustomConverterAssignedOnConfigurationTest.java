@@ -8,6 +8,8 @@ package org.xmappr;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import org.xmappr.annotation.Element;
+import org.xmappr.annotation.RootElement;
 import org.xmappr.converters.ValueConverter;
 
 import java.io.StringReader;

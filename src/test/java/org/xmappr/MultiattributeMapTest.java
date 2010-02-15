@@ -10,6 +10,9 @@ import org.custommonkey.xmlunit.XMLAssert;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import org.xmappr.annotation.Attribute;
+import org.xmappr.annotation.Attributes;
+import org.xmappr.annotation.RootElement;
 import org.xml.sax.SAXException;
 
 import javax.xml.namespace.QName;

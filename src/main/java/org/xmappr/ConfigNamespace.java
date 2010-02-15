@@ -1,5 +1,7 @@
 package org.xmappr;
 
+import org.xmappr.annotation.Attribute;
+
 import javax.xml.XMLConstants;
 
 public class ConfigNamespace {

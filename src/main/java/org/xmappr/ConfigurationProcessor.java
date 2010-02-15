@@ -1,5 +1,6 @@
 package org.xmappr;
 
+import org.xmappr.annotation.*;
 import org.xmappr.converters.*;
 
 import java.io.Reader;

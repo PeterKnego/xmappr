@@ -8,6 +8,8 @@ package org.xmappr;
 
 import org.custommonkey.xmlunit.XMLAssert;
 import org.custommonkey.xmlunit.XMLUnit;
+import org.xmappr.annotation.Element;
+import org.xmappr.annotation.RootElement;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;

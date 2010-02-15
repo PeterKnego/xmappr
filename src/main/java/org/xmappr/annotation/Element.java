@@ -4,7 +4,7 @@
  * Copyright (c) 2008, 2009, Peter Knego & Xmappr contributors
  * All rights reserved.
  */
-package org.xmappr;
+package org.xmappr.annotation;
 
 import org.xmappr.converters.ElementConverter;
 import org.xmappr.converters.Converter;
@@ -22,14 +22,14 @@ import java.lang.annotation.Target;
 public @interface Element {
 
     /**
-     * The name of the XML element that a field maps to.
+     * The name of the XML element that a field or method maps to.
      *
      * @return
      */
     String value() default "";
 
     /**
-     * The name of the XML element that a field maps to.
+     * The name of the XML element that a field or method maps to.
      *
      * @return
      */
@@ -44,7 +44,7 @@ public @interface Element {
 
     /**
      * targetType is used to determine which converter will be used.
-     * Either targetType or converter element must be defined when a target field is a Collection.
+     * Either targetType or converter element must be defined when target is a Collection.
      *
      * @return
      */
@@ -52,7 +52,7 @@ public @interface Element {
 
     /**
      * Custom converter assigned to convert this XML element.
-     * Either targetType or converter element must be defined when a target field is a Collection.
+     * Either targetType or converter element must be defined when target is a Collection.
      *
      * @return
      */
