@@ -18,14 +18,15 @@ can be mapped to a {{{java.util.Collection}}} like this:
 @RootElement
 class Root{
 
-  @Element(targetType=Integer.class)
-  List number;
+  @Element
+  public List<Integer> number;
 }
 }}}
 
 Here Xmappr will take every {{{<number>}}} element, convert it to {{{Integer}}} and add it to an instance of {{{ArrayList}}}.
 
-Xmappr normally derives target type from field type, but since Java generics' type erasure removes runtime type information, an alternative way for providing type information has to be used. This is the job of {{{targetType}}} attribute of the {{{@Element}}} annotation. When a target field is a {{{Collection}}} this attribute must be provided, otherwise an exception is thrown. 
+*Note:* Since Xmappr 0.9.3 this is not needed any more - Xmappr now recognizes generic types:
+~~Xmappr normally derives target type from field type, but since Java generics' type erasure removes runtime type information, an alternative way for providing type information has to be used. This is the job of {{{targetType}}} attribute of the {{{@Element}}} annotation. When a target field is a {{{Collection}}} this attribute must be provided, otherwise an exception is thrown. ~~
 
 == Mapping different elements to a {{{Collection}}} ==
 
@@ -50,7 +51,7 @@ class Root{
     @Element(name="two", targetType=Double.class),
     @Element(name="three", targetType=String.class)
   })
-  List number;
+  public List number;
 }
 }}}
 
@@ -67,7 +68,7 @@ Given the above XML snippet a wildcard mapping can be done like this:
 class Root{
 
   @Element("*")
-  List number;
+  public List number;
 }
 }}}
 
@@ -89,7 +90,7 @@ class Root{
     @Element(name="one", targetType=Integer.class),
     @Element("*")
   })
-  List number;
+  public List number;
 }
 }}}
 
@@ -103,7 +104,7 @@ Custom target type or converter can be used also with wildcard mappings:
 class Root{
 
   @Element(name="*", converter=MyCustomConverter.class)
-  List numbers;
+  public List numbers;
 }
 }}}
 
@@ -132,7 +133,7 @@ class Root{
 
   @Element("*")
   @Text
-  List elements;
+  public List elements;
 }
 }}}
 
@@ -155,13 +156,13 @@ class Root {
     @Attribute(name = "b", targetType = Integer.class),
     @Attribute(name = "c"),
     @Attribute("*")})
-  Map firstMap;
+  public Map firstMap;
 
    @Attributes({
      @Attribute("i"),
      @Attribute(name = "k", targetType = Double.class),
      @Attribute("l")})
-   Map secondMap;
+   public Map secondMap;
 }
 }}}
 
