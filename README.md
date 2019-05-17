@@ -1,4 +1,4 @@
-##Xmappr is a really simple way to handle XML in Java.
+## Xmappr is a really simple way to handle XML in Java.
 
 It's a lightweight library for mapping arbitrary XML to your Java classes, mapped via annotations or external config, understands XML namespaces, can cache unmapped elements, preserves order of XML elements, it's extensible with custom converters, it's thread-safe and is lightweight at under 80kb with no external dependencies. Oh, and it has a permissive license: BSD.
 
@@ -13,7 +13,7 @@ List of features:
 - Thread-safe. Designed for multi-thread use.
 - Permissive license: xmappr is released under BSD license.
 
-###Quick example
+### Quick example
 Let’s map some xml:
 
 <root a="2.2">
